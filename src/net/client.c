@@ -22,6 +22,12 @@
 #define TIMEOUT_TICKS 0x4af
 #define MAX_RING_FRAME 64
 
+/* The reader of the objects of a state packet. The game client replaces it with a reader that
+ * also moves the humans and objects to their new places. */
+#ifndef sr_unpack_state_objects
+#define sr_unpack_state_objects() unpackobjectpacket()
+#endif
+
 /* Read bits as a number where all bits set mean -1. */
 static void read_or_none(int *dst, uint32_t *tmp, uint32_t bits)
 {
@@ -445,7 +451,7 @@ static void read_state(int bytes)
         for (j = 1; j <= slot[0]; j++)
             pbitread((uint32_t *)&slot[j], 16);
     }
-    unpackobjectpacket();
+    sr_unpack_state_objects();
     sr_debug.net_flag = 0;
     pbitread((uint32_t *)&sr_areasector.client_event_total, 16);
     pbitread(&count, 6);

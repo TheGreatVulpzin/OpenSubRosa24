@@ -476,6 +476,8 @@ void resetgame_client_light(void);
 #define sr_resetgame_light() resetgame_client_light()
 void resetgame_client_camera_counter(void);
 #define sr_resetgame_camera_counter() resetgame_client_camera_counter()
+void __cdecl cl_unpackobjectpacket(void);
+#define sr_unpack_state_objects() cl_unpackobjectpacket()
 #define sr_human_floor_all_rays 1
 #define sr_human_vehicle_limit_protection 0
 #define BOND_HUMAN_VEL(h, j) (cl_data_bondhuman_client[h].vel[j].value)
