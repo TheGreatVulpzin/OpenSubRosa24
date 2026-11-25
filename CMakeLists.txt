@@ -151,7 +151,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
             build/client_image/image_client.c build/client_image/client_gl.c
             build/client_image/client_gl_glee.c third_party/glee/GLee.c
             $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
-        target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform third_party/glee)
+        target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform src/client third_party/glee)
         set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "/W0")
         target_link_libraries(subvulpes-client PRIVATE opengl32)
         target_compile_options(subvulpes-client PRIVATE /W4 /utf-8)
