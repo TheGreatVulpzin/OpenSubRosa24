@@ -108,7 +108,6 @@ extern uintptr_t sr_base;
 #define sr_data_radix (*((Radix *)(sr_base + 0xfefe340u)))
 #define sr_data_intersect (*((Intersect *)(sr_base + 0x1033ec20u)))
 #define sr_data_slogfp (*((void * *)(sr_base + 0x1033eca4u)))
-#define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
 #define sr_data_numofsprite_models (*((int *)(sr_base + 0x12a7d604u)))
 #define sr_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
@@ -151,6 +150,8 @@ extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
 extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
+extern SrPacketWorkspace sr_unplaced_packet_workspace;
+#define sr_data_packet_workspace sr_unplaced_packet_workspace
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
@@ -226,14 +227,11 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_image (*((Image *)(sr_base + 0x19da5220u)))
 #define cl_data_landrender (*((LandRender *)(sr_base + 0x17bbb880u)))
 #define cl_data_bigendian (*((int *)(sr_base + 0xb7331c0u)))
-#define cl_data_random_counter (*((uint32_t *)(sr_base + 0x90f6080u)))
-#define cl_data_texturelist (*((TextureList *)(sr_base + 0x14311840u)))
 #define cl_data_landsector_vbo ((int *)(sr_base + 0x1033fd4cu))
 #define cl_data_vbo ((VboRec *)(sr_base + 0x1b7b4e0u))
 #define cl_data_landsector_lod ((LandSectorLod *)(sr_base + 0x19c07d74u))
 #define cl_data_gl_bind_buffer (*((void * *)(sr_base + 0x115aa8u)))
 #define cl_data_gl_buffer_data (*((void * *)(sr_base + 0x115ab8u)))
-#define cl_data_fontnum (*((int *)(sr_base + 0x127eacu)))
 #define cl_data_fontlist ((int *)(sr_base + 0x29e7d340u))
 #define cl_data_sphere ((SphereLevel *)(sr_base + 0x9065260u))
 #define cl_data_texture_windowatlas (*((WindowAtlas *)(sr_base + 0x103673a0u)))
@@ -276,7 +274,6 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_display_text ((char *)(sr_base + 0x126728u))
 #define cl_data_round_ticks (*((int *)(sr_base + 0x908ac70u)))
 #define cl_data_round_goal (*((int *)(sr_base + 0x908ac74u)))
-#define cl_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
 #define cl_data_light_ambient ((float *)(sr_base + 0x19c07d00u))
 #define cl_data_interior_corners ((vec3 *)(sr_base + 0x1271e8u))
 #define cl_data_block_sectors ((BlockSector *)(sr_base + 0x1dda5280u))
@@ -350,7 +347,7 @@ extern int sr_unplaced_startup_counter;
 #undef sr_data_numofkicked
 #define sr_data_numofkicked (*((int *)(sr_base + 0x103675a4u)))
 #define cl_data_input_debug_toggle (*((uint32_t *)(sr_base + 0x102feb48u)))
-#define cl_data_input_label_chat ((char *)(sr_base + 0x127eb1u))
+#define cl_data_input_label_chat (*((char *)(sr_base + 0x127eb1u)))
 #define cl_data_input_label_pause ((char *)(sr_base + 0x125224u))
 #define cl_data_input_label_return ((char *)(sr_base + 0x12522cu))
 #define cl_data_input_label_options ((char *)(sr_base + 0x12523cu))
@@ -364,6 +361,10 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_input_label_timer_setup ((char *)(sr_base + 0x123e3cu))
 #define cl_data_input_label_timer_alloc ((char *)(sr_base + 0x123e4cu))
 #define cl_data_input_label_timer_shadow ((char *)(sr_base + 0x123e5cu))
+#undef sr_data_objectpacket
+#define sr_data_objectpacket (*((ObjectPacket *)(sr_base + 0x10340d60u)))
+#undef sr_data_itemtype
+#define sr_data_itemtype ((ItemType *)(sr_base + 0x1034db80u))
 #define cl_data_menu_items ((MenuItem *)(sr_base + 0x5350d00u))
 #define cl_data_menu_item_count (*((int *)(sr_base + 0x9065240u)))
 #define cl_data_menu_item_index (*((int *)(sr_base + 0xfefe288u)))
@@ -498,7 +499,5 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_glee_ati_separate_stencil (*((uint8_t *)(sr_base + 0x127d3du)))
 #include "client_build.h"
 
-#define sr_data_objectpacket sr_data_packet_workspace.objectpacket
-#define sr_data_itemtype sr_data_packet_workspace.itemtype
 
 #endif

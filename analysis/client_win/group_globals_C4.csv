@@ -14,7 +14,7 @@ input_game_running,uint32_t,1,0x9065350,Client input flag at the byte position o
 kickedip,uint32_t,1024,0x1033ed20,Linux kickedip size 0x1000 and getinputs selected connection addresses
 numofkicked,int,1,0x103675a4,Client count is at packet workspace plus 0x28884 instead of the server offset 0x28660
 input_debug_toggle,uint32_t,1,0x102feb48,debug_getinputs F10 toggle
-input_label_chat,char,2,0x127eb1,getinputs chat label
+input_label_chat,char,1,0x127eb1,"getinputs chat label: an empty text. version_marks starts at the next byte. No code writes it"
 input_label_pause,char,5,0x125224,getinputs pause label
 input_label_return,char,15,0x12522c,getinputs return menu label
 input_label_options,char,8,0x12523c,getinputs options label
@@ -28,3 +28,5 @@ input_label_timer_optimize,char,17,0x123e28,debug_getinputs interior optimizatio
 input_label_timer_setup,char,14,0x123e3c,debug_getinputs interior setup label
 input_label_timer_alloc,char,14,0x123e4c,debug_getinputs interior allocation label
 input_label_timer_shadow,char,15,0x123e5c,debug_getinputs interior shadow label
+objectpacket,ObjectPacket,1,0x10340d60,"unpackobjectpacket reads it. It starts 0x2040 bytes after kickedip, after landsector_vbo"
+itemtype,ItemType,64,0x1034db80,"the item functions read the 64 item types. It starts 0xce20 bytes after objectpacket"

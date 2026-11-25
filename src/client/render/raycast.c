@@ -73,7 +73,7 @@ void __cdecl render_raycast2(void)
 {
     int row, column;
 
-    starttimer(cl_data_timerlist.raycast);
+    starttimer(sr_data_timerlist.raycast);
     for (row = 0; row < RAY_ROWS; row++) {
         for (column = 0; column < RAY_COLUMNS; column++) {
             vec3 dir, step;
@@ -105,5 +105,5 @@ void __cdecl render_raycast2(void)
             }
         }
     }
-    stoptimer(cl_data_timerlist.raycast);
+    stoptimer(sr_data_timerlist.raycast);
 }

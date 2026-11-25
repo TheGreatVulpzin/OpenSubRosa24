@@ -1,0 +1,92 @@
+inner,outer,note
+block_sectors,area_sector,"alias of area_sector.records (+0x40, SrSectorStore)"
+input_heli_mouse,area_sector,field +0x8 of the 0x40 byte area header (client layout). No name yet
+sim_ticks,area_sector,field +0x0 of the 0x40 byte area header (client layout). No name yet
+camera_position,audio_camera,field AudioCamera.pos +0x4
+camera_rotation,audio_camera,field AudioCamera.rot +0x10
+camera_velocity,audio_camera,field AudioCamera.vel +0x38
+view,audio_camera,field AudioCamera.player +0x0: sr_data_view becomes this field in the client
+view_player,audio_camera,field AudioCamera.player +0x0 (alias of view)
+view_zoom,audio_camera,field AudioCamera.projection +0x34
+font_alpha_low,bigendian,alias: same object; keep bigendian
+join_debug,blocktemp,field +0x76040 in the pad of BlockTemp: joinmenu writes it when debugit is set. No name in BlockTemp yet
+last_event,blocktemp,"field BlockTemp.unused_7602c +0x7602c: events.c reads it as lastevent. The Linux blocktemp is 0x7606c bytes, so the BlockTemp size is correct"
+bonds,bond,alias: same object; keep bond
+windowrect,buildingtype,field BuildingType.pieces +0x1000004: the client reads 32 WindowRect records there
+input_cameras,camera,field +0x0: camera[0..111] holds the 16 InputCamera records (0x1c0 bytes). packorientation (0x68830) and unpackorientation (0x68bd0) use camera[112..129]: camera keeps 130 floats. A union type later
+debug_counters,debug,field +0x50234 of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+debug_extra_count,debug,field +0x18010 of Debug. No name yet
+debug_player_count,debug,field +0x50230 of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+debug_spheres,debug,field +0x18014 of Debug. No name yet
+frame_rate,debug,field Debug.frame_ms_average +0x50124
+frame_time_average,debug,field +0x5022c of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+frame_time_index,debug,field +0x50128 of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+frame_times,debug,field +0x5012c of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+tick_start_ms,debug,field +0x50018 of Debug. No name yet: the client Debug places differ from the server view after +0x50000
+audio_debug,debugit,alias: same object; keep debugit
+audio_fade_ticks,game,field GameClient.timer +0x24
+audio_mode,game,field GameClient.state +0x20
+audio_simulation,game,field GameClient.running +0x0
+damage_flash,game,field GameClient.unused_257ec +0x257e8
+death_fade,game,field +0x25d4c of GameClient. No name yet
+game_state,game,field GameClient.state +0x20
+game_tick,game,field GameClient.ticks +0x34
+hide_hud,game,field +0x25d54 of GameClient. No name yet
+hide_messages,game,field +0x25d58 of GameClient. No name yet
+input_game_running,game,field +0x50 of GameClient. No name yet
+last_health,game,field GameClient.unused_257e8 +0x257e4
+last_tick_ms,game,field GameClient.debug_p +0x38
+light_angle_a,game,field GameClient.start_angle_a +0x48
+light_angle_b,game,field GameClient.start_angle_b +0x4c
+map_shown,game,field GameClient.unused_257e0 +0x257e0
+mic_text_timer,game,field +0x25d50 of GameClient. No name yet
+paused,game,field GameClient.debug_o +0x3c
+relative_mouse,game,field +0x50 of GameClient. No name yet
+round_goal,game,field GameClient.unused_25978 +0x25974
+round_ticks,game,field GameClient.unused_25974 +0x25970
+scenario_event_data,game,field +0x22fdc: 128 records of 0x50 bytes. The last record ends 4 bytes after spectator_human (+0x257d8)
+slow_tick,game,field +0x44 of GameClient. No name yet
+spectated_human,game,field GameClient.spectator_human +0x257d8
+step_once,game,field GameClient.debug_i +0x40
+audio_mode,game_state,alias: same object; keep game_state
+image_height,image,field Image.height +0x4
+image_pixels,image,field Image.pixels +0x8
+image_width,image,field Image.width +0x0
+audio_mouse_buttons,input_mouse,field InputMouse.buttons +0x28
+level_hit,intersect,"field +0x0: LevelHit (pos, normal) is the first 0x18 bytes of Intersect"
+audio_keys,keyboard,alias: same object; keep keyboard
+level_view,level_editor,field +0x1c6850 of LevelEditor. No name yet
+sector_mesh_bitmap,level_marks,alias: a uint32_t[1024] view of the 4096 bytes of level_marks
+material_records,materials,alias: same object; keep materials
+menu_clear_color,menucolor,alias: same object; keep menucolor
+sprite_model_count,numofsprite_models,alias: same object; keep numofsprite_models
+sprite_count,numofsprites,alias: same object; keep numofsprites
+audio_push_to_talk,option,field OptionClient.voiceholdtotalk +0x12c
+audio_threshold,option,field OptionClient.voicemin +0x124
+audio_voice_enabled,option,field OptionClient.voicechat +0x128
+audio_voice_gain,option,field OptionClient.voiceboost_scale +0x144
+audio_voice_key,option,field OptionClient.voicekey +0x130
+audio_voice_mouse,option,field OptionClient.voicemb +0x134
+mic_gain_percent,option,field OptionClient.voiceboost +0x140
+show_help,option,field OptionClient.help +0x138
+audio_keys_previous,prevkeyboard,alias: same object; keep prevkeyboard
+input_game_running,relative_mouse,alias: same object; keep relative_mouse
+spectated_human,scenario_event_data,field: the last ScenarioEventData record pads over GameClient.spectator_human. Keep both as GameClient fields
+sector_mesh_next,sector_block,alias: same object; keep sector_block
+server_address,server,field +0x54: no name yet. Layout question: the server view has name[72] from +0x14 to +0x5c
+server_port,server,field +0x58: no name yet. Layout question: the server view has name[72] from +0x14 to +0x5c
+audio_capture_backup,speex,"field +0x91ebe0 of Speex. No name yet. The Linux speex is 0x931000 bytes, so the Speex size is correct"
+audio_samples,speex,"field +0x0 of Speex. No name yet. The Linux speex is 0x931000 bytes, so the Speex size is correct"
+glass_vertex_count,sprite_lines,alias: same object; keep sprite_lines
+sprite_decal_count,sprite_points,alias: same object; keep sprite_points
+shell_count,sprite_quads,alias: same object; keep sprite_quads
+debris_count,sprite_triangles,alias: same object; keep sprite_triangles
+sector_mesh_remap,tempmesh,field TempMesh.block_verts +0x2d000c
+image_textures,texture,alias: one record type of 0x70 bytes; ImageTexture becomes a view or a typedef of Texture
+audio_voice_icon,texturelist,field TextureList.mic +0x1100
+tiremark_head,tiremarkend,alias: same object; keep tiremarkend
+tiremark_tail,tiremarkstart,alias: same object; keep tiremarkstart
+view_player,view,alias: same object; keep view
+audio_channels,voice,alias: one VoiceChannelClient object; AudioChannel is the same record
+wsa_data,wsadata,alias: one WSADATA buffer of 0x190 bytes
+zlib_defaults_ready,zlib_default_distance,"element 31: init_defaults sets the 32 bytes to 5 with memset, so it also sets the flag. No other code writes the flag"

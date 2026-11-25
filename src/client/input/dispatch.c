@@ -48,7 +48,7 @@ static void input_menu(int *connection)
     if (!cl_data_input_chat) {
         createmenuitemempty();
     } else {
-        menu_label(cl_data_input_label_chat, 60.0f, 580.0f, 512.0f, 20.0f, 16.0f, 0);
+        menu_label(&cl_data_input_label_chat, 60.0f, 580.0f, 512.0f, 20.0f, 16.0f, 0);
         setmenuitem(MENU_TEXT, cl_data_input_chat_text, CHAT_CAPACITY);
     }
     if (!sr_game.link_state) {

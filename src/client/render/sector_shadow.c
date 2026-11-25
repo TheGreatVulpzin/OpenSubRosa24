@@ -40,8 +40,8 @@ void __cdecl render_buildareasectorshadow(void)
     static const uint8_t caps[6] = {0,1,2,5,4,3};
     const vec3 *light = (const vec3 *)cl_data_light_position;
     int s, t, edge;
-    resettimer(cl_data_timerlist.buildsectorshadow, "buildsectorshadow");
-    starttimer(cl_data_timerlist.buildsectorshadow);
+    resettimer(sr_data_timerlist.buildsectorshadow, "buildsectorshadow");
+    starttimer(sr_data_timerlist.buildsectorshadow);
     if (light->y < 0.0)
         return;
     cl_data_sector_shadow_count = 0;
@@ -77,13 +77,13 @@ void __cdecl render_buildareasectorshadow(void)
             GL_ARRAY_BUFFER, 0, cl_data_sector_shadow_count * 12, cl_data_sector_shadow_vertices);
         bind_shadow_buffer(0);
     }
-    stoptimer(cl_data_timerlist.buildsectorshadow);
+    stoptimer(sr_data_timerlist.buildsectorshadow);
 }
 
 /* Draw the sector volume list and report its vertex count. */
 void __cdecl render_areasectorshadow(void)
 {
-    starttimer(cl_data_timerlist.rendersectorshadow);
+    starttimer(sr_data_timerlist.rendersectorshadow);
     glEnableClientState(ARRAY_POSITION);
     if (!cl_data_glext[EXT_BUFFERS])
         glVertexPointer(3, GL_FLOAT, 12, cl_data_sector_shadow_vertices);
@@ -96,5 +96,5 @@ void __cdecl render_areasectorshadow(void)
         bind_shadow_buffer(0);
     glDisableClientState(ARRAY_POSITION);
     debug_addataint("shadowverts", cl_data_sector_shadow_count);
-    stoptimer(cl_data_timerlist.rendersectorshadow);
+    stoptimer(sr_data_timerlist.rendersectorshadow);
 }

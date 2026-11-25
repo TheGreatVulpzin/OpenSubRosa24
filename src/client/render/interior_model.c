@@ -29,7 +29,7 @@
 #define g_cityobjecttype sr_data_cityobjecttype
 #define g_interior_store sr_data_interior
 #define g_interiors ((InteriorMesh *)&sr_data_interior)
-#define g_timers cl_data_timerlist
+#define g_timers sr_data_timerlist
 #define g_debug sr_data_debug
 #define g_interior_model_count cl_data_interior_model_count
 #define g_yaxis sr_data_yaxis

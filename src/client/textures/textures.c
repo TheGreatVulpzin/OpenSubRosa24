@@ -23,7 +23,7 @@
 #include "vectors.h"
 
 #define g_textures cl_data_texture
-#define g_texturelist cl_data_texturelist
+#define g_texturelist sr_data_texturelist
 #define g_image cl_data_image
 #define g_bigendian cl_data_bigendian
 #define g_fontnum cl_data_fontnum

@@ -100,7 +100,7 @@ static void frame_view(void)
 /* Reset the profiler timers of the frame passes. */
 static void reset_timers(void)
 {
-    const TimerListClient *timers = &cl_data_timerlist;
+    const TimerListClient *timers = &sr_data_timerlist;
     resettimer(timers->raycast, "raycast");
     resettimer(timers->buildframelist, "framesetup");
     resettimer(timers->renderdepth, "renderdepth");
@@ -443,7 +443,7 @@ static void draw_alpha(void)
 {
     static const float white[3] = {1.0f, 1.0f, 1.0f};
     renderframeatmosphere(0.625f);
-    starttimer(cl_data_timerlist.renderalpha);
+    starttimer(sr_data_timerlist.renderalpha);
     frame_view();
     glEnable(GL_BLEND);
     glBlendFunc(ONE, ONE);
@@ -478,7 +478,7 @@ static void draw_alpha(void)
         rendermodelwire(sr_data_modellist.item[item->type], &item->pos, item->rot, (const unsigned *)white, 1.125f);
         glEnable(GL_TEXTURE_2D);
     }
-    stoptimer(cl_data_timerlist.renderalpha);
+    stoptimer(sr_data_timerlist.renderalpha);
 }
 
 /* Draw the shapes of the world debug view. */
