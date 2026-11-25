@@ -78,3 +78,36 @@ The play fixture omits the gain key. After exit, the saved file must contain the
 The saved file must use CRLF lines without an extra carriage return.
 
 Use SR_SMOKE_ROUND_ONLY=1 for roster comparisons. This mode ends play after the team captures and does not test fire or voice.
+
+## Native executable and guards
+
+Run the native executable with one command:
+
+```powershell
+bash tools/native_test.sh --guard --hidden menus level
+```
+
+The script builds the targets, checks the build and runs the scenarios. It stops with exit code 1 when:
+
+- the build prints an error or returns a code other than 0 (`tools/build_native.bat` does the build);
+- an executable is older than a source file, so a failed build cannot leave an old executable to test;
+- a scenario fails, or a guard fires (see below).
+
+`--hidden` hides the game window. The run takes no screen, no focus and no mouse: the driver supplies the mouse
+motion and the keys, and the call that holds the cursor (`SDL_SetRelativeMouseMode`) does nothing in the smoke build.
+`--build-only` builds and checks the executables only. Without `--guard` the script tests the normal executable.
+
+The native executable keeps each datum as its own C object. A write past the end of an object changes the
+next variable in memory, and the next variable is not the same one as in the first executable.
+The guard targets add 256 bytes after each object (`SR_STORAGE_GUARDS`). A thread checks all guards every
+millisecond. When a guard changes, the process log has a `GUARD <name> first=<n> last=<n>` line and a
+`SAMPLE` line with the address of the main thread and its return addresses. The script maps them to function
+names (`tools/re/map_address.py`). The scan repairs the guard, so the next write is reported too.
+A guard that fires means a size in `analysis/client_win/group_globals_*.csv` is too small, or an array that the
+original executable fills past its end into idle data. Give the real size, or add the object to
+`analysis/client_win/native_slack.csv`.
+
+The native executable has no entry hook in its functions. The smoke driver finds the running frame loop
+(game, building editor, level editor, model viewer) from the stack of the main thread.
+`SR_SAMPLE=1` prints the position of the main thread once a second. The smoke driver clears `SR_SAMPLE`:
+use `SR_NATIVE_SAMPLE=1` for a smoke run.

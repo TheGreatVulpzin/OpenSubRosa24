@@ -285,7 +285,7 @@ extern SrPacketWorkspace sr_unplaced_packet_workspace;
 #define cl_data_sector_entries ((SectorEntry *)(sr_base + 0x19c05c64u))
 #define cl_data_interior_model_count (*((int *)(sr_base + 0x19c07c64u)))
 #define cl_data_sector_vertices ((uint8_t *)(sr_base + 0x1047c604u))
-#define cl_data_sector_indices (*((uint8_t *)(sr_base + 0x1247c604u)))
+#define cl_data_sector_indices ((uint8_t *)(sr_base + 0x1247c604u))
 #define cl_data_sector_vbo (*((int *)(sr_base + 0x1033fd24u)))
 #define cl_data_camera_position (*((vec3 *)(sr_base + 0xfefe2a4u)))
 #define cl_data_camera_rotation ((vec3 *)(sr_base + 0xfefe2b0u))

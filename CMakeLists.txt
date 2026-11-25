@@ -147,6 +147,39 @@ if(CL_ADOPTED)
     target_link_options(subvulpes-client-native-smoke PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
     set_target_properties(subvulpes-client-native-smoke PROPERTIES OUTPUT_NAME opensubrosa24_client_native_smoke)
     set_property(TARGET subvulpes-client-native-smoke PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+    # The native client with a guard after each datum (SR_STORAGE_GUARDS). A write past the end of a datum
+    # prints its name and where the main thread is. The smoke variant drives the same scenarios.
+    add_library(client_native_guard OBJECT EXCLUDE_FROM_ALL ${CL_ADOPTED})
+    target_include_directories(client_native_guard PRIVATE src/include src/platform src/client src/client/native third_party/glee ${SV_REWRITTEN_INCLUDES})
+    target_compile_options(client_native_guard PRIVATE /arch:IA32 /W3 /utf-8)
+    target_compile_definitions(client_native_guard PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_STORAGE_GUARDS)
+    set_property(SOURCE src/net/server.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native_guard>:addvoice=server_voice_slot>")
+    set_property(SOURCE src/game/game_setup.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native_guard>:setupgame=server_setupgame>")
+    set_property(SOURCE src/game/options.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native_guard>:loadsaveoptions=server_loadsaveoptions>")
+    set_property(TARGET client_native_guard PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    foreach(variant "" "-smoke")
+        set(sources src/standalone/client_native_main.c src/platform/client_imports.c src/platform/client_crt.c
+            src/platform/x87_math_client.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native_guard>)
+        set(definitions _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_STORAGE_GUARDS)
+        if(variant STREQUAL "-smoke")
+            list(APPEND sources src/standalone/client_smoke.c)
+            list(APPEND definitions SR_SMOKE)
+        endif()
+        set(target subvulpes-client-native-guard${variant})
+        add_executable(${target} EXCLUDE_FROM_ALL ${sources})
+        target_include_directories(${target} PRIVATE src/include src/platform src/client src/client/native src/standalone third_party/glee)
+        target_compile_options(${target} PRIVATE /arch:IA32 /W3 /utf-8)
+        target_compile_definitions(${target} PRIVATE ${definitions})
+        target_link_libraries(${target} PRIVATE opengl32 user32 gdi32 ws2_32 shell32)
+        target_link_options(${target} PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
+        set_target_properties(${target} PROPERTIES OUTPUT_NAME opensubrosa24_client_native_guard${variant})
+        set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endforeach()
+    set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "/W0")
 endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder. The hook
 # tables are generated under build/ by instrumentation/client/pipeline.sh and are not in the

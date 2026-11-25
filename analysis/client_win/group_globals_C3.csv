@@ -1,8 +1,8 @@
 name,type,count,client_rva,evidence
 draw_text,char,1024,0x1779ae00,"drawtext builds the text in it, up to 1000 letters and an end mark"
-draw_number,char,32,0x1779b200,"drawtext formats one number or string in it before it adds it to the text"
+draw_number,char,1024,0x1779b200,"drawtext formats one number or string in it before it adds it to the text. The 1024 bytes run to the next object"
 glext,int,17,0x29e7d2c0,"flags of the OpenGL extensions that the client checks at start. The Linux client names the symbol glext, 0x44 bytes. Entry 8 is the two sided stencil and entry 9 the separate stencil operation"
-programs,ProgramObject,10,0x128260,"setupprogramobjects and compileprogramobject: one record of 0x50 bytes for each of the ten shader programs"
+programs,ProgramObject,32,0x128260,"setupprogramobjects and compileprogramobject: one record of 0x50 bytes for each of the 32 program slots. Ten of them hold a compiled program"
 shader_log,char,65536,0x13c1e6c0,"compileprogramobject adds the info logs to it. setupprogramobjects writes it to shaderoutput.txt"
 info_log,char,65536,0x163129e0,"compileprogramobject reads the info log of an object into it"
 render_width,int,1,0xb7330c0,"setupprogramobjects gives the shaders the size of one pixel: 1 over this width"
@@ -45,7 +45,7 @@ sector_list,int,1024,0x19c04c64,"clearsectorlist: the sectors with an interior, 
 sector_entries,SectorEntry,1024,0x19c05c64,"clearsectorlist: the sectors with an interior and their distance, before the sort"
 interior_model_count,int,1,0x19c07c64,"clearsectorlist clears it. The interior model builder adds 1 for each model"
 sector_vertices,uint8_t,33554432,0x1047c604,"render_sectorlist: the vertices of the sectors, 64 bytes each"
-sector_indices,uint8_t,1,0x1247c604,"clearsectorlist: the triangle indices of the sectors, 12 bytes for each triangle"
+sector_indices,uint8_t,6291456,0x1247c604,"clearsectorlist: the triangle indices of the sectors, 12 bytes for each triangle"
 sector_vbo,int,1,0x1033fd24,"render_sectorlist: the number of the buffer of the sector vertices"
 camera_position,vec3,1,0xfefe2a4,"the place of the camera"
 camera_rotation,vec3,3,0xfefe2b0,"spritesimulation copies the camera rows to a particle in flight"
@@ -70,7 +70,7 @@ frame_models,FrameEntry,4096,0x19c110b8,Frame model transforms and draw paramete
 video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height and pixel depth
 video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
 screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
-blur_params_near,float,4,0x19c750dc,The first four parameters of the depth blur shader
+blur_params_near,float,8,0x19c750dc,The eight weights of the depth blur. The first four go to the shader as the near parameters and the last four as the far parameters (blur_params_far)
 blur_params_far,float,4,0x19c750ec,The second four parameters of the depth blur shader
 frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
 debug_player_count,int,1,0x14f88b0,The active player count without bots

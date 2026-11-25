@@ -154,6 +154,19 @@ def declaration(r):
     return f"{r['type']} {r['name']}{arr}"
 
 
+GUARD_SIZE = 256
+
+
+def hold_name(r):
+    return "cl_hold_" + re.sub(r"^(sr|cl)_data_", "", r["name"])
+
+
+def holder(r):
+    """A struct with the object and a guard after it. A write past the object changes the guard."""
+    arr = f"[{r['count']}]" if r["count"] > 1 else ""
+    return f"struct {hold_name(r)} {{ {r['type']} obj{arr}; unsigned char guard[{GUARD_SIZE}]; }};"
+
+
 def alias_macro(r):
     base = f"((char *)&{r['root']['name']} + 0x{r['offset']:x})"
     if r["count"] > 1:
@@ -174,7 +187,13 @@ def header(rows, dummies):
                 out.append(f'extern uint8_t {r["glee"]};')
             out.append(f'#define {r["name"]} {r["glee"]}')
         elif r["root"] is None:
+            out.append("#ifdef SR_STORAGE_GUARDS")
+            out.append(holder(r))
+            out.append(f"extern struct {hold_name(r)} {hold_name(r)};")
+            out.append(f"#define {r['name']} ({hold_name(r)}.obj)")
+            out.append("#else")
             out.append("extern " + declaration(r) + ";")
+            out.append("#endif")
     out.append("")
     for r in rows:
         if r["root"] is not None and not r["glee"]:
@@ -239,7 +258,11 @@ def source(rows, dummies):
            "/* The data of the game. Each object has the size that the clean code expects. */"]
     for r in rows:
         if r["root"] is None and not r["glee"]:
+            out.append("#ifdef SR_STORAGE_GUARDS")
+            out.append(f"struct {hold_name(r)} {hold_name(r)};")
+            out.append("#else")
             out.append(declaration(r) + ";")
+            out.append("#endif")
             out.append(f'SR_STATIC_ASSERT(sizeof({r["name"]}) == {r["count"]} * {r["bytes"] // r["count"]}, "{r["name"]}");')
     out += ["", "/* An object that lies inside a bigger object must fit in it. */"]
     for r in rows:
@@ -251,9 +274,38 @@ def source(rows, dummies):
         if count * size <= DUMMY_LIMIT:
             arr = f"[{count}]" if count > 1 else ""
             out.append(f"{typ} sr_unplaced_{name}{arr};")
-    out += ["int sr_client_end_time;", "int sr_client_gametype;", "",
-            "/* Give the objects their start values. Call it once, before the game starts. */",
-            "void cl_storage_init(void)", "{"]
+    out += ["int sr_client_end_time;", "int sr_client_gametype;", ""]
+    out += ["#ifdef SR_STORAGE_GUARDS", "#define CL_GUARD_SIZE %d" % GUARD_SIZE,
+            "/* The guard after each object. A change in a guard means a write past the end of its object. */",
+            "static const struct { const char *name; unsigned char *guard; } cl_guards[] = {"]
+    for r in rows:
+        if r["root"] is None and not r["glee"]:
+            out.append(f'    {{ "{r["name"]}", {hold_name(r)}.guard }},')
+    out += ["};", "",
+            "/* Return the name of an object whose guard changed, and mend the guard. Return 0 when all are whole. */",
+            "const char *cl_guards_scan(unsigned *first, unsigned *last)", "{",
+            "    unsigned i, k;", "",
+            "    for (i = 0; i < sizeof cl_guards / sizeof cl_guards[0]; i++)",
+            "        for (k = 0; k < CL_GUARD_SIZE; k++)",
+            "            if (cl_guards[i].guard[k] != 0xa5) {",
+            "                unsigned end = CL_GUARD_SIZE;",
+            "",
+            "                while (end > k && cl_guards[i].guard[end - 1] == 0xa5)",
+            "                    end--;",
+            "                *first = k;",
+            "                *last = end - 1;",
+            "                memset(cl_guards[i].guard, 0xa5, CL_GUARD_SIZE);",
+            "                return cl_guards[i].name;",
+            "            }",
+            "            ",
+            "    return 0;", "}", "#endif", ""]
+    out += ["/* Give the objects their start values. Call it once, before the game starts. */",
+            "void cl_storage_init(void)", "{",
+            "#ifdef SR_STORAGE_GUARDS",
+            "    unsigned i;", "",
+            "    for (i = 0; i < sizeof cl_guards / sizeof cl_guards[0]; i++)",
+            "        memset(cl_guards[i].guard, 0xa5, CL_GUARD_SIZE);",
+            "#endif"]
     for r in rows:
         if r["glee"]:
             continue

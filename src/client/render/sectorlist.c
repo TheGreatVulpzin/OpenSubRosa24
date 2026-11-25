@@ -138,7 +138,7 @@ static void add_runs(const BlockSector *sector)
             continue;
         g_draw_counts[material * RUNS_PER_MATERIAL + run] = sector->parts[part].num_triangles * 3;
         g_draw_offsets[material * RUNS_PER_MATERIAL + run] =
-            (void *)((const char *)&cl_data_sector_indices + sector->parts[part].first_index * TRIANGLE_INDEX_SIZE);
+            (void *)((const char *)cl_data_sector_indices + sector->parts[part].first_index * TRIANGLE_INDEX_SIZE);
         g_part_count[material] = run + 1;
     }
 }

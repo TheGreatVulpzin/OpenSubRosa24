@@ -90,3 +90,4 @@ view_player,view,alias: same object; keep view
 audio_channels,voice,alias: one VoiceChannelClient object; AudioChannel is the same record
 wsa_data,wsadata,alias: one WSADATA buffer of 0x190 bytes
 zlib_defaults_ready,zlib_default_distance,"element 31: init_defaults sets the 32 bytes to 5 with memset, so it also sets the flag. No other code writes the flag"
+blur_params_far,blur_params_near,"the last four weights of blur_params_near (+0x10)"

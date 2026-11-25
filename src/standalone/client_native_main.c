@@ -21,7 +21,7 @@
 void cl_storage_init(void);
 int __cdecl client_main(void);
 
-static HANDLE g_main_thread;
+HANDLE g_main_thread;
 
 /* A word of the stack that looks like the return address of a call. */
 static int is_return_address(uintptr_t word, uintptr_t base, uintptr_t end)
@@ -32,31 +32,59 @@ static int is_return_address(uintptr_t word, uintptr_t base, uintptr_t end)
     return code[-5] == 0xE8 || code[-2] == 0xFF || code[-6] == 0xFF;
 }
 
-static DWORD WINAPI sampler(LPVOID unused)
+/* Print where the main thread is: its address and the return addresses on its stack. */
+static void print_main_thread(void)
 {
     uintptr_t base = (uintptr_t)GetModuleHandleA(NULL);
     const IMAGE_NT_HEADERS *nt = (const IMAGE_NT_HEADERS *)(base + ((const IMAGE_DOS_HEADER *)base)->e_lfanew);
     uintptr_t end = base + nt->OptionalHeader.SizeOfImage;
+    CONTEXT context;
+
+    SuspendThread(g_main_thread);
+    context.ContextFlags = CONTEXT_CONTROL;
+    if (GetThreadContext(g_main_thread, &context)) {
+        const uintptr_t *stack = (const uintptr_t *)context.Esp;
+        int i, shown = 0;
+        printf("SAMPLE base=%p eip=%p calls:", (void *)base, (void *)context.Eip);
+        for (i = 0; i < 2048 && shown < 10; i++)
+            if (!IsBadReadPtr(stack + i, sizeof *stack) && is_return_address(stack[i], base, end)) {
+                printf(" %p", (void *)stack[i]);
+                shown++;
+            }
+        printf("\n");
+    }
+    ResumeThread(g_main_thread);
+}
+
+static DWORD WINAPI sampler(LPVOID unused)
+{
     (void)unused;
     for (;;) {
-        CONTEXT context;
         Sleep(1000);
-        SuspendThread(g_main_thread);
-        context.ContextFlags = CONTEXT_CONTROL;
-        if (GetThreadContext(g_main_thread, &context)) {
-            const uintptr_t *stack = (const uintptr_t *)context.Esp;
-            int i, shown = 0;
-            printf("SAMPLE base=%p eip=%p calls:", (void *)base, (void *)context.Eip);
-            for (i = 0; i < 2048 && shown < 10; i++)
-                if (!IsBadReadPtr(stack + i, sizeof *stack) && is_return_address(stack[i], base, end)) {
-                    printf(" %p", (void *)stack[i]);
-                    shown++;
-                }
-            printf("\n");
-        }
-        ResumeThread(g_main_thread);
+        print_main_thread();
     }
 }
+
+#ifdef SR_STORAGE_GUARDS
+const char *cl_guards_scan(unsigned *first, unsigned *last);
+
+/* Each object has a guard after it. When a guard changes, some code wrote past the end of the
+ * object: print its name and where the main thread is. */
+static DWORD WINAPI guard_watcher(LPVOID unused)
+{
+    (void)unused;
+    for (;;) {
+        unsigned first, last;
+        const char *name = cl_guards_scan(&first, &last);
+
+        if (name) {
+            printf("GUARD %s first=%u last=%u\n", name, first, last);
+            print_main_thread();
+        }
+        Sleep(1);
+    }
+}
+#endif
 
 /* Print where a crash happened: the address, the faulting access and the return addresses on the
  * stack. Map the addresses with the .map file of the link. */
@@ -97,12 +125,14 @@ int main(void)
     if (getenv("SR_DEBUGIT") && atoi(getenv("SR_DEBUGIT")) != 0)
         sr_data_debugit = 1;
     /* The smoke driver clears SR_SAMPLE, so SR_NATIVE_SAMPLE does the same for a smoke run. */
+    DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &g_main_thread, 0, FALSE,
+                    DUPLICATE_SAME_ACCESS);
     if ((getenv("SR_SAMPLE") && atoi(getenv("SR_SAMPLE")) != 0) ||
-        (getenv("SR_NATIVE_SAMPLE") && atoi(getenv("SR_NATIVE_SAMPLE")) != 0)) {
-        DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &g_main_thread, 0, FALSE,
-                        DUPLICATE_SAME_ACCESS);
+        (getenv("SR_NATIVE_SAMPLE") && atoi(getenv("SR_NATIVE_SAMPLE")) != 0))
         CreateThread(NULL, 0, sampler, NULL, 0, NULL);
-    }
+#ifdef SR_STORAGE_GUARDS
+    CreateThread(NULL, 0, guard_watcher, NULL, 0, NULL);
+#endif
 #ifdef SR_SMOKE
     if (!client_smoke_start())
         return 2;

@@ -206,6 +206,20 @@ static int __stdcall smoke_documents(void *window, char *path, int folder, int c
     return size > 0 && size < MAX_PATH;
 }
 
+static int __cdecl smoke_relative_mode(int enabled)
+{
+    (void)enabled;
+    return 0;
+}
+
+enum { SDL_WINDOW_HIDDEN_FLAG = 0x8 };
+static void *(__cdecl *create_window)(const char *, int, int, int, int, uint32_t);
+
+static void *__cdecl smoke_create_window(const char *title, int x, int y, int width, int height, uint32_t flags)
+{
+    return create_window(title, x, y, width, height, flags | SDL_WINDOW_HIDDEN_FLAG);
+}
+
 void *client_smoke_import(const char *dll, const char *name, void *function)
 {
     if (!getenv("SR_SMOKE")) return function;
@@ -219,6 +233,15 @@ void *client_smoke_import(const char *dll, const char *name, void *function)
         if (!strcmp(name, "alcCaptureSamples")) return (void *)smoke_capture_samples;
     }
     if (_stricmp(dll, "SDL2.DLL")) return function;
+    /* The smoke driver supplies the mouse motion itself. The real relative mode would hold the cursor of
+     * the user, so the call does nothing. */
+    if (!strcmp(name, "SDL_SetRelativeMouseMode"))
+        return (void *)smoke_relative_mode;
+    /* SR_SMOKE_HIDDEN=1 makes the window hidden: the run takes no screen and no focus. */
+    if (!strcmp(name, "SDL_CreateWindow") && getenv("SR_SMOKE_HIDDEN") && atoi(getenv("SR_SMOKE_HIDDEN")) != 0) {
+        create_window = (void *(__cdecl *)(const char *, int, int, int, int, uint32_t))function;
+        return (void *)smoke_create_window;
+    }
     if (!strcmp(name, "SDL_GL_SwapWindow")) {
         swap_window = (void (__cdecl *)(void *))function;
         return (void *)smoke_swap;
@@ -250,6 +273,54 @@ void client_smoke_call(unsigned rva)
     case SMOKE_CALL_MODEL: InterlockedExchange(&active_loop, LOOP_MODEL); break;
     }
 }
+
+#ifdef SR_CLIENT_NATIVE
+/* The native executable has no entry hook in its functions. This thread looks at the stack of the
+ * main thread instead: a frame loop that runs has a return address inside its function. */
+extern HANDLE g_main_thread;
+void __cdecl gameloop(void);
+void __cdecl building_editorloop(void);
+void __cdecl leveleditor_loop(void);
+void __cdecl model_viewer(void);
+
+enum { LOOP_RANGE = 0x1000, LOOP_PROBE_MS = 10, LOOP_STACK_WORDS = 4096 };
+
+static int in_function(uintptr_t word, void (__cdecl *function)(void))
+{
+    uintptr_t start = (uintptr_t)function;
+    return word > start && word < start + LOOP_RANGE;
+}
+
+/* The probe stops the main thread, so it runs only while a wait needs the loop. */
+static volatile LONG probe_wanted;
+
+static DWORD WINAPI loop_probe(LPVOID unused)
+{
+    (void)unused;
+    for (;;) {
+        CONTEXT context;
+        int loop = LOOP_NONE;
+
+        Sleep(LOOP_PROBE_MS);
+        if (!InterlockedCompareExchange(&probe_wanted, 0, 0))
+            continue;
+        SuspendThread(g_main_thread);
+        context.ContextFlags = CONTEXT_CONTROL;
+        if (GetThreadContext(g_main_thread, &context)) {
+            const uintptr_t *stack = (const uintptr_t *)context.Esp;
+            int i;
+            for (i = 0; i < LOOP_STACK_WORDS && !IsBadReadPtr(stack + i, sizeof *stack); i++) {
+                if (in_function(stack[i], leveleditor_loop)) loop = LOOP_LEVEL;
+                else if (in_function(stack[i], building_editorloop)) loop = LOOP_BUILDING;
+                else if (in_function(stack[i], model_viewer)) loop = LOOP_MODEL;
+                else if (in_function(stack[i], gameloop) && loop == LOOP_NONE) loop = LOOP_GAME;
+            }
+        }
+        ResumeThread(g_main_thread);
+        InterlockedExchange(&active_loop, loop);
+    }
+}
+#endif
 
 static int item_index(const SmokeFrame *view, const char *text)
 {
@@ -288,6 +359,9 @@ static int wait_screen(ScreenCheck check, unsigned frames, DWORD milliseconds, D
     unsigned first_frame = 0;
     int seen = 0;
     fprintf(stderr, "SMOKE STAGE %s\n", stage);
+#ifdef SR_CLIENT_NATIVE
+    InterlockedExchange(&probe_wanted, check == level_screen || check == building_screen || check == model_screen);
+#endif
     while (GetTickCount() - start < limit) {
         SmokeFrame view = snapshot();
         if (!strcmp(scenario, "explore") && GetTickCount() - scenario_start >= EXPLORE_MS)
@@ -526,6 +600,9 @@ int client_smoke_start(void)
     changed = CreateEventA(NULL, FALSE, FALSE, NULL);
     stop = CreateEventA(NULL, TRUE, FALSE, NULL);
     if (!changed || !stop) return fail("event allocation");
+#ifdef SR_CLIENT_NATIVE
+    CreateThread(NULL, 0, loop_probe, NULL, 0, NULL);
+#endif
     worker = CreateThread(NULL, 0, smoke_worker, NULL, 0, NULL);
     if (!worker) return fail("thread allocation");
     return 1;

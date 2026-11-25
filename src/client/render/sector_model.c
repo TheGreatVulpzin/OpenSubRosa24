@@ -440,7 +440,7 @@ static void start_part(BlockSector *s, int mat)
 void __cdecl area_submitsectormodel(int sector)
 {
     SectorVertex *verts = (SectorVertex *)cl_data_sector_vertices;
-    int (*indices)[3] = (int (*)[3])&cl_data_sector_indices;
+    int (*indices)[3] = (int (*)[3])cl_data_sector_indices;
     int *block_verts = g_tempmesh.block_verts;
     BlockSector *s;
     int mat, t, k, j, used;
