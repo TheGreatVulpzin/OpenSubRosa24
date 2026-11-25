@@ -4,6 +4,10 @@ Goal: a client that people can read, optimize and change. Several people will wo
 The normal build has no image of the original executable, no address in a call, and no tool
 of `instrumentation/`. The code is shared with the server where the algorithm is the same.
 
+The end state is a source tree that reads like the original source of the game. A developer
+opens a file, reads it, and changes it. No custom layer stands between the code and the compiler:
+no hook macro, no call by address, no storage adapter, no generated offset.
+
 ## State on 2026-11-25
 
 - All game code has clean C: about 52000 lines in `src/client`, `src/game`, `src/common` and `src/net`.
@@ -51,8 +55,11 @@ target has no include path to `instrumentation/`.
    that declares `name`. The type cast goes away.
 2. Replace the 87 aliases by named fields of the big struct (names in `analysis/structs/names.csv`
    and `tools/re/gen_types.py`). The generator stops writing offsets.
-3. Move the hook macros of `client_build.h` into groups with a comment that says what the client does
-   differently and why (for example "the client smooths the moves after it reads the objects").
+3. Remove every hook macro of `client_build.h`. Each one becomes normal code, one of two forms:
+   a function that the shared code calls by name and that the server and the client each implement
+   (the linker picks one, for example `unpack_state_objects`), or one shared function when the
+   difference is only data (the two record layouts become one). No macro that expands to a
+   different expression in the client.
 4. Keep `instrumentation/` as an optional verification tree (harness, lifter, recorder) outside the
    normal build, as the server does. The image executable target moves there.
 
@@ -101,6 +108,10 @@ The decision that opens the work for other people: what happens to the compariso
 Done when: the frame time at the same scenes is not worse than the original, and each
 hot function has a measured result.
 
+0. Benchmark of the rewrite (`python -I instrumentation/lift/bench.py`): the time of each clean
+   function against the original, for every function that runs each frame. Run it once after
+   phase A and again after phase B. A ratio above 1.05 in all runs is a slower function: fix it
+   before the next phase.
 1. Profile with `profile=1` and `SV_SAMPLE` on the native executable: frame time of the menus,
    the city, a fight.
 2. Remove what only existed to match the original: x87 helpers where SSE gives the same
@@ -119,7 +130,7 @@ Model: Opus for the float work. Sonnet for the rest.
    They touch different files, so two worktrees can run together.
 4. E when A passes. F after B and C.
 
-## Decisions that the owner has to confirm
+## Decisions (items 1 and 2 confirmed by the owner on 2026-11-25)
 
 1. Phase E: after the freeze, a change that alters a result is allowed with a note in the commit.
 2. Phase B step 4: the harness, lifter and recorder stay in the repository, outside the normal build.
