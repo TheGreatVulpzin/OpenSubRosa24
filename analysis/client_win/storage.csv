@@ -69,7 +69,7 @@ bullettypes,BulletType,4,24,0xf3ea9c0,27,31,ok
 accounts,SrAccountStore,1,4980744,0xf3eb200,9,18,ok
 view,int,1,4,0xfefe2a0,1,1,checked
 intersect,Intersect,1,132,0x1033ec20,49,72,ok
-packet_workspace,SrPacketWorkspace,1,165476,0x1033ed20,37,133,weak
+packet_workspace,SrPacketWorkspace,1,165476,0x1033ed20,37,133,dropped
 level_marks,uint8_t,4096,1,0x12a7c604,1,1,weak
 speex,Speex,1,9637888,0x12a7d680,1,9,other
 area_block,AreaBlock,65536,132,0x133ae680,30,31,checked

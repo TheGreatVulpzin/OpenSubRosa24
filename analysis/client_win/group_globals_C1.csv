@@ -5,7 +5,7 @@ zlib_default_length,uint8_t,288,0x1279d8,Fixed length code sizes
 zlib_default_distance,uint8_t,32,0x1272b0,Fixed distance code sizes
 image_error,char*,1,0x126720,Image failure message
 fontnum,int,1,0x127eac,Selected font index
-fonts,Font,16,0xb773540,Font records have stride 0x2410
+fonts,Font,4,0xb773540,"Font records have stride 0x2410. The font numbers are 0 to 3 (FONT_SIGN). tiremarkstart starts 0x9040 bytes (4 records) after it. The Linux client names the symbol font, 0x9040 bytes"
 image_textures,ImageTexture,4096,0x17b4b840,Texture records have stride 0x70
 image_width,uint32_t,1,0x19da5220,Loaded image width
 image_height,uint32_t,1,0x19da5224,Loaded image height

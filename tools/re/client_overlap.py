@@ -106,6 +106,9 @@ def main():
     problems = 0
     objects = []
     for row in csv.DictReader((ROOT / "analysis/client_win/storage.csv").open(encoding="utf-8")):
+        # A dropped row has no object in the client adapter.
+        if row["status"] == "dropped":
+            continue
         objects.append(("storage", row["name"], int(row["client_rva"], 16), int(row["count"]) * int(row["size"])))
     for path in sorted((ROOT / "analysis/client_win").glob("group_globals_C*.csv")):
         for row in csv.DictReader(path.open(encoding="utf-8")):

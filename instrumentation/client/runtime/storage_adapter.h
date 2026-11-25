@@ -108,7 +108,6 @@ extern uintptr_t sr_base;
 #define sr_data_radix (*((Radix *)(sr_base + 0xfefe340u)))
 #define sr_data_intersect (*((Intersect *)(sr_base + 0x1033ec20u)))
 #define sr_data_slogfp (*((void * *)(sr_base + 0x1033eca4u)))
-#define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
 #define sr_data_numofsprite_models (*((int *)(sr_base + 0x12a7d604u)))
 #define sr_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
@@ -151,6 +150,8 @@ extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
 extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
+extern SrPacketWorkspace sr_unplaced_packet_workspace;
+#define sr_data_packet_workspace sr_unplaced_packet_workspace
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
@@ -347,7 +348,7 @@ extern int sr_unplaced_startup_counter;
 #undef sr_data_numofkicked
 #define sr_data_numofkicked (*((int *)(sr_base + 0x103675a4u)))
 #define cl_data_input_debug_toggle (*((uint32_t *)(sr_base + 0x102feb48u)))
-#define cl_data_input_label_chat ((char *)(sr_base + 0x127eb1u))
+#define cl_data_input_label_chat (*((char *)(sr_base + 0x127eb1u)))
 #define cl_data_input_label_pause ((char *)(sr_base + 0x125224u))
 #define cl_data_input_label_return ((char *)(sr_base + 0x12522cu))
 #define cl_data_input_label_options ((char *)(sr_base + 0x12523cu))
@@ -361,6 +362,10 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_input_label_timer_setup ((char *)(sr_base + 0x123e3cu))
 #define cl_data_input_label_timer_alloc ((char *)(sr_base + 0x123e4cu))
 #define cl_data_input_label_timer_shadow ((char *)(sr_base + 0x123e5cu))
+#undef sr_data_objectpacket
+#define sr_data_objectpacket (*((ObjectPacket *)(sr_base + 0x10340d60u)))
+#undef sr_data_itemtype
+#define sr_data_itemtype ((ItemType *)(sr_base + 0x1034db80u))
 #define cl_data_menu_items ((MenuItem *)(sr_base + 0x5350d00u))
 #define cl_data_menu_item_count (*((int *)(sr_base + 0x9065240u)))
 #define cl_data_menu_item_index (*((int *)(sr_base + 0xfefe288u)))
@@ -560,7 +565,5 @@ extern int sr_client_end_time;
 #define cl_data_glee_ext_stencil_two_side (*((uint8_t *)(sr_base + 0x127d28u)))
 #define cl_data_glee_ati_separate_stencil (*((uint8_t *)(sr_base + 0x127d3du)))
 
-#define sr_data_objectpacket sr_data_packet_workspace.objectpacket
-#define sr_data_itemtype sr_data_packet_workspace.itemtype
 
 #endif
