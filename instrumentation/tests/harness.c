@@ -1141,8 +1141,9 @@ static const char *known_difference(const char *name)
         { "pbitreadnego", "client follows the server code (damaged packets)" },
         /* With no account the client prints an uninitialized average in stats.txt. The server code prints 0. */
         { "server_writelogfile", "no account: the client prints junk for the average" },
-        /* The function has no result. EAX holds what the last call left there. Memory and environment are the same. */
-        { "resetgame", "no result: EAX is junk" },
+        /* In some game modes resetgame creates humans with createhuman. Then only the two low bytes of
+         * Human.protect_timer differ: the client gives 3600 ticks less protection. */
+        { "resetgame", "client follows the server code (createhuman)" },
         /* A text with no number: the client returns an uninitialized float, the shared code 0. */
         { "getfloat", "returns an uninitialized local when there is no number" },
         /* The ray test subtracts two close numbers, so the last bit of the dot product shows in the result. */
