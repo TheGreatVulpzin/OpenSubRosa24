@@ -6,6 +6,7 @@
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
 #include "sr_input_types.h"
+#include "gl_slots.h"
 
 extern int sr_data_hack_modulusopt[3];
 extern vec3 sr_data_cubevertex[8];
@@ -163,7 +164,7 @@ extern char cl_data_image_name[128];
 extern SoundBuffer cl_data_sound_buffers[256];
 extern int cl_data_audio_source_limit;
 extern char cl_data_source_buffer[131072];
-extern void * cl_data_gl_buffer_sub_data;
+#define cl_data_gl_buffer_sub_data cl_glBufferSubDataARB
 extern ModelVertex cl_data_track_verts[917504];
 extern int cl_data_building_click_wait;
 extern int cl_data_head_face_quads[3];
@@ -201,8 +202,8 @@ extern int cl_data_bigendian;
 extern int cl_data_landsector_vbo[1024];
 extern VboRec cl_data_vbo[4096];
 extern LandSectorLod cl_data_landsector_lod[1024];
-extern void * cl_data_gl_bind_buffer;
-extern void * cl_data_gl_buffer_data;
+#define cl_data_gl_bind_buffer cl_glBindBufferARB
+#define cl_data_gl_buffer_data cl_glBufferDataARB
 extern int cl_data_fontlist[2];
 extern SphereLevel cl_data_sphere[8];
 extern WindowAtlas cl_data_texture_windowatlas;
@@ -332,11 +333,11 @@ extern JoinAddress cl_data_join_addresses[8192];
 extern int cl_data_join_address_count;
 extern int cl_data_join_master_first;
 extern float cl_data_join_columns[10];
-extern void * cl_data_gl_create_program;
-extern void * cl_data_gl_create_shader;
-extern void * cl_data_gl_gen_buffers;
-extern void * cl_data_gl_gen_framebuffers;
-extern void * cl_data_gl_gen_renderbuffers;
+#define cl_data_gl_create_program cl_glCreateProgramObjectARB
+#define cl_data_gl_create_shader cl_glCreateShaderObjectARB
+#define cl_data_gl_gen_buffers cl_glGenBuffersARB
+#define cl_data_gl_gen_framebuffers cl_glGenFramebuffers
+#define cl_data_gl_gen_renderbuffers cl_glGenRenderbuffers
 extern int cl_data_vbo_next;
 extern int cl_data_framebuffer_ready;
 extern int cl_data_vbo_spare_a;
@@ -381,13 +382,20 @@ extern int cl_data_game_block_count;
 extern EditorEntry cl_data_game_blocks[1024];
 extern int cl_data_game_texture_count;
 extern EditorEntry cl_data_game_textures[1024];
-extern uint8_t cl_data_glee_arb_multitexture;
-extern uint8_t cl_data_glee_arb_vertex_buffer_object;
-extern uint8_t cl_data_glee_arb_shader_objects;
-extern uint8_t cl_data_glee_arb_framebuffer_object;
-extern uint8_t cl_data_glee_ext_multi_draw_arrays;
-extern uint8_t cl_data_glee_ext_stencil_two_side;
-extern uint8_t cl_data_glee_ati_separate_stencil;
+extern uint8_t _GLEE_ARB_multitexture;
+#define cl_data_glee_arb_multitexture _GLEE_ARB_multitexture
+extern uint8_t _GLEE_ARB_vertex_buffer_object;
+#define cl_data_glee_arb_vertex_buffer_object _GLEE_ARB_vertex_buffer_object
+extern uint8_t _GLEE_ARB_shader_objects;
+#define cl_data_glee_arb_shader_objects _GLEE_ARB_shader_objects
+extern uint8_t _GLEE_ARB_framebuffer_object;
+#define cl_data_glee_arb_framebuffer_object _GLEE_ARB_framebuffer_object
+extern uint8_t _GLEE_EXT_multi_draw_arrays;
+#define cl_data_glee_ext_multi_draw_arrays _GLEE_EXT_multi_draw_arrays
+extern uint8_t _GLEE_EXT_stencil_two_side;
+#define cl_data_glee_ext_stencil_two_side _GLEE_EXT_stencil_two_side
+extern uint8_t _GLEE_ATI_separate_stencil;
+#define cl_data_glee_ati_separate_stencil _GLEE_ATI_separate_stencil
 
 #define sr_data_view (*(int *)((char *)&cl_data_audio_camera + 0x0))
 #define cl_data_zlib_defaults_ready (*(uint8_t *)((char *)&cl_data_zlib_default_distance + 0x1f))

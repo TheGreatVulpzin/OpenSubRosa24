@@ -108,6 +108,20 @@ if(CL_ADOPTED)
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:loadsaveoptions=server_loadsaveoptions>")
     set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set(CL_ADOPTED_OBJECTS $<TARGET_OBJECTS:client_adopted>)
+
+    # The native client: the same sources, one real C object for each datum (src/client/storage.c),
+    # no image of subrosa.exe and no file of instrumentation/.
+    add_library(client_native OBJECT EXCLUDE_FROM_ALL ${CL_ADOPTED})
+    target_include_directories(client_native PRIVATE src/include src/platform src/client src/client/native third_party/glee ${SV_REWRITTEN_INCLUDES})
+    target_compile_options(client_native PRIVATE /arch:IA32 /W3 /utf-8)
+    target_compile_definitions(client_native PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE)
+    set_property(SOURCE src/net/server.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native>:addvoice=server_voice_slot>")
+    set_property(SOURCE src/game/game_setup.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native>:setupgame=server_setupgame>")
+    set_property(SOURCE src/game/options.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native>:loadsaveoptions=server_loadsaveoptions>")
+    set_property(TARGET client_native PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder. The hook
 # tables are generated under build/ by instrumentation/client/pipeline.sh and are not in the
