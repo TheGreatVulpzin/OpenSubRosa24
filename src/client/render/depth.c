@@ -84,7 +84,7 @@ static void blur_quad(const float step[2])
         program->uniforms[2], 1, cl_data_blur_params_near);
     cl_glUniform4fvARB(
         program->uniforms[3], 1, cl_data_blur_params_far);
-    depth_texture(cl_data_texturelist.shadow_map);
+    depth_texture(sr_data_texturelist.shadow_map);
     glBegin(GL_QUADS);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glTexCoord2f(0.0f, 1.0f);
@@ -97,7 +97,7 @@ static void blur_quad(const float step[2])
     glVertex2f(-1.0f, -1.0f);
     glEnd();
     depth_program(-1);
-    depth_copy(cl_data_texturelist.shadow_map);
+    depth_copy(sr_data_texturelist.shadow_map);
 }
 
 /* Draw depth, shadow masks and optional ambient occlusion. */
@@ -106,9 +106,9 @@ void __cdecl renderframedepth(void)
     const ClientRenderOptions *options = (const ClientRenderOptions *)&sr_data_option;
     int debug_shadows = sr_data_debugit && !cl_data_audio_input_blocked && cl_data_keyboard[14];
     int i;
-    starttimer(cl_data_timerlist.renderdepth);
+    starttimer(sr_data_timerlist.renderdepth);
     if (options->framebuffer)
-        depth_attachment(cl_data_texturelist.sky);
+        depth_attachment(sr_data_texturelist.sky);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glStencilMask(UINT32_MAX);
     glClearStencil(0);
@@ -138,11 +138,11 @@ void __cdecl renderframedepth(void)
     rendertrackmodel(1);
     depth_program(-1);
     if (!options->framebuffer)
-        depth_copy(cl_data_texturelist.sky);
+        depth_copy(sr_data_texturelist.sky);
     if (options->framebuffer)
-        depth_attachment(cl_data_texturelist.shadow_map);
+        depth_attachment(sr_data_texturelist.shadow_map);
     if (debug_shadows && options->framebuffer)
-        depth_attachment(cl_data_texturelist.frame_color);
+        depth_attachment(sr_data_texturelist.frame_color);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(CLEAR_COLOR);
     glstateshadowtwoside();
@@ -167,7 +167,7 @@ void __cdecl renderframedepth(void)
     disabletwosidedstencil();
     if (debug_shadows) {
         glDisable(STENCIL_TEST);
-        stoptimer(cl_data_timerlist.renderdepth);
+        stoptimer(sr_data_timerlist.renderdepth);
         return;
     }
     glColorMask(1, 0, 0, 0);
@@ -195,14 +195,14 @@ void __cdecl renderframedepth(void)
     glDisable(STENCIL_TEST);
     glEnable(GL_TEXTURE_2D);
     glColorMask(0, 1, 0, 0);
-    depth_texture(cl_data_texturelist.sky);
+    depth_texture(sr_data_texturelist.sky);
     if (!options->ambient_occlusion)
         glDisable(GL_TEXTURE_2D);
     else {
         depth_program(PROGRAM_OCCLUSION);
         cl_glActiveTextureARB(TEXTURE1);
         glEnable(GL_TEXTURE_2D);
-        depth_texture(cl_data_texturelist.random_vectors);
+        depth_texture(sr_data_texturelist.random_vectors);
     }
     glBegin(GL_QUADS);
     glColor3f(0.5f, 0.5f, 0.5f);
@@ -222,9 +222,9 @@ void __cdecl renderframedepth(void)
     glEnable(CULL_FACE);
     glFrontFace(FRONT_CW);
     if (!options->framebuffer)
-        depth_copy(cl_data_texturelist.shadow_map);
+        depth_copy(sr_data_texturelist.shadow_map);
     else
-        depth_attachment(cl_data_texturelist.frame_aux);
+        depth_attachment(sr_data_texturelist.frame_aux);
     if (options->ambient_occlusion) {
         float step[2];
         glColorMask(0, 1, 0, 0);
@@ -242,5 +242,5 @@ void __cdecl renderframedepth(void)
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
     }
-    stoptimer(cl_data_timerlist.renderdepth);
+    stoptimer(sr_data_timerlist.renderdepth);
 }

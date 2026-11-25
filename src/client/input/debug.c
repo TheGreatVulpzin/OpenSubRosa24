@@ -18,9 +18,9 @@ void debug_getinputs(void)
         cl_data_input_label_timer_shadow
     };
     const int timers[INTERIOR_TIMERS] = {
-        cl_data_timerlist.buildinterior, cl_data_timerlist.optimizeinterior,
-        cl_data_timerlist.setupinterior, cl_data_timerlist.allocinterior,
-        cl_data_timerlist.shadowinterior
+        sr_data_timerlist.buildinterior, sr_data_timerlist.optimizeinterior,
+        sr_data_timerlist.setupinterior, sr_data_timerlist.allocinterior,
+        sr_data_timerlist.shadowinterior
     };
     int timer;
     if (!cl_data_audio_input_blocked) {

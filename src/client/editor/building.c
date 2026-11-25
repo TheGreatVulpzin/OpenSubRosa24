@@ -183,7 +183,7 @@ static int cell_texture(const BuildingCell *cell, int layer, int slot)
     /* The slots hold unsigned 16-bit material numbers. */
     int material = layer == 0 ? (uint16_t)cell->tex_outer[slot] : (uint16_t)cell->tex_inner[slot];
 
-    return cl_data_texturelist.material[sr_data_building.material_textures[material]];
+    return sr_data_texturelist.material[sr_data_building.material_textures[material]];
 }
 
 /* Send one corner of a block quad: shade it by its height and move it to its place. The y of
@@ -218,7 +218,7 @@ static void block_quads(const AreaBlock *type, const BuildingCell *cell, int lay
 
         if (slot > LAST_SLOT)
             slot = LAST_SLOT;
-        texture = slots != NULL ? cl_data_texturelist.material[sr_data_building.material_textures[slots[slot]]]
+        texture = slots != NULL ? sr_data_texturelist.material[sr_data_building.material_textures[slots[slot]]]
                                 : cell_texture(cell, layer, slot);
         glBindTexture(GL_TEXTURE_2D, cl_data_texture[texture].gl_name);
         glBegin(GL_QUADS);
@@ -253,7 +253,7 @@ void __cdecl buildingeditor_renderblock(uint32_t block, int layer, int x, int fl
         if (slot > LAST_SLOT)
             slot = LAST_SLOT;
         if (slot == 6)
-            texture = cl_data_texturelist.material[sr_data_materiallist.flagged_material];
+            texture = sr_data_texturelist.material[sr_data_materiallist.flagged_material];
         else if (layer == 0)
             texture = cell_texture(cell, 0, slot);
         else if (slot < LAST_SLOT)

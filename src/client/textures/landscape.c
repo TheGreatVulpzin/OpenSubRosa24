@@ -26,7 +26,7 @@
 #define g_vbo cl_data_vbo
 #define g_sector_lod cl_data_landsector_lod
 #define g_textures cl_data_texture
-#define g_texturelist cl_data_texturelist
+#define g_texturelist sr_data_texturelist
 #define g_image cl_data_image
 #define glBindBufferARB ((GlBindBufferFn)cl_data_gl_bind_buffer)
 #define glBufferDataARB ((GlBufferDataFn)cl_data_gl_buffer_data)

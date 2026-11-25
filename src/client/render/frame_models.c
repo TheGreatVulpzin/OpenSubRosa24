@@ -82,7 +82,7 @@ void __cdecl rendermodellist(int mode)
     int previous = -1, i;
     if (sr_data_debug.world_view)
         return;
-    starttimer(cl_data_timerlist.rendermodels);
+    starttimer(sr_data_timerlist.rendermodels);
     glEnableClientState(ARRAY_POSITION);
     if (mode == 0 || mode == 2) {
         glEnableClientState(ARRAY_TEXCOORD);
@@ -93,7 +93,7 @@ void __cdecl rendermodellist(int mode)
         glEnable(GL_TEXTURE_2D);
         texture_unit(TEXTURE2);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, cl_data_texture[cl_data_texturelist.shadow_map].gl_name);
+        glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.shadow_map].gl_name);
         glLightfv(LIGHT0, LIGHT_POSITION, cl_data_light_position);
     }
     placement = CL_FN(0x5066b0, PlacementFn);
@@ -138,7 +138,7 @@ void __cdecl rendermodellist(int mode)
         glDisableClientState(ARRAY_NORMAL);
     }
     glDisableClientState(ARRAY_POSITION);
-    stoptimer(cl_data_timerlist.rendermodels);
+    stoptimer(sr_data_timerlist.rendermodels);
 }
 
 /* Reset culling and depth testing around the message pass. */

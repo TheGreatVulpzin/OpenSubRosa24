@@ -8,8 +8,8 @@
 #include "textures/opengl.h"
 #include "vectors.h"
 
-#define g_timerlist cl_data_timerlist
-#define g_texturelist cl_data_texturelist
+#define g_timerlist sr_data_timerlist
+#define g_texturelist sr_data_texturelist
 #define g_textures cl_data_texture
 #define g_materials cl_data_material_records
 #define g_interiors ((const InteriorMesh *)&sr_data_interior)

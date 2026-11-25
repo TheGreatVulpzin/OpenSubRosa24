@@ -69,7 +69,7 @@ void __cdecl displaydebuginfo(void)
     if (sr_data_debug.display_mode == 3) {
         x = 4.0f;
         y = 128.0f;
-        for (i = 64; i < cl_data_timerlist.numoftimers; ++i) {
+        for (i = 64; i < sr_data_timerlist.numoftimers; ++i) {
             drawtext(sr_data_timer[i].name, x, y, height, 0x20, 1.0f, 1.0f, 1.0f, 1.0f);
             drawtext("/u", (float)(height * 10.0 + x), y, height, 0x20,
                 1.0f, 1.0f, 1.0f, 1.0f, sr_data_timer[i].ms);

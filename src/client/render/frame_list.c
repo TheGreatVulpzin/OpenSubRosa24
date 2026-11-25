@@ -374,7 +374,7 @@ void __cdecl buildframelist(void)
 {
     int i;
 
-    starttimer(cl_data_timerlist.buildframelist);
+    starttimer(sr_data_timerlist.buildframelist);
     cl_data_frame_model_count = 0;
     cl_data_window_quad_count = 0;
     add_humans();
@@ -390,5 +390,5 @@ void __cdecl buildframelist(void)
     for (i = 0; i < cl_data_frame_model_count; ++i)
         cl_data_frame_model_order[i] = sr_data_radix.order[i];
     debug_addataint("numofmodels", cl_data_frame_model_count);
-    stoptimer(cl_data_timerlist.buildframelist);
+    stoptimer(sr_data_timerlist.buildframelist);
 }
