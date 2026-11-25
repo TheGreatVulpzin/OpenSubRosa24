@@ -14,6 +14,10 @@
 #include "sr_math.h"
 #include "sr_runtime.h"
 
+#ifdef SR_SMOKE
+#include "client_smoke.h"
+#endif
+
 void cl_storage_init(void);
 int __cdecl client_main(void);
 
@@ -71,5 +75,12 @@ int main(void)
                         DUPLICATE_SAME_ACCESS);
         CreateThread(NULL, 0, sampler, NULL, 0, NULL);
     }
+#ifdef SR_SMOKE
+    if (!client_smoke_start())
+        return 2;
+    client_main();
+    return client_smoke_finish();
+#else
     return client_main();
+#endif
 }

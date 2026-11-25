@@ -135,6 +135,18 @@ if(CL_ADOPTED)
     target_link_options(subvulpes-client-native PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
     set_target_properties(subvulpes-client-native PROPERTIES OUTPUT_NAME opensubrosa24_client_native)
     set_property(TARGET subvulpes-client-native PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+    # The same executable with the automatic input and frame checks of the smoke test.
+    add_executable(subvulpes-client-native-smoke EXCLUDE_FROM_ALL src/standalone/client_native_main.c
+        src/platform/client_imports.c src/platform/client_crt.c src/platform/x87_math_client.c
+        src/standalone/client_smoke.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
+    target_include_directories(subvulpes-client-native-smoke PRIVATE src/include src/platform src/client src/client/native src/standalone third_party/glee)
+    target_compile_options(subvulpes-client-native-smoke PRIVATE /arch:IA32 /W3 /utf-8)
+    target_compile_definitions(subvulpes-client-native-smoke PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_SMOKE)
+    target_link_libraries(subvulpes-client-native-smoke PRIVATE opengl32 user32 gdi32 ws2_32 shell32)
+    target_link_options(subvulpes-client-native-smoke PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
+    set_target_properties(subvulpes-client-native-smoke PROPERTIES OUTPUT_NAME opensubrosa24_client_native_smoke)
+    set_property(TARGET subvulpes-client-native-smoke PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder. The hook
 # tables are generated under build/ by instrumentation/client/pipeline.sh and are not in the

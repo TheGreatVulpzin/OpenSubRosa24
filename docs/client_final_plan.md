@@ -14,8 +14,11 @@ no hook macro, no call by address, no storage adapter, no generated offset.
   The only lifted C that is left is GLee (third party, built from `third_party/glee`).
 - The native target `client_native` compiles all 200 source files with 0 errors. Each datum is a real C
   object (`src/client/storage.c`, `src/include/sr_client_storage.h`). Each call goes by name.
-- Not done: the native executable (link and start), the test only scaffolding in the clean code,
-  direct calls to the system libraries, names for 20 fields, a policy for changes.
+- The native executable `opensubrosa24_client_native.exe` links with 0 errors (1.6 MB, no image). It starts,
+  builds the shaders, starts the audio, and runs the main menu loop. Its window stays white: the menu does
+  not appear. `SR_SAMPLE=1` and `tools/re/map_address.py` show where the main thread is.
+- Not done: the first picture on the native window, the smoke test of the native executable, the test only
+  scaffolding in the clean code, direct calls to the system libraries, names for 20 fields.
 
 ## Numbers that size the work
 

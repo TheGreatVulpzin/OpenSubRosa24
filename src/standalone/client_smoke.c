@@ -12,7 +12,11 @@
 #include <GL/gl.h>
 #include "client_smoke.h"
 #include "sr_limits.h"
+#ifdef SR_CLIENT_NATIVE
+#include "sr_runtime.h"
+#else
 #include "../../instrumentation/client/runtime/storage_adapter.h"
+#endif
 
 enum {
     MENU_WIDTH = 1024, MENU_HEIGHT = 640, MAX_ITEMS = 256, KEY_COUNT = 512,
