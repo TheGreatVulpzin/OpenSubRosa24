@@ -6,6 +6,8 @@
 
 #ifdef SR_TEST_MEMORY
 #include "storage_adapter.h"
+#elif defined(SR_CLIENT_NATIVE)
+#include "sr_client_storage.h"
 #else
 #include "sr_storage.h"
 #endif
