@@ -20,12 +20,13 @@
 #include "textures/models.h"
 #include "textures/noise.h"
 #include "vectors.h"
+#include "textures/mesh_edit.h"
 
 #define g_temp cl_data_modeltemp
 #define g_keys cl_data_audio_keys
 
 /* Game functions of other files. */
-#define model_addvertex CL_FN(0x4badd0, int(__cdecl *)(const vec3 *pos, float tolerance))
+#define model_addvertex CL_FN_NAMED(model_addvertex, 0x4badd0, int(__cdecl *)(const vec3 *pos, float tolerance))
 
 /* createheadmodel2 */
 

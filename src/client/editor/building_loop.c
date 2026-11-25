@@ -24,6 +24,8 @@
 #include "render/view.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
+#include "input/mouse.h"
+#include "render/text.h"
 
 #define g_editor cl_data_building_editor
 #define g_view cl_data_building_view
@@ -41,10 +43,10 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Game functions of other files. */
-#define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
-#define building_setupbuild CL_FN(0x461fd0, void(__cdecl *)(void))
-#define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
+#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
+#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
+#define building_setupbuild CL_FN_NAMED(building_setupbuild, 0x461fd0, void(__cdecl *)(void))
+#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 
 #define KEY_G 10

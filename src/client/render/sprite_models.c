@@ -19,6 +19,7 @@
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "collide.h"
 
 #define g_sprites cl_data_sprite_models
 #define g_count cl_data_sprite_model_count
@@ -34,7 +35,7 @@
 #define g_light_position cl_data_light_position
 
 /* Game functions of other files. */
-#define lineintersectlevel CL_FN(0x4a0f40, int(__cdecl *)(float *from, float *to, int with_objects))
+#define lineintersectlevel CL_FN_NAMED(lineintersectlevel, 0x4a0f40, int(__cdecl *)(float *from, float *to, int with_objects))
 
 enum {
     MAX_PIECES = 0x4000,

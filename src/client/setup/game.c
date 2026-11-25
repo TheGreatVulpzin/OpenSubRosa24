@@ -1,14 +1,16 @@
 /* Small hooks of the game loop of the client. */
 #include "client.h"
 #include "sr_runtime.h"
+#include "render/frame_textures.h"
+#include "render/programs.h"
 
 void *sr_import(const char *dll, const char *name);
 
 #define g_relative_mouse cl_data_relative_mouse
 
 /* Game functions of other files. */
-#define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define setupprogramobjects CL_FN(0x4d5690, void(__cdecl *)(void))
+#define setupframetextures CL_FN_NAMED(setupframetextures, 0x4742f0, void(__cdecl *)(void))
+#define setupprogramobjects CL_FN_NAMED(setupprogramobjects, 0x4d5690, void(__cdecl *)(void))
 
 /* The ticket update has no code. */
 void __cdecl updateplayticket(void)

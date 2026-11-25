@@ -12,6 +12,7 @@
 #include "util.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "render/raycast.h"
 
 #define g_timerlist sr_data_timerlist
 #define g_texturelist sr_data_texturelist
@@ -37,7 +38,7 @@
 #define g_sort_keys sr_data_radix.keys
 
 /* Game functions of other files. */
-#define markinteriors CL_FN(0x4d9fa0, void(__cdecl *)(void))
+#define markinteriors CL_FN_NAMED(render_raycast2, 0x4d9fa0, void(__cdecl *)(void))
 
 /* The slots of the extension functions: the client holds a pointer to each one. */
 

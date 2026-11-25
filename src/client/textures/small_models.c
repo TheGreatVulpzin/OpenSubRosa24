@@ -12,11 +12,12 @@
 #include "textures/models.h"
 #include "vectors.h"
 #include "items.h"
+#include "textures/mesh_edit.h"
 
 #define g_temp cl_data_modeltemp
 
 /* Game functions of other files. */
-#define addboxtomodelquad CL_FN(0x4b2ad0, void(__cdecl *)(const vec3 *center, float x, float y, float z))
+#define addboxtomodelquad CL_FN_NAMED(addboxtomodelquad, 0x4b2ad0, void(__cdecl *)(const vec3 *center, float x, float y, float z))
 
 #define FOOT_DROP 0.03125f
 #define LENS_CENTER_X 0.0421875f

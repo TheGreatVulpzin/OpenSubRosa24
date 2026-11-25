@@ -9,6 +9,7 @@
 #include "render/text.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
+#include "vectors.h"
 
 #define GL_LINES 0x0001
 
@@ -21,7 +22,7 @@
 #define g_view_zoom cl_data_view_zoom
 
 /* Game functions of other files. */
-#define vectorlength CL_FN(0x50b890, double(__cdecl *)(const float *vector))
+#define vectorlength CL_FN_NAMED(vectorlength, 0x50b890, double(__cdecl *)(const float *vector))
 
 enum {
     NO_PLAYER = -1,

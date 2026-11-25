@@ -19,6 +19,13 @@
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "block_mesh.h"
+#include "buildings.h"
+#include "files.h"
+#include "input/mouse.h"
+#include "level.h"
+#include "render/text.h"
+#include "../../game/level.h"
 
 #define KEY_G 10
 #define KEY_PERIOD 55
@@ -56,14 +63,14 @@ GL_IMPORT(glLineWidth, (float width), (width))
 GL_IMPORT(glPointSize, (float size), (size))
 
 /* Game functions of other files. */
-#define building_load CL_FN(0x4614e0, void(__cdecl *)(const char *name, int rotate))
-#define listfiles CL_FN(0x4fdde0, void(__cdecl *)(const char *pattern, int list, int flags))
-#define removeflieextentions CL_FN(0x4fe200, void(__cdecl *)(int list))
-#define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
-#define leveleditor_save CL_FN(0x4a0740, void(__cdecl *)(void))
-#define createlevel CL_FN(0x49b740, void(__cdecl *)(void))
-#define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
+#define building_load CL_FN_NAMED(building_load, 0x4614e0, void(__cdecl *)(const char *name, int rotate))
+#define listfiles CL_FN_NAMED(listfiles, 0x4fdde0, void(__cdecl *)(const char *pattern, int list, int flags))
+#define removeflieextentions CL_FN_NAMED(removeflieextentions, 0x4fe200, void(__cdecl *)(int list))
+#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
+#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
+#define leveleditor_save CL_FN_NAMED(leveleditor_save, 0x4a0740, void(__cdecl *)(void))
+#define createlevel CL_FN_NAMED(createlevel, 0x49b740, void(__cdecl *)(void))
+#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 
 static const char *const tile_kind_names[] = {

@@ -12,6 +12,8 @@
 #include "logic.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
+#include "scenario.h"
+#include "sr_server.h"
 
 #define MISSION_SECONDS 0x4ab50
 #define MISSION_EXPIRE_LIMIT 0x3b0d30
@@ -28,8 +30,8 @@
 #define CASH_GROWTH 2.499999936844688e-05
 
 /* Game functions of other files. */
-#define scenario_createchase_client CL_FN(0x4dd100, int(__cdecl *)(int item_type, int expire))
-#define scenario_createguards_client CL_FN(0x4dca90, void(__cdecl *)(int building, int item_type, int expire))
+#define scenario_createchase_client CL_FN_NAMED(scenario_createchase, 0x4dd100, int(__cdecl *)(int item_type, int expire))
+#define scenario_createguards_client CL_FN_NAMED(scenario_createguards, 0x4dca90, void(__cdecl *)(int building, int item_type, int expire))
 
 /* The type of the building at an index: 3 is a mission building. */
 static int building_kind(int building)

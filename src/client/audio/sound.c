@@ -9,6 +9,7 @@
 #include "sr_runtime.h"
 #include "vectors.h"
 #include <string.h>
+#include "audio/speex.h"
 
 enum { AUDIO_VOICES = 8, AUDIO_OBJECTS = 8, AUDIO_FRAMES = 64,
        AUDIO_FRAME_SAMPLES = 160, AUDIO_BUFFER_FRAMES = 4, AUDIO_SAMPLE_RATE = 8000,
@@ -174,7 +175,7 @@ static void play_voice(int index, const vec3 *velocity)
         audio_alSourceUnqueueBuffers()(voice->source, 1, &buffer);
         for (frame = 0; frame < AUDIO_BUFFER_FRAMES; frame++) {
             voice->mode = voice->frame_mode[voice->tail];
-            CL_FN(0x4e13c0, void (__cdecl *)(int, int, int))(index, index, voice->tail);
+            CL_FN_NAMED(decodespeex, 0x4e13c0, void (__cdecl *)(int, int, int))(index, index, voice->tail);
             memcpy(cl_data_audio_play_buffer + frame * AUDIO_FRAME_SAMPLES,
                    voice->samples + voice->tail * AUDIO_FRAME_SAMPLES,
                    AUDIO_FRAME_SAMPLES * sizeof(int16_t));

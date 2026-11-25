@@ -21,6 +21,9 @@
 #include "textures/opengl.h"
 #include "textures/upload.h"
 #include "vectors.h"
+#include "image/fonts.h"
+#include "render/draw2d.h"
+#include "render/text.h"
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
@@ -66,12 +69,12 @@
 #define NO_BITMAP (-1) /* drawbitmap draws a plain rectangle */
 
 /* Game functions of other files. */
-#define getrandomvector3d CL_FN(0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
-#define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
+#define getrandomvector3d CL_FN_NAMED(getrandomvector3d, 0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
+#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
-#define drawbitmap CL_FN(0x507ac0, void(__cdecl *)(int texture, float x, float y, float width, float height, \
+#define drawbitmap CL_FN_NAMED(drawbitmap, 0x507ac0, void(__cdecl *)(int texture, float x, float y, float width, float height, \
                                                    uint32_t flags, float red, float green, float blue, float alpha))
-#define setfontresolution CL_FN(0x509f30, void(__cdecl *)(int width, int height))
+#define setfontresolution CL_FN_NAMED(setfontresolution, 0x509f30, void(__cdecl *)(int width, int height))
 
 /* The word of a pixel. On a big endian machine the bytes have the other order. */
 /* Reuse an atlas cell or append one. A full atlas replaces its last cell. */

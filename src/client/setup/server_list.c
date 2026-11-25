@@ -12,8 +12,8 @@
 #define PACKET_SERVER_LIST 0x21
 
 /* Game functions of other files. */
-#define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
-#define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
+#define sendpacket CL_FN_NAMED(sendpacket, 0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
+#define cs_pwrite CL_FN_NAMED(cs_pwrite, 0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
 
 /* Send the request. Nothing goes out while the address of the master server is zero. */
 void __cdecl getonlineserverlist(void)

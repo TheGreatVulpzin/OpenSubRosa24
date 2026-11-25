@@ -15,6 +15,11 @@
 #include "sr_math.h"
 #include "render/view.h"
 #include <stdlib.h>
+#include "input/keyboard.h"
+#include "input/mouse.h"
+#include "render/draw2d.h"
+#include "render/text.h"
+#include "setup/simulation.h"
 
 enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
        ICON_HEAD_BONE = 2, ICON_CENTER = 5, MENU_KEYS = 323,
@@ -46,12 +51,12 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 #define MENU_ACTIVE_ALPHA 0.5f
 
 /* Game functions of other files. */
-#define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
-#define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
-#define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
-#define drawtext CL_FN(0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))
-#define drawmousecursor CL_FN(0x507ee0, void (__cdecl *)(int, int, int, float, float, float, float))
-#define checksimulation CL_FN(0x47d900, int (__cdecl *)(int))
+#define drawbitmap CL_FN_NAMED(drawbitmap, 0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
+#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void (__cdecl *)(void))
+#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void (__cdecl *)(void))
+#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))
+#define drawmousecursor CL_FN_NAMED(drawmousecursor, 0x507ee0, void (__cdecl *)(int, int, int, float, float, float, float))
+#define checksimulation CL_FN_NAMED(checksimulation, 0x47d900, int (__cdecl *)(int))
 
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))

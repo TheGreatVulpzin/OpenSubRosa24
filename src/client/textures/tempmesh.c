@@ -15,12 +15,13 @@
 #include "setup/timers.h"
 #include "sr_runtime.h"
 #include "vectors.h"
+#include "textures/mesh_edit.h"
 
 #define g_tempmesh sr_data_tempmesh
 
 /* Game functions of other files. */
-#define tempmesh_deletequad CL_FN(0x44d920, void(__cdecl *)(int quad))
-#define tempmesh_vertnormalequal CL_FN(0x50b290, int(__cdecl *)(int a, int b))
+#define tempmesh_deletequad CL_FN_NAMED(tempmesh_deletequad, 0x44d920, void(__cdecl *)(int quad))
+#define tempmesh_vertnormalequal CL_FN_NAMED(tempmesh_vertnormalequal, 0x50b290, int(__cdecl *)(int a, int b))
 
 #define g_materials cl_data_material_records
 #define JOIN_TIMER 3

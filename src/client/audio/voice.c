@@ -7,6 +7,7 @@
 #include "audio/imports.h"
 #include "client.h"
 #include "sr_runtime.h"
+#include "debug/debug.h"
 
 enum { VOICE_SLOTS = 8, VOICE_SAMPLES = 160, VOICE_FRAMES = 64,
        CAPTURE_BATCH = 16, SILENCE_LIMIT = 64, VOICE_RELEASE = 16, TALK_RELEASE = 24,
@@ -96,7 +97,7 @@ void getaudioinput(int player)
             }
         }
         encodespeex(0, player, frame);
-        CL_FN(0x46aaa0, void (__cdecl *)(char *, int))(
+        CL_FN_NAMED(debug_addataint, 0x46aaa0, void (__cdecl *)(char *, int))(
             cl_data_text_speex_frame_size, ring->size[frame]);
         ring->mode[frame] = cl_data_audio_voice_mode;
         if (quiet) {

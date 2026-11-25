@@ -38,8 +38,8 @@
 #define EYE_V 0.875
 
 /* Game functions of other files. */
-#define sethumanmodelvertface CL_FN(0x4bed20, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
-#define sethumanmodelvert CL_FN(0x4becd0, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
+#define sethumanmodelvertface CL_FN_NAMED(sethumanmodelvertface, 0x4bed20, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
+#define sethumanmodelvert CL_FN_NAMED(sethumanmodelvert, 0x4becd0, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
 
 /* Add one vertex: the place relative to center turned by rot, and the normal turned by rot. */
 static void cylinder_vertex(const vec3 *center, const vec3 *rot, const vec3 *place, float normal_x, float normal_y,

@@ -108,7 +108,7 @@ void __cdecl render_sector_alpha(int sector, int mode)
 }
 
 /* The dot product of two vectors, returned as a double. */
-#define dotproduct_wide CL_FN(0x50b7f0, double(__cdecl *)(const float *a, const float *b))
+#define dotproduct_wide CL_FN_NAMED(dotproduct, 0x50b7f0, double(__cdecl *)(const float *a, const float *b))
 
 #define SHADOW_PUSH_LENGTH (-16.0f)
 

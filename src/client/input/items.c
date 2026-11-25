@@ -76,8 +76,8 @@ void getinputs_door(int player)
         return;
     door = &sr_items[item];
     scaleaddvectors(&hinge, &door->pos, &door->rot[0], -0.5f);
-    CL_FN(0x4fc900, void (__cdecl *)(vec3 *))(rotation);
-    CL_FN(0x4fca30, void (__cdecl *)(vec3 *, const vec3 *, float))(
+    CL_FN_NAMED(resetorientation, 0x4fc900, void (__cdecl *)(vec3 *))(rotation);
+    CL_FN_NAMED(rotateorientation, 0x4fca30, void (__cdecl *)(vec3 *, const vec3 *, float))(
         rotation, &sr_data_yaxis, controls->input_axes[0]);
     scaleaddvectors(&target, &hinge, &rotation[0], 1.0f);
     scaleaddvectors(&target, &target, &human->bones[2].rot[0],

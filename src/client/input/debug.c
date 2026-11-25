@@ -6,6 +6,8 @@
 #include "input/keyboard.h"
 #include "client.h"
 #include "sr_runtime.h"
+#include "math/small_vectors.h"
+#include "setup/timers.h"
 
 enum { INTERIOR_TIMERS = 5, DEBUG_MODES = 6, DEBUG_MONEY = 10000 };
 
@@ -35,10 +37,10 @@ void debug_getinputs(void)
         if (input_pressed(KEY_F10)) cl_data_input_debug_toggle ^= 1;
         if (input_pressed(KEY_U))
             for (timer = 0; timer < INTERIOR_TIMERS; timer++)
-                CL_FN(0x4fafe0, void (__cdecl *)(int, const char *))(
+                CL_FN_NAMED(resettimer, 0x4fafe0, void (__cdecl *)(int, const char *))(
                     timers[timer], labels[timer]);
         if (cl_data_audio_keys[KEY_INSERT] && sr_players[0].human_id != -1)
-            CL_FN(0x50b950, void (__cdecl *)(vec3 *, const vec3 *))(
+            CL_FN_NAMED(copyvector, 0x50b950, void (__cdecl *)(vec3 *, const vec3 *))(
                 &cl_data_input_cameras[0].pos, &sr_humans[sr_players[0].human_id].bones[2].pos);
         if (input_pressed(KEY_F2)) sr_data_debug.human_view ^= 1;
         if (input_pressed(KEY_INSERT)) sr_players[0].money += DEBUG_MONEY;

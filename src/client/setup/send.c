@@ -19,10 +19,10 @@
 #define g_view_pos cl_data_audio_camera.pos
 
 /* Game functions of other files. */
-#define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
-#define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
-#define pbitwrite CL_FN(0x4fe6c0, int(__cdecl *)(const uint32_t *value, uint32_t bits))
-#define pbitwritenego CL_FN(0x4feb60, int(__cdecl *)(const uint32_t *value, uint32_t bits))
+#define sendpacket CL_FN_NAMED(sendpacket, 0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
+#define cs_pwrite CL_FN_NAMED(cs_pwrite, 0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
+#define pbitwrite CL_FN_NAMED(pbitwrite, 0x4fe6c0, int(__cdecl *)(const uint32_t *value, uint32_t bits))
+#define pbitwritenego CL_FN_NAMED(pbitwritenego, 0x4feb60, int(__cdecl *)(const uint32_t *value, uint32_t bits))
 
 #define PACKET_PLAYER_INPUT 4
 

@@ -36,6 +36,16 @@
 #include "textures/opengl.h"
 #include "textures/textures.h"
 #include "vectors.h"
+#include "audio/sound.h"
+#include "audio/voice.h"
+#include "audio/voice_ui.h"
+#include "input/debug.h"
+#include "input/keyboard.h"
+#include "input/mouse.h"
+#include "logic.h"
+#include "player.h"
+#include "server.h"
+#include "sr_server.h"
 
 #define g_game sr_data_game
 #define g_human sr_data_human
@@ -98,24 +108,24 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFlush, (void))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 
 /* Game functions of other files. */
-#define createaccount CL_FN(0x433be0, int(__cdecl *)(int player))
-#define createplayer CL_FN(0x4d4750, int(__cdecl *)(void))
-#define fixplayername CL_FN(0x4d5200, void(__cdecl *)(int player))
-#define deleteplayer CL_FN(0x4d4a20, void(__cdecl *)(int player))
-#define resetgame CL_FN(0x479ad0, void(__cdecl *)(void))
-#define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
-#define checkmouserelative CL_FN(0x4fedb0, void(__cdecl *)(void))
-#define debug_getinputs CL_FN(0x469190, void(__cdecl *)(void))
-#define calculateplayervoice CL_FN(0x4fbe70, void(__cdecl *)(int connection, int player))
-#define soundsimulation CL_FN(0x44e190, void(__cdecl *)(const vec3 *position, const vec3 *rotation, \
+#define createaccount CL_FN_NAMED(createaccount, 0x433be0, int(__cdecl *)(int player))
+#define createplayer CL_FN_NAMED(createplayer, 0x4d4750, int(__cdecl *)(void))
+#define fixplayername CL_FN_NAMED(sr_fixplayername, 0x4d5200, void(__cdecl *)(int player))
+#define deleteplayer CL_FN_NAMED(deleteplayer, 0x4d4a20, void(__cdecl *)(int player))
+#define resetgame CL_FN_NAMED(resetgame, 0x479ad0, void(__cdecl *)(void))
+#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
+#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
+#define checkmouserelative CL_FN_NAMED(checkmouserelative, 0x4fedb0, void(__cdecl *)(void))
+#define debug_getinputs CL_FN_NAMED(debug_getinputs, 0x469190, void(__cdecl *)(void))
+#define calculateplayervoice CL_FN_NAMED(calculateplayervoice, 0x4fbe70, void(__cdecl *)(int connection, int player))
+#define soundsimulation CL_FN_NAMED(soundsimulation, 0x44e190, void(__cdecl *)(const vec3 *position, const vec3 *rotation, \
                                                          const vec3 *velocity))
-#define getaudioinput CL_FN(0x4fb6f0, void(__cdecl *)(int player))
-#define frame_drawvoiceicons CL_FN(0x479330, void(__cdecl *)(void))
-#define deletesound CL_FN(0x44f720, void(__cdecl *)(int sound))
-#define voiceoptionsmenu CL_FN(0x4d38c0, void(__cdecl *)(void))
-#define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
-#define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
+#define getaudioinput CL_FN_NAMED(getaudioinput, 0x4fb6f0, void(__cdecl *)(int player))
+#define frame_drawvoiceicons CL_FN_NAMED(frame_drawvoiceicons, 0x479330, void(__cdecl *)(void))
+#define deletesound CL_FN_NAMED(deletesound, 0x44f720, void(__cdecl *)(int sound))
+#define voiceoptionsmenu CL_FN_NAMED(voiceoptionsmenu, 0x4d38c0, void(__cdecl *)(void))
+#define cs_pwrite CL_FN_NAMED(cs_pwrite, 0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
+#define sendpacket CL_FN_NAMED(sendpacket, 0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 
 /* Clear the chat, the players and the human looks. A hosted game makes the player of the host:
  * the name of the options, and in a round game an account with its money (at least 10000 with

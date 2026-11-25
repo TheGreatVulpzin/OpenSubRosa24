@@ -12,6 +12,7 @@
 #include "sr_runtime.h"
 #include "textures/textures.h"
 #include "textures/upload.h"
+#include "image/load.h"
 
 void *sr_import(const char *dll, const char *name);
 
@@ -32,8 +33,8 @@ void checkbigendian(void)
 
 /* Game functions of other files. */
 #define image_file_load \
-    CL_FN(0x4010a0, unsigned char *(__cdecl *)(const char *, int *, int *, int *, int))
-#define image_file_free CL_FN(0x401010, void(__cdecl *)(void *))
+    CL_FN_NAMED(stbi_load, 0x4010a0, unsigned char *(__cdecl *)(const char *, int *, int *, int *, int))
+#define image_file_free CL_FN_NAMED(stbi_image_free, 0x401010, void(__cdecl *)(void *))
 
 /* Return 1 when the value is a power of two. Zero counts as one. */
 static int is_power_of_two(int value)

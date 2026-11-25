@@ -25,6 +25,9 @@
 #include "textures/textures.h"
 #include "textures/type_models.h"
 #include "textures/upload.h"
+#include "render/frame_textures.h"
+#include "textures/cash_model.h"
+#include "setup/client_setup.h"
 
 #define g_modellist sr_data_modellist
 #define g_texturelist sr_data_texturelist
@@ -35,8 +38,8 @@
 #define g_logo ((const int *)sr_data_cslogo)
 
 /* Game functions of other files. */
-#define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define createbillmodel CL_FN(0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
+#define setupframetextures CL_FN_NAMED(setupframetextures, 0x4742f0, void(__cdecl *)(void))
+#define createbillmodel CL_FN_NAMED(model_createcash, 0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
 
 enum {
     NUM_VEHICLE_MODELS = 16,

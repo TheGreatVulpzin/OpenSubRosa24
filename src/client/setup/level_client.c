@@ -11,6 +11,7 @@
 #include "textures/landscape.h"
 #include "textures/opengl.h"
 #include "textures/textures.h"
+#include "render/area_queries.h"
 
 #define GL_ARRAY_BUFFER 0x8892
 #define GL_DYNAMIC_DRAW 0x88e8
@@ -22,7 +23,7 @@
 #define NUM_SECTORS 0x2000
 
 /* Game functions of other files. */
-#define area_resetsector CL_FN(0x439370, void(__cdecl *)(int sector))
+#define area_resetsector CL_FN_NAMED(area_resetsector, 0x439370, void(__cdecl *)(int sector))
 
 /* Make the mesh of the landscape and clear the list of window cells. */
 void level_client_landscape(void)

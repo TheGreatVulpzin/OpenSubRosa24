@@ -8,6 +8,7 @@
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "../../game/collide.h"
 
 /* Game functions of other files. */
 typedef int(__cdecl *LevelIntersectFn)(const vec3 *, const vec3 *, int);
@@ -34,7 +35,7 @@ void __cdecl tiremark_simulation(void)
 {
     int object;
     int wheel;
-    LevelIntersectFn intersect = CL_FN(0x4a0f40, LevelIntersectFn);
+    LevelIntersectFn intersect = CL_FN_NAMED(lineintersectlevel, 0x4a0f40, LevelIntersectFn);
 
     for (object = 0; object < MAX_OBJECTS; ++object) {
         Object *body = &sr_data_object[object];

@@ -11,10 +11,11 @@
 #include "objects.h"
 #include "particles.h"
 #include "sr_runtime.h"
+#include "render/cityobjects.h"
 
 /* Game functions of other files. */
-#define cityobject_simulation CL_FN(0x4665f0, void(__cdecl *)(void))
-#define itemtimetolive CL_FN(0x497130, void(__cdecl *)(void))
+#define cityobject_simulation CL_FN_NAMED(cityobject_simulation, 0x4665f0, void(__cdecl *)(void))
+#define itemtimetolive CL_FN_NAMED(itemtimetolive, 0x497130, void(__cdecl *)(void))
 
 /* Run one physical tick and then expire each packed pool. */
 void physicssimulation(void)

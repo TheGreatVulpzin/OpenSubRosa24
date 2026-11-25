@@ -10,6 +10,7 @@
 
 #include "client.h"
 #include "sr_runtime.h"
+#include "draw.h"
 
 #define ITEMS 256
 #define TEXT_LIMIT 0x3f
@@ -31,10 +32,10 @@ enum {
 typedef void(__cdecl *MenuCallback)(void);
 
 /* The callbacks that setmenuitem stores. The item holds the image address of each function. */
-#define menutextbox_address ((void *)CL_FN(0x5040c0, MenuCallback))
-#define menutoggle_address ((void *)CL_FN(0x503dd0, MenuCallback))
-#define menuset_address ((void *)CL_FN(0x503e30, MenuCallback))
-#define menuslider_address ((void *)CL_FN(0x503e70, MenuCallback))
+#define menutextbox_address ((void *)CL_FN_NAMED(menutextbox, 0x5040c0, MenuCallback))
+#define menutoggle_address ((void *)CL_FN_NAMED(menutoggle, 0x503dd0, MenuCallback))
+#define menuset_address ((void *)CL_FN_NAMED(menuset, 0x503e30, MenuCallback))
+#define menuslider_address ((void *)CL_FN_NAMED(menuslider, 0x503e70, MenuCallback))
 
 /* Copy the bits of a float. A float load can change the bits of a signaling NaN. */
 static void copy_bits(float *to, const float *from)

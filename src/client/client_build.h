@@ -8,6 +8,9 @@
 #define sr_parser_file (*(void **)&cl_data_open_file)
 /* The client keeps the tick before the place of Game.ticks. Shared code reads a signed int. */
 #define sr_game_ticks (*(int *)&cl_data_game_tick)
+/* The OpenGL extension loader of GLee: it fills the pointers of the slots and sets the extension flags. */
+int __cdecl GLeeInit(void);
+char __cdecl GLeeEnabled(const uint8_t *flag);
 /* The text that a place number of the client executable names (image decoder messages). */
 #ifdef SR_CLIENT_NATIVE
 #include "image/texts.h"

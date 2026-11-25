@@ -9,6 +9,11 @@
 #include <emmintrin.h>
 #include <stdint.h>
 
+#ifdef SR_CLIENT_NATIVE
+/* The native client calls a game function by its name, through the type of the call site. The
+ * address is for the test builds. */
+#define CL_FN_NAMED(name, va, type) ((type)name)
+#else
 extern uintptr_t sr_base;
 extern void *(*cl_fn_hook)(unsigned va);
 
@@ -18,6 +23,8 @@ static __inline void *cl_fn(unsigned va)
 }
 
 #define CL_FN(va, type) ((type)cl_fn(va))
+#define CL_FN_NAMED(name, va, type) CL_FN(va, type)
+#endif
 
 /* Convert a float value to an int. The value rounds to a double, then loses its fraction. A
  * value that is not a number, or that does not fit in an int, gives 0x80000000. */

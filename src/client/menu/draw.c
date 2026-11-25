@@ -17,6 +17,7 @@
 #include "textures/opengl.h"
 #include "textures/upload.h"
 #include "vectors.h"
+#include "render/text.h"
 
 #define MENU_TEXTURE 0x3de
 #define MENU_TEXTURE_SIZE 0x20
@@ -38,7 +39,7 @@ GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Game functions of other files. */
-#define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
+#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 
 

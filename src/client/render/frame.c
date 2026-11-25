@@ -23,12 +23,14 @@
 #include "textures/opengl.h"
 #include "util.h"
 #include "vectors.h"
+#include "render/view.h"
+#include "render/debug_cylinder.h"
 
 /* Game functions of other files. */
-#define setupperspectiveviewport CL_FN(0x506320, void(__cdecl *)(int, int, int, int, float, float, float))
-#define setupviewpoint CL_FN(0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
-#define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))
-#define debug_rendercylinder CL_FN(0x469ea0, void(__cdecl *)(const vec3 *, const vec3 *))
+#define setupperspectiveviewport CL_FN_NAMED(setupperspectiveviewport, 0x506320, void(__cdecl *)(int, int, int, int, float, float, float))
+#define setupviewpoint CL_FN_NAMED(setupviewpoint, 0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
+#define setupobjectrender CL_FN_NAMED(setupobjectrender, 0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))
+#define debug_rendercylinder CL_FN_NAMED(debug_rendercylinder, 0x469ea0, void(__cdecl *)(const vec3 *, const vec3 *))
 
 enum { CULL_FACE = 0xb44, DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, LIGHT0 = 0x4000,
        LIGHT_AMBIENT = 0x1200, LIGHT_DIFFUSE = 0x1201, LIGHT_POSITION = 0x1203,

@@ -11,6 +11,7 @@
 #include "setup/timers.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "view.h"
 
 enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        TEXTURE0 = 0x84c0, TEXTURE1 = 0x84c1, TEXTURE2 = 0x84c2,
@@ -96,7 +97,7 @@ void __cdecl rendermodellist(int mode)
         glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.shadow_map].gl_name);
         glLightfv(LIGHT0, LIGHT_POSITION, cl_data_light_position);
     }
-    placement = CL_FN(0x5066b0, PlacementFn);
+    placement = CL_FN_NAMED(setupobjectrender, 0x5066b0, PlacementFn);
     for (i = 0; i < cl_data_frame_model_count; ++i) {
         const FrameEntry *entry = &cl_data_frame_models[cl_data_frame_model_order[i]];
         const Model *model;

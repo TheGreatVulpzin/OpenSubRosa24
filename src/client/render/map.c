@@ -11,6 +11,7 @@
 #include "textures/opengl.h"
 #include "vectors.h"
 #include "textures/upload.h"
+#include "render/sectorlist.h"
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
@@ -18,8 +19,8 @@
 #define g_keyboard cl_data_keyboard
 
 /* Game functions of other files. */
-#define render_sectorlist CL_FN(0x4d7ed0, void(__cdecl *)(int mode))
-#define clearsectorlist CL_FN(0x4d7850, void(__cdecl *)(int mode))
+#define render_sectorlist CL_FN_NAMED(render_sectorlist, 0x4d7ed0, void(__cdecl *)(int mode))
+#define clearsectorlist CL_FN_NAMED(clearsectorlist, 0x4d7850, void(__cdecl *)(int mode))
 
 enum {
     MAP_SIZE = 512,
