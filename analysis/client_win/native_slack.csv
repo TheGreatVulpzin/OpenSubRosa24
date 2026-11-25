@@ -1,0 +1,2 @@
+name,extra_bytes,note
+shadow_list,12386304,"The shadow volume of the interiors of one sector has 24 points for each triangle and a sector holds 4 interiors, so it needs more than 16384 points. The original executable has idle data after the list and the long list ends in it. The native build keeps each datum as its own object, so the list gets room for 1048576 points."

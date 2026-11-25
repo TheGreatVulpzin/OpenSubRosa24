@@ -97,6 +97,17 @@ def load():
             raise SystemExit(f"{name}: no size for type {typ}")
         rows.append({"name": name, "type": typ, "count": count, "rva": rva, "size": size,
                      "bytes": count * size})
+    # Room after an array that the original executable fills past its end into an idle neighbor.
+    slack = {}
+    for s in csv.DictReader((ROOT / "analysis/client_win/native_slack.csv").open(encoding="utf-8")):
+        slack["cl_data_" + s["name"]] = int(s["extra_bytes"])
+    for r in rows:
+        extra = slack.pop(r["name"], 0)
+        if extra:
+            r["count"] += -(-extra // r["size"])
+            r["bytes"] = r["count"] * r["size"]
+    if slack:
+        raise SystemExit("native_slack.csv: unknown name " + ", ".join(slack))
     # A datum that GLee owns in the native build: an OpenGL function pointer slot or an extension flag.
     slots = {}
     for line in (ROOT / "analysis/client_win/gl_slots.csv").read_text(encoding="utf-8").splitlines()[1:]:

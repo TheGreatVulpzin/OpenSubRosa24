@@ -14,11 +14,16 @@ no hook macro, no call by address, no storage adapter, no generated offset.
   The only lifted C that is left is GLee (third party, built from `third_party/glee`).
 - The native target `client_native` compiles all 200 source files with 0 errors. Each datum is a real C
   object (`src/client/storage.c`, `src/include/sr_client_storage.h`). Each call goes by name.
-- The native executable `opensubrosa24_client_native.exe` links with 0 errors (1.6 MB, no image). It starts,
-  builds the shaders, starts the audio, and runs the main menu loop. Its window stays white: the menu does
-  not appear. `SR_SAMPLE=1` and `tools/re/map_address.py` show where the main thread is.
-- Not done: the first picture on the native window, the smoke test of the native executable, the test only
-  scaffolding in the clean code, direct calls to the system libraries, names for 20 fields.
+- The native executable `opensubrosa24_client_native.exe` links with 0 errors (1.6 MB, no image). It shows the
+  main menu, and the Demo shows the city with the HUD, the gun and the items (checked by hand on 2026-11-25).
+  `SR_SAMPLE=1` and `tools/re/map_address.py` show where the main thread is. A crash prints its address and
+  the return addresses on the stack, for the same tool.
+- One bug of the first run: each datum is its own object, and the original executable writes past the end of an
+  array into idle data. The list of the interior shadow volumes did this and broke the light, the track
+  buffer and the viewport. `analysis/client_win/native_slack.csv` gives an array more room in the native build.
+  Another array can do the same: a wrong value that changes between frames points to it.
+- Not done: the smoke test of the native executable on all scenarios, the test only scaffolding in the clean
+  code, direct calls to the system libraries, names for 20 fields.
 
 ## Numbers that size the work
 

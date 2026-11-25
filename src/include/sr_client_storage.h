@@ -229,7 +229,7 @@ extern int cl_data_track_vertex_count;
 extern vec3 cl_data_frustum_planes[5];
 extern vec3 cl_data_shadow_corners[6];
 extern int cl_data_shadow_count;
-extern vec3 cl_data_shadow_list[16384];
+extern vec3 cl_data_shadow_list[1048576];
 extern uint32_t cl_data_chat_head;
 extern SpriteModel cl_data_sprite_models[16384];
 extern SpriteVertex cl_data_shell_verts[262144];

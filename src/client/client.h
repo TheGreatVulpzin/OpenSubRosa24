@@ -12,7 +12,7 @@
 #ifdef SR_CLIENT_NATIVE
 /* The native client calls a game function by its name, through the type of the call site. The
  * address is for the test builds. */
-#define CL_FN_NAMED(name, va, type) ((type)name)
+#define CL_FN_NAMED(name, va, type) (name)
 #else
 extern uintptr_t sr_base;
 extern void *(*cl_fn_hook)(unsigned va);
