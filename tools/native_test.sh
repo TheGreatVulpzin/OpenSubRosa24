@@ -69,8 +69,8 @@ echo "== executables are current"
 [ $build_only -eq 1 ] && exit 0
 
 export SR_SMOKE_HIDDEN=$hidden
-output="build/native_test/$kind"
-mkdir -p build/native_test
+output="build/nt/$kind"
+mkdir -p build/nt
 rm -rf "$output"
 echo "== smoke: ${scenarios[*]} (hidden=$hidden)"
 python -I instrumentation/client/smoke.py "build/hook/$smoke.exe" "${scenarios[@]}" --timeout "$timeout" \
