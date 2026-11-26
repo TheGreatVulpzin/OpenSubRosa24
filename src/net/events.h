@@ -7,16 +7,6 @@
 #include "sr_types.h"
 #include "sr_runtime.h"
 
-#ifndef sr_updatehuman_params
-#define sr_updatehuman_params int human, int player
-#endif
-#ifndef sr_updatehuman_recipient
-#define sr_updatehuman_recipient(record, supplied) (supplied)
-#endif
-#ifndef sr_emit_updatehuman
-#define sr_emit_updatehuman(human, player) createevent_updatehuman((human), (player))
-#endif
-
 void createevent_createobject(int object);
 void createevent_updateitem(uint32_t item);
 void createevent_updateiteminfo(uint32_t item);

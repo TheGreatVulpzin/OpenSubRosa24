@@ -333,9 +333,6 @@ static __forceinline void midpoint(vec3 *m, const vec3 *a, const vec3 *b)
 /* A unit vector as a path in the octahedron: 3 bits for the octant (face), then 2 bits for
  * each split of the face into 4 triangles (0: at corner 0, 1: at corner 1, 2: at corner 2,
  * 3: the middle one). */
-#ifndef sr_orientation_nonpositive
-#define sr_orientation_nonpositive(value) ((value) <= 0.0)
-#endif
 
 void packorientation(const vec3 *dir, uint32_t bits)
 {

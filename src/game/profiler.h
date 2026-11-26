@@ -35,12 +35,4 @@ static __inline void starttimer(int timer)
     g_timer[timer].start_hi = (int)(now >> 0x20);
 }
 
-/* The timer calls of a section of the tick. A record without the timers of the server defines
- * the three macros as empty before this header. */
-#ifndef sr_timer_start
-#define sr_timer_name(field, name) nametimer(g_timerlist.field, (name))
-#define sr_timer_start(field) starttimer(g_timerlist.field)
-#define sr_timer_stop(field) stoptimer(g_timerlist.field)
-#endif
-
 #endif /* SR_PROFILER_H */

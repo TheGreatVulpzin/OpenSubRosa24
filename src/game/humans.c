@@ -20,11 +20,6 @@
 #include "sr_runtime.h"
 #include "vectors.h"
 
-#ifndef sr_human_vehicle_limit_protection
-#define sr_human_vehicle_limit_protection 1
-#endif
-
-
 /* Game globals. */
 #define g_xaxis sr_data_xaxis /* (1 0 0) */
 #define g_yaxis sr_data_yaxis /* (0 1 0) */
@@ -355,12 +350,6 @@ static int human_begin(int h, int vehicle)
   human_movebones(hu, vehicle != -1);
   return 0 < hu->inventory[0].count || 0 < hu->inventory[1].count;
 }
-
-/* The floor search stops at the first hit. A build can set this macro to 1 before this file:
- * the search then tries every ray, counts all the hits and skips no object. */
-#ifndef sr_human_floor_all_rays
-#define sr_human_floor_all_rays 0
-#endif
 
 /* A ray against the level that finds a floor (the normal points up more than 0.7). */
 static int human_floorray(vec3 *from, vec3 *to)

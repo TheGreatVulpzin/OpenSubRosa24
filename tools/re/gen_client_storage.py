@@ -96,7 +96,6 @@ def main():
         lines.append('#include "sr_input_types.h"')
         lines.extend(client_only)
         # Hand-written client hook macros and prototypes. New ones go there, not here.
-        lines.append('#include "client_build.h"')
     # Fields that the server keeps in the packet workspace object.
     if 'packet_workspace' in names:
         lines.append('')

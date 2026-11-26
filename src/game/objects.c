@@ -170,12 +170,6 @@ static float object_gather(Object *o)
   return (float)(imp / o->num_particles);
 }
 
-/* The last step of object_frame turns rot[0] square to rot[1] and rot[2]. A build can set this
- * macro to 0 before this file to skip the step. */
-#ifndef sr_object_frame_orthogonal
-#define sr_object_frame_orthogonal 1
-#endif
-
 /* The orientation of the object (rot) from the first particles and their weights. */
 static void object_frame(Object *o)
 {

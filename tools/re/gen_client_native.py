@@ -199,7 +199,6 @@ def header(rows, dummies):
         out.append(f"extern {typ} sr_unplaced_{name}{arr};")
         out.append(f"#define sr_data_{name} sr_unplaced_{name}")
     names = {r["name"] for r in rows}
-    out.append('#include "client_build.h"')
     for field in storage["PACKET_FIELDS"]:
         if "sr_data_" + field not in names:
             out.append(f"#define sr_data_{field} sr_data_packet_workspace.{field}")

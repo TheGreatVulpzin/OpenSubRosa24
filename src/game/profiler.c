@@ -10,13 +10,6 @@
 
 #define g_sysinfo sr_data_sysinfo
 
-#ifndef sr_timer_list_type
-#define sr_timer_list_type TimerList
-#endif
-#ifndef sr_physics_timers
-#define sr_physics_timers 1
-#endif
-
 void stoptimer(int timer)
 {
     Timer *t = &g_timer[timer];
@@ -45,7 +38,6 @@ void stoptimer(int timer)
     }
     t->ms = (int)(uint32_t)whole;
 }
-
 
 /* Gives each section of the tick the index of its timer. The numbers start at 0x40, and
  * the order of the lines below sets them. */

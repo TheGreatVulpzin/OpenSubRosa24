@@ -7,10 +7,6 @@
 #include <string.h>
 #include "sr_runtime.h"
 
-#ifndef sr_chat_mode
-#define sr_chat_mode 0
-#endif
-
 enum { ACTION_CHAT = 1, ACTION_ITEM = 2, ACTION_MASK = 63 };
 
 /* Queue an item action. The ring wraps after the last entry. */

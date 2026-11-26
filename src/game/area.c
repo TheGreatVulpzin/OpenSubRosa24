@@ -392,10 +392,8 @@ void createarea(uint32_t area, const vec3 *origin, int size_x, int size_y, int s
                 index[(size_z * y + z) * size_x + x] = -1;
     for (i = 0; i < NUM_CHUNKS; i++)
         a->chunks[i].used = 0;
-#ifdef sr_area_reset_interiors
     /* The client also clears its interior models. */
     sr_area_reset_interiors();
-#endif
     for (i = 0; i < NUM_SECTORS; i++)
         if (g_sectors[i].area == (int)area)
             g_sectors[i].used = 0;

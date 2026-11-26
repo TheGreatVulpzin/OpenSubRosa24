@@ -5,10 +5,6 @@
 #include "sr_math.h"
 #include "sr_runtime.h"
 
-#ifndef sr_triangle_edge
-#define sr_triangle_edge(value) (value)
-#endif
-
 /* The values of pi that the game uses (double). */
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718

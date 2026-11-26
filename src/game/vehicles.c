@@ -536,7 +536,7 @@ static void rotor_blade(Object *o, int blade)
   bl->vel.x = (float)(bl->vel.x + n.x * 0.0011111111380159855);
   bl->vel.y = (float)(bl->vel.y + n.y * 0.0011111111380159855);
   bl->vel.z = (float)(bl->vel.z + n.z * 0.0011111111380159855);
-#ifdef sr_debug_float
+#if SR_DEBUG_DISPLAY
   if (blade == 0) {
     /* The client shows the speed of the first blade in the debug display. */
     float len = vectorlength(&bl->vel_prev);
@@ -549,7 +549,7 @@ static void rotor_blade(Object *o, int blade)
   c2 = (float)(r.z * o->rot[2].z + (r.x * o->rot[2].x + r.y * o->rot[2].y));
   c0 = (float)((r.x * o->rot[0].x + r.y * o->rot[0].y) + r.z * o->rot[0].z);
   ang = (float)x87_atan2(-c0, c2);
-#ifdef sr_debug_float
+#if SR_DEBUG_DISPLAY
   if (blade == 0)
     sr_debug_float("rotorangle", ang);
 #endif
@@ -587,7 +587,7 @@ static void rotor_blade(Object *o, int blade)
                   (float)((float)((in[3] * 0.0625) * 3.14159265359 + 0.04908738521234375) -
                           x87_atan2(in[0] * sa, 1.0) * 0.25));
       rotatevector(&a, &r, w);
-#ifdef sr_debug_line
+#if SR_DEBUG_DISPLAY
       if (blade == 0 && j == 7 && i == 1) {
         /* The client draws the direction of the last point of the blade, and the up vector. */
         vec3 tip;

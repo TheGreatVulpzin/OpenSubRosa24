@@ -131,24 +131,6 @@ static void test_players(void)
     scenario_createcar(11, i, 0, 1, 1, 80.0f);
 }
 
-/* The client draws a loading screen and clears its sounds and chat at the start of a reset. */
-#ifndef sr_resetgame_screen
-#define sr_resetgame_screen() ((void)0)
-#endif
-/* The client draws the map and the shadow of the new level when the level is built. */
-#ifndef sr_resetgame_level_built
-#define sr_resetgame_level_built() ((void)0)
-#endif
-/* The client sets the position of the light from the start angles before the level is built. */
-#ifndef sr_resetgame_light
-#define sr_resetgame_light() ((void)0)
-#endif
-/* The server writes minus one to the death camera counter. The client has no spectator and a counter of
- * zero: the free camera moves only when the counter is zero. */
-#ifndef sr_resetgame_camera_counter
-#define sr_resetgame_camera_counter() (sr_game.death_camera_ticks = -1)
-#endif
-
 void resetgame(void)
 {
     int i, j, round;

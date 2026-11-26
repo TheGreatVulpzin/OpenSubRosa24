@@ -12,10 +12,6 @@
 #define g_bezier_curve_uv sr_data_bezier_curve_uv
 #define g_bezier_curve_dv sr_data_bezier_curve_dv
 
-#ifndef sr_linear_curve_negate_first
-#define sr_linear_curve_negate_first 0
-#endif
-
 float tesselatebezier(int degree, float t, float a, float b, float c, float d)
 {
     double u = (float)(1.0 - t);

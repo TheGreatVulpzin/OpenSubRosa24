@@ -217,10 +217,6 @@ void servercycle(void)
     }
 }
 
-#ifndef sr_socket_disable_closes
-#define sr_socket_disable_closes 0
-#endif
-
 /* Set the state of the UDP socket. */
 void disablesocket(int index)
 {

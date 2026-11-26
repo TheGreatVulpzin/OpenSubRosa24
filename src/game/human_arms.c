@@ -530,7 +530,7 @@ void human_calcarmtorque(int human)
         hand_vel.z = (float)(chest->rot[2].x * rv.x + chest->rot[2].y * rv.y + chest->rot[2].z * rv.z);
 
         hand_target(&t, hu, side, type, swing);
-#ifdef sr_debug_cross
+#if SR_DEBUG_DISPLAY
         {
             /* The client marks the target of the hand in the world. */
             vec3 cross, mark = t;

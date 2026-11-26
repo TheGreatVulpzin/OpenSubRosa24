@@ -440,10 +440,6 @@ int lineintersectline2d(float hit[2], float n[2], float *t, const float a[2], co
 
 /* The 2D circle (p, r) against the segment a -> b. n gets the unit normal of the segment, hit
  * the nearest point of the segment and *t the signed distance over r. */
-#ifndef sr_collision_ge
-#define sr_collision_ge(a, b) ((a) >= (b))
-#define sr_collision_le(a, b) ((a) <= (b))
-#endif
 
 int sphereintersectline2d(float hit[2], float n[2], float *t, const float p[2], const float a[2], const float b[2],
                           float r)

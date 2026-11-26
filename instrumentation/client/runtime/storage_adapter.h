@@ -410,7 +410,6 @@ extern SrPacketWorkspace sr_unplaced_packet_workspace;
 #define cl_data_glee_ext_multi_draw_arrays (*((uint8_t *)(sr_base + 0x127cd3u)))
 #define cl_data_glee_ext_stencil_two_side (*((uint8_t *)(sr_base + 0x127d28u)))
 #define cl_data_glee_ati_separate_stencil (*((uint8_t *)(sr_base + 0x127d3du)))
-#include "client_build.h"
 
 
 #endif

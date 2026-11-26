@@ -2602,6 +2602,5 @@ extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
 extern SrPacketWorkspace sr_unplaced_packet_workspace;
 #define sr_data_packet_workspace sr_unplaced_packet_workspace
-#include "client_build.h"
 
 #endif

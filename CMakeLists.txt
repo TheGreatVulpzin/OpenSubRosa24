@@ -99,7 +99,7 @@ if(CL_ADOPTED)
     add_library(client_adopted OBJECT ${CL_ADOPTED} instrumentation/client/runtime/storage_unplaced.c instrumentation/client/runtime/server_stubs.c instrumentation/client/runtime/cl_fn.c)
     target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform src/client ${SV_REWRITTEN_INCLUDES})
     target_compile_options(client_adopted PRIVATE /arch:IA32 /W3 /utf-8)
-    target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
+    target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY SR_CLIENT_IMAGE)
     set_property(SOURCE src/net/server.c APPEND PROPERTY COMPILE_DEFINITIONS
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:addvoice=server_voice_slot>")
     set_property(SOURCE src/game/game_setup.c APPEND PROPERTY COMPILE_DEFINITIONS
@@ -204,7 +204,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform src/client instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
-    target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=114688 SR_TEST_MEMORY CL_HARNESS SV_FULL_EVERY_DEFAULT=1)
+    target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=114688 SR_TEST_MEMORY SR_CLIENT_IMAGE CL_HARNESS SV_FULL_EVERY_DEFAULT=1)
     target_link_options(harness_client PRIVATE /LARGEADDRESSAWARE /MAP /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
     set_property(TARGET harness_client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")

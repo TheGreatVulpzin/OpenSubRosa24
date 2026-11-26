@@ -20,11 +20,6 @@
 #define g_blocklist sr_data_blocklist
 #define g_buildblocktype sr_data_buildblocktype
 
-/* The window atlas of a wall texture: a build can define this macro as a call that returns the
- * atlas number. The texture then gets that number in its high byte. Without it, the number is 0. */
-#ifndef sr_window_atlas
-#define sr_window_atlas(texture, type) 0
-#endif
 
 typedef size_t(__cdecl *building_io_fn)(void *, size_t, size_t, void *);
 #define game_fread (*((building_io_fn *)&sr_data_file_read))

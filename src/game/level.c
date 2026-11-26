@@ -23,18 +23,6 @@
 #define g_building sr_data_building
 #define g_level_marks sr_data_level_marks
 
-/* The client builds more: the landscape mesh after the landscape, and textures, buffers and the
- * track model after the buildings. The client also has one shop less. */
-#ifndef sr_level_after_landscape
-#define sr_level_after_landscape() ((void)0)
-#endif
-#ifndef sr_level_after_buildings
-#define sr_level_after_buildings() ((void)0)
-#endif
-#ifndef sr_level_shop_count
-#define sr_level_shop_count 5
-#endif
-
 static float track_span(const vec3 *a, const vec3 *b, int z_first)
 {
     float x = (float)(a->x - b->x);
