@@ -45,6 +45,10 @@ tools\build_server.bat
 bash instrumentation/lift/pipeline.sh --full
 ```
 
+## The data files
+
+The data of the game is plain source: `src/client/storage.c`, `src/server/storage.c` and their headers. Edit them like any other file. The type headers (`src/include/sr_types.h` and its siblings) come from `tools/re/gen_types.py`: change a name or a field in `analysis/structs/names.csv`, then run the tool.
+
 ## It must be bit-exact
 
 The results of the game do not change unless `docs/changes.md` says so. Fixes for invalid input are welcome.

@@ -307,8 +307,13 @@ def source(rows, dummies):
 
 def main():
     rows, dummies = load()
-    files = {HEADER: header(rows, dummies), SOURCE: source(rows, dummies), REGIONS: regions(rows)}
-    if "--check" in sys.argv[1:]:
+    files = {REGIONS: regions(rows)}
+    # The header and the source of the game are plain source files. --write-src makes them again
+    # from the CSV files and replaces any hand edit.
+    if "--write-src" in sys.argv[1:] or "--check-src" in sys.argv[1:]:
+        files[HEADER] = header(rows, dummies)
+        files[SOURCE] = source(rows, dummies)
+    if "--check" in sys.argv[1:] or "--check-src" in sys.argv[1:]:
         stale = [p.name for p, t in files.items() if not p.exists() or p.read_text(encoding="utf-8") != t]
         if stale:
             print("stale:", ", ".join(stale))

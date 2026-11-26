@@ -133,13 +133,17 @@ def main():
     text = render(rows)
     if "--check" in sys.argv[1:]:
         current = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
-        if current != text:
+        # The first line is the comment of the plain source file.
+        if current.split("\n", 1)[1:] != text.split("\n", 1)[1:]:
             print("texts.c does not match the executable")
             sys.exit(1)
         print(f"texts.c matches: {len(rows['narrow'])} narrow, {len(rows['wide'])} wide")
         return
+    if "--write-src" not in sys.argv[1:]:
+        print("texts.c is a plain source file. Use --check to compare it with the executable, or --write-src to replace it.")
+        return
     OUT.write_text(text, encoding="utf-8", newline="\n")
-    print(f"{OUT}: {len(rows['narrow'])} narrow, {len(rows['wide'])} wide")
+    print(f"{OUT}:{len(rows['narrow'])} narrow, {len(rows['wide'])} wide")
 
 
 if __name__ == "__main__":

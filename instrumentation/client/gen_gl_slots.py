@@ -8,6 +8,7 @@ analysis/client_win/gl_slots.csv, the same file that types the slots in Ghidra.
 Usage: python -I instrumentation/client/gen_gl_slots.py
 """
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -105,8 +106,10 @@ def main():
         native.append(f'extern cl_{name}_fn GLeeFuncPtr_{name};')
         native.append(f'#define cl_{name} GLeeFuncPtr_{name}')
     native += ['', '#endif', '']
-    NATIVE_OUT.parent.mkdir(parents=True, exist_ok=True)
-    NATIVE_OUT.write_text('\n'.join(native), encoding='utf-8', newline='\n')
+    # src/client/native/gl_slots.h is a plain source file. --write-src replaces it.
+    if '--write-src' in sys.argv[1:]:
+        NATIVE_OUT.parent.mkdir(parents=True, exist_ok=True)
+        NATIVE_OUT.write_text('\n'.join(native), encoding='utf-8', newline='\n')
     # The slots start with the lazy functions of GLee (third_party/glee). The first call of a lazy
     # function runs GLeeInit, which needs the OpenGL context that the game opens later. With the
     # environment variable SV_GL_WRAPPERS the slots get the small functions above instead.
