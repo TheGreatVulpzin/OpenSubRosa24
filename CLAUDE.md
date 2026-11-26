@@ -11,11 +11,13 @@ RE/decompilation project for Sub Rosa (2015).
 - Verification tools live in `instrumentation/`: `hook/`, `tests/`, `platform/plat_test.*`, `standalone/record_shim.c`, `lift/`, `ghidra/`, and `recording/`.
 - The normal server uses direct C calls and separate typed objects in `src/server/storage.c`.
   Do not add address dispatch, image storage or an instrumentation include path to that target.
-  The storage files are plain source: `src/server/storage.c`, `src/include/sr_storage.h`, `src/client/storage.c`,
-  `src/include/sr_client_storage.h`, `src/client/image/texts.c` and `src/client/native/gl_slots.h`. Edit them like
-  any other file. `tools/re/gen_storage.py` and `tools/re/gen_client_native.py` write only the test adapter and the
-  region lists under `instrumentation/`. `--write-src` makes the sources again from the CSV files and replaces hand
-  edits, so use it only to recover. A rename in these files needs the same rename in the adapter files.
+  The data is plain source, one file for each system: `src/server/data/*.c` with `src/include/sr_storage.h`,
+  and `src/client/data/*.c` with `src/include/sr_client_storage.h` (plus `src/client/image/texts.c` and
+  `src/client/native/gl_slots.h`). Edit them like any other file. `tools/re/gen_storage.py` and
+  `tools/re/gen_client_native.py` write only the test adapters and the lists under `instrumentation/`.
+  `bash tools/native_test.sh --guard` makes the guard data from the plain files (`instrumentation/client/gen_guards.py`).
+  After a change to the client data run `python -I tools/re/gen_client_native.py` and `tools\test_client_storage.bat`:
+  they compare each size and start value with the original executable. A rename needs the same rename in the CSV files of `analysis/`.
   The type headers (`sr_types.h` and its siblings) still come from `tools/re/gen_types.py`.
   The recording target alone uses `instrumentation/standalone/image_024d.*`.
 - Only the separate `subvulpes-server-record` target uses the recorder in `instrumentation/`. The normal server has no include path to that folder.

@@ -52,6 +52,10 @@ fi
 fail() { echo "FAIL: $*"; exit 1; }
 
 started=$(date +%s)
+if [ $guard -eq 1 ]; then
+    # The guard data comes from the plain data files (src/client/data).
+    python -I instrumentation/client/gen_guards.py || fail "gen_guards.py"
+fi
 echo "== build ($kind): $targets"
 if ! cmd //c "tools\\build_native.bat $targets"; then
     fail "build (see build/native_build.log)"

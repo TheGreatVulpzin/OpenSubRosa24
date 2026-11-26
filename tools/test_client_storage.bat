@@ -1,5 +1,6 @@
 @echo off
-rem Build and run the start value test of the native client storage (instrumentation\tests\test_client_storage.c).
+rem Build and run the test of the native client storage (instrumentation\tests\test_client_storage.c).
+rem It checks the size of every object and the start values against the original executable.
 rem Run tools\re\gen_client_native.py first. The image tables need: python -I instrumentation\lift\gen_image.py --client
 setlocal
 set VSLANG=1033
@@ -9,5 +10,5 @@ call "%VCVARS%" >nul 2>nul || (echo ERROR: vcvars32.bat not found & exit /b 1)
 :have_cl
 cd /d "%~dp0.."
 if not exist build mkdir build
-cl /nologo /std:c11 /arch:IA32 /W3 /utf-8 /D_CRT_SECURE_NO_WARNINGS /DSR_CLIENT_NATIVE /Isrc\include /Isrc\client /Isrc\platform /Isrc\lifted /Isrc\standalone /Iinstrumentation\client\runtime /Febuild\test_client_storage.exe /Fobuild\ instrumentation\tests\test_client_storage.c src\client\storage.c build\client_image\image_client.c || exit /b 1
+cl /nologo /std:c11 /arch:IA32 /W3 /utf-8 /D_CRT_SECURE_NO_WARNINGS /DSR_CLIENT_NATIVE /Isrc\include /Isrc\client /Isrc\client\native /Isrc\platform /Isrc\lifted /Isrc\standalone /Iinstrumentation\client\runtime /Febuild\test_client_storage.exe /Fobuild\ instrumentation\tests\test_client_storage.c src\client\data\*.c build\client_image\image_client.c || exit /b 1
 build\test_client_storage.exe

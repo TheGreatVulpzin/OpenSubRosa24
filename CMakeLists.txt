@@ -28,8 +28,9 @@ set(SV_STORAGE_HEADERS)
 foreach(header sr_types.h sr_runtime.h sr_storage.h sr_storage_types.h sr_limits.h)
     list(APPEND SV_STORAGE_HEADERS "${CMAKE_SOURCE_DIR}/src/include/${header}")
 endforeach()
+file(GLOB SV_STORAGE_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/server/data/*.c)
 set_property(SOURCE ${SV_REWRITTEN_SOURCES} src/server/accounts.c src/server/events.c
-    src/server/players.c src/server/main_loop.c src/server/storage.c
+    src/server/players.c src/server/main_loop.c ${SV_STORAGE_SOURCES}
     src/standalone/main.c src/platform/x87_math.c APPEND PROPERTY OBJECT_DEPENDS "${SV_STORAGE_HEADERS}")
 
 set_source_files_properties(${SV_GAME_SOURCES} PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013;/Z7")
@@ -55,7 +56,7 @@ foreach(syslib SDL2 OpenAL32 libspeex libspeexdsp)
     list(APPEND CL_SYSLIBS ${CL_SYSLIB_DIR}/${syslib}.lib)
 endforeach()
 
-# The native client: the same sources, one real C object for each datum (src/client/storage.c),
+# The native client: the same sources, one real C object for each datum (src/client/data),
 # no image of subrosa.exe and no file of instrumentation/.
 add_library(client_native OBJECT EXCLUDE_FROM_ALL ${CL_ADOPTED})
 target_include_directories(client_native PRIVATE src/include src/platform src/client src/client/native third_party/glee ${SV_REWRITTEN_INCLUDES})
@@ -94,8 +95,15 @@ set_property(TARGET subvulpes-client-native-smoke PROPERTY MSVC_RUNTIME_LIBRARY 
 
 # The native client with a guard after each datum (SR_STORAGE_GUARDS). A write past the end of a datum
 # prints its name and where the main thread is. The smoke variant drives the same scenarios.
-add_library(client_native_guard OBJECT EXCLUDE_FROM_ALL ${CL_ADOPTED})
-target_include_directories(client_native_guard PRIVATE src/include src/platform src/client src/client/native third_party/glee ${SV_REWRITTEN_INCLUDES})
+# The guard data comes from build/guards. Make it first with: python -I instrumentation/client/gen_guards.py
+# (tools/native_test.sh --guard does it).
+set(CL_GUARD_DIR ${CMAKE_SOURCE_DIR}/build/guards)
+if(EXISTS ${CL_GUARD_DIR}/guard_data.c)
+set(CL_GUARD_SOURCES ${CL_ADOPTED})
+list(FILTER CL_GUARD_SOURCES EXCLUDE REGEX "/src/client/data/")
+list(APPEND CL_GUARD_SOURCES ${CMAKE_SOURCE_DIR}/src/client/data/unplaced.c ${CL_GUARD_DIR}/guard_data.c)
+add_library(client_native_guard OBJECT EXCLUDE_FROM_ALL ${CL_GUARD_SOURCES})
+target_include_directories(client_native_guard PRIVATE src/include src/platform src/client src/client/native third_party/glee ${CL_GUARD_DIR} ${SV_REWRITTEN_INCLUDES})
 target_compile_options(client_native_guard PRIVATE /arch:IA32 /W3 /utf-8)
 target_compile_definitions(client_native_guard PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_STORAGE_GUARDS)
 set_property(SOURCE src/net/server.c APPEND PROPERTY COMPILE_DEFINITIONS
@@ -115,7 +123,7 @@ foreach(variant "" "-smoke")
     endif()
     set(target subvulpes-client-native-guard${variant})
     add_executable(${target} EXCLUDE_FROM_ALL ${sources})
-    target_include_directories(${target} PRIVATE src/include src/platform src/client src/client/native src/standalone third_party/glee)
+    target_include_directories(${target} PRIVATE src/include src/platform src/client src/client/native src/standalone third_party/glee ${CL_GUARD_DIR})
     target_compile_options(${target} PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(${target} PRIVATE ${definitions})
     target_link_libraries(${target} PRIVATE opengl32 user32 gdi32 ws2_32 shell32 ${CL_SYSLIBS})
@@ -123,10 +131,11 @@ foreach(variant "" "-smoke")
     set_target_properties(${target} PROPERTIES OUTPUT_NAME opensubrosa24_client_native_guard${variant})
     set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endforeach()
+endif()
 set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "/W0")
 
 # The normal executable has its own storage and no verification sources or include paths.
-add_executable(subvulpes-server src/standalone/main.c src/server/storage.c src/platform/x87_math.c ${SV_REWRITTEN_SOURCES}
+add_executable(subvulpes-server src/standalone/main.c ${SV_STORAGE_SOURCES} src/platform/x87_math.c ${SV_REWRITTEN_SOURCES}
     src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c
     src/platform/plat_imports.c)
 target_include_directories(subvulpes-server PRIVATE src/include src/standalone src/platform ${SV_REWRITTEN_INCLUDES})

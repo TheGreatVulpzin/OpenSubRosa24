@@ -54,9 +54,9 @@ The storage containers preserve these aliases:
 - The landscape reset counter remains the last word of `Newspaper`.
 - The completed item scan still reads the float at offset 0x48 of event 11,194 as its team angle.
 
-The definitions and declarations (`src/server/storage.c`, `src/include/sr_storage.h`) are plain source files.
-`tools/re/gen_storage.py` owns the adapter and the test region list. It rejects overlapping storage regions.
-`--check` detects a stale adapter. `--write-src` makes the two source files again and replaces hand edits.
+The definitions and declarations (`src/server/data/*.c`, `src/include/sr_storage.h`) are plain source files,
+one file for each system. `tools/re/gen_storage.py` owns the adapter and the test region list. It rejects
+overlapping storage regions. `--check` detects a stale adapter. `verify_storage.py` compares the two memory modes.
 Initialized scalar values, vectors, tables and strings become C initializers.
 The default comparison checks storage bytes exactly and checks 15 initialized string pointers by content.
 

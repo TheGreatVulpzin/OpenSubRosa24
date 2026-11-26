@@ -18,7 +18,9 @@
 #include "client_smoke.h"
 #endif
 
+#ifdef SR_STORAGE_GUARDS
 void cl_storage_init(void);
+#endif
 int __cdecl client_main(void);
 
 HANDLE g_main_thread;
@@ -123,7 +125,10 @@ int main(void)
     setvbuf(stdout, NULL, _IONBF, 0);
     /* The game uses 53 bit x87 math. */
     _controlfp_s(&control, _PC_53, _MCW_PC);
+#ifdef SR_STORAGE_GUARDS
+    /* The data has its start values as plain initializers. Only the guard build fills its guards. */
     cl_storage_init();
+#endif
     x87_init();
     /* SR_DEBUGIT=1 shows the editors in the main menu. */
     if (getenv("SR_DEBUGIT") && atoi(getenv("SR_DEBUGIT")) != 0)

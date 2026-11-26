@@ -1,13 +1,7 @@
-/* The data of the server: one C object for each datum of the game. Edit this file like any other source. */
+/* Data of the game rules and the world that the shared game code reads and writes. Edit this file like any other source. */
 #include "sr_storage.h"
 
-char sr_data_filtered_word[7] = {
-    110, 105, 103, 103, 101, 114, 0
-};
-char sr_data_gamedir[9] = {
-    83, 117, 98, 32, 82, 111, 115, 97,
-    0
-};
+char sr_data_gamedir[9] = "Sub Rosa";
 int sr_data_hack_modulusopt[3] = {
     1, 2, 0
 };
@@ -58,7 +52,6 @@ float sr_data_debug_cubevertex[24] = {
     1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
     1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f
 };
-int sr_data_currentversion = 24;
 float sr_data_menucolor[3] = {
     0.16470588743686676f, 0.2666666805744171f, 0.3529411852359772f
 };
@@ -342,7 +335,6 @@ float sr_data_lightwavelength[3] = {
 const char * sr_data_carcolorname[6] = {
     "Black", "Red", "Blue", "Silver", "White", "Gold"
 };
-int sr_data_mti = 625;
 vec3 sr_data_xaxis = {1.0f, 0.0f, 0.0f};
 vec3 sr_data_yaxis = {0.0f, 1.0f, 0.0f};
 vec3 sr_data_zaxis = {0.0f, 0.0f, 1.0f};
@@ -357,11 +349,8 @@ uint32_t sr_data_mag01[2] = {
     0u, 2567483615u
 };
 char sr_data_newspaper_line[128];
-uint32_t sr_data_mt[624];
 char sr_data_manager_msg[64];
 char sr_data_world_msg[128];
-int sr_data_tzset_done;
-char sr_data_message[64];
 char sr_data_farbs_digits[128];
 BondHuman sr_data_bondhuman[512];
 BondParticle sr_data_bondparticle[16384];
@@ -370,17 +359,13 @@ int sr_data_guard_used[64];
 char sr_data_world_digits[64];
 char sr_data_newspaper_money[128];
 char sr_data_farbs_line[128];
-int sr_data_debugit;
-int sr_data_dedicated;
 FloorplanCell sr_data_floorplan[262144];
 Timer sr_data_timer[256];
 Bullet sr_data_bullet[16384];
-Debug sr_data_debug;
 Human sr_data_human[512];
 Stats sr_data_stats;
 SrClientAccountStore sr_data_clientaccounts;
 vec3 sr_data_pointtemp[512];
-int sr_data_numofconnections;
 int sr_data_numofdynamicbonds;
 SrSurface sr_data_surface2;
 Building sr_data_building;
@@ -399,20 +384,17 @@ int sr_data_numoftracks;
 Game sr_data_game;
 SrFileTransfer sr_data_file_read;
 Item sr_data_item[1024];
-uint32_t sr_data_random_counter;
 SysInfo sr_data_sysinfo;
 SoundList sr_data_soundlist;
 Event sr_data_event[65536];
 Newspaper sr_data_newspaper;
 SrLandscape sr_data_landscape;
-uint8_t sr_data_wsadata[400];
 Scenario sr_data_scenario;
 ObjectType sr_data_objecttype[128];
 float sr_data_bezier_curve_dv[12];
 Particle sr_data_particle[16384];
 BuildBlockTypeRec sr_data_buildblocktype[16];
 int sr_data_tiremarkend;
-int sr_data_startup_counter;
 BlockList sr_data_blocklist;
 int sr_data_tiremarkstart;
 SrSurface sr_data_surface;
@@ -430,15 +412,12 @@ BulletType sr_data_bullettypes[4];
 float sr_data_camera[136];
 SrAccountStore sr_data_accounts;
 BondOpt sr_data_bondopt[16384];
-int sr_data_view;
 Radix sr_data_radix;
 Intersect sr_data_intersect;
-void * sr_data_slogfp;
 SrPacketWorkspace sr_data_packet_workspace;
 uint8_t sr_data_level_marks[4096];
 int sr_data_numofsprite_models;
 TimerList sr_data_timerlist;
-Speex sr_data_speex;
 AreaBlock sr_data_area_block[65536];
 SrFileTransfer sr_data_file_write;
 int sr_data_numofstaticbonds;
@@ -446,11 +425,8 @@ float sr_data_bezier_curve_uv[8];
 Parser sr_data_parser;
 TextureList sr_data_texturelist;
 CityObjectRec sr_data_cityobject[1024];
-Connection sr_data_connection[256];
 SrMaterialStore sr_data_materials;
 Area sr_data_area[4];
-Market sr_data_market;
-MasterServer sr_data_masterserver;
 int sr_data_numofbonds;
 Bond sr_data_bond[16384];
 int sr_data_numofbullets;

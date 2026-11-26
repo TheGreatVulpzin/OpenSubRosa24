@@ -19,7 +19,7 @@ class NativeDependencies(unittest.TestCase):
         ref = next(t for t in targets if t['name'] == 'subvulpes-server')
         target = json.loads((reply / ref['jsonFile']).read_text())
         sources = [s['path'] for s in target['sources']]
-        self.assertIn('src/server/storage.c', sources)
+        self.assertIn('src/server/data/game.c', sources)
         forbidden = re.compile(r'instrumentation|lifted|image_024d|fn_table')
         for path in sources:
             self.assertIsNone(forbidden.search(path), path)

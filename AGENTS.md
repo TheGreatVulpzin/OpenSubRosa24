@@ -49,7 +49,7 @@ Machine lacks game binaries or recordings: do items 1 to 4 as far as possible, s
 
 For structural storage changes, run `python -I instrumentation/lift/verify_storage.py`.
 Build the normal target with `SV_BUILD_INSTRUMENTATION=OFF` and run the full gate and relevant synthetic suites.
-The storage files (`src/server/storage.c`, `src/include/sr_storage.h`) are plain source: edit them by hand. `python -I tools/re/gen_storage.py` writes only the test adapter. `--write-src` makes the sources again from the CSV files and replaces hand edits.
+The storage files (`src/server/data/*.c`, `src/include/sr_storage.h`) are plain source: edit them by hand. `python -I tools/re/gen_storage.py` writes only the test adapter.
 
 ## Which steps
 
