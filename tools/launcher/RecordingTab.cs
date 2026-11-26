@@ -250,16 +250,44 @@ namespace SubVulpes
         // ------------------------------------------------------------ record_focus.txt
 
         // The server recorder hooks the functions of record_focus.txt all the time. They are the ones that are still missing.
+        // The class "diff" keeps the hook until record_diff_max calls (32) and then drops it. The class "untested"
+        // records every call with new arguments without a limit: a hot function would fill the file in seconds.
+        const string FocusMarker = "# Made by the launcher: the functions that the checklist still misses.";
+
         void WriteFocus(string side, string target)
         {
             if (!LoadRecFunctions()) return;
+            // The lines above the marker are the list that people keep by hand. The lines below are made again each time.
+            var lines = new List<string>();
+            // The list of the repository is the base when it exists (the target may hold an older made list). A package has
+            // only the target.
+            string repoList = Path.GetFullPath(Path.Combine(launcherFolder, @"..\..\instrumentation\recording\record_focus.txt"));
+            string master = File.Exists(repoList) ? repoList : target;
+            if (side == "server" && File.Exists(master)) {
+                foreach (string line in File.ReadAllLines(master)) {
+                    if (line == FocusMarker || line.StartsWith("# The functions that the checklist still misses")) break;
+                    lines.Add(line);
+                }
+            }
+            var kept = new HashSet<uint>();
+            foreach (string line in lines) {
+                var parts = line.Split(' ');
+                uint rva;
+                if (parts.Length >= 3 && parts[0].StartsWith("0x") &&
+                    uint.TryParse(parts[0].Substring(2), System.Globalization.NumberStyles.HexNumber, null, out rva))
+                    kept.Add(rva);
+            }
+            lines.Add(FocusMarker);
+            lines.Add("# Format: rva class name");
             var total = TotalCalls(side);
-            var lines = new List<string> { "# The functions that the checklist still misses (made by the launcher).", "# Format: rva class name" };
+            int added = 0;
             foreach (var f in recFunctions.Where(f => f.Side == side)) {
                 int calls;
                 total.TryGetValue(f.Rva, out calls);
-                if (calls < RecordMinCalls && lines.Count < FocusMax + 2)
-                    lines.Add("0x" + f.Rva.ToString("x") + " untested " + f.Name);
+                if (calls < RecordMinCalls && !kept.Contains(f.Rva) && added < FocusMax) {
+                    lines.Add("0x" + f.Rva.ToString("x") + " diff " + f.Name);
+                    added++;
+                }
             }
             File.WriteAllText(target, string.Join("\n", lines.ToArray()) + "\n", Encoding.ASCII);
         }
@@ -318,7 +346,7 @@ namespace SubVulpes
             File.WriteAllText(Path.Combine(folder, "subvulpes.ini"),
                 "[hooks]\r\nenabled=1\r\nverify=0\r\noriginal_only=1\r\nown_main=0\r\nlog_calls=0\r\nlifted=1\r\n" +
                 "record_args=1\r\nrecord_imports=1\r\nsnapshot_after=" + settings.Get("snapshot_after", "600") + "\r\n" +
-                "capture_packets=0\r\nnet_guard=1\r\n", Encoding.ASCII);
+                "capture_packets=0\r\nnet_guard=1\r\nrecord_total_mb=" + settings.Get("record_total_mb", "100") + "\r\n", Encoding.ASCII);
         }
 
         // When the original server closes, its files go to the folder of the test.
@@ -381,7 +409,8 @@ namespace SubVulpes
                 File.Copy(proxy, Path.Combine(dir, "wsock32.dll"), true);
                 File.WriteAllText(Path.Combine(dir, "subvulpes.ini"),
                     "[hooks]\r\nhooks=1\r\nlifted=1\r\noriginal_only=1\r\nverify=0\r\nrecord_args=1\r\nrecord_imports=1\r\n" +
-                    "snapshot_after=" + settings.Get("client_snapshot_after", "240") + "\r\n", Encoding.ASCII);
+                    "snapshot_after=" + settings.Get("client_snapshot_after", "240") + "\r\n" +
+                    "record_total_mb=" + settings.Get("record_total_mb", "100") + "\r\n", Encoding.ASCII);
                 WriteFocus("client", Path.Combine(dir, "record_focus.txt"));
                 clientDir = dir;
                 clientSaveDir = (server != null && testDir != null) ? Path.Combine(testDir, "client") : Path.Combine(logsRoot, stamp + "-client", "client");
@@ -399,6 +428,8 @@ namespace SubVulpes
         void OnClientExited()
         {
             if (client == null) return;
+            // 0 is a normal close. 0xC0000005 and the like are a crash.
+            int exitCode = client.ExitCode;
             client.Dispose();
             client = null;
             recStartClient.Enabled = true;
@@ -408,7 +439,9 @@ namespace SubVulpes
                     string path = Path.Combine(clientDir, name);
                     if (File.Exists(path)) File.Move(path, Path.Combine(clientSaveDir, name));
                 }
-                message.Text = "The client recording is in " + clientSaveDir + ".";
+                message.Text = "The client closed with exit code " + (exitCode == 0 ? "0" : "0x" + exitCode.ToString("X8")) +
+                               ". Its recording is in " + clientSaveDir + ".";
+                AddLine("[launcher] The client closed with exit code 0x" + exitCode.ToString("X8") + ".");
             } catch (Exception ex) {
                 message.Text = "Cannot save the client recording: " + ex.Message;
             }

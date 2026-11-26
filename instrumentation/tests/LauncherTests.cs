@@ -307,6 +307,23 @@ namespace SubVulpes
             Check(mainTabs.TabPages.Contains(pages["Debug"]) && new KeyFile(Path.Combine(root, "launcher.ini")).Get("developer", "") == "1", "Debug shortcut enables and persists Debug Mode");
             Field<CheckBox>(form, "debugModeBox").Checked = false;
             Check(!mainTabs.TabPages.Contains(pages["Debug"]), "Debug Mode hides the Debug tab");
+
+            // The focus list keeps the hand list and makes the missing functions "diff". "untested" has no limit of calls:
+            // a hot function in that class fills the recording in seconds.
+            File.Copy(Path.Combine(repo, @"instrumentation\recording\functions.csv"), Path.Combine(root, "recording_functions.csv"), true);
+            string focusFile = Path.Combine(root, "focus-test.txt");
+            // A package has the hand list next to the exe. The launcher adds its lines below a marker.
+            File.Copy(Path.Combine(repo, @"instrumentation\recording\record_focus.txt"), focusFile, true);
+            Call(form, "WriteFocus", "server", focusFile);
+            var focusLines = File.ReadAllLines(focusFile);
+            int marker = Array.FindIndex(focusLines, l => l.StartsWith("# Made by the launcher"));
+            Check(marker > 0, "Focus list: the lines of the launcher start at a marker");
+            int diffLines = focusLines.Skip(marker + 1).Count(l => l.Contains(" diff ")), untestedLines = focusLines.Count(l => l.Contains(" untested "));
+            int handLines = File.ReadAllLines(Path.Combine(repo, @"instrumentation\recording\record_focus.txt")).Count(l => l.Contains(" untested "));
+            Check(diffLines > 0 && diffLines <= 150, "Focus list: the missing functions are diff, at most 150 (" + diffLines + ")");
+            Check(untestedLines == handLines, "Focus list: only the hand list is untested (" + untestedLines + " of " + handLines + ")");
+            Call(form, "WriteFocus", "server", focusFile);
+            Check(File.ReadAllLines(focusFile).Length == focusLines.Length, "Focus list: a second run does not grow the file");
             Field<CheckBox>(form, "debugModeBox").Checked = true;
             mainTabs.SelectedTab = pages["Debug"];
             await Capture(form, "07-debug-test", "Debug");
