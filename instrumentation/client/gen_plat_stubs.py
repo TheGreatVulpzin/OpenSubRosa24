@@ -175,6 +175,13 @@ def main():
     for rva, name in slots:
         o.append('    *(void **)(sr_base + %su) = (void *)cs_%s; \\' % (rva, name))
     o.append('')
+    # The clean code calls the extensions through the pointers of GLee, not through the slots.
+    for rva, name in slots:
+        o.append('extern void *GLeeFuncPtr_%s;' % name)
+    o.append('#define CL_GLEE_PATCHES \\')
+    for rva, name in slots:
+        o.append('    GLeeFuncPtr_%s = (void *)cs_%s; \\' % (name, name))
+    o.append('')
     open(OUT, 'w', newline='\n').write('\n'.join(o) + '\n')
     print('%d stubs, %d slots -> %s' % (len(rows), len(slots), OUT))
 

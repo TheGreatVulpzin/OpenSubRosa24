@@ -817,6 +817,7 @@ void plat_test_patch_globals(void)
     *(void **)(sr_base + 0x908b064) = (void *)st_fread;
     *(void **)(sr_base + 0x13bee680) = r_fwrite;
     CL_SLOT_PATCHES
+    CL_GLEE_PATCHES
 #else
     *(void **)(sr_base + 0x91022a4) = (void *)st_fread;
     *(void **)(sr_base + 0x13bf2d00) = r_fwrite;

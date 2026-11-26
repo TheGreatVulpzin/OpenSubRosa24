@@ -51,6 +51,7 @@ grep "^result:" "$LOG/lift.log"
 step "tables"
 python -I instrumentation/client/gen_count_table.py
 python -I instrumentation/client/gen_plat_stubs.py
+python -I instrumentation/client/gen_system_thunks.py
 
 step "build"
 cmd //c "tools\\build_hook.bat" > "$LOG/build.log" 2>&1

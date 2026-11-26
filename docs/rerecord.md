@@ -1,0 +1,61 @@
+# Recordings to make again
+
+The recordings of `build/recordings` are not in git. Nine of them were lost on 2026-11-25. This page says what each one covered and how to record it again. The gate (`gate.py`) lists the functions of a lost recording as `DROP` until a new recording reaches them.
+
+Never commit a recording. It holds player names, IP addresses and `config.txt`.
+
+## Server (024d)
+
+Surviving: `play-20261012`, `20261013-1016-smoke`, `20261013-query`, `20261015-friend`, `murilo-20261015` (with its synthetic runs). The gate on these shows 0 differences.
+
+Functions that no surviving recording reaches (13). A new recording must do the action in the right column:
+
+| Function | What the player does |
+| --- | --- |
+| `logic_gunstore_buy` | Buy a gun at the gun store |
+| `item_addbill`, `item_removebill`, `item_billvalue` | Pick up, spend and drop bills (money items) |
+| `createevent_updateplayer_finance` | Any change of a player's money |
+| `saveaccountsserver`, `server_writelogfile` | Let the server save the accounts and write the log (play a few minutes, then stop the server in the normal way) |
+| `logicsimulation_round` | One full round: the round ends and the next one starts |
+| `player_loadinventory`, `player_saveinventory` | A player leaves in a round and joins in the next one (the server saves and loads the inventory) |
+| `sphereintersectarea`, `sphereintersectcityobjecttype` | Collision tests of a sphere with a building and a city object (move objects and cars in a building and near city objects) |
+| `multiply3x3matrices` | Not known. The old recording reached it twice. Play with cars, objects and several players |
+
+Functions that fell to one or two calls (33). They still pass, but with little proof. A longer session with these actions reaches most of them:
+
+- Teams: `logic_addteamcash`, `playerteamkilltax`, `createmission_threeway`, `createmission_transaction`, `scenario_getnumofmissions`
+- New game and level: `resetgame`, `createlevel`, `createscenario_world`, `createplayer`, `createcityobject`, `city_createelevator`
+- Cars and items: `logic_createcar`, `linkitemtoitem`, `objectwheelsimulation2`, `item_sphereintersect`, `playerbuystock`, `createevent_updatecarmarket`
+- Shots: `createbullet`, `bullettimetolive`, `lineintersecthuman`, `lineintersectcityobject`
+- Network: `pbitread`, `packposition`, `sendpacket`, `servercycle`, `account_nameexists`
+
+Plan for one session of about 40 minutes with 2 or 3 people (the second person joins late, so the inventory path runs):
+
+1. Start the launcher preset `Harness Recording` (`SV_RECORD_DIR`, snapshot after 600 s by default).
+2. Everybody buys a gun, picks up bills, drives a car, shoots, kills a player of another team (team kill tax) and spends money at a store.
+3. Let one round end. A player leaves before the end and joins in the next round.
+4. Stop the server in the normal way, so the accounts and the log are saved.
+5. Run `python -I instrumentation/lift/min_calls.py --keep 2`, then `python -I instrumentation/lift/gate.py --update` (ask first: it replaces the baseline).
+
+## Client (0.24b)
+
+All three client recordings are lost, so the client gate has no data. A recording needs the proxy `wsock32.dll` of the target `cl_wsock32` and the fixed copy `subrosa_fixed.exe` (see `docs/client.md`, "Recorder" and "Harness for the client").
+
+| Lost recording | What it held |
+| --- | --- |
+| `client-menu-20261103` | 50 s on the main menu, snapshot after 20 s |
+| `client-play-20261103-1229` | 14 min of play, snapshot after 180 s |
+| `client-play2-20261103-2019` | 25 min of play, snapshot after 240 s, with a hosted game and the two demos |
+
+Record these sessions again, with `record_args=1`, `record_imports=1` and `hooks=1` in `subvulpes.ini`:
+
+1. Main menu: open every menu (options, video modes, controls, voice options, credits), then leave. Snapshot after 20 s.
+2. Join a server: walk, shoot, drive, buy, use a phone, open the map, the inventory, the company list (key C) and the chat. Snapshot after about 3 minutes, and keep playing for 10 minutes.
+3. Host a game on the same PC and play 10 minutes (the server paths of the client).
+4. Demo 1 and Demo 2.
+5. The editors: building, level and model editor, each for a few minutes, and save one.
+6. Take a screenshot, change the video mode, and try the voice test.
+
+The functions that no earlier recording reached stay with the synthetic tests (`instrumentation/client/synth_*.py`). Those scripts use the snapshot of `client-play2-20261103-2019`. Make `sv_snapshot.bin` of the new play recording before you run them again.
+
+After the recording: run `python -I instrumentation/client/cap_calls.py build/recordings/<recording>` (2 calls per function) and add the names to `instrumentation/lift/targets/client_win.json`.

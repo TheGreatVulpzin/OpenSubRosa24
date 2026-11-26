@@ -3,6 +3,8 @@
 /original/**
 !/original/README.md
 !/original/MANIFEST.sha256
+# Backup of original/ (a copy in the repository folder, kept outside git).
+/original.rar
 
 # Server manager: estado local
 /third_party/server-manager/logs/

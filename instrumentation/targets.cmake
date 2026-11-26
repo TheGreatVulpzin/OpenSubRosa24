@@ -79,6 +79,11 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
         instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
+    # The clean code calls the system libraries by name: the thunks send each call to the import of the
+    # target (build/lift/client_win/system_thunks.c, made by instrumentation/client/gen_system_thunks.py).
+    target_sources(cl_wsock32 PRIVATE build/lift/client_win/system_thunks.c)
+    target_link_libraries(cl_wsock32 PRIVATE ws2_32)
+    set_source_files_properties(build/lift/client_win/system_thunks.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
     set_source_files_properties(build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 
@@ -92,6 +97,8 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
     target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=114688 SR_TEST_MEMORY SR_CLIENT_IMAGE CL_HARNESS SV_FULL_EVERY_DEFAULT=1)
     target_link_options(harness_client PRIVATE /LARGEADDRESSAWARE /MAP /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
+    target_sources(harness_client PRIVATE build/lift/client_win/system_thunks.c)
+    target_link_libraries(harness_client PRIVATE ws2_32)
     set_property(TARGET harness_client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
     set_source_files_properties(src/lifted/client/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
