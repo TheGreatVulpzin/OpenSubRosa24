@@ -390,11 +390,39 @@ namespace SubVulpes
             form.Close();
         }
 
+        // Smoke test of the recording client: the launcher starts the original client with the recorder, the client
+        // stays open for a few seconds, closes, and the launcher saves its recording. No server runs.
+        static async Task ClientSmoke(LauncherForm form)
+        {
+            Field<CheckBox>(form, "debugModeBox").Checked = true;
+            Click(form, "recStartClient");
+            await Wait(() => Field<Process>(form, "client") != null || Field<Label>(form, "message").Text.Length > 0, 30000, "the launcher answers to Start the client");
+            var client = Field<Process>(form, "client");
+            Check(client != null, "the launcher starts the client: " + Field<Label>(form, "message").Text);
+            await Task.Delay(20000);
+            Check(!client.HasExited, "the client is still open after 20 seconds: " + Field<Label>(form, "message").Text);
+            string saveDir = Field<string>(form, "clientSaveDir");
+            // The client closes like a player closes it.
+            client.CloseMainWindow();
+            await Wait(() => Field<Process>(form, "client") == null, 40000, "the client closes and the launcher saves its files");
+            string text = Field<Label>(form, "message").Text;
+            Console.WriteLine("MESSAGE: " + text);
+            Check(text.Contains("exit code 0."), "the client closed with exit code 0");
+            foreach (string file in new[] { "sv_args.txt", "sv_snapshot.bin", "subvulpes.log" }) {
+                string path = Path.Combine(saveDir, file);
+                long size = File.Exists(path) ? new FileInfo(path).Length : -1;
+                Console.WriteLine("SIZE: " + file + " " + size + " bytes");
+                Check(size > 1000, "recorded file " + file + " has data (" + size + " bytes)");
+            }
+        }
+
         [STAThread]
         static int Main(string[] args)
         {
             bool serverScreens = args.Length == 3 && args[1] == "--server-screens";
-            if (args.Length != 1 && !serverScreens) throw new ArgumentException("Pass the repository directory.");
+            // --client-smoke <client folder>: see ClientSmoke.
+            bool original = args.Length == 3 && args[1] == "--client-smoke";
+            if (args.Length != 1 && !serverScreens && !original) throw new ArgumentException("Pass the repository directory.");
             string repo = Path.GetFullPath(args[0]);
             root = serverScreens ? Path.GetFullPath(args[2]) : Path.Combine(repo, "build", "launcher-tests", Guid.NewGuid().ToString("N"));
             if (!root.StartsWith(Path.Combine(repo, "build", "launcher-tests") + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
@@ -402,12 +430,20 @@ namespace SubVulpes
             screens = Path.Combine(repo, "build", "launcher-screens");
             Directory.CreateDirectory(root);
             Directory.CreateDirectory(screens);
-            if (!serverScreens) {
+            if (original) {
+                // The launcher looks for the proxies and the function list next to itself.
+                File.Copy(Path.Combine(repo, "build", "hook", "client", "wsock32.dll"), Path.Combine(root, "client_wsock32.dll"));
+                File.Copy(Path.Combine(repo, "instrumentation", "recording", "functions.csv"), Path.Combine(root, "recording_functions.csv"));
+                // The server folder is the fixture itself: no server starts in this test.
+                File.WriteAllText(Path.Combine(root, "launcher.ini"),
+                    "developer=1\r\nserver_folder=" + root + "\r\nclient_folder=" + Path.GetFullPath(args[2]) + "\r\n" +
+                    "client_snapshot_after=20\r\n");
+            } else if (!serverScreens) {
                 foreach (string screenshot in Directory.GetFiles(screens, "*.png")) File.Delete(screenshot);
                 File.Copy(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "version.txt"), Path.Combine(root, "version.txt"));
             }
             Console.WriteLine("FIXTURE: " + root);
-            if (!serverScreens) {
+            if (!serverScreens && !original) {
                 UpdateTests();
                 LogTests();
             }
@@ -419,6 +455,7 @@ namespace SubVulpes
             form.Shown += async delegate {
                 try {
                     if (serverScreens) await ServerScreens(form);
+                    else if (original) await ClientSmoke(form);
                     else await Run(form, repo);
                     result = 0;
                 }

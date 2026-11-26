@@ -424,6 +424,31 @@ static size_t __cdecl st_fread(void *buf, size_t size, size_t count, CFILE *f)
     return done / size;
 }
 
+/* fprintf: a write to a file of the run goes to the file. The snapshot holds the file handles of the process
+ * that was recorded. The runtime of this process cannot use one: it stops the program. Such a write is logged
+ * and dropped. */
+static int __cdecl st_fprintf(CFILE *f, const char *format, ...)
+{
+    char text[4096];
+    va_list args;
+    int n, i;
+    va_start(args, format);
+    n = _vsnprintf(text, sizeof text - 1, format, args);
+    va_end(args);
+    if (n < 0)
+        n = (int)sizeof text - 1;
+    text[n] = '\0';
+    for (i = 0; i < MAX_FILES; i++) {
+        if (g_files[i].f && g_files[i].f == f) {
+            ((size_t(__cdecl *)(const void *, size_t, size_t, CFILE *))r_fwrite)(text, 1, (size_t)n, f);
+            ev("fprintf %s: %d bytes", g_files[i].rel, n);
+            return n;
+        }
+    }
+    ev("fprintf of a file from outside the run");
+    return n;
+}
+
 static int __cdecl st_chdir(const char *path)
 {
     int r = r_chdir(path);
@@ -713,6 +738,7 @@ static const Stub g_stubs[] = {
     { "MSVCR100.dll", "fopen", 0, (void *)st_fopen },
     { "MSVCR100.dll", "fclose", 0, (void *)st_fclose },
     { "MSVCR100.dll", "fread", 0, (void *)st_fread },
+    { "MSVCR100.dll", "fprintf", 0, (void *)st_fprintf },
     { "MSVCR100.dll", "_chdir", 0, (void *)st_chdir },
     { "MSVCR100.dll", "_getcwd", 0, (void *)st_getcwd },
     { "MSVCR100.dll", "printf", 0, (void *)st_printf },

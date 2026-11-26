@@ -32,6 +32,10 @@
   "recordings_dir": "build/recordings",
   "recordings": [
     {
+      "name": "client-menu-20261126-134906",
+      "quick": true
+    },
+    {
       "name": "client-menu-20261103",
       "quick": true
     },

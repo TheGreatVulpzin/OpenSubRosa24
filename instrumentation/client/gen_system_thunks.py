@@ -28,6 +28,22 @@ WINSOCK = [
 ]
 
 
+# The shell calls of the client. The clean code calls them by name, and the original calls them through its
+# SHELL32 import: the thunk lets the test environment see the call.
+SHELL = [
+    {'dll': 'SHELL32.DLL', 'name': 'SHGetSpecialFolderPathA', 'cc': '__stdcall',
+     'prototype': 'int SHGetSpecialFolderPathA(void *hwnd, char *path, int csidl, int create)'},
+    {'dll': 'SHELL32.DLL', 'name': 'ShellExecuteA', 'cc': '__stdcall',
+     'prototype': 'void *ShellExecuteA(void *hwnd, const char *operation, const char *file, const char *parameters, '
+                  'const char *directory, int show)'},
+    # Folder calls of the C runtime that the clean code makes by name (src/client/setup/paths.c). The thunk is
+    # defined before the static runtime of the harness, so the call goes to the import of the test environment.
+    {'dll': 'MSVCR100.DLL', 'name': '_chdir', 'cc': '__cdecl', 'prototype': 'int _chdir(const char *path)'},
+    {'dll': 'MSVCR100.DLL', 'name': '_getcwd', 'cc': '__cdecl', 'prototype': 'char *_getcwd(char *buffer, int maxlen)'},
+    {'dll': 'MSVCR100.DLL', 'name': '_mkdir', 'cc': '__cdecl', 'prototype': 'int _mkdir(const char *path)'},
+]
+
+
 def split_params(text):
     text = text.strip()
     if text in ('', 'void'):
@@ -77,6 +93,9 @@ def main():
                 continue
             out.append(thunk(row))
             count += 1
+    for row in SHELL:
+        out.append(thunk(row))
+        count += 1
     for ret, name, params, body in WINSOCK:
         out.append('%s __stdcall %s(%s)\n{\n    %s\n}\n' % (ret, name, params, body))
         count += 1
