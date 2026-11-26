@@ -62,11 +62,23 @@ AREA_HINTS = {
 }
 
 
+def unhookable(side):
+    """RVAs that the lifter leaves without a hook (a relative call in the first bytes). They cannot be recorded."""
+    report = ROOT / "build/lift" / ("client_win" if side == "client" else "ded024d") / "report.csv"
+    found = set()
+    if report.exists():
+        for row in csv.DictReader(report.open(encoding="utf-8")):
+            if row.get("status") == "unhookable":
+                found.add(int(row["rva"], 16))
+    return found
+
+
 def read_table(side):
     rows = {}
+    skip = unhookable(side)
     for line in TABLES[side].read_text(encoding="utf-8", errors="replace").splitlines():
         m = ENTRY.match(line)
-        if m:
+        if m and int(m.group(2), 16) not in skip:
             rows[int(m.group(2), 16)] = {"name": m.group(1), "side_flag": int(m.group(5))}
     return rows
 

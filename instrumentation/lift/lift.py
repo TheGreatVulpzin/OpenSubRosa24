@@ -1343,6 +1343,12 @@ def main():
         status[r] = (('loop' if is_loop(r) else 'harness_only'), side[r]) if r in side else ('lifted', '')
     for r in rewritten:
         status[r] = ('rewritten', 'by hand')
+        # A hook copies the first bytes of the function into a trampoline. A relative call or jump there
+        # (or a prologue under 5 bytes) goes to a wrong place from the trampoline: the client crashes
+        # when it first calls the function (setupobjecttypes starts with a call).
+        pro = funcs[r]['prologue']
+        if r not in side and (pro['relative'] or pro['len'] < 5):
+            UNHOOKABLE.add(r)
     for r in lifted:
         if r in UNHOOKABLE and r not in side:
             status[r] = ('unhookable', '')
