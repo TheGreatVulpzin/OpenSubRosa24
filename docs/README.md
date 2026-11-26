@@ -49,6 +49,7 @@ Start here. Each row of the table names a system of the game, the folder with it
 | Debug and timers | `src/client/debug/` | [client/runtime.md](client/runtime.md) |
 | Code shared by the client and the server | `src/include/sr_variant.h` | [client/shared.md](client/shared.md) |
 | Smoke test of the client | `src/standalone/client_smoke*.c` | [client/smoke.md](client/smoke.md) |
+| Speed of the client | `src/platform/os_calls.c`, `tools/re/profile_samples.py` | [client/performance.md](client/performance.md) |
 
 ## Formats, versions and tools
 

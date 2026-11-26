@@ -15,7 +15,7 @@ def load(path):
     text = Path(path).read_text(encoding="latin-1")
     preferred = int(re.search(r"Preferred load address is ([0-9a-fA-F]+)", text).group(1), 16)
     symbols = []
-    for m in re.finditer(r"^\s*[0-9a-fA-F]{4}:[0-9a-fA-F]{8}\s+(\S+)\s+([0-9a-fA-F]{8})\s+f", text, re.M):
+    for m in re.finditer(r"^\s*[0-9a-fA-F]{4}:[0-9a-fA-F]{8}\s+(\S+)\s+([0-9a-fA-F]{8})\s+f\s", text, re.M):
         symbols.append((int(m.group(2), 16), m.group(1)))
     symbols.sort()
     return preferred, symbols

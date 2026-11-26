@@ -58,9 +58,13 @@ static void print_main_thread(void)
 
 static DWORD WINAPI sampler(LPVOID unused)
 {
+    /* SR_SAMPLE_MS sets the time between two samples. The default is one second. */
+    const char *text = getenv("SR_SAMPLE_MS");
+    DWORD interval = text && atoi(text) > 0 ? (DWORD)atoi(text) : 1000;
+
     (void)unused;
     for (;;) {
-        Sleep(1000);
+        Sleep(interval);
         print_main_thread();
     }
 }

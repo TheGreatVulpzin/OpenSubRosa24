@@ -8,6 +8,18 @@ The end state is a source tree that reads like the original source of the game. 
 opens a file, reads it, and changes it. No custom layer stands between the code and the compiler:
 no hook macro, no call by address, no storage adapter, no generated offset.
 
+## State on 2026-11-26
+
+Phases B to F are done in the code of the client:
+
+- B: every call goes by name (no `CL_FN_NAMED`). The aliases of the storage are fields of the records (one name, `sr_data_view`, stays a macro for a field). `src/include/sr_variant.h` is the one place where the client and the server differ. The image executable targets still exist in `instrumentation/`, but they do not build all: `cl_wsock32` and `harness_client` need a new hook table.
+- C: SDL2, OpenAL, Speex, OpenGL, the C runtime, winsock and the shell are normal calls. `sr_import` is gone from `src/client`, `src/game`, `src/common` and `src/net`. `src/platform` and `src/server` still use it for the operating system calls.
+- D: no `unk_` name is left. `docs/README.md` maps each system to its folder and page.
+- E: `CONTRIBUTING.md` and `docs/changes.md` say what a change may do.
+- F: a sampler and `tools/re/profile_samples.py` show where the client spends time (`docs/client/performance.md`). The client has its own `rand`. The frame time was not compared with the first executable.
+
+Not done: the server gate runs only on the recordings that came back (`20261013-query` and `20261015-friend` are whole). `sr_import` in `src/platform` and `src/server`. The image targets of `instrumentation/` (B4).
+
 ## State on 2026-11-25
 
 - All game code has clean C: about 52000 lines in `src/client`, `src/game`, `src/common` and `src/net`.
