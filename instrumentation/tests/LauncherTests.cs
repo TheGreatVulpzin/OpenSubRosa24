@@ -67,10 +67,12 @@ namespace SubVulpes
         {
             var button = Field<Button>(form, name);
             Control parent = button.Parent;
-            var tabs = Field<TabControl>(form, "mainTabs");
+            // A page can sit in a tab control inside another page (the Recording page is in Debug).
+            // Each ancestor page is selected in its own tab control.
             while (parent != null) {
                 var page = parent as TabPage;
-                if (page != null && page.Parent == tabs) tabs.SelectedTab = page;
+                var owner = page == null ? null : page.Parent as TabControl;
+                if (owner != null) owner.SelectedTab = page;
                 parent = parent.Parent;
             }
             button.PerformClick();
