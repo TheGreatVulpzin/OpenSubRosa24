@@ -209,6 +209,8 @@ namespace SubVulpes
     class Captures
     {
         public bool Profile, Timers, Packets, Record, FreezeDump;
+        // The original server (subrosadedicated024d.exe) runs with the recording wsock32.dll. Only a preset sets it.
+        public bool Original;
         public string CrashDump = "small";  // none, small or full
 
         public Captures Copy() { return (Captures)MemberwiseClone(); }
@@ -216,7 +218,7 @@ namespace SubVulpes
         public bool Same(Captures o)
         {
             return Profile == o.Profile && Timers == o.Timers && Packets == o.Packets && Record == o.Record &&
-                   FreezeDump == o.FreezeDump && CrashDump == o.CrashDump;
+                   Original == o.Original && FreezeDump == o.FreezeDump && CrashDump == o.CrashDump;
         }
 
         public string Summary()
@@ -225,7 +227,8 @@ namespace SubVulpes
             if (Profile) parts.Add("speed profile");
             if (Timers) parts.Add("game timers");
             if (Packets) parts.Add("packets");
-            if (Record) parts.Add("harness recording");
+            if (Original) parts.Add("original game recording");
+            else if (Record) parts.Add("harness recording");
             if (CrashDump != "none") parts.Add(CrashDump + " crash dump");
             if (FreezeDump) parts.Add("freeze dump");
             return parts.Count == 0 ? "no captures" : string.Join(", ", parts.ToArray());
@@ -288,14 +291,14 @@ namespace SubVulpes
         }
     }
 
-    class LauncherForm : Form
+    partial class LauncherForm : Form
     {
         static readonly Regex TicksLine = new Regex(@"^Server status: ([0-9.]+) ticks/s, (\d+) players, (\d+) bots$");
         const int FreezeSeconds = 150;
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
             "opensubrosa24_server.exe", "opensubrosa24_server_record.exe", "opensubrosa24_launcher.exe", "LEIA-ME.txt", "version.txt",
-            "record_focus.txt"
+            "record_focus.txt", "recording_functions.csv"
         };
 
         static readonly Preset[] Presets = {
@@ -303,8 +306,11 @@ namespace SubVulpes
                 "Captures a speed profile and small crash or freeze dumps.",
                 new Captures { Profile = true, FreezeDump = true }),
             new Preset("Harness Recording",
-                "Records packets and function calls with a memory snapshot after 10 minutes.",
+                "Records packets and function calls of OUR server with a memory snapshot after 10 minutes. It does not count in the checklist: use Original Recording for the tests.",
                 new Captures { Packets = true, Record = true }),
+            new Preset("Original Recording",
+                "Runs the original server with the hook recorder, and the original client if you start it in the Recording tab. No other captures.",
+                new Captures { Record = true, Original = true, CrashDump = "none" }),
             new Preset("Playtest (For Speed Issues)",
                 "Captures a speed profile, game timers and small crash or freeze dumps.",
                 new Captures { Profile = true, Timers = true, FreezeDump = true }),
@@ -570,15 +576,19 @@ namespace SubVulpes
             presetBox.SelectedIndexChanged += delegate { OnPreset(); };
             page.Controls.Add(presetBox, 0, 0);
             var tabs = new TabControl { Dock = DockStyle.Fill };
-            Control[] views = { OverviewPage(), CapturesPage(), TestsPage() };
-            string[] names = { "Test", "Captures", "Past tests" };
+            Control[] views = { OverviewPage(), CapturesPage(), TestsPage(), RecordingPage() };
+            string[] names = { "Test", "Captures", "Past tests", "Recording" };
             for (int i = 0; i < views.Length; i++) {
                 var tab = new TabPage(names[i]) { Padding = new Padding(8), UseVisualStyleBackColor = true };
                 views[i].Dock = DockStyle.Fill;
                 tab.Controls.Add(views[i]);
                 tabs.TabPages.Add(tab);
             }
-            tabs.SelectedIndexChanged += delegate { if (tabs.SelectedIndex == 2) LoadTests(); };
+            tabs.SelectedIndexChanged += delegate {
+                if (tabs.SelectedIndex == 2) LoadTests();
+                recTabActive = tabs.SelectedIndex == 3;
+                if (recTabActive) RefreshChecklist();
+            };
             page.Controls.Add(tabs, 0, 1);
             return page;
         }
@@ -833,7 +843,8 @@ namespace SubVulpes
             if (server != null) return;
             developerRun = debugModeBox.Checked;
             activeCaptures = developerRun ? captures.Copy() : new Captures { CrashDump = "none" };
-            string exe = Path.Combine(folder, activeCaptures.Record ? "opensubrosa24_server_record.exe" : "opensubrosa24_server.exe");
+            string exe = Path.Combine(folder, activeCaptures.Original ? "subrosadedicated024d.exe" :
+                activeCaptures.Record ? "opensubrosa24_server_record.exe" : "opensubrosa24_server.exe");
             if (!Directory.Exists(Path.Combine(folder, "data"))) {
                 ShowMissing(false);
                 return;
@@ -859,9 +870,11 @@ namespace SubVulpes
                 logFile = Path.Combine(testDir, "server.log");
                 string eventName = @"Local\OpenSubRosa24-stop-" + Guid.NewGuid().ToString("N");
                 stopEvent = new System.Threading.EventWaitHandle(false, System.Threading.EventResetMode.ManualReset, eventName);
+                // The original server keeps its own window and writes no status lines for the launcher.
+                bool original = activeCaptures.Original;
                 var start = new ProcessStartInfo(exe) {
-                    WorkingDirectory = folder, UseShellExecute = false, CreateNoWindow = true,
-                    RedirectStandardOutput = true, RedirectStandardError = true
+                    WorkingDirectory = folder, UseShellExecute = false, CreateNoWindow = !original,
+                    RedirectStandardOutput = !original, RedirectStandardError = !original
                 };
                 var env = start.EnvironmentVariables;
                 foreach (string key in new[] { "SV_SAMPLE", "SV_TIMERS", "SV_PACKETS", "SV_DUMP", "SV_DUMP_TYPE", "SV_TEST_CRASH", "SV_RECORD_DIR", "SV_SNAPSHOT_AFTER" })
@@ -885,6 +898,8 @@ namespace SubVulpes
                     var session = new KeyFile(Path.Combine(testDir, "session.ini"));
                     session.Set("preset", ((Preset)presetBox.SelectedItem).Name);
                     session.Set("captures", activeCaptures.Summary());
+                    // A recording made by our own server does not count in the checklist: the code under test shaped it.
+                    if (activeCaptures.Record) session.Set("origin", activeCaptures.Original ? "original" : "own server");
                     session.Set("start", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     session.Set("server", ServerVersion());
                     session.Save();
@@ -904,14 +919,22 @@ namespace SubVulpes
                 pendingLog = "";
                 // Remove the previous session before the server opens SV_LOG.
                 if (File.Exists(logFile)) File.Delete(logFile);
+                if (original) PrepareOriginalServer();
+                // The recorder hooks the functions of record_focus.txt all the time: the ones that the checklist misses.
+                if (activeCaptures.Record) WriteFocus("server", Path.Combine(folder, "record_focus.txt"));
                 server.Start();
-                server.BeginOutputReadLine();
-                server.BeginErrorReadLine();
+                if (!original) {
+                    server.BeginOutputReadLine();
+                    server.BeginErrorReadLine();
+                } else {
+                    AddLine("[launcher] The original server runs with the hook recorder. Close its window to stop it.");
+                }
                 started = lastSpeedLine = DateTime.Now;
                 runPanel.Visible = true;
                 endPanel.Visible = false;
                 SetState("Starting");
                 message.Text = developerRun ? "This test: logs\\" + stamp : "";
+                StartClientWithServer();
             } catch (Exception ex) {
                 if (server != null) { server.Dispose(); server = null; }
                 if (stopEvent != null) { stopEvent.Dispose(); stopEvent = null; }
@@ -931,7 +954,13 @@ namespace SubVulpes
             if (server == null) return true;
             if (!stopping) {
                 stopping = true;
-                stopEvent.Set();
+                if (activeCaptures.Original) {
+                    // The original server has no stop event. Its window closes like any window.
+                    if (!server.CloseMainWindow())
+                        message.Text = "Close the window of the original server by hand: the recording is saved when it closes.";
+                } else {
+                    stopEvent.Set();
+                }
                 SetState("Stopping");
             }
             await Task.WhenAny(serverStopped.Task, Task.Delay(15000));
@@ -1012,11 +1041,13 @@ namespace SubVulpes
 
         void OnClock()
         {
+            RecordingClock();
             if (server == null) return;
             ReadLog();
             TimeSpan t = DateTime.Now - started;
             SetCard(uptimeText, ((int)t.TotalHours).ToString("00") + ":" + t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00"));
-            if (server == null || frozen || (DateTime.Now - lastSpeedLine).TotalSeconds < FreezeSeconds)
+            // The original server prints no speed line, so it cannot look frozen.
+            if (server == null || activeCaptures.Original || frozen || (DateTime.Now - lastSpeedLine).TotalSeconds < FreezeSeconds)
                 return;
             // The status line comes each minute. No line for a long time: the main loop stops.
             frozen = true;
@@ -1033,10 +1064,11 @@ namespace SubVulpes
             int code = server.ExitCode;
             server.Dispose();
             server = null;
+            if (activeCaptures.Original) CollectOriginalServer();
             if (stopEvent != null) { stopEvent.Dispose(); stopEvent = null; }
             serverStopped.TrySetResult(true);
             string result;
-            if (stopping) {
+            if (stopping || activeCaptures.Original) {
                 AddLine("[launcher] You stopped the server.");
                 SetState("Stopped");
                 result = frozen ? "frozen" : "ok";

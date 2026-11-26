@@ -313,7 +313,7 @@ namespace SubVulpes
             var tabs = pages["Debug"].Controls[0].Controls.OfType<TabControl>().Single();
             tabs.SelectedIndex = 1;
             await Capture(form, "08-debug-captures", "Debug");
-            Check(Field<ComboBox>(form, "presetBox").Items.Count == 5, "Debug retains all five presets");
+            Check(Field<ComboBox>(form, "presetBox").Items.Count == 6, "Debug retains all six presets");
             foreach (Preset preset in Field<ComboBox>(form, "presetBox").Items) {
                 Field<ComboBox>(form, "presetBox").SelectedItem = preset;
                 Check(preset.Captures == null || Field<Captures>(form, "captures").Same(preset.Captures), "preset captures: " + preset.Name);

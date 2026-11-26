@@ -1,0 +1,42 @@
+side,function,text
+server,logic_gunstore_buy,A player buys a gun at the gun store.
+server,item_addbill,A bill (a money item) is made. A player takes money or sells something.
+server,item_removebill,A bill is taken away. A player spends it or drops it.
+server,item_billvalue,The value of a bill is read. A player pays or counts money.
+server,createevent_updateplayer_finance,The money of a player changes and the server sends the new value.
+server,saveaccountsserver,The server saves the accounts. Let it run a few minutes and close it the normal way.
+server,server_writelogfile,The server writes its log file. Close the server the normal way.
+server,logicsimulation_round,A round ends and the next one starts. Play one full round.
+server,player_loadinventory,A player joins a round and gets the saved inventory.
+server,player_saveinventory,A player leaves a round and the inventory is saved. Make one player leave before the round ends.
+server,sphereintersectarea,Collision of a sphere with a building. Move objects and cars inside a building.
+server,sphereintersectcityobjecttype,Collision of a sphere with a city object. Bump into poles, signs and benches.
+server,multiply3x3matrices,A math helper for rotations. Play with cars and objects and several players.
+server,logic_addteamcash,The cash of a team changes. Finish a job or a mission.
+server,playerteamkilltax,A player kills a teammate and pays a tax.
+server,createmission_threeway,A three way mission starts.
+server,createmission_transaction,A transaction mission starts.
+server,scenario_getnumofmissions,The server counts the missions of a scenario at the start of a round.
+server,resetgame,A new game starts. Start the server twice or change the mode.
+server,createlevel,The level is made at the start of a round.
+server,createscenario_world,The world scenario starts. Use the World mode.
+server,createplayer,A player joins. Join with a second client.
+server,createcityobject,A city object is made at the start of a round.
+server,city_createelevator,The city makes an elevator. Start a round in a city that has one.
+server,logic_createcar,A car is made. Buy or call a car.
+server,linkitemtoitem,One item is linked to another. Put an item in a bag or on a gun.
+server,playerbuystock,A player buys a stock at the stock market.
+server,createevent_updatecarmarket,The car market changes. Wait for the market to update.
+server,createbullet,A gun is shot.
+server,lineintersecthuman,A bullet or a ray hits a human. Shoot another player.
+server,lineintersectcityobject,A bullet or a ray hits a city object. Shoot a wall or a pole.
+server,pbitread,The server reads bits of a packet. Join, chat and play with several players.
+server,sendpacket,The server sends a packet. Join and play.
+server,account_nameexists,The server checks if an account name is taken. Create a new account.
+client,optionsmenu,Open the options menu from the main menu.
+client,voiceoptionsmenu,Open the voice options from the options menu.
+client,loadsaveoptions,Change an option and leave the options menu. The game saves the options.
+client,newspaper_load,Open the newspaper in a city.
+client,saveaccountsclient,Create or change an account on the client.
+client,screenshot,Take a screenshot with the screenshot key.
+client,listvideomodes,Open the video options and look at the list of modes.

@@ -11,7 +11,7 @@ try {
         /r:System.Core.dll /r:System.Web.Extensions.dll "/r:$framework\System.IO.Compression.dll" `
         "/r:$framework\System.IO.Compression.FileSystem.dll" `
         /resource:tools\release\default-config.ini,SubVulpes.DefaultConfig `
-        tools\launcher\Launcher.cs instrumentation\tests\LauncherTests.cs
+        tools\launcher\Launcher.cs tools\launcher\RecordingTab.cs instrumentation\tests\LauncherTests.cs
     if ($LASTEXITCODE -ne 0) { throw 'Launcher test build failed.' }
     if (-not $CompileOnly) {
         & build/launcher/launcher-tests.exe $repo

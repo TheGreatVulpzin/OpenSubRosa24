@@ -38,6 +38,7 @@ $sources = [ordered]@{
     'opensubrosa24_launcher.exe' = 'build\launcher\opensubrosa24_launcher.exe'
     'LEIA-ME.txt' = 'tools\release\LEIA-ME.txt'
     'record_focus.txt' = 'instrumentation\recording\record_focus.txt'
+    'recording_functions.csv' = 'instrumentation\recording\functions.csv'
     'readme.txt' = 'tools\release\newspaper.txt'
 }
 $allowed = @($sources.Keys) + @('version.txt')

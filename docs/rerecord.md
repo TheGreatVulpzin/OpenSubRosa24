@@ -4,6 +4,22 @@ The recordings of `build/recordings` are not in git. Nine of them were lost on 2
 
 Never commit a recording. It holds player names, IP addresses and `config.txt`.
 
+## The launcher and the checklist
+
+The launcher (`build\launcher\opensubrosa24_launcher.exe`, build it with `tools\launcher\build.bat`) records the server and the client together. Turn on Debug Mode, choose the preset Harness Recording and open the tab Recording.
+
+1. Client folder: the folder of the client with `subrosa_fixed.exe` (`build\hook\subrosa_fixed.exe`, made by `tools/re/fixed_base.py`). The launcher puts the recording `wsock32.dll` (`client_wsock32.dll` next to the launcher, or `build\hook\client\wsock32.dll`) and a `subvulpes.ini` there. Only the original client code runs.
+2. Tick "Start the client with the server" and click Start. The server starts on the port of its settings, the client 6 seconds later. In the client join `127.0.0.1`.
+3. The list in the tab shows each function of the server or the client with its recorded calls and a short text. A function is ticked at 2 calls. The list reads the recordings of all past tests and the running one, and updates each 15 seconds. "Missing only" hides the ticked ones. The text comes from `instrumentation/recording/hints.csv`, else from the comment above the function in the code.
+4. Before each start the launcher writes `record_focus.txt`: the functions that are still missing stay hooked all the time.
+5. Stop the server and close the client. The server files stay in `logs\<test>`, the client files go to `logs\<test>\client`.
+
+`python -I instrumentation/recording/coverage.py --side server|client` makes the same checklist as a file (`build\recordings\CHECKLIST-<side>.md`) from the recordings in `build\recordings`. After a change of the functions or the hints run `python -I instrumentation/recording/coverage.py --export instrumentation/recording/functions.csv`: the launcher reads that list (the package has it as `recording_functions.csv`).
+
+The server snapshot needs 600 seconds of play, the client snapshot 240 seconds (`snapshot_after` in `launcher.ini` sets the server value).
+
+The sections below say what the old recordings held and what the player does.
+
 ## Server (024d)
 
 Surviving: `play-20261012`, `20261013-1016-smoke`, `20261013-query`, `20261015-friend`, `murilo-20261015` (with its synthetic runs). The gate on these shows 0 differences.

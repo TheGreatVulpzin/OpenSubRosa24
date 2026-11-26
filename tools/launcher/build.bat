@@ -7,4 +7,4 @@ if not exist build\launcher mkdir build\launcher
 "%NET%\csc.exe" /nologo /target:winexe /optimize+ /out:build\launcher\opensubrosa24_launcher.exe ^
     /platform:x86 /r:System.Windows.Forms.dll /r:System.Drawing.dll /r:System.Core.dll /r:System.Web.Extensions.dll ^
     /r:"%NET%\System.IO.Compression.dll" /r:"%NET%\System.IO.Compression.FileSystem.dll" ^
-    /resource:tools\release\default-config.ini,SubVulpes.DefaultConfig tools\launcher\Launcher.cs
+    /resource:tools\release\default-config.ini,SubVulpes.DefaultConfig tools\launcher\Launcher.cs tools\launcher\RecordingTab.cs
