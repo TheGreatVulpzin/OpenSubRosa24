@@ -179,7 +179,7 @@ Slots 0 and 1 are the hands and slots 2 to 6 are the pockets. Button 0x10 choose
 - A slot removal takes out every copy of an item index in the slot. The last item of the slot takes the place of the removed item.
 - `item_removebill` with one bill left sets `time_to_live` to 0 and keeps the bill. The item is deleted later.
 - `bullettimetolive` tests the moved bullet again. A bullet that moves into a place loses one more tick of life.
-- `ItemType.client_param` is copied to the item field `unk_e4`. The values are 90 for the rifles and the sub machine guns, 18 for the Magnum and 32 for the 9mm.
+- `ItemType.client_param` is copied to the item field `client_param`. The values are 90 for the rifles and the sub machine guns, 18 for the Magnum and 32 for the 9mm.
 - A door end is computed from the global axes `(1 0 0)` and `(0 1 0)`, not from the orientation of the door.
 - `human_itemsimulation` uses player 0 for the team test of a human with no player.
 - The elevator floor that a human sets reads the building of city object 0, not of the new elevator.

@@ -1,7 +1,7 @@
 /* Shared header of the clean client code (src/client).
  *
  * The client code calls every game function by its name. The test tools of instrumentation/ use
- * CL_FN(va, type) to reach a function of the original executable by its address. */
+ * CL_FN(va, type) to call a function of the Windows executable by its address. */
 #ifndef CL_CLIENT_H
 #define CL_CLIENT_H
 

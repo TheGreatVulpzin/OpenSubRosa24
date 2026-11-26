@@ -2,6 +2,12 @@
 
 The client runs functions of the shared game code (`src/game`, `src/common`, `src/net`). The server runs the same functions. A client function calls the shared version when its name is in an adoption list. Before a name goes in the list, the test must show the same result as the client.
 
+## Where the client and the server differ
+
+The server and the client compile the same source file for the shared code. When the two programs must run different code, the difference has one name in `src/include/sr_variant.h`. The first part of that file is the server, the second part the client. A shared file uses only the name: no shared file has its own `#ifndef` for a client hook. To add a difference, add the name to both parts with a comment that says what differs.
+
+The data of each program is separate. The server data is in `src/server/storage.c`. The client data is in `src/client/storage.c` (from `analysis/client_win/*.csv`). A client name that is a field of a bigger record is a field in `analysis/structs/names.csv`, not a macro with an offset.
+
 ## The pieces
 
 - `analysis/client_win/adopted*.txt`: one list for each group. A line has the function name and its source file. `adopted_pending.txt` holds the candidates that do not pass yet.

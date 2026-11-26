@@ -228,7 +228,7 @@ human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
 human,0x64,pitch,float,,human_calculatearmangles multiplies it by a constant (likely: vertical angle)
 item,0xa8,ang_momentum,vec3,,"the angular momentum: bondsimulation2 adds dw to it each pass; item_physicssimulation damps it with scalevector"
 item,0xe0,ammo,int,,"createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0"
-item,0xe4,unk_e4,int,,"createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7)"
+item,0xe4,client_param,int,,"createitem copies itemtype.client_param here (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it"
 item,0xec,flags,uint32_t,,itemlogic tests bit 1; human_itemsimulation sets bit 1
 item,0xfc,phone_id,int,,logic_setteammanager compares with team * 1111 (0x457)
 item,0x104,info,int,,createevent_updateiteminfo sends it; itemlogic and eventsimulation write it
@@ -302,6 +302,7 @@ particle,0x38,vel_prev,vec3,,particlesimulation copies vel here
 particle,0x50,num_bonds,int,,"createbond appends to the list at +0x54, limit 31"
 particle,0x54,bonds,int,31,createbond; deletebond and particletimetolive remove from it
 particle,0xd4,num_objects,int,,createparticle appends parameter 5 to the list at +0xd8
+particle,0x10,unused_10,float,,"createparticle writes 1.0. No function reads it"
 particle,0xd8,objects,int,6,particletimetolive renames the particle in each object of this list
 area_sector,0x30,num_particles,int,,"createparticle: limit 0x3fff; particlesimulation loops over it"
 object,0xac,particles,int,64,"createobject appends; particletimetolive renames; createobject uses floats from +0x1ac"

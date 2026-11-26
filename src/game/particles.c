@@ -68,7 +68,7 @@ int createparticle(int type, const vec3 *pos, const vec3 *vel, float mass, int o
         p->vel = *vel;
     p->mass = mass;
     p->gravity = GRAVITY;
-    p->unk_0010 = 1.0f;
+    p->unused_10 = 1.0f;
     if (object != -1)
         p->objects[p->num_objects++] = object;
     sr_numofparticles = n + 1;

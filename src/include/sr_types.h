@@ -1182,7 +1182,7 @@ typedef union Item { struct {
     int cooldown;                        /* +0x00d8 itemweaponsimulation: fire_delay after a shot, counts down; itemlogic: 180 after a phone dials */
     int unk_00dc;                        /* +0x00dc 1 functions */
     int ammo;                            /* +0x00e0 createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0 */
-    int unk_e4;                          /* +0x00e4 createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7) */
+    int client_param;                    /* +0x00e4 createitem copies itemtype.client_param here (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it */
     int trigger_ticks;                   /* +0x00e8 itemweaponsimulation: ticks the trigger is down; fires when it equals 2 (Magnum 6) */
     uint32_t flags;                      /* +0x00ec itemlogic tests bit 1; human_itemsimulation sets bit 1 */
     uint32_t flags_prev;                 /* +0x00f0 itemlogic copies flags here and clears flags each tick */
@@ -1229,7 +1229,7 @@ SR_STATIC_ASSERT(offsetof(Item, contact_angvel) == 0xc0, "Item.contact_angvel");
 SR_STATIC_ASSERT(offsetof(Item, dw) == 0xcc, "Item.dw");
 SR_STATIC_ASSERT(offsetof(Item, cooldown) == 0xd8, "Item.cooldown");
 SR_STATIC_ASSERT(offsetof(Item, ammo) == 0xe0, "Item.ammo");
-SR_STATIC_ASSERT(offsetof(Item, unk_e4) == 0xe4, "Item.unk_e4");
+SR_STATIC_ASSERT(offsetof(Item, client_param) == 0xe4, "Item.client_param");
 SR_STATIC_ASSERT(offsetof(Item, trigger_ticks) == 0xe8, "Item.trigger_ticks");
 SR_STATIC_ASSERT(offsetof(Item, flags) == 0xec, "Item.flags");
 SR_STATIC_ASSERT(offsetof(Item, flags_prev) == 0xf0, "Item.flags_prev");
@@ -1892,7 +1892,7 @@ typedef union Particle { struct {
     int time_to_live;                    /* +0x0004 createparticle writes 0x10000 (no limit); particletimetolive counts it down */
     float mass;                          /* +0x0008 createparticle: parameter 4; bondsimulation2 uses 1 / (mass_a + mass_b) */
     float gravity;                       /* +0x000c createparticle writes 0.0027222; particlesimulation subtracts it from vel.y */
-    float unk_0010;                      /* +0x0010 1 functions */
+    float unused_10;                     /* +0x0010 createparticle writes 1.0. No function reads it */
     vec3 pos;                            /* +0x0014 createparticle: parameter 2 */
     vec3 pos_prev;                       /* +0x0020 particlesimulation copies pos here before it adds vel */
     vec3 vel;                            /* +0x002c createparticle: parameter 3; particlesimulation adds it to pos */
@@ -1909,6 +1909,7 @@ SR_STATIC_ASSERT(offsetof(Particle, type) == 0x0, "Particle.type");
 SR_STATIC_ASSERT(offsetof(Particle, time_to_live) == 0x4, "Particle.time_to_live");
 SR_STATIC_ASSERT(offsetof(Particle, mass) == 0x8, "Particle.mass");
 SR_STATIC_ASSERT(offsetof(Particle, gravity) == 0xc, "Particle.gravity");
+SR_STATIC_ASSERT(offsetof(Particle, unused_10) == 0x10, "Particle.unused_10");
 SR_STATIC_ASSERT(offsetof(Particle, pos) == 0x14, "Particle.pos");
 SR_STATIC_ASSERT(offsetof(Particle, pos_prev) == 0x20, "Particle.pos_prev");
 SR_STATIC_ASSERT(offsetof(Particle, vel) == 0x2c, "Particle.vel");
