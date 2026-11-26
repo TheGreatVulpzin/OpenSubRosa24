@@ -3,7 +3,7 @@
  * Preprocessing applies noise reduction and automatic gain control.
  */
 #include "audio/speex.h"
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "sr_runtime.h"
 
 enum { SPEEX_SAMPLES = 160, SPEEX_RATE = 8000, SPEEX_CHANNELS = 8,
@@ -18,19 +18,19 @@ void enablespeex(void)
     int value = SPEEX_QUALITY, channel;
     float level = SPEEX_AGC_LEVEL;
     AudioEncoder *encoder = &cl_data_audio_encoder;
-    encoder->state = audio_speex_encoder_init()(audio_speex_lib_get_mode()(SPEEX_NARROWBAND));
-    audio_speex_encoder_ctl()(encoder->state, SPEEX_SET_QUALITY, &value);
-    audio_speex_bits_init()(encoder->bits);
-    encoder->preprocess = audio_speex_preprocess_state_init()(SPEEX_SAMPLES, SPEEX_RATE);
+    encoder->state = speex_encoder_init(speex_lib_get_mode(SPEEX_NARROWBAND));
+    speex_encoder_ctl(encoder->state, SPEEX_SET_QUALITY, &value);
+    speex_bits_init(encoder->bits);
+    encoder->preprocess = speex_preprocess_state_init(SPEEX_SAMPLES, SPEEX_RATE);
     value = 1;
-    audio_speex_preprocess_ctl()(encoder->preprocess, SPEEX_SET_AGC, &value);
-    audio_speex_preprocess_ctl()(encoder->preprocess, SPEEX_SET_AGC_LEVEL, &level);
+    speex_preprocess_ctl(encoder->preprocess, SPEEX_SET_AGC, &value);
+    speex_preprocess_ctl(encoder->preprocess, SPEEX_SET_AGC_LEVEL, &level);
     value = 1;
-    audio_speex_preprocess_ctl()(encoder->preprocess, SPEEX_SET_DENOISE, &value);
+    speex_preprocess_ctl(encoder->preprocess, SPEEX_SET_DENOISE, &value);
     for (channel = 0; channel < SPEEX_CHANNELS; channel++) {
         AudioDecoder *decoder = &cl_data_audio_decoders[channel];
-        decoder->state = audio_speex_decoder_init()(audio_speex_lib_get_mode()(SPEEX_NARROWBAND));
-        audio_speex_bits_init()(decoder->bits);
+        decoder->state = speex_decoder_init(speex_lib_get_mode(SPEEX_NARROWBAND));
+        speex_bits_init(decoder->bits);
     }
 }
 
@@ -39,12 +39,12 @@ void disablespeex(void)
 {
     int channel;
     AudioEncoder *encoder = &cl_data_audio_encoder;
-    audio_speex_encoder_destroy()(encoder->state);
-    audio_speex_bits_destroy()(encoder->bits);
-    audio_speex_preprocess_state_destroy()(encoder->preprocess);
+    speex_encoder_destroy(encoder->state);
+    speex_bits_destroy(encoder->bits);
+    speex_preprocess_state_destroy(encoder->preprocess);
     for (channel = 0; channel < SPEEX_CHANNELS; channel++) {
-        audio_speex_decoder_destroy()(cl_data_audio_decoders[channel].state);
-        audio_speex_bits_destroy()(cl_data_audio_decoders[channel].bits);
+        speex_decoder_destroy(cl_data_audio_decoders[channel].state);
+        speex_bits_destroy(cl_data_audio_decoders[channel].bits);
     }
 }
 
@@ -52,7 +52,7 @@ void disablespeex(void)
 void preprocessspeex(int channel, int player, int frame)
 {
     (void)channel;
-    audio_speex_preprocess_run()(cl_data_audio_encoder.preprocess,
+    speex_preprocess_run(cl_data_audio_encoder.preprocess,
                                sr_data_speex.voice_ring[player].samples[frame]);
 }
 
@@ -65,9 +65,9 @@ void encodespeex(int channel, int player, int frame)
     (void)channel;
     for (sample = 0; sample < SPEEX_SAMPLES; sample++)
         sr_data_speex.samples[sample] = (float)ring->samples[frame][sample];
-    audio_speex_bits_reset()(encoder->bits);
-    audio_speex_encode()(encoder->state, sr_data_speex.samples, encoder->bits);
-    ring->size[frame] = audio_speex_bits_write()(encoder->bits, (char *)ring->data[frame], SPEEX_BYTES);
+    speex_bits_reset(encoder->bits);
+    speex_encode(encoder->state, sr_data_speex.samples, encoder->bits);
+    ring->size[frame] = speex_bits_write(encoder->bits, (char *)ring->data[frame], SPEEX_BYTES);
 }
 
 /* Decode one frame of a speaker. A frame with no bytes gives silence. A decoded frame clears its byte
@@ -82,8 +82,8 @@ void decodespeex(int decoder_index, int channel_index, int frame)
         for (sample = 0; sample < SPEEX_SAMPLES; sample++)
             channel->samples[frame][sample] = 0;
     } else {
-        audio_speex_bits_read_from()(decoder->bits, (char *)channel->data[frame], channel->size[frame]);
-        audio_speex_decode()(decoder->state, decoder->bits, sr_data_speex.samples);
+        speex_bits_read_from(decoder->bits, (char *)channel->data[frame], channel->size[frame]);
+        speex_decode(decoder->state, decoder->bits, sr_data_speex.samples);
         for (sample = 0; sample < SPEEX_SAMPLES; sample++)
             channel->samples[frame][sample] = (int16_t)(long long)sr_data_speex.samples[sample];
         channel->size[frame] = 0;

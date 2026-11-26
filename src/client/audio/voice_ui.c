@@ -5,7 +5,7 @@
 #include "audio/voice_ui.h"
 #include "audio/voice.h"
 #include "audio/sound.h"
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "input/key_events.h"
 #include "menu/draw.h"
@@ -49,16 +49,6 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 #define ICON_ALPHA_SCALE 0.75
 #define MENU_WAVE_SCALE 256.0
 #define MENU_ACTIVE_ALPHA 0.5f
-
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glBegin, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnd, (void))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glVertex2f, (float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Draw one icon for each active voice. No icon is drawn for an inactive voice. */
 void frame_drawvoiceicons(void)
@@ -124,32 +114,32 @@ static void voice_waveform(void)
 {
     int point;
     VoiceRing *ring = &sr_data_speex.voice_ring[0];
-    audio_glDisable()(GL_TEXTURE_MODE);
-    audio_glBegin()(GL_LINES_MODE);
-    audio_glColor3f()(1.0f, 1.0f, 1.0f);
+    glDisable(GL_TEXTURE_MODE);
+    glBegin(GL_LINES_MODE);
+    glColor3f(1.0f, 1.0f, 1.0f);
     if (sr_data_option.voicechat) {
         for (point = 0; point < MENU_WAVE_POINTS; point++) {
             const int16_t *samples = &ring->samples[0][0];
             int next = (point + 1) * MENU_WAVE_STRIDE;
             /* The last endpoint reads the low half of the ring head. */
             int16_t endpoint = next == ICON_FRAMES * ICON_FRAME_SAMPLES ? (int16_t)ring->head : samples[next];
-            audio_glVertex2f()((float)point,
+            glVertex2f((float)point,
                 (float)(samples[point * MENU_WAVE_STRIDE] / MENU_WAVE_SCALE + MENU_WAVE_Y));
-            audio_glVertex2f()((float)(point + 1),
+            glVertex2f((float)(point + 1),
                 (float)(endpoint / MENU_WAVE_SCALE + MENU_WAVE_Y));
         }
-        audio_glColor3f()(1.0f, 1.0f, 1.0f);
+        glColor3f(1.0f, 1.0f, 1.0f);
         if (!sr_data_option.voiceholdtotalk) {
             float low = (float)(MENU_WAVE_Y - (float)sr_data_option.voicemin / MENU_WAVE_SCALE);
             float high = (float)((float)sr_data_option.voicemin / MENU_WAVE_SCALE + MENU_WAVE_Y);
-            audio_glVertex2f()(MENU_LEFT, low);
-            audio_glVertex2f()(MENU_WAVE_RIGHT, low);
-            audio_glVertex2f()(MENU_LEFT, high);
-            audio_glVertex2f()(MENU_WAVE_RIGHT, high);
+            glVertex2f(MENU_LEFT, low);
+            glVertex2f(MENU_WAVE_RIGHT, low);
+            glVertex2f(MENU_LEFT, high);
+            glVertex2f(MENU_WAVE_RIGHT, high);
         }
     }
-    audio_glEnd()();
-    audio_glEnable()(GL_TEXTURE_MODE);
+    glEnd();
+    glEnable(GL_TEXTURE_MODE);
 }
 
 /* Store the last newly pressed key or mouse button. Escape ends key selection. */
@@ -202,8 +192,8 @@ void voiceoptionsmenu(void)
         checkkeyboard();
         checkmouse();
         checkmenuitems();
-        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-        audio_glClear()(GL_CLEAR_MASK);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_CLEAR_MASK);
         setuptextdisplay();
         voice_waveform();
         setuptextdisplay();
@@ -235,7 +225,7 @@ void voiceoptionsmenu(void)
                 TEXT_BIND, MENU_LEFT, MENU_BIND_HINT_Y, MENU_HEIGHT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         drawmousecursor(
             cl_data_input_mouse.x, cl_data_input_mouse.y, MENU_CURSOR_SIZE, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         if (sr_data_game.running) checksimulation(0);
         binding = cl_data_menu_items[1].pressed != 0;
         if (binding) voice_bind_key();

@@ -27,7 +27,7 @@
 #include "setup/interpolation.h"
 #include "setup/send.h"
 
-void *sr_import(const char *dll, const char *name);
+#include "system_libs.h"
 
 #define g_game sr_data_game
 #define g_server sr_data_server
@@ -104,11 +104,7 @@ static void copy_bits(float *to, const float *from)
 
 static unsigned ticks_now(void)
 {
-    static unsigned(__cdecl * get_ticks)(void);
-
-    if (!get_ticks)
-        *(void **)&get_ticks = sr_import("SDL2.DLL", "SDL_GetTicks");
-    return get_ticks();
+    return SDL_GetTicks();
 }
 
 /* The display keys: voice on and off, hide the display, the gain of the microphone, restart

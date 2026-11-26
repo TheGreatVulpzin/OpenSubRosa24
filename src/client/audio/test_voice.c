@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "audio/speex.h"
 #include "client.h"
 #include "sr_os.h"
@@ -42,11 +42,11 @@ void __cdecl testspeex(int sound, const char *file, int mode)
     if (cl_data_audio_enabled == 0)
         return;
     changed = os_chdir("sound");
-    rw = audio_SDL_RWFromFile()(file, "rb");
-    if (audio_SDL_LoadWAV_RW()(rw, 1, &spec, &data, &length) != NULL && spec.channels == 1) {
+    rw = SDL_RWFromFile(file, "rb");
+    if (SDL_LoadWAV_RW(rw, 1, &spec, &data, &length) != NULL && spec.channels == 1) {
         memcpy(cl_data_voice_test_samples, data, length);
         format = AL_FORMAT_MONO16;
-        audio_SDL_FreeWAV()(data);
+        SDL_FreeWAV(data);
     }
     if (changed == 0)
         os_chdir("..");
@@ -59,7 +59,7 @@ void __cdecl testspeex(int sound, const char *file, int mode)
         else
             encodespeex(0, 0, 0);
     }
-    audio_alBufferData()(record->buffer, format, cl_data_voice_test_samples, (int)length, spec.frequency);
+    alBufferData(record->buffer, format, cl_data_voice_test_samples, (int)length, spec.frequency);
     record->loaded = 1;
 }
 
@@ -99,6 +99,6 @@ void __cdecl testvoice(int sound, int player)
         }
         stage->head = (head + 1) & VOICE_FRAME_MASK;
     }
-    audio_alBufferData()(record->buffer, AL_FORMAT_MONO16, cl_data_voice_test_samples, VOICE_BYTES, VOICE_RATE);
+    alBufferData(record->buffer, AL_FORMAT_MONO16, cl_data_voice_test_samples, VOICE_BYTES, VOICE_RATE);
     record->loaded = 1;
 }

@@ -2,6 +2,7 @@
  * shows, and the debug log file. All of them do nothing when the debug flag is off, except
  * debug_addcross, which has no flag.
  */
+#include <stdio.h>
 #include "debug/debug.h"
 
 #include <string.h>
@@ -9,7 +10,6 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
-void *sr_import(const char *dll, const char *name);
 
 #define g_debug sr_data_debug
 #define g_debugit sr_data_debugit
@@ -121,7 +121,6 @@ void __cdecl debug_addatafloat(const char *name, float value)
 /* Add a line of text at the end of the debug log file. The file must exist. */
 void __cdecl debug_writelogfile(const char *text)
 {
-    static int(__cdecl * seek)(void *, long, int);
     Debug *d = &g_debug;
 
     if (g_debugit == 0)
@@ -129,9 +128,7 @@ void __cdecl debug_writelogfile(const char *text)
     d->log_file = os_fopen(d->log_path, "rb+");
     if (d->log_file == 0)
         return;
-    if (!seek)
-        *(void **)&seek = sr_import("MSVCR100.DLL", "fseek");
-    seek(d->log_file, 0, SEEK_END_OF_FILE);
+    fseek(d->log_file, 0, SEEK_END_OF_FILE);
     os_fprintf(d->log_file, "%s\r\n", text);
     os_fclose(d->log_file);
 }

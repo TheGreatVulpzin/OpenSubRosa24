@@ -3,7 +3,7 @@
  * Vehicle sources occupy a packed list. Eight voice sources use separate rings.
  */
 #include "audio/sound.h"
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "audio/sound_create.h"
 #include "client.h"
 #include "sr_runtime.h"
@@ -51,7 +51,7 @@ void deletesound(int index)
     if (!cl_data_audio_enabled || index < 0 || index >= cl_data_audio_sound_count)
         return;
     source = sounds[index].source;
-    audio_alSourceStop()(source);
+    alSourceStop(source);
     cl_data_audio_sound_count--;
     if (index != cl_data_audio_sound_count) {
         sounds[index] = sounds[cl_data_audio_sound_count];
@@ -83,7 +83,7 @@ static int vehicle_slot(int object, const vec3 *position)
             AudioSound *sound = &cl_data_audio_sounds[index];
             if (sound->object == cl_data_audio_objects[candidate]) {
                 sound->object = -1;
-                audio_alSourceStop()(sound->source);
+                alSourceStop(sound->source);
                 sound->keep_alive = 0;
             }
         }
@@ -126,7 +126,7 @@ static void update_vehicle_sound(AudioSound *sound, int in_vehicle)
     if (sound->object == -1) return;
     object = &sr_objects[sound->object];
     if (!object->active) {
-        audio_alSourceStop()(sound->source);
+        alSourceStop(sound->source);
         sound->keep_alive = 0;
         return;
     }
@@ -134,9 +134,9 @@ static void update_vehicle_sound(AudioSound *sound, int in_vehicle)
     scaleaddvectors(&position, &object->pos, &object->rot[2],
                     sound->kind == AUDIO_ENGINE_SOURCE ? AUDIO_ENGINE_OFFSET : AUDIO_TIRE_OFFSET);
     scaleaddvectors(&position, &position, &object->rot[1], AUDIO_SOURCE_HEIGHT);
-    audio_alSourcefv()(sound->source, AL_POSITION, &position.x);
+    alSourcefv(sound->source, AL_POSITION, &position.x);
     scalevector(&position, &object->vel, (float)AUDIO_TICK_RATE);
-    audio_alSourcefv()(sound->source, AL_VELOCITY, &position.x);
+    alSourcefv(sound->source, AL_VELOCITY, &position.x);
     if (sound->kind == AUDIO_ENGINE_SOURCE) {
         pitch = (float)((double)(float)object->rpm_net / AUDIO_ENGINE_PITCH_SCALE + AUDIO_ENGINE_PITCH_BASE);
         gain = (float)((double)(float)object->rpm_net / AUDIO_ENGINE_GAIN_SCALE);
@@ -151,10 +151,10 @@ static void update_vehicle_sound(AudioSound *sound, int in_vehicle)
         if (AUDIO_TIRE_GAIN_MAX < gain) gain = AUDIO_TIRE_GAIN_MAX;
     }
     if (in_vehicle) gain = (float)((double)gain * AUDIO_HALF_GAIN);
-    audio_alSourcef()(sound->source, AL_PITCH, pitch);
-    audio_alSourcef()(sound->source, AL_GAIN, gain);
+    alSourcef(sound->source, AL_PITCH, pitch);
+    alSourcef(sound->source, AL_GAIN, gain);
     if (sound->kind == AUDIO_TIRE_SOURCE && gain < AUDIO_TIRE_GAIN_MIN) {
-        audio_alSourceStop()(sound->source);
+        alSourceStop(sound->source);
         sound->keep_alive = 0;
     }
 }
@@ -170,9 +170,9 @@ static void play_voice(int index, const vec3 *velocity)
     unsigned buffer;
     if (queued < AUDIO_QUEUE_MIN || queued > AUDIO_QUEUE_MAX)
         voice->tail = (voice->head - AUDIO_QUEUE_TARGET) & (AUDIO_FRAMES - 1);
-    audio_alGetSourcei()(voice->source, AL_PROCESSED, &processed);
+    alGetSourcei(voice->source, AL_PROCESSED, &processed);
     for (; processed > 0; processed--) {
-        audio_alSourceUnqueueBuffers()(voice->source, 1, &buffer);
+        alSourceUnqueueBuffers(voice->source, 1, &buffer);
         for (frame = 0; frame < AUDIO_BUFFER_FRAMES; frame++) {
             voice->mode = voice->frame_mode[voice->tail];
             decodespeex(index, index, voice->tail);
@@ -181,21 +181,21 @@ static void play_voice(int index, const vec3 *velocity)
                    AUDIO_FRAME_SAMPLES * sizeof(int16_t));
             voice->tail = (voice->tail + 1) & (AUDIO_FRAMES - 1);
         }
-        audio_alBufferData()(buffer, AUDIO_MONO16, cl_data_audio_play_buffer,
+        alBufferData(buffer, AUDIO_MONO16, cl_data_audio_play_buffer,
                              AUDIO_BUFFER_FRAMES * AUDIO_FRAME_SAMPLES * sizeof(int16_t), AUDIO_SAMPLE_RATE);
-        audio_alSourceQueueBuffers()(voice->source, 1, &buffer);
+        alSourceQueueBuffers(voice->source, 1, &buffer);
     }
-    audio_alSource3f()(voice->source, AL_POSITION, voice->pos.x, voice->pos.y, voice->pos.z);
-    audio_alSource3f()(voice->source, AL_VELOCITY, velocity->x, velocity->y, velocity->z);
+    alSource3f(voice->source, AL_POSITION, voice->pos.x, voice->pos.y, voice->pos.z);
+    alSource3f(voice->source, AL_VELOCITY, velocity->x, velocity->y, velocity->z);
     reference = voice->item != -1 ? AUDIO_RADIO_DISTANCE :
                 voice->mode == 0 ? AUDIO_WHISPER_DISTANCE :
                 voice->mode == 1 ? AUDIO_TALK_DISTANCE : AUDIO_YELL_DISTANCE;
-    audio_alSourcef()(voice->source, AL_REFERENCE_DISTANCE, reference);
-    audio_alSourcef()(voice->source, AL_GAIN, 1.0f);
-    audio_alSourcei()(voice->source, AL_RELATIVE, 0);
-    audio_alGetSourcei()(voice->source, AL_STATE, &state);
-    if (!voice->active) audio_alSourceStop()(voice->source);
-    else if (state != AL_PLAYING) audio_alSourcePlay()(voice->source);
+    alSourcef(voice->source, AL_REFERENCE_DISTANCE, reference);
+    alSourcef(voice->source, AL_GAIN, 1.0f);
+    alSourcei(voice->source, AL_RELATIVE, 0);
+    alGetSourcei(voice->source, AL_STATE, &state);
+    if (!voice->active) alSourceStop(voice->source);
+    else if (state != AL_PLAYING) alSourcePlay(voice->source);
 }
 
 /* Update the listener, vehicle sounds and eight voices. Disabled audio does nothing. */
@@ -216,13 +216,13 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
             else voice->pos = sr_items[voice->item].pos;
         } else voice->pos = sr_humans[voice->human].bones[AUDIO_HEAD_BONE].pos;
     }
-    audio_alListenerfv()(AL_POSITION, (float *)position);
+    alListenerfv(AL_POSITION, (float *)position);
     negvector(&orientation[0], &rotation[2]);
     orientation[1] = rotation[1];
-    audio_alListenerfv()(AL_ORIENTATION, &orientation[0].x);
+    alListenerfv(AL_ORIENTATION, &orientation[0].x);
     if (!velocity) speed.x = speed.y = speed.z = 0.0f;
     else scalevector(&speed, velocity, (float)AUDIO_TICK_RATE);
-    audio_alListenerfv()(AL_VELOCITY, &speed.x);
+    alListenerfv(AL_VELOCITY, &speed.x);
     if (sr_data_game.state == AUDIO_FADE) {
         gain = (float)((double)(float)sr_data_game.timer / AUDIO_TICK_RATE);
         if (gain < 0.0f) gain = 0.0f;
@@ -230,7 +230,7 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
     } else if (sr_data_game.state == AUDIO_SILENT) gain = 0.0f;
     gain = (float)((double)((float)sr_data_option.soundvolume * gain) / AUDIO_VOLUME_MAX);
     gain = (float)(gain * gain);
-    audio_alListenerf()(AL_GAIN, gain);
+    alListenerf(AL_GAIN, gain);
     for (index = 0; index < SR_MAX_OBJECT; index++) {
         Object *object = &sr_objects[index];
         if (object->active && object->type != VEHICLE_SILENT && object->rpm_net > 0) {
@@ -244,7 +244,7 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
     index = 0;
     while (index < cl_data_audio_sound_count) {
         AudioSound *sound = &cl_data_audio_sounds[index];
-        audio_alGetSourcei()(sound->source, AL_STATE, &state);
+        alGetSourcei(sound->source, AL_STATE, &state);
         if (state == AL_PLAYING || sound->keep_alive) index++;
         else deletesound(index);
     }

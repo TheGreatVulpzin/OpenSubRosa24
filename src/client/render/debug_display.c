@@ -2,6 +2,7 @@
  * Each display mode selects a separate set of rows.
  * The player count updates even when the display is off.
  */
+#include <stdio.h>
 #include "render/frame.h"
 #include "client.h"
 #include "render/text.h"
@@ -18,7 +19,6 @@ static void debug_integer_row(const char *format, float x, float *y, float heigh
 /* Count nonbot players and draw the selected diagnostic page. */
 void __cdecl displaydebuginfo(void)
 {
-    static int(__cdecl *format_text)(char *, const char *, ...);
     char text[68];
     int i;
     float x, y;
@@ -28,11 +28,9 @@ void __cdecl displaydebuginfo(void)
         if (sr_data_player[i].active && !sr_data_player[i].is_bot)
             ++sr_data_debug.player_count;
     if (sr_data_debug.display_mode > 0) {
-        if (!format_text)
-            *(void **)&format_text = sr_import("MSVCR100.DLL", "sprintf");
-        format_text(text, "%.2f", (double)sr_data_debug.frame_ms_average);
+        sprintf(text, "%.2f", (double)sr_data_debug.frame_ms_average);
         drawtext(text, 0.0f, 500.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
-        format_text(text, "%.2f", (double)sr_data_debug.frame_time_average);
+        sprintf(text, "%.2f", (double)sr_data_debug.frame_time_average);
         drawtext(text, 0.0f, 516.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         y = 532.0f;
         debug_integer_row("Toggle 1:/i", 0.0f, &y, 16.0f, sr_data_debug.human_view);

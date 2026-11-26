@@ -11,13 +11,9 @@
 #include "textures/opengl.h"
 #include "vectors.h"
 
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 enum { MAX_SECTORS = 8192, ARRAY_POSITION = 0x8074,
        EXT_BUFFERS = 6, SHADOW_BUFFER_BYTES = 0x300000, BUFFER_DYNAMIC = 0x88e8 };
-
 
 /* Bind the sector vertex buffer on the array target. */
 static void bind_shadow_buffer(uint32_t buffer)

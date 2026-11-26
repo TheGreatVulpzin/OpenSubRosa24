@@ -18,7 +18,6 @@
 #include "textures/mesh_edit.h"
 #include "textures/model_parts.h"
 
-void *sr_import(const char *dll, const char *name);
 
 #define g_temp cl_data_modeltemp
 #define g_bonevert cl_data_bonevert
@@ -841,13 +840,6 @@ void addwaisttomodel(const vec3 *center, float half_x, float half_y, float half_
     append_quad(first + 9, first + 2, first + 1, first + 8);
     for (i = 0; i < 6; ++i)
         append_tri(first + triangles[i][0], first + triangles[i][1], first + triangles[i][2], SHADE_FLAT);
-}
-
-/* File transfers keep the item size and count of each model array. */
-static size_t csm_transfer(const char *operation, void *data, size_t size, size_t count, void *file)
-{
-    SrFileTransfer transfer = (SrFileTransfer)sr_import("MSVCR100.DLL", operation);
-    return transfer(data, size, count, file);
 }
 
 #define WAIST_CORNERS 8

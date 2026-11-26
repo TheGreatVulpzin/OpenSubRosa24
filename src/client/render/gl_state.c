@@ -38,11 +38,6 @@ typedef void(__stdcall *ActiveStencilFaceFn)(uint32_t face);
 typedef void(__stdcall *StencilOpSeparateFn)(uint32_t face, uint32_t fail, uint32_t depth_fail, uint32_t pass);
 typedef void(__stdcall *StencilFuncSeparateFn)(uint32_t front, uint32_t back, int reference, uint32_t mask);
 
-GL_IMPORT(glFrontFace, (uint32_t mode), (mode))
-GL_IMPORT(glStencilMask, (uint32_t mask), (mask))
-GL_IMPORT(glStencilFunc, (uint32_t function, int reference, uint32_t mask), (function, reference, mask))
-GL_IMPORT(glStencilOp, (uint32_t fail, uint32_t depth_fail, uint32_t pass), (fail, depth_fail, pass))
-GL_IMPORT(glDepthFunc, (uint32_t function), (function))
 
 /* Set the front and back stencil tests through an available extension. */
 void settwosidedstencil(unsigned back, unsigned front, int reference, unsigned mask,

@@ -35,8 +35,6 @@ enum { KIND_TEXT = 1, KIND_TEXT_2 = 2, KIND_TOGGLE = 3, KIND_SLIDER = 5 };
 #define SLIDER_KNOB 8.0
 #define TOGGLE_BOX 16.0
 
-GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
-GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Make the texture of the round button corners: a quarter of a white disc. The distance is from
  * the corner of the texture. Pixels inside radius 24 are faint, the ring up to radius 32 is

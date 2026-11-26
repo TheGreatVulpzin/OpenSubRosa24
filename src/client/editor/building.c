@@ -30,13 +30,7 @@
 #define GL_LINE 0x1b01
 #define GL_FILL 0x1b02
 
-GL_IMPORT(glVertex3f, (float x, float y, float z), (x, y, z))
-GL_IMPORT(glVertex3fv, (const float *vertex), (vertex))
-GL_IMPORT(glTexCoord2f, (float s, float t), (s, t))
-GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
-GL_IMPORT(glPolygonMode, (uint32_t face, uint32_t mode), (face, mode))
 
-GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 
 #define MATERIAL_NAME 64
 #define DELETE_LIMIT 31

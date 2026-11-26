@@ -29,9 +29,6 @@
 #define FLAG_CENTER_Y 4
 #define FLAG_BOTTOM 8
 
-GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
-GL_IMPORT(glTexCoord2f, (float s, float t), (s, t))
-GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Move the place of a shape by the flags. The menu buttons use it too. */
 void align_shape(float *x, float *y, float width, float height, unsigned flags)

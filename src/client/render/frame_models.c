@@ -18,15 +18,6 @@ enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        LIGHT0 = 0x4000, LIGHT_POSITION = 0x1203, CULL_FACE = 0xb44, NORMAL_OFFSET = 0x14, TEXCOORD_OFFSET = 0xc,
        FIRST_PART_REFERENCE = 16, ENTRY_HIDDEN = 2, FRAME_MODELS = 4096 };
 
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glPushMatrix, (void), ())
-GL_IMPORT(glPopMatrix, (void), ())
-GL_IMPORT(glColor3fv, (const float *color), (color))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
-GL_IMPORT(glTexCoordPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 /* Transform human corners, then fill the face and vertex normals. */
 void __cdecl buildhumanmodel(int human_index, int model_index)

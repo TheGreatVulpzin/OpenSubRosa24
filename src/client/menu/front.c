@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "audio/sound.h"
 #include "audio/sound_create.h"
 #include "audio/speex.h"
@@ -64,33 +64,11 @@
 enum { OPTION_KEY = 1, OPTION_TEXT = 4, OPTION_INT = 6, OPTION_TOGGLE = 10, OPTION_CHOICE = 11,
        OPTION_SLIDER = 19 };
 
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, const unsigned char *, glGetString, (unsigned))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_SetAttribute, (int, int))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_GetAttribute, (int, int *))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_SetWindowSize, (void *, int, int))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_SetWindowFullscreen, (void *, uint32_t))
-AUDIO_IMPORT("OPENAL32.DLL", __cdecl, const char *, alGetString, (int))
-AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alcCaptureStart, (void *))
-AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alcCaptureStop, (void *))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_Delay, (uint32_t))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthFunc, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthMask, (unsigned char))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFrontFace, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glLightfv, (unsigned, unsigned, const float *))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
-
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
 {
-    audio_glClearColor()(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2], 0.0f);
-    audio_glClear()(bits);
+    glClearColor(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2], 0.0f);
+    glClear(bits);
 }
 
 /* Read the input of a frame and check the items. */
@@ -107,7 +85,7 @@ static void menu_show(int cursor)
 {
     drawmenuitems();
     drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, cursor, 1.0f, 1.0f, 1.0f, 1.0f);
-    audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+    SDL_GL_SwapWindow(cl_data_audio_window);
 }
 
 /* The menu loops end when the back item is pressed or the window closes. */
@@ -166,7 +144,7 @@ void __cdecl connectmenu(void)
     uint32_t last;
 
     resetmenuitems();
-    last = audio_SDL_GetTicks()();
+    last = SDL_GetTicks();
     while (cl_data_menu_items[0].pressed == 0 && cl_data_audio_menu_back == 0 && !connected) {
         int sent;
 
@@ -179,12 +157,12 @@ void __cdecl connectmenu(void)
         drawtext("Connecting...", 512.0f, 24.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
         menu_show(16);
         /* After three steps of 100 ms, the clock starts again from now. */
-        for (sent = 0; audio_SDL_GetTicks()() - last > RESEND_MS && sent < RESEND_LIMIT;) {
+        for (sent = 0; SDL_GetTicks() - last > RESEND_MS && sent < RESEND_LIMIT;) {
             sent++;
             if (sent < 4)
                 last += RESEND_MS;
             else
-                last = audio_SDL_GetTicks()();
+                last = SDL_GetTicks();
             send_connect_request();
         }
         connected = read_connect_replies();
@@ -192,7 +170,7 @@ void __cdecl connectmenu(void)
     if (connected) {
         clear_menu_screen(GL_COLOR_BUFFER_BIT);
         drawtext("Connected, Wait...", 512.0f, 24.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         gameloop();
     }
     resetmenuitems();
@@ -216,16 +194,16 @@ static const struct {
  * lines have the same place. */
 void __cdecl notsupportedmenu(void)
 {
-    const char *vendor = (const char *)audio_glGetString()(GL_VENDOR);
-    const char *renderer = (const char *)audio_glGetString()(GL_RENDERER);
-    const char *version = (const char *)audio_glGetString()(GL_VERSION);
+    const char *vendor = (const char *)glGetString(GL_VENDOR);
+    const char *renderer = (const char *)glGetString(GL_RENDERER);
+    const char *version = (const char *)glGetString(GL_VERSION);
     int i;
 
-    audio_glGetString()(GL_EXTENSIONS);
+    glGetString(GL_EXTENSIONS);
     resetmenuitems();
     while (menu_open()) {
-        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-        audio_glClear()(GL_CLEAR_BITS);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_CLEAR_BITS);
         cl_data_menu_item_count = 0;
         createmenubutton("Exit", 0.0f, 0.0f, 128.0f, 20.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         setmenuitem(OPTION_KEY, KEY_ESCAPE);
@@ -266,8 +244,8 @@ void __cdecl usermenu(void)
         float y = 64.0f;
         int i;
 
-        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-        audio_glClear()(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         cl_data_menu_item_count = 0;
         createmenubutton("Back", 4.0f, 636.0f, 192.0f, 24.0f, 12.0f, 8, 1.0f, 1.0f, 1.0f, 1.0f);
         setmenuitem(OPTION_KEY, KEY_ESCAPE);
@@ -526,20 +504,20 @@ static void options_apply(int mode, int start_mode, int fullscreen)
     cl_data_screen_fullscreen = fullscreen;
     cl_data_screen_bits = cl_data_video_modes[mode].bits;
     if (cl_data_screen_bits == 16) {
-        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 5);
-        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 6);
-        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 5);
-        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 1);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 1);
     }
     if (cl_data_screen_bits == 32) {
-        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     }
-    audio_SDL_SetWindowSize()(cl_data_audio_window, cl_data_render_width, cl_data_render_height);
-    audio_SDL_SetWindowFullscreen()(cl_data_audio_window, cl_data_screen_fullscreen == 0 ? 0 : 1);
-    audio_SDL_GL_GetAttribute()(SDL_GL_RED_SIZE, &red);
+    SDL_SetWindowSize(cl_data_audio_window, cl_data_render_width, cl_data_render_height);
+    SDL_SetWindowFullscreen(cl_data_audio_window, cl_data_screen_fullscreen == 0 ? 0 : 1);
+    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &red);
     if (red != 8)
         cl_data_screen_bits = 16;
     reactivategame();
@@ -552,13 +530,13 @@ void __cdecl optionsmenu(void)
     const char *gl[3], *al[3];
     int mode, start_mode, fullscreen, page = 0;
 
-    gl[0] = (const char *)audio_glGetString()(GL_VENDOR);
-    gl[1] = (const char *)audio_glGetString()(GL_RENDERER);
-    gl[2] = (const char *)audio_glGetString()(GL_VERSION);
-    audio_glGetString()(GL_EXTENSIONS);
-    al[0] = audio_alGetString()(AL_VENDOR);
-    al[2] = audio_alGetString()(AL_RENDERER);
-    al[1] = audio_alGetString()(AL_VERSION);
+    gl[0] = (const char *)glGetString(GL_VENDOR);
+    gl[1] = (const char *)glGetString(GL_RENDERER);
+    gl[2] = (const char *)glGetString(GL_VERSION);
+    glGetString(GL_EXTENSIONS);
+    al[0] = alGetString(AL_VENDOR);
+    al[2] = alGetString(AL_RENDERER);
+    al[1] = alGetString(AL_VERSION);
     mode = options_current_mode();
     start_mode = mode;
     fullscreen = sr_data_config.fullscreen;
@@ -567,13 +545,13 @@ void __cdecl optionsmenu(void)
     while (cl_data_menu_items[0].pressed == 0 && cl_data_menu_items[1].pressed == 0 && cl_data_audio_menu_back == 0) {
         options_items(&fullscreen, &page, &mode);
         menu_input();
-        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-        audio_glClear()(GL_CLEAR_BITS);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_CLEAR_BITS);
         setuptextdisplay();
         drawmenuitems();
         options_texts(gl, al);
         drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         if (sr_data_game.running != 0)
             checksimulation(0);
     }
@@ -595,9 +573,6 @@ void __cdecl optionsmenu(void)
 #define MASTER_LIMIT 0x2000
 #define DIRECT_IP_SIZE 0x18
 #define KEY_J 0x0d
-#define WSOCK_INET_ADDR 10
-#define WSOCK_GETHOSTBYNAME 52
-#define WSOCK_GETHOSTNAME 57
 #define HOST_NAME_SIZE 0x80
 #define MAX_LAN_ADDRESSES 16
 #define BROADCAST_BYTE 0xff /* the last byte of a broadcast address */
@@ -681,15 +656,12 @@ static void join_items(int *page, int *chosen, char *direct_ip)
  * does not type. */
 static void join_add_direct_ip(char *direct_ip)
 {
-    static uint32_t(__stdcall * inet_address)(const char *);
     JoinAddress *a;
 
     if (cl_data_audio_input_blocked != 0 || direct_ip[0] == '\0')
         return;
-    if (!inet_address)
-        *(void **)&inet_address = sr_import_ordinal("WSOCK32.DLL", WSOCK_INET_ADDR);
     a = &cl_data_join_addresses[cl_data_join_address_count];
-    a->address = swap32(inet_address(direct_ip));
+    a->address = swap32(inet_addr(direct_ip));
     a->port = (uint16_t)sr_data_option.port;
     cl_data_join_address_count++;
     direct_ip[0] = '\0';
@@ -708,19 +680,13 @@ typedef struct HostEntry {
  * 255 (the broadcast of its network) and the game port. The master list starts after them. */
 void __cdecl getlanipaddress(void)
 {
-    static int(__stdcall * host_name)(char *, int);
-    static const HostEntry *(__stdcall * host_by_name)(const char *);
     char name[HOST_NAME_SIZE];
     const HostEntry *host;
     int i;
 
-    if (!host_name) {
-        *(void **)&host_name = sr_import_ordinal("WSOCK32.DLL", WSOCK_GETHOSTNAME);
-        *(void **)&host_by_name = sr_import_ordinal("WSOCK32.DLL", WSOCK_GETHOSTBYNAME);
-    }
-    if (host_name(name, sizeof name) == -1)
+    if (gethostname(name, sizeof name) == -1)
         return;
-    host = host_by_name(name);
+    host = gethostbyname(name);
     if (host == NULL)
         return;
     for (i = 0; host->addresses[i] != NULL && i < MAX_LAN_ADDRESSES; i++) {
@@ -811,9 +777,9 @@ static void join_texts(int page, int master_done)
  * again. The ping holds the send time. */
 static void join_send_ping(uint32_t *last, int *next, int master_done)
 {
-    if (audio_SDL_GetTicks()() - *last <= PING_MS)
+    if (SDL_GetTicks() - *last <= PING_MS)
         return;
-    *last = audio_SDL_GetTicks()();
+    *last = SDL_GetTicks();
     if (cl_data_join_address_count > 0) {
         if (*next < cl_data_join_address_count) {
             char kind = PACKET_PING;
@@ -838,7 +804,7 @@ static void read_server_state(JoinServer *s)
 {
     pbitread((uint32_t *)&s->version, 8);
     cs_pread(&s->ping, 4, 1);
-    s->ping = (int)(audio_SDL_GetTicks()() - (uint32_t)s->ping);
+    s->ping = (int)(SDL_GetTicks() - (uint32_t)s->ping);
     pbitread((uint32_t *)&s->game_type, 4);
     pbitread((uint32_t *)&s->players, 8);
     pbitread((uint32_t *)&s->max_players, 8);
@@ -926,7 +892,7 @@ void __cdecl joinmenu(void)
     cl_data_join_columns[9] = 24.0f;
     cl_data_join_columns[6] = 784.0f;
     cl_data_join_columns[7] = 24.0f;
-    last = audio_SDL_GetTicks()();
+    last = SDL_GetTicks();
     resetmenuitems();
     for (;;) {
         if (!menu_open()) {
@@ -1000,7 +966,7 @@ static void main_status(const char *text)
     clear_menu_screen(GL_CLEAR_BITS);
     setuptextdisplay();
     drawtext(text, 512.0f, 160.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
-    audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+    SDL_GL_SwapWindow(cl_data_audio_window);
 }
 
 /* Make the OpenGL objects: 32 shader programs, 0x1000 buffer pairs and two framebuffers, each
@@ -1072,7 +1038,7 @@ static int main_setup(void)
     getmasterserverip();
     loadaccountsserver();
     if (cl_data_audio_capture != 0)
-        audio_alcCaptureStart()(cl_data_audio_capture);
+        alcCaptureStart(cl_data_audio_capture);
     return 1;
 }
 
@@ -1157,15 +1123,15 @@ static void main_scene(void)
     cl_data_light_position[1] = 0.0f;
     cl_data_light_position[2] = 1.0f;
     cl_data_light_position[3] = 0.0f;
-    audio_glLightfv()(GL_LIGHT0, GL_POSITION, cl_data_light_position);
+    glLightfv(GL_LIGHT0, GL_POSITION, cl_data_light_position);
     cl_data_light_ambient[0] = 1.0f;
     cl_data_light_ambient[1] = 1.0f;
     cl_data_light_ambient[2] = 1.0f;
     cl_data_light_diffuse[0] = 0.0f;
     cl_data_light_diffuse[1] = 0.0f;
     cl_data_light_diffuse[2] = 0.0f;
-    audio_glLightfv()(GL_LIGHT0, GL_AMBIENT, cl_data_light_ambient);
-    audio_glLightfv()(GL_LIGHT0, GL_DIFFUSE, cl_data_light_diffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, cl_data_light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, cl_data_light_diffuse);
     place.x = 0.0f;
     place.y = 0.0f;
     place.z = -1.0f;
@@ -1174,13 +1140,13 @@ static void main_scene(void)
     textures[0] = sr_data_texturelist.human[0];
     textures[1] = sr_data_texturelist.human[0];
     if (cl_data_keyboard[KEY_H] != 0) {
-        audio_glPolygonMode()(GL_FRONT, GL_LINE);
-        audio_glPolygonMode()(GL_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
     }
-    audio_glColor3f()(1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     rendermodel(sr_data_modellist.head, &place, rot, 2, textures, white);
-    audio_glPolygonMode()(GL_FRONT, GL_FILL);
-    audio_glPolygonMode()(GL_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_FILL);
 }
 
 /* Run the item that the player pressed. Start (and the demos) begin a game on this machine:
@@ -1262,12 +1228,12 @@ void __cdecl mainmenu(void)
     while (menu_open()) {
         main_items();
         menu_input();
-        audio_glEnable()(0xb71);    /* depth test */
-        audio_glDepthFunc()(0x203); /* less or equal */
-        audio_glDepthMask()(1);
-        audio_glDisable()(0xbe2); /* blend */
-        audio_glEnable()(0xb44);  /* cull face */
-        audio_glFrontFace()(0x900);
+        glEnable(0xb71);    /* depth test */
+        glDepthFunc(0x203); /* less or equal */
+        glDepthMask(1);
+        glDisable(0xbe2); /* blend */
+        glEnable(0xb44);  /* cull face */
+        glFrontFace(0x900);
         clear_menu_screen(GL_CLEAR_BITS);
         if (sr_data_debugit != 0)
             main_scene();
@@ -1284,13 +1250,13 @@ void __cdecl mainmenu(void)
         if (sr_data_option.voicemin > 0x8000)
             sr_data_option.voicemin = 0x8000;
         main_actions();
-        audio_SDL_Delay()(1);
+        SDL_Delay(1);
         if (sr_data_debugit != 0)
             main_test_sounds();
     }
     disablesocket(1);
     resetmenuitems();
     if (cl_data_audio_capture != 0)
-        audio_alcCaptureStop()(cl_data_audio_capture);
+        alcCaptureStop(cl_data_audio_capture);
     disablespeex();
 }

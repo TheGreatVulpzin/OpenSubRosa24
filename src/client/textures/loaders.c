@@ -3,6 +3,7 @@
  * The decoder writes the file into the shared image: width, height and one 32 bit word for each pixel.
  * A texture takes the pixels of the shared image. The path of the last image stays in image_name.
  */
+#include <stdio.h>
 #include "textures/loaders.h"
 
 #include <string.h>
@@ -13,8 +14,6 @@
 #include "textures/textures.h"
 #include "textures/upload.h"
 #include "image/load.h"
-
-void *sr_import(const char *dll, const char *name);
 
 #define g_image cl_data_image
 #define g_bigendian cl_data_bigendian
@@ -27,8 +26,8 @@ enum { GL_RGBA = 0x1908, GL_CLAMP_TO_EDGE = 0x812f, GL_LINEAR = 0x2601 };
 void checkbigendian(void)
 {
     cl_data_bigendian = 0;
-    sr_data_file_write = (SrFileTransfer)sr_import("MSVCR100.DLL", "fwrite");
-    sr_data_file_read = (SrFileTransfer)sr_import("MSVCR100.DLL", "fread");
+    sr_data_file_write = (SrFileTransfer)fwrite;
+    sr_data_file_read = (SrFileTransfer)fread;
 }
 
 /* Game functions of other files. */

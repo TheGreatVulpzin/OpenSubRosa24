@@ -13,14 +13,6 @@
 /* The static C runtime (client_crt.c). */
 void *client_crt_lookup(const char *name);
 
-#ifdef SR_SMOKE
-/* The test build wraps the input and the frame calls (src/standalone/client_smoke.c). */
-void *client_smoke_import(const char *dll, const char *name, void *function);
-#define WRAP(dll, name, function) client_smoke_import(dll, name, function)
-#else
-#define WRAP(dll, name, function) (function)
-#endif
-
 void *sr_import(const char *dll, const char *name)
 {
     HMODULE module;
@@ -35,7 +27,7 @@ void *sr_import(const char *dll, const char *name)
         fprintf(stderr, "import %s!%s not found\n", dll, name);
         exit(1);
     }
-    return WRAP(dll, name, function);
+    return function;
 }
 
 void *sr_import_ordinal(const char *dll, unsigned ordinal)

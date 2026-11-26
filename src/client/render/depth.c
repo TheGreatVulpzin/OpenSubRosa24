@@ -23,18 +23,6 @@ enum { CULL_FACE = 0xb44, STENCIL_TEST = 0xb90, ARRAY_POSITION = 0x8074,
        FRAMEBUFFER = 0x8d40, COLOR_ATTACHMENT = 0x8ce0, CLEAR_COLOR = 0x4000,
        CLEAR_COLOR_DEPTH_STENCIL = 0x4500, STENCIL_KEEP = 0x1e00, STENCIL_EQUAL = 0x202 };
 
-GL_IMPORT(glClearColor, (float r, float g, float b, float a), (r, g, b, a))
-GL_IMPORT(glClearStencil, (int value), (value))
-GL_IMPORT(glStencilMask, (uint32_t mask), (mask))
-GL_IMPORT(glClear, (uint32_t mask), (mask))
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glStencilOp, (uint32_t fail, uint32_t depth_fail, uint32_t pass), (fail, depth_fail, pass))
-GL_IMPORT(glStencilFunc, (uint32_t test, int reference, uint32_t mask), (test, reference, mask))
-GL_IMPORT(glColor3f, (float r, float g, float b), (r, g, b))
-GL_IMPORT(glFrontFace, (uint32_t face), (face))
-GL_IMPORT(glDepthFunc, (uint32_t test), (test))
-GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
 
 /* Select a shader program, or clear the program with a negative index. */
 static void depth_program(int index)

@@ -2,12 +2,11 @@
  * A format selects one, two or four low bytes from each integer.
  * Spaces separate fields and consume no values.
  */
+#include <stdio.h>
 #include "image/write.h"
 #include <stddef.h>
 #include "image/io.h"
 #include "sr_os.h"
-
-void *sr_import(const char *dll, const char *name);
 
 enum {
     IMAGE_ASSERT_WRITE_FORMAT = 0x1121f4,
@@ -17,10 +16,7 @@ enum {
 /* Write one byte to the file. */
 void write8(void *file, uint8_t value)
 {
-    static size_t(__cdecl *call)(const void *, size_t, size_t, void *);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "fwrite");
-    call(&value, 1, 1, file);
+    fwrite(&value, 1, 1, file);
 }
 
 /* Write fields in little endian order. Stop at an invalid format character. */
@@ -51,13 +47,10 @@ void writefv(void *file, const char *format, const int *values)
 void write_pixels(void *file, int rgb_dir, int vdir, int width, int height, int comp, const uint8_t *data,
                   int write_alpha, size_t scanline_pad)
 {
-    static size_t(__cdecl *write)(const void *, size_t, size_t, void *);
     static const uint8_t background[3] = {255, 0, 255};
     uint32_t zero = 0;
     int row, row_end, column, channel;
 
-    if (!write)
-        *(void **)&write = sr_import("MSVCR100.DLL", "fwrite");
     if (vdir < 0) {
         row_end = -1;
         row = height - 1;
@@ -70,7 +63,7 @@ void write_pixels(void *file, int rgb_dir, int vdir, int width, int height, int 
             const uint8_t *pixel = data + (row * width + column) * comp;
             int values[3];
             if (write_alpha < 0)
-                write(&pixel[comp - 1], 1, 1, file);
+                fwrite(&pixel[comp - 1], 1, 1, file);
             switch (comp) {
             case 1:
             case 2:
@@ -98,9 +91,9 @@ void write_pixels(void *file, int rgb_dir, int vdir, int width, int height, int 
                 break;
             }
             if (write_alpha > 0)
-                write(&pixel[comp - 1], 1, 1, file);
+                fwrite(&pixel[comp - 1], 1, 1, file);
         }
-        write(&zero, scanline_pad, 1, file);
+        fwrite(&zero, scanline_pad, 1, file);
     }
 }
 

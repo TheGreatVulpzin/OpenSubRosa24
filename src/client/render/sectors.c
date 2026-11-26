@@ -16,12 +16,6 @@
 #define g_light_ambient cl_data_light_ambient
 #define g_block_sectors sr_data_area_sector.records
 
-GL_IMPORT(glColorPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glTexCoordPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glColor3fv, (const float *color), (color))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 enum {
     SLOTS_PER_SECTOR = 4,

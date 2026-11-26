@@ -9,7 +9,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "packet.h"
 #include "render/sector_models.h"
@@ -98,16 +98,6 @@
 #define VOICE_RATE 8000
 #define VOICE_BYTES 0x500
 
-AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_SetRelativeMouseMode, (int))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_Delay, (uint32_t))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFlush, (void))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
-
 /* Clear the chat, the players and the human looks. A hosted game makes the player of the host:
  * the name of the options, and in a round game an account with its money (at least 10000 with
  * the debug flag) and team 7. */
@@ -157,9 +147,9 @@ static void game_wait_events(void)
     while (cl_data_menu_items[0].pressed == 0 && cl_data_audio_menu_back == 0 &&
            (link->client_connected == 0 || (int)sr_data_numofevents < link->client_event_total)) {
         if (link->client_event_total != ALL_EVENTS) {
-            audio_glClearColor()(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2],
+            glClearColor(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2],
                                  0.0f);
-            audio_glClear()(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT);
             cl_data_menu_item_count = 0;
             createmenuitem("", 0.0f, 0.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
             setmenuitem(OPTION_KEY, KEY_ESCAPE);
@@ -177,7 +167,7 @@ static void game_wait_events(void)
                 drawbitmap(-1, 352.0f, 160.0f,
                            (float)((double)(float)(int)sr_data_numofevents * 320.0 / (float)link->client_event_total),
                            20.0f, 0, 0.75f, 0.75f, 0.75f, 1.0f);
-            audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+            SDL_GL_SwapWindow(cl_data_audio_window);
         }
         checksimulation(0);
         checksimulation(0);
@@ -193,8 +183,8 @@ static void game_start_voice(void)
         AudioChannel *channel = &((AudioChannel *)sr_data_voice)[i];
 
         for (k = 0; k < 4; k++)
-            audio_alBufferData()(channel->buffers[k], AL_FORMAT_MONO16, channel->samples, VOICE_BYTES, VOICE_RATE);
-        audio_alSourceQueueBuffers()(channel->source, 4, channel->buffers);
+            alBufferData(channel->buffers[k], AL_FORMAT_MONO16, channel->samples, VOICE_BYTES, VOICE_RATE);
+        alSourceQueueBuffers(channel->source, 4, channel->buffers);
     }
 }
 
@@ -214,12 +204,12 @@ static void game_start(void)
     checkmouse();
     checkmouse();
     checkmouserelative();
-    audio_SDL_SetRelativeMouseMode()(1);
+    SDL_SetRelativeMouseMode(1);
     sr_data_game.relative_mouse = 1;
     checkmouserelative();
     checkmouserelative();
     g_game.link_state = 0;
-    audio_SDL_GetTicks()();
+    SDL_GetTicks();
     resetmenuitems();
 }
 
@@ -444,7 +434,7 @@ static void frame_voice_wave(void)
 
     glDisable(GL_TEXTURE_2D);
     glBegin(GL_LINES);
-    audio_glColor3f()(1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     for (i = 0; i < WAVE_POINTS; i++) {
         glVertex2f((float)((float)i + 16.0), (float)((float)samples[i * WAVE_STEP] / 1024.0 + 32.0));
         glVertex2f((float)((float)(i + 1) + 16.0), (float)((float)samples[(i + 1) * WAVE_STEP] / 1024.0 + 32.0));
@@ -530,7 +520,7 @@ static void frame_timing(void)
     Debug *debug = &sr_data_debug;
     int i;
 
-    debug->frame_ms[debug->frame_ms_index] = (int)(audio_SDL_GetTicks()() - debug->frame_start);
+    debug->frame_ms[debug->frame_ms_index] = (int)(SDL_GetTicks() - debug->frame_start);
     debug_addataint("mspf", debug->frame_ms[debug->frame_ms_index]);
     if (debug->frame_ms_max < debug->frame_ms[debug->frame_ms_index])
         debug->frame_ms_max = debug->frame_ms[debug->frame_ms_index];
@@ -552,14 +542,14 @@ static void frame_ticks(void)
 
     sr_data_area_sector.client_connected = 0;
     for (i = 0; checksimulation(1) == 0 && i < FIRST_WAIT_STEPS; i++)
-        audio_SDL_Delay()(1);
+        SDL_Delay(1);
     for (i = 0; i < EXTRA_TICKS; i++)
         checksimulation(1);
     if (sr_data_server.active != 0)
         return;
     for (i = 0; sr_data_area_sector.client_connected == 0 && i < CATCH_UP_STEPS; i++) {
         checksimulation(1);
-        audio_SDL_Delay()(1);
+        SDL_Delay(1);
     }
 }
 
@@ -577,7 +567,7 @@ static void frame_menus(void)
             building_editorloop();
         else
             leveleditor_loop();
-        sr_data_game.last_tick_ms = audio_SDL_GetTicks()();
+        sr_data_game.last_tick_ms = SDL_GetTicks();
         checkmouse();
         checkmouserelative();
     }
@@ -608,7 +598,7 @@ static void game_end(void)
 
     g_game.running = 0;
     sr_data_game.relative_mouse = 0;
-    audio_SDL_SetRelativeMouseMode()(0);
+    SDL_SetRelativeMouseMode(0);
     if (sr_data_server.active != 0) {
         for (i = 0; i < NUM_PLAYERS; i++)
             if (g_player[i].active != 0)
@@ -623,11 +613,11 @@ static void game_end(void)
 
         if (source == 0xffffffffu)
             continue;
-        audio_alSourcef()(source, AL_GAIN, 0.0f);
-        audio_alSourceStop()(source);
-        audio_alGetSourcei()(source, AL_BUFFERS_PROCESSED, &count);
+        alSourcef(source, AL_GAIN, 0.0f);
+        alSourceStop(source);
+        alGetSourcei(source, AL_BUFFERS_PROCESSED, &count);
         for (; count > 0; count--)
-            audio_alSourceUnqueueBuffers()(source, 1, (unsigned *)&buffer);
+            alSourceUnqueueBuffers(source, 1, (unsigned *)&buffer);
     }
     for (i = 0; i < NUM_OBJECTS; i++)
         sr_data_object[i].active = 0;
@@ -640,7 +630,7 @@ void __cdecl gameloop(void)
 {
     game_start();
     while (g_game.link_state < LINK_LOST && cl_data_audio_menu_back == 0) {
-        sr_data_debug.frame_start = audio_SDL_GetTicks()();
+        sr_data_debug.frame_start = SDL_GetTicks();
         frame_textures();
         render_buildareasectorshadow();
         frame_camera();
@@ -651,11 +641,11 @@ void __cdecl gameloop(void)
         getaudioinput(g_view == -1 ? 0 : g_view);
         sr_data_area_sector.client_connected = 0;
         frame_display();
-        audio_glFlush()();
+        glFlush();
         frame_timing();
         frame_ticks();
-        audio_glFinish()();
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        glFinish();
+        SDL_GL_SwapWindow(cl_data_audio_window);
         frame_menus();
     }
     game_end();

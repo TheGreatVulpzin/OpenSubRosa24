@@ -4,7 +4,7 @@
 #include "render/frame_textures.h"
 #include "render/programs.h"
 
-void *sr_import(const char *dll, const char *name);
+#include "system_libs.h"
 
 #define g_relative_mouse sr_data_game.relative_mouse
 
@@ -17,12 +17,8 @@ void __cdecl updateplayticket(void)
  * back. The relative mouse mode of SDL comes on first when the flag is set. */
 void __cdecl reactivategame(void)
 {
-    static int(__cdecl * set_relative_mouse_mode)(int);
-
     if (g_relative_mouse != 0) {
-        if (!set_relative_mouse_mode)
-            *(void **)&set_relative_mouse_mode = sr_import("SDL2.DLL", "SDL_SetRelativeMouseMode");
-        set_relative_mouse_mode(1);
+        SDL_SetRelativeMouseMode(1);
     }
     setupframetextures();
     setupprogramobjects();

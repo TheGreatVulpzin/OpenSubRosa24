@@ -51,20 +51,6 @@ enum {
 /* The slot of the multitexture extension: the client holds a pointer to it. */
 typedef void(__stdcall *ActiveTextureFn)(uint32_t unit);
 
-GL_IMPORT(glPushMatrix, (void), ())
-GL_IMPORT(glPopMatrix, (void), ())
-GL_IMPORT(glScalef, (float x, float y, float z), (x, y, z))
-GL_IMPORT(glNormal3fv, (const float *normal), (normal))
-GL_IMPORT(glVertex3fv, (const float *vertex), (vertex))
-GL_IMPORT(glColor3fv, (const float *color), (color))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glTexCoordPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
-GL_IMPORT(glPolygonMode, (uint32_t face, uint32_t mode), (face, mode))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
 
 static void select_texture_unit(uint32_t unit)
 {

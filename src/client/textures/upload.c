@@ -13,11 +13,6 @@
 #define GL_TEXTURE_WRAP_T 0x2803
 #define GL_UNSIGNED_BYTE 0x1401
 
-GL_IMPORT(glTexParameteri, (uint32_t target, uint32_t name, int value), (target, name, value))
-GL_IMPORT(glTexImage2D,
-          (uint32_t target, int level, int internal_format, int width, int height, int border, uint32_t format,
-           uint32_t type, const void *pixels),
-          (target, level, internal_format, width, height, border, format, type, pixels))
 
 /* Bind a texture and give OpenGL its parameters and the pixels of each level. A level is half the
  * size of the level before it. */

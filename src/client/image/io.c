@@ -7,9 +7,12 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-void *sr_import(const char *dll, const char *name);
+/* The release C runtime has this function, but assert.h declares it only for a debug build. */
+void __cdecl _wassert(const wchar_t *expression, const wchar_t *file, unsigned line);
 
 /* Keep the failure message and return zero. */
 int stbi_set_error(const char *message)
@@ -27,12 +30,9 @@ int image_fail(unsigned message_rva)
 /* Stop when a required decoder invariant fails. */
 void image_check(int condition, unsigned expression_rva, unsigned source_rva, unsigned line)
 {
-    static void(__cdecl *call)(const wchar_t *, const wchar_t *, unsigned);
     if (condition)
         return;
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "_wassert");
-    call(CL_WTEXT(expression_rva), CL_WTEXT(source_rva), line);
+    _wassert(CL_WTEXT(expression_rva), CL_WTEXT(source_rva), line);
 }
 
 /* Read one unsigned byte. End of input gives zero. */
@@ -70,19 +70,13 @@ void start_mem(ImageReader *reader, const uint8_t *buffer, int length)
 /* The position of a file. */
 long image_tell(void *file)
 {
-    static long(__cdecl *call)(void *);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "ftell");
-    return call(file);
+    return ftell(file);
 }
 
 /* Move a file to a position from its start. */
 void image_seek_set(void *file, long position)
 {
-    static int(__cdecl *call)(void *, long, int);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "fseek");
-    call(file, position, 0);
+    fseek(file, position, SEEK_SET);
 }
 
 /* Read a big endian word. Missing bytes give zero. */
@@ -116,14 +110,11 @@ unsigned stbi_get32le(ImageReader *reader)
 /* Move the cursor by count bytes. The memory cursor has no bounds check. */
 void stbi_skip(ImageReader *reader, int count)
 {
-    static int(__cdecl *seek)(void *, long, int);
     if (reader->file == NULL) {
         reader->cursor += count;
         return;
     }
-    if (!seek)
-        *(void **)&seek = sr_import("MSVCR100.DLL", "fseek");
-    seek(reader->file, count, 1);
+    fseek(reader->file, count, SEEK_CUR);
 }
 
 /* Read count bytes into data. */
@@ -140,28 +131,19 @@ void stbi_getn(ImageReader *reader, void *data, size_t count)
 /* Read a byte array from a file. Return the number of bytes read. */
 size_t image_read(void *data, size_t count, void *file)
 {
-    static size_t(__cdecl *call)(void *, size_t, size_t, void *);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "fread");
-    return call(data, 1, count, file);
+    return fread(data, 1, count, file);
 }
 
 /* Resize an allocation. Return null when memory is full. */
 void *image_realloc(void *data, size_t size)
 {
-    static void *(__cdecl *call)(void *, size_t);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "realloc");
-    return call(data, size);
+    return realloc(data, size);
 }
 
 /* Return the end flag of a file. */
 int image_eof(ImageReader *reader)
 {
-    static int(__cdecl *call)(void *);
-    if (!call)
-        *(void **)&call = sr_import("MSVCR100.DLL", "feof");
-    return call(reader->file);
+    return feof(reader->file);
 }
 
 /* Read big endian items into little endian storage. EOF bytes become 255. */
@@ -182,17 +164,14 @@ uint32_t freadswap(void *data, int size, uint32_t count, void *file)
  * Return the item count. */
 uint32_t fwriteswap(const void *data, int size, uint32_t count, void *file)
 {
-    static int(__cdecl *put)(int, void *);
     const uint8_t *bytes = data;
     uint32_t item;
     int byte;
 
-    if (!put)
-        *(void **)&put = sr_import("MSVCR100.DLL", "fputc");
     if (size != 1 && size != 2 && size != 4)
         return count;
     for (item = 0; item < count; item++)
         for (byte = size - 1; byte >= 0; byte--)
-            put(bytes[item * size + byte], file);
+            fputc(bytes[item * size + byte], file);
     return count;
 }

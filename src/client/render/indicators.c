@@ -18,9 +18,6 @@
 #define COMPASS_LINE_WIDTH 2.0f
 #define COMPASS_NEEDLE_GREY 0.75f
 
-GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glLineWidth, (float width), (width))
 
 /* The size of the pointer at a segment: largest at the start and the end, smaller in the middle. */
 static float pointer_scale(int segment)

@@ -4,8 +4,7 @@
  */
 #include "input/mouse.h"
 #include "sr_runtime.h"
-
-void *sr_import(const char *dll, const char *name);
+#include "system_libs.h"
 
 #define MOUSE_INTEGER_LIMIT 2147483648.0
 
@@ -32,19 +31,11 @@ static void mouse_buttons(unsigned buttons)
 /* Poll absolute coordinates. The screen dimensions determine coordinate scaling. */
 void checkmouse(void)
 {
-    typedef unsigned (__cdecl *MouseState)(int *, int *);
-    typedef void (__cdecl *PumpEvents)(void);
-    static MouseState state;
-    static PumpEvents pump;
     unsigned buttons;
     InputMouse *mouse = &cl_data_input_mouse;
-    if (!state) {
-        *(void **)&state = sr_import("SDL2.DLL", "SDL_GetMouseState");
-        *(void **)&pump = sr_import("SDL2.DLL", "SDL_PumpEvents");
-    }
-    pump();
+    SDL_PumpEvents();
     cl_data_input_mouse_previous = *mouse;
-    buttons = state(&mouse->x, &mouse->y);
+    buttons = SDL_GetMouseState(&mouse->x, &mouse->y);
     mouse->x = cl_ftoi((double)mouse->x * INPUT_WIDTH / cl_data_render_width);
     mouse->y = cl_ftoi((double)mouse->y * INPUT_HEIGHT / cl_data_render_height);
     mouse_buttons(buttons);
@@ -53,19 +44,11 @@ void checkmouse(void)
 /* Poll relative movement and button releases. */
 void checkmouserelative(void)
 {
-    typedef unsigned (__cdecl *MouseState)(int *, int *);
-    typedef void (__cdecl *PumpEvents)(void);
-    static MouseState state;
-    static PumpEvents pump;
     unsigned buttons;
     InputMouse *mouse = &cl_data_input_mouse;
-    if (!state) {
-        *(void **)&state = sr_import("SDL2.DLL", "SDL_GetRelativeMouseState");
-        *(void **)&pump = sr_import("SDL2.DLL", "SDL_PumpEvents");
-    }
-    pump();
+    SDL_PumpEvents();
     cl_data_input_mouse_previous = *mouse;
-    buttons = state(&mouse->dx, &mouse->dy);
+    buttons = SDL_GetRelativeMouseState(&mouse->dx, &mouse->dy);
     mouse->x = INPUT_WIDTH / 2;
     mouse->y = INPUT_HEIGHT / 2;
     mouse_buttons(buttons);

@@ -5,7 +5,7 @@
 
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "input/key_events.h"
 #include "editor/building.h"
@@ -28,10 +28,6 @@
 #define FILE_LIST 0
 #define NEW_SIZE 24
 #define NEW_FLOORS 4
-
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* List the building files without their extensions. */
 static void list_buildings(void)
@@ -90,9 +86,6 @@ static void building_new(void)
 
 enum { TILE_BUILDING_TEXTURE = 0, TILE_BUILDING_BLOCK = 2, TILE_GAME_TEXTURE = 3, TILE_GAME_BLOCK = 4 };
 
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
-
 /* Add a tile of 64 by 64 at x, y that writes index into target when clicked. Move the place to
  * the next tile: 72 units on, and to the start of a new row at x 960. */
 static void tile_add(int kind, float *x, float *y, int *target, int index)
@@ -147,8 +140,8 @@ static void tile_clicks(int kind_a, int kind_b)
 /* The picker loop starts each frame alike: clear the screen and make the Exit item. */
 static void picker_start(void)
 {
-    audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-    audio_glClear()(0x4000);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(0x4000);
     cl_data_menu_item_count = 0;
     createmenubutton("Exit", 0.0f, 0.0f, 128.0f, 20.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
     setmenuitem(OPTION_KEY, KEY_ESCAPE);
@@ -169,7 +162,7 @@ static void picker_show(void)
 {
     drawmenuitems();
     drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
-    audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+    SDL_GL_SwapWindow(cl_data_audio_window);
 }
 
 /* Fill the list of game blocks from the block list of the files: each group of four turns gives
@@ -233,7 +226,7 @@ void __cdecl buildingedit_blockmenu(void)
         for (i = 0; i < cl_data_game_block_count; i++)
             tile_add(TILE_GAME_BLOCK, &x, &y, &game_block, i);
         picker_input();
-        audio_glDisable()(GL_BLEND);
+        glDisable(GL_BLEND);
         for (i = 0; i < cl_data_editor_tile_count; i++) {
             const EditorTile *t = &cl_data_editor_tiles[i];
             int chosen = t->kind == TILE_BUILDING_BLOCK ? building_block : game_block;
@@ -244,7 +237,7 @@ void __cdecl buildingedit_blockmenu(void)
                 tile_frame(t);
             drawbitmap(-1, t->x, t->y, t->width, t->height, 0, 0.5f, 0.5f, 0.5f, 1.0f);
         }
-        audio_glEnable()(GL_BLEND);
+        glEnable(GL_BLEND);
         for (i = 0; i < cl_data_editor_tile_count; i++) {
             const EditorTile *t = &cl_data_editor_tiles[i];
 
@@ -346,7 +339,7 @@ void __cdecl buildingedit_texturemenu(void)
         for (i = 0; i < cl_data_game_texture_count; i++)
             tile_add(TILE_GAME_TEXTURE, &x, &y, &game_texture, i);
         picker_input();
-        audio_glDisable()(GL_BLEND);
+        glDisable(GL_BLEND);
         for (i = 0; i < cl_data_editor_tile_count; i++) {
             const EditorTile *t = &cl_data_editor_tiles[i];
             int material;
@@ -365,7 +358,7 @@ void __cdecl buildingedit_texturemenu(void)
             drawbitmap(sr_data_texturelist.material[material], t->x, t->y, t->width, t->height, 0, 1.0f, 1.0f, 1.0f,
                        1.0f);
         }
-        audio_glEnable()(GL_BLEND);
+        glEnable(GL_BLEND);
         for (i = 0; i < cl_data_editor_tile_count; i++) {
             const EditorTile *t = &cl_data_editor_tiles[i];
 
@@ -404,8 +397,8 @@ void __cdecl buildingedit_menu(void)
     list_buildings();
     resetmenuitems();
     while (cl_data_menu_items[0].pressed == 0 && cl_data_audio_menu_back == 0) {
-        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
-        audio_glClear()(0x4000);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(0x4000);
         building_menu_items(&chosen, &create);
         checksystemmessages();
         checkkeyboard();
@@ -414,7 +407,7 @@ void __cdecl buildingedit_menu(void)
         setuptextdisplay();
         drawmenuitems();
         drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         if (chosen != -1) {
             strcpy(cl_data_building_editor.file, sr_data_filelist.list[FILE_LIST].name[chosen]);
             building_load(cl_data_building_editor.file, 0);

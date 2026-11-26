@@ -4,7 +4,7 @@
  */
 #include "audio/voice.h"
 #include "audio/speex.h"
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "sr_runtime.h"
 #include "debug/debug.h"
@@ -64,11 +64,11 @@ void getaudioinput(int player)
     }
     if (!cl_data_audio_capture)
         return;
-    audio_alcGetIntegerv()(cl_data_audio_capture, ALC_CAPTURE_SAMPLES, sizeof(int), &available);
+    alcGetIntegerv(cl_data_audio_capture, ALC_CAPTURE_SAMPLES, sizeof(int), &available);
     for (batch = 0; available >= VOICE_SAMPLES && batch < CAPTURE_BATCH; batch++) {
         int quiet = 1;
         int frame = ring->head;
-        audio_alcCaptureSamples()(cl_data_audio_capture, ring->samples[frame], VOICE_SAMPLES);
+        alcCaptureSamples(cl_data_audio_capture, ring->samples[frame], VOICE_SAMPLES);
         for (sample = 0; sample < VOICE_SAMPLES; sample++) {
             int value = (int)((double)(float)ring->samples[frame][sample] * sr_data_option.voiceboost_scale);
             if (value < -SAMPLE_LIMIT) value = -SAMPLE_LIMIT;
@@ -109,6 +109,6 @@ void getaudioinput(int player)
         }
         ring->voice_off = quiet;
         ring->head = (ring->head + 1) & (VOICE_FRAMES - 1);
-        audio_alcGetIntegerv()(cl_data_audio_capture, ALC_CAPTURE_SAMPLES, sizeof(int), &available);
+        alcGetIntegerv(cl_data_audio_capture, ALC_CAPTURE_SAMPLES, sizeof(int), &available);
     }
 }

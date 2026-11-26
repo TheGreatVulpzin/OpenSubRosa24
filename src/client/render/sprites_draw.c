@@ -15,15 +15,6 @@ enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        CULL_FACE = 0xb44, LINE_SMOOTH = 0xb20, LINES = 1,
        PROGRAM_REFLECT = 2, UNIFORM_CAMERA = 1, UNIFORM_WORLD = 4, UNIFORM_LIGHT = 5 };
 
-GL_IMPORT(glVertex3fv, (const float *position), (position))
-GL_IMPORT(glNormal3fv, (const float *normal), (normal))
-GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glTexCoordPointer, (int count, uint32_t type, int stride, const void *pointer), (count, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 /* Fade alpha over the last 32 ticks. Negative life gives negative alpha. */
 static float sprite_alpha(int life)

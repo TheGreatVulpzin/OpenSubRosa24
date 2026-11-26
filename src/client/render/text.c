@@ -40,8 +40,6 @@ enum {
     FLAG_VERTICAL = 0x100
 };
 
-GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
-GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Sum the widths of at most one thousand letters. Character indices are signed bytes. */
 float gettextlength(const char *text, float size)
@@ -131,13 +129,8 @@ static void build_text(const char *format, va_list args)
                 break;
             }
             case 'f': {
-                static int(__cdecl *format_float)(char *, const char *, ...);
-
                 ++i;
-                /* The game CRT formats the number, so the digits match the game text. */
-                if (!format_float)
-                    *(void **)&format_float = sr_import("MSVCR100.DLL", "sprintf");
-                format_float(g_number, "%.3f", va_arg(args, double));
+                sprintf(g_number, "%.3f", va_arg(args, double));
                 length = append_number(length);
                 break;
             }

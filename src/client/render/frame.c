@@ -41,23 +41,6 @@ enum { CULL_FACE = 0xb44, DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, LIGHT0 = 0x400
        OBJECT_HELICOPTER = 11, CITYOBJECT_ELEVATOR = 2, BOND_PARTICLES = 0, BOND_BONES = 9,
        GAMETYPE_RACE = 2, KEY_SHADOWS = 14, KEY_NAMES = 20 };
 
-GL_IMPORT(glDepthFunc, (uint32_t test), (test))
-GL_IMPORT(glClearColor, (float r, float g, float b, float a), (r, g, b, a))
-GL_IMPORT(glClearStencil, (int value), (value))
-GL_IMPORT(glStencilMask, (uint32_t mask), (mask))
-GL_IMPORT(glClear, (uint32_t mask), (mask))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
-GL_IMPORT(glColor3f, (float r, float g, float b), (r, g, b))
-GL_IMPORT(glColor3fv, (const float *color), (color))
-GL_IMPORT(glPolygonMode, (uint32_t face, uint32_t mode), (face, mode))
-GL_IMPORT(glFrontFace, (uint32_t face), (face))
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glNormal3fv, (const float *normal), (normal))
-GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
-GL_IMPORT(glVertex3fv, (const float *position), (position))
-GL_IMPORT(glPushMatrix, (void), ())
-GL_IMPORT(glPopMatrix, (void), ())
 
 typedef void(__stdcall *UseProgramFn)(uint32_t program);
 typedef void(__stdcall *ActiveTextureFn)(uint32_t unit);

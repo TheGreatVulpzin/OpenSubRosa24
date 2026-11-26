@@ -156,9 +156,11 @@ static int capture_buffer(void *window)
     return valid || fail("capture is all black or one color");
 }
 
-static unsigned __cdecl smoke_relative(int *x, int *y)
+uint32_t __cdecl SDL_GetRelativeMouseState(int *x, int *y)
 {
+    if (!relative_state) relative_state = (unsigned (__cdecl *)(int *, int *))real_function("SDL2.dll", "SDL_GetRelativeMouseState");
     relative_state(x, y);
+    if (!smoke_active()) return 0;
     if (x) *x = (int)InterlockedExchange(&relative_x, 0);
     if (y) *y = (int)InterlockedExchange(&relative_y, 0);
     return (unsigned)InterlockedCompareExchange(&buttons, 0, 0);

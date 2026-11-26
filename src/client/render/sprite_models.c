@@ -61,13 +61,6 @@ enum {
 #define REST_SPEED 0.008333333767950535
 /* The up vector of the world: 3 floats. */
 
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
-GL_IMPORT(glTexCoordPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 static float float_from_bits(unsigned bits)
 {

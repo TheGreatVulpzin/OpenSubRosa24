@@ -87,27 +87,80 @@ static int capture_device;
 static DWORD capture_time;
 static unsigned capture_count;
 
-/* Supply deterministic microphone frames without a physical capture device. */
-static void *__cdecl smoke_capture_open(const char *name, unsigned rate, int format, int size)
+/* The smoke build defines the functions below with the names of the system functions. The linker takes
+ * them in place of the import library, so the client calls them. Each one calls the real function when the
+ * test does not change the call. This is its address. */
+static void *real_function(const char *dll, const char *name)
 {
-    (void)name; (void)rate; (void)format; (void)size;
+    HMODULE module = LoadLibraryA(dll);
+    return module ? (void *)GetProcAddress(module, name) : NULL;
+}
+
+static int smoke_active(void) { return getenv("SR_SMOKE") != NULL; }
+
+/* The play scenario supplies deterministic microphone frames without a physical capture device. */
+static int smoke_microphone(void) { return scenario && !strcmp(scenario, "play"); }
+
+void *__cdecl alcCaptureOpenDevice(char *name, unsigned rate, int format, int size)
+{
+    static void *(__cdecl *real)(char *, unsigned, int, int);
+    if (!smoke_microphone()) {
+        if (!real) real = (void *(__cdecl *)(char *, unsigned, int, int))real_function("OpenAL32.dll", "alcCaptureOpenDevice");
+        return real(name, rate, format, size);
+    }
     capture_time = GetTickCount();
     return &capture_device;
 }
 
-static int __cdecl smoke_capture_close(void *device) { (void)device; return 1; }
-static void __cdecl smoke_capture_control(void *device) { (void)device; }
-static void __cdecl smoke_capture_info(void *device, int token, int size, int *value)
+char __cdecl alcCaptureCloseDevice(void *device)
 {
-    (void)device; (void)token; (void)size;
+    static char (__cdecl *real)(void *);
+    if (!smoke_microphone()) {
+        if (!real) real = (char (__cdecl *)(void *))real_function("OpenAL32.dll", "alcCaptureCloseDevice");
+        return real(device);
+    }
+    return 1;
+}
+
+void __cdecl alcCaptureStart(void *device)
+{
+    static void (__cdecl *real)(void *);
+    if (!smoke_microphone()) {
+        if (!real) real = (void (__cdecl *)(void *))real_function("OpenAL32.dll", "alcCaptureStart");
+        real(device);
+    }
+}
+
+void __cdecl alcCaptureStop(void *device)
+{
+    static void (__cdecl *real)(void *);
+    if (!smoke_microphone()) {
+        if (!real) real = (void (__cdecl *)(void *))real_function("OpenAL32.dll", "alcCaptureStop");
+        real(device);
+    }
+}
+
+void __cdecl alcGetIntegerv(void *device, int token, int size, int *value)
+{
+    static void (__cdecl *real)(void *, int, int, int *);
+    if (!smoke_microphone()) {
+        if (!real) real = (void (__cdecl *)(void *, int, int, int *))real_function("OpenAL32.dll", "alcGetIntegerv");
+        real(device, token, size, value);
+        return;
+    }
     *value = GetTickCount() - capture_time >= 20 ? 160 : 0;
 }
 
-static void __cdecl smoke_capture_samples(void *device, void *data, int count)
+void __cdecl alcCaptureSamples(void *device, void *data, int count)
 {
+    static void (__cdecl *real)(void *, void *, int);
     int i;
     int16_t *samples = data;
-    (void)device;
+    if (!smoke_microphone()) {
+        if (!real) real = (void (__cdecl *)(void *, void *, int))real_function("OpenAL32.dll", "alcCaptureSamples");
+        real(device, data, count);
+        return;
+    }
     for (i = 0; i < count; i++) samples[i] = i & 1 ? 4096 : -4096;
     capture_time = GetTickCount();
     capture_count++;
@@ -125,9 +178,15 @@ static SmokeFrame snapshot(void)
 #include "client_smoke_capture.inc"
 
 /* Copy the frame state before the buffer swap. */
-static void __cdecl smoke_swap(void *window)
+void __cdecl SDL_GL_SwapWindow(void *window)
 {
     int i, count;
+
+    if (!swap_window) swap_window = (void (__cdecl *)(void *))real_function("SDL2.dll", "SDL_GL_SwapWindow");
+    if (!smoke_active()) {
+        swap_window(window);
+        return;
+    }
 
     EnterCriticalSection(&lock);
     if (shot_done != shot_request) {
@@ -174,17 +233,21 @@ static void __cdecl smoke_swap(void *window)
 }
 
 /* SDL_PushEvent does not update the state returned by SDL polling calls. */
-static unsigned __cdecl smoke_mouse(int *x, int *y)
+uint32_t __cdecl SDL_GetMouseState(int *x, int *y)
 {
+    if (!mouse_state) mouse_state = (unsigned (__cdecl *)(int *, int *))real_function("SDL2.dll", "SDL_GetMouseState");
     mouse_state(x, y);
+    if (!smoke_active()) return 0;
     if (x) *x = (int)InterlockedCompareExchange(&mouse_x, 0, 0);
     if (y) *y = (int)InterlockedCompareExchange(&mouse_y, 0, 0);
     return (unsigned)InterlockedCompareExchange(&buttons, 0, 0);
 }
 
-static const uint8_t *__cdecl smoke_keyboard(int *count)
+const uint8_t *__cdecl SDL_GetKeyboardState(int *count)
 {
     LONG key = InterlockedCompareExchange(&scan_key, 0, 0);
+    if (!keyboard_state) keyboard_state = (const uint8_t *(__cdecl *)(int *))real_function("SDL2.dll", "SDL_GetKeyboardState");
+    if (!smoke_active()) return keyboard_state(count);
     keyboard_state(NULL);
     memset(keys, 0, sizeof keys);
     if (key > 0 && key < KEY_COUNT) keys[key] = 1;
@@ -195,69 +258,37 @@ static const uint8_t *__cdecl smoke_keyboard(int *count)
 }
 
 /* Keep test settings inside the folder selected by the executor. */
-static int __stdcall smoke_documents(void *window, char *path, int folder, int create)
+int __stdcall SHGetSpecialFolderPathA(void *window, char *path, int folder, int create)
 {
+    static int (__stdcall *real)(void *, char *, int, int);
     DWORD size;
-    (void)window;
-    (void)folder;
-    (void)create;
+    if (!smoke_active()) {
+        if (!real) real = (int (__stdcall *)(void *, char *, int, int))real_function("SHELL32.dll", "SHGetSpecialFolderPathA");
+        return real(window, path, folder, create);
+    }
     size = GetCurrentDirectoryA(MAX_PATH, path);
     return size > 0 && size < MAX_PATH;
 }
 
-static int __cdecl smoke_relative_mode(int enabled)
+int __cdecl SDL_SetRelativeMouseMode(int enabled)
 {
-    (void)enabled;
+    static int (__cdecl *real)(int);
+    if (!smoke_active()) {
+        if (!real) real = (int (__cdecl *)(int))real_function("SDL2.dll", "SDL_SetRelativeMouseMode");
+        return real(enabled);
+    }
     return 0;
 }
 
 enum { SDL_WINDOW_HIDDEN_FLAG = 0x8 };
 static void *(__cdecl *create_window)(const char *, int, int, int, int, uint32_t);
 
-static void *__cdecl smoke_create_window(const char *title, int x, int y, int width, int height, uint32_t flags)
+void *__cdecl SDL_CreateWindow(const char *title, int x, int y, int width, int height, uint32_t flags)
 {
-    return create_window(title, x, y, width, height, flags | SDL_WINDOW_HIDDEN_FLAG);
-}
-
-void *client_smoke_import(const char *dll, const char *name, void *function)
-{
-    if (!getenv("SR_SMOKE")) return function;
-    if (!_stricmp(dll, "SHELL32.DLL") && !strcmp(name, "SHGetSpecialFolderPathA"))
-        return (void *)smoke_documents;
-    if (!_stricmp(dll, "OPENAL32.DLL") && !strcmp(getenv("SR_SMOKE"), "play")) {
-        if (!strcmp(name, "alcCaptureOpenDevice")) return (void *)smoke_capture_open;
-        if (!strcmp(name, "alcCaptureCloseDevice")) return (void *)smoke_capture_close;
-        if (!strcmp(name, "alcCaptureStart") || !strcmp(name, "alcCaptureStop")) return (void *)smoke_capture_control;
-        if (!strcmp(name, "alcGetIntegerv")) return (void *)smoke_capture_info;
-        if (!strcmp(name, "alcCaptureSamples")) return (void *)smoke_capture_samples;
-    }
-    if (_stricmp(dll, "SDL2.DLL")) return function;
-    /* The smoke driver supplies the mouse motion itself. The real relative mode would hold the cursor of
-     * the user, so the call does nothing. */
-    if (!strcmp(name, "SDL_SetRelativeMouseMode"))
-        return (void *)smoke_relative_mode;
-    /* SR_SMOKE_HIDDEN=1 makes the window hidden: the run takes no screen and no focus. */
-    if (!strcmp(name, "SDL_CreateWindow") && getenv("SR_SMOKE_HIDDEN") && atoi(getenv("SR_SMOKE_HIDDEN")) != 0) {
-        create_window = (void *(__cdecl *)(const char *, int, int, int, int, uint32_t))function;
-        return (void *)smoke_create_window;
-    }
-    if (!strcmp(name, "SDL_GL_SwapWindow")) {
-        swap_window = (void (__cdecl *)(void *))function;
-        return (void *)smoke_swap;
-    }
-    if (!strcmp(name, "SDL_GetMouseState")) {
-        mouse_state = (unsigned (__cdecl *)(int *, int *))function;
-        return (void *)smoke_mouse;
-    }
-    if (!strcmp(name, "SDL_GetRelativeMouseState")) {
-        relative_state = (unsigned (__cdecl *)(int *, int *))function;
-        return (void *)smoke_relative;
-    }
-    if (!strcmp(name, "SDL_GetKeyboardState")) {
-        keyboard_state = (const uint8_t *(__cdecl *)(int *))function;
-        return (void *)smoke_keyboard;
-    }
-    return function;
+    if (!create_window) create_window = (void *(__cdecl *)(const char *, int, int, int, int, uint32_t))real_function("SDL2.dll", "SDL_CreateWindow");
+    if (smoke_active() && getenv("SR_SMOKE_HIDDEN") && atoi(getenv("SR_SMOKE_HIDDEN")) != 0)
+        flags |= SDL_WINDOW_HIDDEN_FLAG;
+    return create_window(title, x, y, width, height, flags);
 }
 
 /* Record entry into a frame loop. Menu snapshots also check its visible controls. */

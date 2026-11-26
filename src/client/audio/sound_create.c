@@ -8,7 +8,7 @@
 
 #include <stddef.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "math/small_vectors.h"
 #include "sr_runtime.h"
@@ -32,21 +32,21 @@ void __cdecl setupsounds(void)
     if (cl_data_audio_enabled == 0)
         return;
     for (i = 0; i < SOUND_BUFFERS; i++)
-        audio_alGenBuffers()(1, &cl_data_sound_buffers[i].buffer);
+        alGenBuffers(1, &cl_data_sound_buffers[i].buffer);
     for (i = 0; i < CHANNELS; i++)
         for (k = 0; k < CHANNEL_BUFFERS; k++)
-            audio_alGenBuffers()(1, &((AudioChannel *)sr_data_voice)[i].buffers[k]);
+            alGenBuffers(1, &((AudioChannel *)sr_data_voice)[i].buffers[k]);
     for (i = 0; i < CHANNELS; i++) {
-        audio_alGenSources()(1, &((AudioChannel *)sr_data_voice)[i].source);
-        if (audio_alGetError()() != 0)
+        alGenSources(1, &((AudioChannel *)sr_data_voice)[i].source);
+        if (alGetError() != 0)
             ((AudioChannel *)sr_data_voice)[i].source = 0xffffffffu;
     }
     cl_data_audio_source_limit = 0;
-    audio_alGenSources()(1, &cl_data_audio_sounds[0].source);
+    alGenSources(1, &cl_data_audio_sounds[0].source);
     for (i = 0; i < SOURCE_TRIES; i++) {
-        if (audio_alGetError()() != 0)
+        if (alGetError() != 0)
             return;
-        audio_alGenSources()(1, &cl_data_audio_sounds[i + 1].source);
+        alGenSources(1, &cl_data_audio_sounds[i + 1].source);
         cl_data_audio_source_limit++;
     }
 }
@@ -68,18 +68,18 @@ static void start_source(const AudioSound *sound, int buffer, const vec3 *positi
 {
     vec3 scaled;
 
-    audio_alSourcei()(sound->source, AL_BUFFER, (int)cl_data_sound_buffers[buffer].buffer);
-    audio_alSourcei()(sound->source, AL_LOOPING, looping);
-    audio_alSourcefv()(sound->source, AL_POSITION, (float *)position);
+    alSourcei(sound->source, AL_BUFFER, (int)cl_data_sound_buffers[buffer].buffer);
+    alSourcei(sound->source, AL_LOOPING, looping);
+    alSourcefv(sound->source, AL_POSITION, (float *)position);
     if (velocity == NULL)
         zerovector((unsigned int *)&scaled);
     else
         scalevector(&scaled, velocity, SOUND_VELOCITY_SCALE);
-    audio_alSourcefv()(sound->source, AL_VELOCITY, &scaled.x);
-    audio_alSourcef()(sound->source, AL_PITCH, pitch);
-    audio_alSourcef()(sound->source, AL_GAIN, gain);
-    audio_alSourcef()(sound->source, AL_REFERENCE_DISTANCE, cl_data_sound_buffers[buffer].reference);
-    audio_alSourcePlay()(sound->source);
+    alSourcefv(sound->source, AL_VELOCITY, &scaled.x);
+    alSourcef(sound->source, AL_PITCH, pitch);
+    alSourcef(sound->source, AL_GAIN, gain);
+    alSourcef(sound->source, AL_REFERENCE_DISTANCE, cl_data_sound_buffers[buffer].reference);
+    alSourcePlay(sound->source);
 }
 
 /* Play a sound on a free source. Return its index, or -1 when it cannot play. A call with an

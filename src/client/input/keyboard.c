@@ -5,20 +5,15 @@
 #include "input/keyboard.h"
 #include <string.h>
 #include "sr_runtime.h"
-
-void *sr_import(const char *dll, const char *name);
+#include "system_libs.h"
 
 enum { KEY_COPY_COUNT = 323 };
 
 /* Poll the key buffer. SDL must supply at least 323 key bytes. */
 void checkkeyboard(void)
 {
-    typedef unsigned char *(__cdecl *KeyboardState)(int *);
-    static KeyboardState state;
-    if (!state)
-        *(void **)&state = sr_import("SDL2.DLL", "SDL_GetKeyboardState");
     memcpy(cl_data_prevkeyboard, cl_data_keyboard, KEY_COPY_COUNT);
-    memcpy(cl_data_keyboard, state(NULL), KEY_COPY_COUNT);
+    memcpy(cl_data_keyboard, SDL_GetKeyboardState(NULL), KEY_COPY_COUNT);
     if (cl_data_keyboard[KEY_RIGHT_SHIFT])
         cl_data_keyboard[KEY_SHIFT] = 1;
 }

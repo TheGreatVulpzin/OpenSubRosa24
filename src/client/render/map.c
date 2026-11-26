@@ -33,11 +33,6 @@ enum {
 #define MAP_RANGE 1024.0f
 #define QUARTER_TURN 1.5707963705062866
 
-GL_IMPORT(glFrontFace, (uint32_t mode), (mode))
-GL_IMPORT(glDepthFunc, (uint32_t function), (function))
-GL_IMPORT(glClear, (uint32_t mask), (mask))
-GL_IMPORT(glClearColor, (float red, float green, float blue, float alpha), (red, green, blue, alpha))
-GL_IMPORT(glLineWidth, (float width), (width))
 
 /* The overlay of the map. It is drawn on a square of 512 pixels, one pixel for each 4 units of
  * the city, with the corner of the city at 128 units. */

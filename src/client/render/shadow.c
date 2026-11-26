@@ -23,9 +23,6 @@
 
 /* Game functions of other files. */
 
-GL_IMPORT(glPushMatrix, (void), ())
-GL_IMPORT(glPopMatrix, (void), ())
-GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 enum { SHADOW_DEPTH_SIGN = -512 };
 

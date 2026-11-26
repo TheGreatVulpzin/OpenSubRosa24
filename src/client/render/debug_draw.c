@@ -9,11 +9,6 @@
 #define GL_LINES 0x0001
 /* The eight corners of a unit box: four at the bottom, then four at the top, in order around. */
 
-GL_IMPORT(glPushMatrix, (void), ())
-GL_IMPORT(glPopMatrix, (void), ())
-GL_IMPORT(glVertex3f, (float x, float y, float z), (x, y, z))
-GL_IMPORT(glVertex3fv, (const float *vertex), (vertex))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
 
 /* Game functions of other files. */
 

@@ -11,11 +11,6 @@
 #define g_fonts cl_data_fonts
 #define g_fontnum cl_data_fontnum
 
-GL_IMPORT(glScissor, (int x, int y, int width, int height), (x, y, width, height))
-GL_IMPORT(glFrustum, (double left, double right, double bottom, double top, double z_near, double z_far),
-          (left, right, bottom, top, z_near, z_far))
-GL_IMPORT(glMultMatrixf, (const float *matrix), (matrix))
-GL_IMPORT(glTranslatef, (float x, float y, float z), (x, y, z))
 
 /* The viewport and the scissor box for a rectangle in the units of the font: the size of the
  * window scales it. The rectangle starts at the top of the window, the viewport at the bottom. */

@@ -30,9 +30,6 @@ enum {
 };
 
 
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-
 static void bind_texture(int texture)
 {
     glBindTexture(GL_TEXTURE_2D, g_textures[texture].gl_name);

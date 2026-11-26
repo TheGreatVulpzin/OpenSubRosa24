@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "input/key_events.h"
 #include "input/keyboard.h"
@@ -52,15 +52,6 @@
 #define GL_LINE_SMOOTH 0x0b20
 #define GL_CLEAR_MASK 0x4100 /* the color and the depth buffers */
 
-AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
-
-GL_IMPORT(glClearColor, (float red, float green, float blue, float alpha), (red, green, blue, alpha))
-GL_IMPORT(glClear, (uint32_t mask), (mask))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glVertex3f, (float x, float y, float z), (x, y, z))
-GL_IMPORT(glLineWidth, (float width), (width))
-GL_IMPORT(glPointSize, (float size), (size))
 
 static const char *const tile_kind_names[] = {
     "Normal", "Wall Up", "Wall Right", "Wall Down", "Wall Left",
@@ -405,12 +396,12 @@ static void level_move_camera(uint32_t *last)
     float step;
     int steps = 0;
 
-    while (audio_SDL_GetTicks()() - *last > STEP_MS - 1 && steps < MAX_STEPS) {
+    while (SDL_GetTicks() - *last > STEP_MS - 1 && steps < MAX_STEPS) {
         steps++;
         if (steps < 3)
             *last += STEP_MS;
         else
-            *last = audio_SDL_GetTicks()();
+            *last = SDL_GetTicks();
         step = CAMERA_STEP;
         if (cl_data_keyboard[KEY_SHIFT] != 0)
             step = CAMERA_FAST_STEP;
@@ -845,7 +836,7 @@ void __cdecl leveleditor_loop(void)
     sr_data_level_editor.chosen_a = -1;
     sr_data_level_editor.chosen_b = -1;
     level_load_types();
-    last = audio_SDL_GetTicks()();
+    last = SDL_GetTicks();
     resetmenuitems();
     while (cl_data_menu_items[0].pressed == 0 && cl_data_audio_menu_back == 0) {
         level_items();
@@ -869,7 +860,7 @@ void __cdecl leveleditor_loop(void)
         level_draw_texts();
         drawmenuitems();
         drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         level_move_camera(&last);
     }
     leveleditor_save();

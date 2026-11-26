@@ -52,7 +52,6 @@ typedef int(__stdcall *UniformLocationFn)(uint32_t program, const char *name);
 typedef void(__stdcall *Uniform1iFn)(int location, int value);
 typedef void(__stdcall *UniformVectorFn)(int location, int count, const float *value);
 
-
 /* Add the info log of an object to the shader log when it has text. */
 static void keep_info_log(uint32_t object)
 {

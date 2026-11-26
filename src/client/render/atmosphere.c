@@ -34,10 +34,6 @@ enum {
 
 #define SKY_DEPTH (-16383.9375f)
 
-GL_IMPORT(glFrontFace, (uint32_t mode), (mode))
-GL_IMPORT(glDepthFunc, (uint32_t function), (function))
-GL_IMPORT(glVertex3f, (float x, float y, float z), (x, y, z))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
 
 /* Add one corner of the sky quad. The corner looks along a direction of the camera: across by
  * sx, up by sy times the aspect, and straight ahead. */

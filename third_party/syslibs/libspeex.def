@@ -1,0 +1,15 @@
+LIBRARY libspeex.dll
+EXPORTS
+    speex_bits_destroy
+    speex_bits_init
+    speex_bits_read_from
+    speex_bits_reset
+    speex_bits_write
+    speex_decode
+    speex_decoder_destroy
+    speex_decoder_init
+    speex_encode
+    speex_encoder_ctl
+    speex_encoder_destroy
+    speex_encoder_init
+    speex_lib_get_mode

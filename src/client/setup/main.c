@@ -6,7 +6,7 @@
 
 #include <stdlib.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "image/fonts.h"
 #include "sr_runtime.h"
@@ -46,35 +46,15 @@
 #define SDL_WINDOW_FULLSCREEN_OPENGL 3
 #define WINDOW_PLACE 16
 #define WINSOCK_VERSION_1_1 0x101
-#define WSOCK_STARTUP 115
-#define WSOCK_CLEANUP 116
 
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_Init, (uint32_t))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_Quit, (void))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_ShowCursor, (int))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_SetAttribute, (int, int))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void *, SDL_CreateWindow, (const char *, int, int, int, int, uint32_t))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void *, SDL_GL_CreateContext, (void *))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_SetSwapInterval, (int))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glGenTextures, (int, uint32_t *))
-
-/* Call a WSOCK32 function by its ordinal. */
 static int wsock_startup(void)
 {
-    static int(__stdcall * call)(uint16_t, void *);
-
-    if (!call)
-        *(void **)&call = sr_import_ordinal("WSOCK32.DLL", WSOCK_STARTUP);
-    return call(WINSOCK_VERSION_1_1, sr_data_wsadata);
+    return WSAStartup(WINSOCK_VERSION_1_1, sr_data_wsadata);
 }
 
 static int wsock_cleanup(void)
 {
-    static int(__stdcall * call)(void);
-
-    if (!call)
-        *(void **)&call = sr_import_ordinal("WSOCK32.DLL", WSOCK_CLEANUP);
-    return call();
+    return WSACleanup();
 }
 
 /* Load a font of 1024 by 640 into a font slot. */
@@ -101,25 +81,25 @@ static void main_window(void)
     cl_data_screen_fullscreen = sr_data_config.fullscreen;
     cl_data_render_aspect = (float)((float)sr_data_config.screenheight / (float)sr_data_config.screenwidth);
     if (cl_data_screen_bits == 16) {
-        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 5);
-        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 6);
-        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 5);
-        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
     } else {
-        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 8);
-        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     }
-    audio_SDL_GL_SetAttribute()(SDL_GL_DEPTH_SIZE, cl_data_render_depth_bits);
-    audio_SDL_GL_SetAttribute()(SDL_GL_STENCIL_SIZE, cl_data_render_stencil_bits);
-    audio_SDL_GL_SetAttribute()(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, cl_data_render_depth_bits);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, cl_data_render_stencil_bits);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     fullscreen = cl_data_screen_fullscreen != 0;
-    cl_data_audio_window = audio_SDL_CreateWindow()("Sub Rosa", WINDOW_PLACE, WINDOW_PLACE, cl_data_render_width,
+    cl_data_audio_window = SDL_CreateWindow("Sub Rosa", WINDOW_PLACE, WINDOW_PLACE, cl_data_render_width,
                                                     cl_data_render_height,
                                                     fullscreen ? SDL_WINDOW_FULLSCREEN_OPENGL : SDL_WINDOW_OPENGL);
-    cl_data_gl_context = audio_SDL_GL_CreateContext()(cl_data_audio_window);
-    audio_SDL_GL_SetSwapInterval()(sr_data_option.swap_interval);
+    cl_data_gl_context = SDL_GL_CreateContext(cl_data_audio_window);
+    SDL_GL_SetSwapInterval(sr_data_option.swap_interval);
 }
 
 /* SR_DEBUGIT=1 in the environment turns the debug flag on. The client never sets it. The
@@ -149,12 +129,12 @@ int __cdecl client_main(void)
     cl_data_steam_active = 0;
     if (sr_data_config.joystick != 0)
         systems |= SDL_INIT_JOYSTICK;
-    audio_SDL_Init()(systems);
-    audio_SDL_ShowCursor()(0);
+    SDL_Init(systems);
+    SDL_ShowCursor(0);
     listvideomodes();
     main_window();
     for (i = 0; i < NUM_GL_TEXTURES; i++)
-        audio_glGenTextures()(1, &cl_data_texture[i].gl_name);
+        glGenTextures(1, &cl_data_texture[i].gl_name);
     cl_data_fontlist[1] = FONT_PRINT;
     cl_data_fontlist[0] = FONT_SIGN;
     main_font(FONT_MAIN, "texture/font01.png", 30.0f);
@@ -170,6 +150,6 @@ int __cdecl client_main(void)
     loadsaveoptions(1);
     shutdownaudio();
     wsock_cleanup();
-    audio_SDL_Quit()();
+    SDL_Quit();
     return 0;
 }

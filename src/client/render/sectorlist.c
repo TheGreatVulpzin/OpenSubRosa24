@@ -39,12 +39,6 @@
 
 /* The slots of the extension functions: the client holds a pointer to each one. */
 
-GL_IMPORT(glEnableClientState, (uint32_t array), (array))
-GL_IMPORT(glDisableClientState, (uint32_t array), (array))
-GL_IMPORT(glColorPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))
-GL_IMPORT(glTexCoordPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
-GL_IMPORT(glLightfv, (uint32_t light, uint32_t name, const float *value), (light, name, value))
 
 enum {
     MAX_SECTORS = 0x2000,

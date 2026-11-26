@@ -5,6 +5,7 @@
  * vertex places, vertex normals and vertex tangents, then the triangles, their normals and their
  * neighbors.
  */
+#include <stdio.h>
 #include "textures/model_files.h"
 
 #include <string.h>
@@ -22,29 +23,6 @@
 #define CSM_FOLDER "model"
 #define CSM_PARENT ".."
 
-void *sr_import(const char *dll, const char *name);
-
-typedef size_t(__cdecl *file_io_fn)(void *, size_t, size_t, void *);
-
-/* The CRT functions of the game that read and write files. */
-static file_io_fn file_reader(void)
-{
-    static file_io_fn read;
-
-    if (!read)
-        *(void **)&read = sr_import("MSVCR100.DLL", "fread");
-    return read;
-}
-
-static file_io_fn file_writer(void)
-{
-    static file_io_fn write;
-
-    if (!write)
-        *(void **)&write = sr_import("MSVCR100.DLL", "fwrite");
-    return write;
-}
-
 /* Write a game model to a file of the model folder. Nothing is written when the file does not open. */
 void __cdecl savemodelcsm(int model, const char *name)
 {
@@ -54,22 +32,21 @@ void __cdecl savemodelcsm(int model, const char *name)
     int changed = os_chdir(CSM_FOLDER);
     char path[0x80];
     void *file;
-    file_io_fn write = file_writer();
 
     strcpy(path, name);
     file = os_fopen(path, "wb");
     if (file != NULL) {
-        write(magic, 1, CSM_MAGIC_SIZE, file);
-        write(&version, 4, 1, file);
-        write(&m->num_verts, 4, 1, file);
-        write(&m->vertex_floats, 4, 1, file);
-        write(&m->num_tris, 4, 1, file);
-        write(m->verts, 4, (size_t)(m->num_verts * 3), file);
-        write(m->vert_normals, 4, (size_t)(m->num_verts * 3), file);
-        write(m->vert_tangents, 4, (size_t)(m->num_verts * 3), file);
-        write(m->tris, 4, (size_t)(m->num_tris * 3), file);
-        write(m->tri_normals, 4, (size_t)(m->num_tris * 3), file);
-        write(m->tri_neighbors, 4, (size_t)(m->num_tris * 3), file);
+        fwrite(magic, 1, CSM_MAGIC_SIZE, file);
+        fwrite(&version, 4, 1, file);
+        fwrite(&m->num_verts, 4, 1, file);
+        fwrite(&m->vertex_floats, 4, 1, file);
+        fwrite(&m->num_tris, 4, 1, file);
+        fwrite(m->verts, 4, (size_t)(m->num_verts * 3), file);
+        fwrite(m->vert_normals, 4, (size_t)(m->num_verts * 3), file);
+        fwrite(m->vert_tangents, 4, (size_t)(m->num_verts * 3), file);
+        fwrite(m->tris, 4, (size_t)(m->num_tris * 3), file);
+        fwrite(m->tri_normals, 4, (size_t)(m->num_tris * 3), file);
+        fwrite(m->tri_neighbors, 4, (size_t)(m->num_tris * 3), file);
         os_fclose(file);
     }
     if (changed == 0)
@@ -86,7 +63,6 @@ int __cdecl loadmodelcsm(int model, const char *name)
     int changed = os_chdir(CSM_FOLDER);
     char path[0x80];
     void *file;
-    file_io_fn read = file_reader();
 
     strcpy(path, name);
     file = os_fopen(path, "rb");
@@ -95,7 +71,7 @@ int __cdecl loadmodelcsm(int model, const char *name)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    read(magic, 1, CSM_MAGIC_SIZE, file);
+    fread(magic, 1, CSM_MAGIC_SIZE, file);
     magic[CSM_MAGIC_SIZE] = '\0';
     if (strcmp(magic, "CSMo") != 0) {
         os_fclose(file);
@@ -103,22 +79,22 @@ int __cdecl loadmodelcsm(int model, const char *name)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    read(&version, 4, 1, file);
+    fread(&version, 4, 1, file);
     if (version != CSM_VERSION) {
         os_fclose(file);
         if (changed == 0)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    read(&g_temp.num_verts, 4, 1, file);
-    read(&g_temp.vertex_floats, 4, 1, file);
-    read(&g_temp.num_tris, 4, 1, file);
-    read(g_temp.verts, 4, (size_t)(g_temp.num_verts * 3), file);
-    read(g_temp.vert_normals, 4, (size_t)(g_temp.num_verts * 3), file);
-    read(g_temp.vert_tangents, 4, (size_t)(g_temp.num_verts * 3), file);
-    read(g_temp.tris, 4, (size_t)(g_temp.num_tris * 3), file);
-    read(g_temp.tri_normals, 4, (size_t)(g_temp.num_tris * 3), file);
-    read(g_temp.tri_neighbors, 4, (size_t)(g_temp.num_tris * 3), file);
+    fread(&g_temp.num_verts, 4, 1, file);
+    fread(&g_temp.vertex_floats, 4, 1, file);
+    fread(&g_temp.num_tris, 4, 1, file);
+    fread(g_temp.verts, 4, (size_t)(g_temp.num_verts * 3), file);
+    fread(g_temp.vert_normals, 4, (size_t)(g_temp.num_verts * 3), file);
+    fread(g_temp.vert_tangents, 4, (size_t)(g_temp.num_verts * 3), file);
+    fread(g_temp.tris, 4, (size_t)(g_temp.num_tris * 3), file);
+    fread(g_temp.tri_normals, 4, (size_t)(g_temp.num_tris * 3), file);
+    fread(g_temp.tri_neighbors, 4, (size_t)(g_temp.num_tris * 3), file);
     os_fclose(file);
     if (changed == 0)
         os_chdir(CSM_PARENT);

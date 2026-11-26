@@ -25,10 +25,6 @@ int pointinsidecheckpoint(const vec3 *position, int checkpoint)
            box->low.z <= position->z && !(box->high.z <= position->z);
 }
 
-GL_IMPORT(glVertex3fv, (const float *position), (position))
-GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
-GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
-GL_IMPORT(glDepthFunc, (uint32_t function), (function))
 
 /* Add a tire strip when slip exceeds 1/32. Save the wheel state for the next tick. */
 void __cdecl tiremark_simulation(void)

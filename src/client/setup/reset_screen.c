@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdint.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "audio/sound.h"
 #include "client.h"
 #include "render/lists.h"
@@ -24,9 +24,6 @@
 #define NUM_CHAT_MESSAGES 0x100
 #define GAMETYPE_LOBBY 3
 
-GL_IMPORT(glClearColor, (float r, float g, float b, float a), (r, g, b, a))
-GL_IMPORT(glClear, (uint32_t mask), (mask))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Set the position of the light from the two start angles: x is sin(a) cos(b), y is cos(a) and
  * z is sin(a) sin(b). The fourth value is 0. */
@@ -58,7 +55,7 @@ void resetgame_client_screen(void)
     glClear(CLEAR_COLOR_DEPTH_STENCIL);
     setuptextdisplay();
     drawtext("Generating...", LOADING_X, LOADING_Y, LOADING_SIZE, LOADING_ALIGN, 1.0f, 1.0f, 1.0f, 1.0f);
-    audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+    SDL_GL_SwapWindow(cl_data_audio_window);
     for (i = cl_data_audio_sound_count; i >= 0; i--)
         deletesound(i);
     cl_data_input_cursor = sr_game.gametype == GAMETYPE_LOBBY;

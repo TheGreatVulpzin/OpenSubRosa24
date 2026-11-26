@@ -10,13 +10,10 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "setup/game.h"
 #include "sr_runtime.h"
-
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_Delay, (uint32_t))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_PollEvent, (void *))
 
 #define EVENT_QUIT 0x100
 #define EVENT_KEY_DOWN 0x300
@@ -56,10 +53,10 @@ void __cdecl checksystemmessages(void)
     SdlEvent event;
 
     if (cl_data_message_delay != 0)
-        audio_SDL_Delay()(MESSAGE_DELAY_MS);
+        SDL_Delay(MESSAGE_DELAY_MS);
     cl_data_key_event_count = 0;
     cl_data_key_event_next = 0;
-    while (audio_SDL_PollEvent()(&event) != 0) {
+    while (SDL_PollEvent(&event) != 0) {
         if (event.type == EVENT_WHEEL) {
             if (event.key < 0)
                 cl_data_input_mouse.wheel_down -= event.key;

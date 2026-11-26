@@ -1,7 +1,7 @@
 /* The model editor: the player moves the vertices of the model in work with the mouse. */
 #include "editor/model.h"
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "input/key_events.h"
 #include "textures/head_models.h"
@@ -85,18 +85,6 @@ void __cdecl model_editor(void)
 #define GL_LINE 0x1b01
 #define GL_FILL 0x1b02
 
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthFunc, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthMask, (unsigned char))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFrontFace, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glLightfv, (unsigned, unsigned, const float *))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned))
-AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
-AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
-
 /* Place the camera half a unit behind the center and turn it to face the model. Left shift turns
  * it a quarter more. Light 0 shines from the front in white. */
 static void viewer_view(void)
@@ -113,15 +101,15 @@ static void viewer_view(void)
     cl_data_light_position[1] = 0.0f;
     cl_data_light_position[2] = 1.0f;
     cl_data_light_position[3] = 0.0f;
-    audio_glLightfv()(GL_LIGHT0, GL_POSITION, cl_data_light_position);
+    glLightfv(GL_LIGHT0, GL_POSITION, cl_data_light_position);
     cl_data_light_ambient[0] = 1.0f;
     cl_data_light_ambient[1] = 1.0f;
     cl_data_light_ambient[2] = 1.0f;
     cl_data_light_diffuse[0] = 1.0f;
     cl_data_light_diffuse[1] = 1.0f;
     cl_data_light_diffuse[2] = 1.0f;
-    audio_glLightfv()(GL_LIGHT0, GL_AMBIENT, cl_data_light_ambient);
-    audio_glLightfv()(GL_LIGHT0, GL_DIFFUSE, cl_data_light_diffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, cl_data_light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, cl_data_light_diffuse);
 }
 
 /* Draw the head model as lines, and a small sphere on each vertex of the model in work: white
@@ -136,20 +124,20 @@ static void viewer_model(void)
     resetorientation(rot);
     textures[0] = sr_data_texturelist.human[0];
     textures[1] = sr_data_texturelist.human[0];
-    audio_glPolygonMode()(GL_FRONT, GL_LINE);
-    audio_glPolygonMode()(GL_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT, GL_LINE);
+    glPolygonMode(GL_BACK, GL_LINE);
     rendermodel(sr_data_modellist.head, &place, rot, 2, textures, white);
-    audio_glPolygonMode()(GL_FRONT, GL_FILL);
-    audio_glPolygonMode()(GL_BACK, GL_FILL);
-    audio_glDisable()(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_FILL);
+    glDisable(GL_TEXTURE_2D);
     for (i = 0; i < cl_data_modeltemp.num_verts; i++) {
         copyvector((unsigned int *)&place, (const unsigned int *)&cl_data_edit_vertices[i]);
-        audio_glColor3f()(0.5f, 0.5f, 0.5f);
+        glColor3f(0.5f, 0.5f, 0.5f);
         if (cl_data_edit_grabbed[i] != 0)
-            audio_glColor3f()(1.0f, 1.0f, 1.0f);
+            glColor3f(1.0f, 1.0f, 1.0f);
         rendersphere(&place, SPHERE_SIZE, 1);
     }
-    audio_glEnable()(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
 }
 
 /* Build the head model again from the model in work. setupmodel writes over the triangle list,
@@ -185,14 +173,14 @@ void __cdecl model_viewer(void)
         checkkeyboard();
         checkmouse();
         checkmenuitems();
-        audio_glEnable()(0xb71);    /* depth test */
-        audio_glDepthFunc()(0x203); /* less or equal */
-        audio_glDepthMask()(1);
-        audio_glDisable()(0xbe2); /* blend */
-        audio_glEnable()(0xb44);  /* cull face */
-        audio_glFrontFace()(0x900);
-        audio_glClearColor()(0.25f, 0.25f, 0.25f, 0.0f);
-        audio_glClear()(0x4100);
+        glEnable(0xb71);    /* depth test */
+        glDepthFunc(0x203); /* less or equal */
+        glDepthMask(1);
+        glDisable(0xbe2); /* blend */
+        glEnable(0xb44);  /* cull face */
+        glFrontFace(0x900);
+        glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
+        glClear(0x4100);
         viewer_view();
         viewer_model();
         setuptextdisplay();
@@ -203,7 +191,7 @@ void __cdecl model_viewer(void)
             }
         drawmenuitems();
         drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 24, 1.0f, 1.0f, 1.0f, 1.0f);
-        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        SDL_GL_SwapWindow(cl_data_audio_window);
         model_editor();
         viewer_rebuild();
     }

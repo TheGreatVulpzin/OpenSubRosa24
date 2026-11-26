@@ -1,0 +1,6 @@
+LIBRARY libspeexdsp.dll
+EXPORTS
+    speex_preprocess_ctl
+    speex_preprocess_run
+    speex_preprocess_state_destroy
+    speex_preprocess_state_init

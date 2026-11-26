@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdint.h>
 
-#include "audio/imports.h"
+#include "system_libs.h"
 #include "client.h"
 #include "sr_math.h"
 #include "sr_os.h"
@@ -38,12 +38,12 @@ void __cdecl loadwav(int sound, const char *path, float reference)
     if (cl_data_audio_enabled == 0)
         return;
     changed = os_chdir("sound");
-    file = audio_SDL_RWFromFile()(path, "rb");
-    if (audio_SDL_LoadWAV_RW()(file, 1, &spec, &data, &length) != NULL && spec.channels == 1) {
+    file = SDL_RWFromFile(path, "rb");
+    if (SDL_LoadWAV_RW(file, 1, &spec, &data, &length) != NULL && spec.channels == 1) {
         int format = (spec.format == 8 || spec.format == AUDIO_S8) ? AL_FORMAT_MONO8 : AL_FORMAT_MONO16;
 
-        audio_alBufferData()(record->buffer, format, data, (int)length, spec.frequency);
-        audio_SDL_FreeWAV()(data);
+        alBufferData(record->buffer, format, data, (int)length, spec.frequency);
+        SDL_FreeWAV(data);
         record->reference = reference;
         record->loaded = 1;
     }
@@ -107,7 +107,7 @@ void __cdecl createwav(int sound, float reference)
             phase_column = (float)(phase_column + (float)(((column + column) * 3.14159265359) / SAMPLE_RATE));
             phase_row = (float)(phase_row + (float)(((row + row) * 3.14159265359) / SAMPLE_RATE));
         }
-        audio_alBufferData()(cl_data_sound_buffers[sound].buffer, AL_FORMAT_MONO16, wave, TONE_SAMPLES,
+        alBufferData(cl_data_sound_buffers[sound].buffer, AL_FORMAT_MONO16, wave, TONE_SAMPLES,
                              SAMPLE_RATE_HZ);
         cl_data_sound_buffers[sound].loaded = 1;
     }
@@ -132,7 +132,7 @@ void __cdecl createwav(int sound, float reference)
             wave[i] = (int16_t)cl_ftoi(noise_filter(state, wave[i]) * 65536.0);
         for (i = 0; i < NOISE_SAMPLES; i++)
             wave[i] = (int16_t)(wave[i] * 3);
-        audio_alBufferData()(cl_data_sound_buffers[sound].buffer, AL_FORMAT_MONO16, wave, NOISE_SAMPLES * 2,
+        alBufferData(cl_data_sound_buffers[sound].buffer, AL_FORMAT_MONO16, wave, NOISE_SAMPLES * 2,
                              SAMPLE_RATE_HZ);
         cl_data_sound_buffers[sound].loaded = 1;
     }
