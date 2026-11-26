@@ -140,8 +140,7 @@ if(CL_ADOPTED)
 
     # The native client executable: it holds no image of subrosa.exe and no file of instrumentation/.
     add_executable(subvulpes-client-native EXCLUDE_FROM_ALL src/standalone/client_native_main.c
-        src/platform/client_imports.c src/platform/client_crt.c src/platform/x87_math_client.c
-        third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
+        src/platform/x87_math_client.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
     target_include_directories(subvulpes-client-native PRIVATE src/include src/platform src/client src/client/native third_party/glee)
     target_compile_options(subvulpes-client-native PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(subvulpes-client-native PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE)
@@ -153,8 +152,7 @@ if(CL_ADOPTED)
 
     # The same executable with the automatic input and frame checks of the smoke test.
     add_executable(subvulpes-client-native-smoke EXCLUDE_FROM_ALL src/standalone/client_native_main.c
-        src/platform/client_imports.c src/platform/client_crt.c src/platform/x87_math_client.c
-        src/standalone/client_smoke.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
+        src/platform/x87_math_client.c src/standalone/client_smoke.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
     target_include_directories(subvulpes-client-native-smoke PRIVATE src/include src/platform src/client src/client/native src/standalone third_party/glee)
     target_compile_options(subvulpes-client-native-smoke PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(subvulpes-client-native-smoke PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_SMOKE)
@@ -177,7 +175,7 @@ if(CL_ADOPTED)
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native_guard>:loadsaveoptions=server_loadsaveoptions>")
     set_property(TARGET client_native_guard PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     foreach(variant "" "-smoke")
-        set(sources src/standalone/client_native_main.c src/platform/client_imports.c src/platform/client_crt.c
+        set(sources src/standalone/client_native_main.c
             src/platform/x87_math_client.c third_party/glee/GLee.c $<TARGET_OBJECTS:client_native_guard>)
         set(definitions _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE SR_STORAGE_GUARDS)
         if(variant STREQUAL "-smoke")

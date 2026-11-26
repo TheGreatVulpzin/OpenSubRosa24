@@ -1,6 +1,11 @@
-/* The operating system calls of the game, through its imports (see sr_os.h). Each function
- * finds its import at the first call. */
+/* The operating system calls of the game (see sr_os.h). The native client calls the system
+ * directly. The other builds go through the imports of the game: each function finds its import
+ * at the first call. */
 #include "sr_os.h"
+
+#ifdef SR_CLIENT_NATIVE
+#include "os_calls_native.inc"
+#else
 
 void *sr_import(const char *dll, const char *name);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
@@ -54,18 +59,6 @@ int os_sendto(uintptr_t socket, const char *buf, int len, int flags, const void 
     return call(socket, buf, len, flags, to, tolen);
 }
 
-#ifdef SR_CLIENT_NATIVE
-/* The random numbers of the client. This is the generator of the Microsoft C runtime: the same
- * sequence for the same seed, without the per thread lookup that its rand does on each call. The
- * start seed is 1, as in the runtime. */
-static unsigned rand_state = 1;
-
-int os_rand(void)
-{
-    rand_state = rand_state * 214013u + 2531011u;
-    return (int)((rand_state >> 16) & 0x7fff);
-}
-#else
 /* rand of the CRT of the game: the game and the server code share one sequence. */
 int os_rand(void)
 {
@@ -74,7 +67,6 @@ int os_rand(void)
         *(void **)&call = sr_import("MSVCR100.DLL", "rand");
     return call();
 }
-#endif
 
 uintptr_t os_socket(int af, int type, int protocol)
 {
@@ -257,14 +249,10 @@ int64_t os_time64(int64_t *out)
 
 void os_srand(unsigned seed)
 {
-#ifdef SR_CLIENT_NATIVE
-    rand_state = seed;
-#else
     static void(__cdecl * call)(unsigned);
     if (!call)
         *(void **)&call = sr_import("MSVCR100.DLL", "srand");
     call(seed);
-#endif
 }
 
 intptr_t os_findfirst64i32(const char *pattern, void *data)
@@ -363,3 +351,5 @@ int os_setprocessaffinitymask(void *process, uintptr_t mask)
         *(void **)&call = sr_import("KERNEL32.dll", "SetProcessAffinityMask");
     return call(process, mask);
 }
+
+#endif /* SR_CLIENT_NATIVE */

@@ -4,6 +4,28 @@
  * to the same function the client uses, so the result has the same bits. */
 #include "sr_math.h"
 
+#ifdef SR_CLIENT_NATIVE
+/* The native client calls the functions of its own C runtime. The pragma keeps the compiler from
+ * replacing a call by an instruction. */
+#include <math.h>
+
+#pragma function(sqrt, sin, cos, tan, acos, atan2, pow, exp)
+
+void x87_init(void)
+{
+}
+
+double __cdecl x87_sqrt(double x) { return sqrt(x); }
+double __cdecl x87_sin(double x) { return sin(x); }
+double __cdecl x87_cos(double x) { return cos(x); }
+double __cdecl x87_tan(double x) { return tan(x); }
+double __cdecl x87_acos(double x) { return acos(x); }
+double __cdecl x87_atan2(double a, double b) { return atan2(a, b); }
+double __cdecl x87_pow(double a, double b) { return pow(a, b); }
+double __cdecl x87_exp(double x) { return exp(x); }
+
+#else
+
 void *sr_import(const char *dll, const char *name);
 
 #pragma warning(disable : 4100)
@@ -36,3 +58,5 @@ PLAIN(x87_acos, p_acos, double x)
 PLAIN(x87_atan2, p_atan2, double a, double b)
 PLAIN(x87_pow, p_pow, double a, double b)
 PLAIN(x87_exp, p_exp, double x)
+
+#endif /* SR_CLIENT_NATIVE */
