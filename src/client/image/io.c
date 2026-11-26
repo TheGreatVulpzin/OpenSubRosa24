@@ -70,13 +70,13 @@ void start_mem(ImageReader *reader, const uint8_t *buffer, int length)
 /* The position of a file. */
 long image_tell(void *file)
 {
-    return ftell(file);
+    return os_ftell(file);
 }
 
 /* Move a file to a position from its start. */
 void image_seek_set(void *file, long position)
 {
-    fseek(file, position, SEEK_SET);
+    os_fseek(file, position, SEEK_SET);
 }
 
 /* Read a big endian word. Missing bytes give zero. */
@@ -114,7 +114,7 @@ void stbi_skip(ImageReader *reader, int count)
         reader->cursor += count;
         return;
     }
-    fseek(reader->file, count, SEEK_CUR);
+    os_fseek(reader->file, count, SEEK_CUR);
 }
 
 /* Read count bytes into data. */
@@ -131,7 +131,7 @@ void stbi_getn(ImageReader *reader, void *data, size_t count)
 /* Read a byte array from a file. Return the number of bytes read. */
 size_t image_read(void *data, size_t count, void *file)
 {
-    return fread(data, 1, count, file);
+    return os_fread(data, 1, count, file);
 }
 
 /* Resize an allocation. Return null when memory is full. */
@@ -143,7 +143,7 @@ void *image_realloc(void *data, size_t size)
 /* Return the end flag of a file. */
 int image_eof(ImageReader *reader)
 {
-    return feof(reader->file);
+    return os_feof(reader->file);
 }
 
 /* Read big endian items into little endian storage. EOF bytes become 255. */
@@ -172,6 +172,6 @@ uint32_t fwriteswap(const void *data, int size, uint32_t count, void *file)
         return count;
     for (item = 0; item < count; item++)
         for (byte = size - 1; byte >= 0; byte--)
-            fputc(bytes[item * size + byte], file);
+            os_fputc(bytes[item * size + byte], file);
     return count;
 }

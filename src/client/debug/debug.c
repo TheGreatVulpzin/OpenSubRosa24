@@ -128,7 +128,7 @@ void __cdecl debug_writelogfile(const char *text)
     d->log_file = os_fopen(d->log_path, "rb+");
     if (d->log_file == 0)
         return;
-    fseek(d->log_file, 0, SEEK_END_OF_FILE);
+    os_fseek(d->log_file, 0, SEEK_END_OF_FILE);
     os_fprintf(d->log_file, "%s\r\n", text);
     os_fclose(d->log_file);
 }

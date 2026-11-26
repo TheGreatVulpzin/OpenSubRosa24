@@ -69,7 +69,7 @@ void __cdecl screenshot(void)
     cl_data_open_file = (int)(uintptr_t)os_fopen(filename, "wb");
     if (!cl_data_open_file)
         return;
-#define WRITE_HEADER(value, object) do { object = (value); fwrite(&object, sizeof(object), 1, (void *)(uintptr_t)cl_data_open_file); } while (0)
+#define WRITE_HEADER(value, object) do { object = (value); os_fwrite(&object, sizeof(object), 1, (void *)(uintptr_t)cl_data_open_file); } while (0)
     WRITE_HEADER(0, byte);
     WRITE_HEADER(0, byte);
     WRITE_HEADER(TGA_TRUE_COLOR, byte);
@@ -86,9 +86,9 @@ void __cdecl screenshot(void)
     for (y = 0; y < cl_data_render_height; ++y) {
         for (x = 0; x < cl_data_render_width; ++x) {
             uint32_t pixel = cl_data_screenshot_pixels[y * cl_data_render_width + x];
-            fputc((pixel >> 16) & 255, (void *)(uintptr_t)cl_data_open_file);
-            fputc((pixel >> 8) & 255, (void *)(uintptr_t)cl_data_open_file);
-            fputc(pixel & 255, (void *)(uintptr_t)cl_data_open_file);
+            os_fputc((pixel >> 16) & 255, (void *)(uintptr_t)cl_data_open_file);
+            os_fputc((pixel >> 8) & 255, (void *)(uintptr_t)cl_data_open_file);
+            os_fputc(pixel & 255, (void *)(uintptr_t)cl_data_open_file);
         }
     }
     os_fclose((void *)(uintptr_t)cl_data_open_file);

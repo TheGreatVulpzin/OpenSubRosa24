@@ -16,7 +16,7 @@ enum {
 /* Write one byte to the file. */
 void write8(void *file, uint8_t value)
 {
-    fwrite(&value, 1, 1, file);
+    os_fwrite(&value, 1, 1, file);
 }
 
 /* Write fields in little endian order. Stop at an invalid format character. */
@@ -63,7 +63,7 @@ void write_pixels(void *file, int rgb_dir, int vdir, int width, int height, int 
             const uint8_t *pixel = data + (row * width + column) * comp;
             int values[3];
             if (write_alpha < 0)
-                fwrite(&pixel[comp - 1], 1, 1, file);
+                os_fwrite(&pixel[comp - 1], 1, 1, file);
             switch (comp) {
             case 1:
             case 2:
@@ -91,9 +91,9 @@ void write_pixels(void *file, int rgb_dir, int vdir, int width, int height, int 
                 break;
             }
             if (write_alpha > 0)
-                fwrite(&pixel[comp - 1], 1, 1, file);
+                os_fwrite(&pixel[comp - 1], 1, 1, file);
         }
-        fwrite(&zero, scanline_pad, 1, file);
+        os_fwrite(&zero, scanline_pad, 1, file);
     }
 }
 

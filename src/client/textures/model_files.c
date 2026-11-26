@@ -36,17 +36,17 @@ void __cdecl savemodelcsm(int model, const char *name)
     strcpy(path, name);
     file = os_fopen(path, "wb");
     if (file != NULL) {
-        fwrite(magic, 1, CSM_MAGIC_SIZE, file);
-        fwrite(&version, 4, 1, file);
-        fwrite(&m->num_verts, 4, 1, file);
-        fwrite(&m->vertex_floats, 4, 1, file);
-        fwrite(&m->num_tris, 4, 1, file);
-        fwrite(m->verts, 4, (size_t)(m->num_verts * 3), file);
-        fwrite(m->vert_normals, 4, (size_t)(m->num_verts * 3), file);
-        fwrite(m->vert_tangents, 4, (size_t)(m->num_verts * 3), file);
-        fwrite(m->tris, 4, (size_t)(m->num_tris * 3), file);
-        fwrite(m->tri_normals, 4, (size_t)(m->num_tris * 3), file);
-        fwrite(m->tri_neighbors, 4, (size_t)(m->num_tris * 3), file);
+        os_fwrite(magic, 1, CSM_MAGIC_SIZE, file);
+        os_fwrite(&version, 4, 1, file);
+        os_fwrite(&m->num_verts, 4, 1, file);
+        os_fwrite(&m->vertex_floats, 4, 1, file);
+        os_fwrite(&m->num_tris, 4, 1, file);
+        os_fwrite(m->verts, 4, (size_t)(m->num_verts * 3), file);
+        os_fwrite(m->vert_normals, 4, (size_t)(m->num_verts * 3), file);
+        os_fwrite(m->vert_tangents, 4, (size_t)(m->num_verts * 3), file);
+        os_fwrite(m->tris, 4, (size_t)(m->num_tris * 3), file);
+        os_fwrite(m->tri_normals, 4, (size_t)(m->num_tris * 3), file);
+        os_fwrite(m->tri_neighbors, 4, (size_t)(m->num_tris * 3), file);
         os_fclose(file);
     }
     if (changed == 0)
@@ -71,7 +71,7 @@ int __cdecl loadmodelcsm(int model, const char *name)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    fread(magic, 1, CSM_MAGIC_SIZE, file);
+    os_fread(magic, 1, CSM_MAGIC_SIZE, file);
     magic[CSM_MAGIC_SIZE] = '\0';
     if (strcmp(magic, "CSMo") != 0) {
         os_fclose(file);
@@ -79,22 +79,22 @@ int __cdecl loadmodelcsm(int model, const char *name)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    fread(&version, 4, 1, file);
+    os_fread(&version, 4, 1, file);
     if (version != CSM_VERSION) {
         os_fclose(file);
         if (changed == 0)
             os_chdir(CSM_PARENT);
         return 0;
     }
-    fread(&g_temp.num_verts, 4, 1, file);
-    fread(&g_temp.vertex_floats, 4, 1, file);
-    fread(&g_temp.num_tris, 4, 1, file);
-    fread(g_temp.verts, 4, (size_t)(g_temp.num_verts * 3), file);
-    fread(g_temp.vert_normals, 4, (size_t)(g_temp.num_verts * 3), file);
-    fread(g_temp.vert_tangents, 4, (size_t)(g_temp.num_verts * 3), file);
-    fread(g_temp.tris, 4, (size_t)(g_temp.num_tris * 3), file);
-    fread(g_temp.tri_normals, 4, (size_t)(g_temp.num_tris * 3), file);
-    fread(g_temp.tri_neighbors, 4, (size_t)(g_temp.num_tris * 3), file);
+    os_fread(&g_temp.num_verts, 4, 1, file);
+    os_fread(&g_temp.vertex_floats, 4, 1, file);
+    os_fread(&g_temp.num_tris, 4, 1, file);
+    os_fread(g_temp.verts, 4, (size_t)(g_temp.num_verts * 3), file);
+    os_fread(g_temp.vert_normals, 4, (size_t)(g_temp.num_verts * 3), file);
+    os_fread(g_temp.vert_tangents, 4, (size_t)(g_temp.num_verts * 3), file);
+    os_fread(g_temp.tris, 4, (size_t)(g_temp.num_tris * 3), file);
+    os_fread(g_temp.tri_normals, 4, (size_t)(g_temp.num_tris * 3), file);
+    os_fread(g_temp.tri_neighbors, 4, (size_t)(g_temp.num_tris * 3), file);
     os_fclose(file);
     if (changed == 0)
         os_chdir(CSM_PARENT);

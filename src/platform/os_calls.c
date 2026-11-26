@@ -205,6 +205,54 @@ int os_fgetc(void *file)
     return call(file);
 }
 
+size_t os_fread(void *buffer, size_t size, size_t count, void *file)
+{
+    static size_t(__cdecl * call)(void *, size_t, size_t, void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fread");
+    return call(buffer, size, count, file);
+}
+
+size_t os_fwrite(const void *buffer, size_t size, size_t count, void *file)
+{
+    static size_t(__cdecl * call)(const void *, size_t, size_t, void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fwrite");
+    return call(buffer, size, count, file);
+}
+
+int os_fseek(void *file, long offset, int origin)
+{
+    static int(__cdecl * call)(void *, long, int);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fseek");
+    return call(file, offset, origin);
+}
+
+long os_ftell(void *file)
+{
+    static long(__cdecl * call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "ftell");
+    return call(file);
+}
+
+int os_feof(void *file)
+{
+    static int(__cdecl * call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "feof");
+    return call(file);
+}
+
+int os_fputc(int c, void *file)
+{
+    static int(__cdecl * call)(int, void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fputc");
+    return call(c, file);
+}
+
 /* fprintf and sscanf take a list of arguments that a wrapper cannot pass on. These two
  * functions return the import, and sr_os.h makes a macro of each. */
 os_fprintf_fn os_fprintf_import(void)

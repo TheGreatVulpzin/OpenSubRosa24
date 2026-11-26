@@ -137,6 +137,36 @@ int os_fgetc(void *file)
     return fgetc((FILE *)file);
 }
 
+size_t os_fread(void *buffer, size_t size, size_t count, void *file)
+{
+    return fread(buffer, size, count, (FILE *)file);
+}
+
+size_t os_fwrite(const void *buffer, size_t size, size_t count, void *file)
+{
+    return fwrite(buffer, size, count, (FILE *)file);
+}
+
+int os_fseek(void *file, long offset, int origin)
+{
+    return fseek((FILE *)file, offset, origin);
+}
+
+long os_ftell(void *file)
+{
+    return ftell((FILE *)file);
+}
+
+int os_feof(void *file)
+{
+    return feof((FILE *)file);
+}
+
+int os_fputc(int c, void *file)
+{
+    return fputc(c, (FILE *)file);
+}
+
 int os_chdir(const char *path)
 {
     return _chdir(path);

@@ -42,6 +42,12 @@ int64_t os_time64(int64_t *out);
 void *os_fopen(const char *path, const char *mode);
 int os_fclose(void *file);
 int os_fgetc(void *file);
+size_t os_fread(void *buffer, size_t size, size_t count, void *file);
+size_t os_fwrite(const void *buffer, size_t size, size_t count, void *file);
+int os_fseek(void *file, long offset, int origin);
+long os_ftell(void *file);
+int os_feof(void *file);
+int os_fputc(int c, void *file);
 int os_chdir(const char *path);
 
 /* fprintf, sprintf and sscanf take a list of arguments, so a wrapper cannot pass them on.
