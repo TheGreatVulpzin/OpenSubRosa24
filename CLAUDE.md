@@ -15,6 +15,7 @@ RE/decompilation project for Sub Rosa (2015).
   The recording target alone uses `instrumentation/standalone/image_024d.*`.
 - Only the separate `subvulpes-server-record` target uses the recorder in `instrumentation/`. The normal server has no include path to that folder.
 - The lifter generates `src/lifted/lifted_table.c` and the hook tables in `instrumentation/hook/`. Never edit these outputs by hand.
+- The root `CMakeLists.txt` has only the server and the native client. Every verification target is in `instrumentation/targets.cmake`, included when `SV_BUILD_INSTRUMENTATION` is ON. Add a new verification target there.
 - `tools/build_hook.bat` still builds all targets into `build/hook/`. `tools/lift/pipeline.sh` forwards to `instrumentation/lift/pipeline.sh`.
 
 - Never version anything in `original/` except `README.md` and `MANIFEST.sha256`. Binaries and assets proprietary.

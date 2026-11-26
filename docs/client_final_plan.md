@@ -18,7 +18,13 @@ Phases B to F are done in the code of the client:
 - E: `CONTRIBUTING.md` and `docs/changes.md` say what a change may do.
 - F: a sampler and `tools/re/profile_samples.py` show where the client spends time (`docs/client/performance.md`). The client has its own `rand`. The frame time was not compared with the first executable.
 
-Not done: the server gate runs only on the recordings that came back (`20261013-query` and `20261015-friend` are whole). `sr_import` in `src/platform` and `src/server`. The image targets of `instrumentation/` (B4).
+Later on 2026-11-26:
+
+- The native client has no `sr_import`. `src/platform/os_calls_native.inc` and the native branch of `x87_math_client.c` call the C runtime, winsock and KERNEL32 directly. The executable imports only KERNEL32, OPENGL32, SHELL32, WS2_32, SDL2, OpenAL32 and the Speex DLL files.
+- B4: the root `CMakeLists.txt` holds the native client and the server. All verification targets (hook libraries, harness, recorder, image executables, storage checks) are in `instrumentation/targets.cmake`, which the root includes only when `SV_BUILD_INSTRUMENTATION` is ON. With it OFF, the server and the native client build.
+- The owner accepts the server gate coverage of the recordings that came back (`20261013-query`: 188 functions, 2230 calls same). The gate lists the functions of the lost recordings as "DROP". The baseline is not updated.
+
+Not done: `sr_import` in `src/server` and in the `src/platform` files that only the server and the image targets use (`x87_math.c` needs the `_CI` math forms, and the test environment replaces the other calls). The image targets `cl_wsock32` and `harness_client` still need a new hook table. The frame time against the first executable.
 
 ## State on 2026-11-25
 
