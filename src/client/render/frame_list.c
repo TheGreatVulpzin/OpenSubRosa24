@@ -51,7 +51,7 @@ static uint32_t head_flags(int human)
 {
     int view = sr_data_view;
 
-    if (sr_data_debugit != 0 && cl_data_audio_input_blocked == 0 && cl_data_audio_keys[KEY_FREE_VIEW] != 0)
+    if (sr_data_debugit != 0 && cl_data_audio_input_blocked == 0 && cl_data_keyboard[KEY_FREE_VIEW] != 0)
         return FLAG_SHADOW;
     if (view == -1 || sr_data_player[view].human_id == -1 || sr_data_player[view].human_id != human)
         return FLAG_SHADOW;

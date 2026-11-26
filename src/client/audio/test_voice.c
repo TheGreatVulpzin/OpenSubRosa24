@@ -84,7 +84,7 @@ void __cdecl testvoice(int sound, int player)
     for (frame = 0; frame < VOICE_FRAMES; frame++) {
         int head = stage->head;
 
-        if (cl_data_audio_keys[VOICE_TEST_KEY] == 0) {
+        if (cl_data_keyboard[VOICE_TEST_KEY] == 0) {
             for (i = 0; i < VOICE_FRAME_SAMPLES; i++)
                 cl_data_voice_test_samples[frame * VOICE_FRAME_SAMPLES + i] = source->samples[head][i];
         } else {

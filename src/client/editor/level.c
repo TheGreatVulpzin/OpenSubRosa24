@@ -334,7 +334,7 @@ static void level_draw_buildings(void)
     }
     if (level->mode == MODE_BUILDINGS) {
         glColor4f(0.5f, 0.5f, 0.5f, 0.125f);
-        if (cl_data_audio_input_blocked == 0 && cl_data_audio_keys[KEY_E] != 0)
+        if (cl_data_audio_input_blocked == 0 && cl_data_keyboard[KEY_E] != 0)
             glColor4f(0.5f, 0.5f, 0.5f, 0.25f);
         level_draw_plan(level->num_buildings);
     }
@@ -412,17 +412,17 @@ static void level_move_camera(uint32_t *last)
         else
             *last = audio_SDL_GetTicks()();
         step = CAMERA_STEP;
-        if (cl_data_audio_keys[KEY_SHIFT] != 0)
+        if (cl_data_keyboard[KEY_SHIFT] != 0)
             step = CAMERA_FAST_STEP;
         if (cl_data_audio_input_blocked != 0)
             continue;
-        if (cl_data_audio_keys[KEY_A] != 0)
+        if (cl_data_keyboard[KEY_A] != 0)
             camera->x = (float)(camera->x - step);
-        if (cl_data_audio_keys[KEY_D] != 0)
+        if (cl_data_keyboard[KEY_D] != 0)
             camera->x = (float)(camera->x + step);
-        if (cl_data_audio_keys[KEY_W] != 0)
+        if (cl_data_keyboard[KEY_W] != 0)
             camera->z = (float)(camera->z - step);
-        if (cl_data_audio_keys[KEY_S] != 0)
+        if (cl_data_keyboard[KEY_S] != 0)
             camera->z = (float)(camera->z + step);
     }
 }
@@ -618,7 +618,7 @@ static void level_edit_streets(float x, float z)
     level->chosen_b = leveleditor_getintersection(x, 0.0f, z, 2.0f);
     if (mouse->left != 0 && previous->left == 0) {
         level->chosen_street = -1;
-        if (level->chosen_b == -1 && (level->chosen_a != -1 || cl_data_audio_keys[KEY_PERIOD] != 0))
+        if (level->chosen_b == -1 && (level->chosen_a != -1 || cl_data_keyboard[KEY_PERIOD] != 0))
             level->chosen_b = leveleditor_addintersection(cl_ftoi(x), 0, cl_ftoi(z));
         if (level->chosen_a != -1 && level->chosen_b != -1) {
             added = leveleditor_addstreet(level->chosen_a, level->chosen_b);
@@ -646,9 +646,9 @@ static void level_edit_streets(float x, float z)
 /* The material of a new tile: 2 with key 5, 1 with key 6, else 0. */
 static int level_tile_material(void)
 {
-    if (cl_data_audio_keys[KEY_5] != 0)
+    if (cl_data_keyboard[KEY_5] != 0)
         return 2;
-    if (cl_data_audio_keys[KEY_6] != 0)
+    if (cl_data_keyboard[KEY_6] != 0)
         return 1;
     return 0;
 }
@@ -682,7 +682,7 @@ static void level_edit_tiles(float x, float z)
         int top = level->drag_z1 < level->drag_z0 ? level->drag_z1 : level->drag_z0;
         int width = abs(level->drag_x0 - level->drag_x1), depth = abs(level->drag_z0 - level->drag_z1);
 
-        if (cl_data_audio_keys[KEY_E] != 0) {
+        if (cl_data_keyboard[KEY_E] != 0) {
             int material = level_tile_material();
 
             for (j = top; j < top + depth; j++)
@@ -692,27 +692,27 @@ static void level_edit_tiles(float x, float z)
                         level->tiles[i + j * TILE_ROW] = (uint8_t)(level_tile_kind(level->tile_kind) + material);
                 }
         }
-        if (cl_data_audio_keys[KEY_DELETE] != 0) {
+        if (cl_data_keyboard[KEY_DELETE] != 0) {
             for (j = top; j < top + depth; j++)
                 for (i = left; i < left + width; i++)
                     level->tiles[i + j * TILE_ROW] = 0;
         }
     }
     if (mouse->left != 0) {
-        if (cl_data_audio_keys[KEY_SHIFT] == 0) {
+        if (cl_data_keyboard[KEY_SHIFT] == 0) {
             if (level->dragging == 0) {
                 int material = level_tile_material();
 
                 *tile = 0x10;
-                if (cl_data_audio_keys[KEY_1] != 0)
+                if (cl_data_keyboard[KEY_1] != 0)
                     *tile = 0x20;
-                else if (cl_data_audio_keys[KEY_2] != 0)
+                else if (cl_data_keyboard[KEY_2] != 0)
                     *tile = 0x30;
-                else if (cl_data_audio_keys[KEY_3] != 0)
+                else if (cl_data_keyboard[KEY_3] != 0)
                     *tile = 0x40;
-                else if (cl_data_audio_keys[KEY_4] != 0)
+                else if (cl_data_keyboard[KEY_4] != 0)
                     *tile = 0x50;
-                else if (cl_data_audio_keys[KEY_7] != 0)
+                else if (cl_data_keyboard[KEY_7] != 0)
                     *tile = 0x60;
                 if (level->tile_kind > 0)
                     *tile = (uint8_t)level_tile_kind(level->tile_kind);
@@ -757,7 +757,7 @@ static void level_edit_buildings(float x, float z)
     next->z = cl_ftoi(z);
     next->turns = level->place_turns;
     type = &level->types[*placed_type(level->num_buildings)];
-    if (cl_data_audio_input_blocked == 0 && cl_data_audio_keys[KEY_E] != 0 && mouse->left != 0 &&
+    if (cl_data_audio_input_blocked == 0 && cl_data_keyboard[KEY_E] != 0 && mouse->left != 0 &&
         previous->left == 0 && type->size_x > 0 && type->size_z > 0)
         level->num_buildings++;
     if (mouse->right == 0 || previous->right != 0)

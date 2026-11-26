@@ -114,7 +114,7 @@ static void font_fixed_metrics(Font *font, double inset)
 /* Build the large font, small font and cursor textures. */
 void createfont(void)
 {
-    uint32_t outline = cl_data_font_alpha_low ? 255 : 0xff000000u;
+    uint32_t outline = cl_data_bigendian ? 255 : 0xff000000u;
     int texture = cl_data_fontnum + FONT_TEXTURE_BASE, x, y;
     uint32_t *pixels;
     cl_data_fonts[cl_data_fontnum].texture = texture;
@@ -188,7 +188,7 @@ void loadfont(int texture_index, char *path, float size)
     for (y = texture->height - cell; y < texture->height; y++)
         for (x = 0; x < cell; x++)
             pixels[y * texture->width + x] = UINT32_MAX;
-    alpha = cl_data_font_alpha_low ? 255 : 0xff000000u;
+    alpha = cl_data_bigendian ? 255 : 0xff000000u;
     for (glyph = 0; glyph < FONT_GLYPHS; glyph++) {
         float *coordinates = font->coordinates + glyph * 8;
         font->width[glyph] = font_width(texture, cell, glyph, size > 32.0 ? 4 : 2, alpha);

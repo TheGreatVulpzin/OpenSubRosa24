@@ -28,9 +28,9 @@ int __cdecl createsprite(int kind, const vec3 *pos, const vec3 *vel, float size)
     ClientSprite *sprite;
     int index;
 
-    if (cl_data_sprite_count >= SPRITE_LIMIT)
+    if (sr_data_numofsprites >= SPRITE_LIMIT)
         return -1;
-    sprite = &cl_data_sprites[cl_data_sprite_count];
+    sprite = &cl_data_sprites[sr_data_numofsprites];
     sprite->kind = kind;
     sprite->pos = *pos;
     if (vel == NULL)
@@ -74,18 +74,18 @@ int __cdecl createsprite(int kind, const vec3 *pos, const vec3 *vel, float size)
         sprite->gravity = 0.0f;
         sprite->drag = 0.875f;
     }
-    index = cl_data_sprite_count;
-    cl_data_sprite_count++;
+    index = sr_data_numofsprites;
+    sr_data_numofsprites++;
     return index;
 }
 
 /* Remove a particle. The last particle takes its place. An index outside the list changes nothing. */
 void __cdecl deletesprite(int index)
 {
-    if (index > -1 && index < cl_data_sprite_count) {
-        cl_data_sprite_count--;
-        if (index != cl_data_sprite_count)
-            memcpy(&cl_data_sprites[index], &cl_data_sprites[cl_data_sprite_count], sizeof(ClientSprite));
+    if (index > -1 && index < sr_data_numofsprites) {
+        sr_data_numofsprites--;
+        if (index != sr_data_numofsprites)
+            memcpy(&cl_data_sprites[index], &cl_data_sprites[sr_data_numofsprites], sizeof(ClientSprite));
     }
 }
 
@@ -95,7 +95,7 @@ void __cdecl spritetimetolive(void)
 {
     int index = 0;
 
-    while (index < cl_data_sprite_count) {
+    while (index < sr_data_numofsprites) {
         if (cl_data_sprites[index].life < LIFE_FOREVER)
             cl_data_sprites[index].life--;
         if (cl_data_sprites[index].life < 1)
@@ -143,9 +143,9 @@ void __cdecl createwindowsprites_block(int area, int x, int y, int z, uint32_t w
     for (k = 0; k < 4; k++) {
         ClientSprite *piece;
 
-        if (cl_data_sprite_count >= SPRITE_LIMIT)
+        if (sr_data_numofsprites >= SPRITE_LIMIT)
             continue;
-        piece = &cl_data_sprites[cl_data_sprite_count];
+        piece = &cl_data_sprites[sr_data_numofsprites];
         piece->kind = SPRITE_TRIANGLE;
         piece->rot[0] = corners[k];
         piece->rot[1] = corners[(k + 1) & 3];
@@ -162,6 +162,6 @@ void __cdecl createwindowsprites_block(int area, int x, int y, int z, uint32_t w
         piece->spin.x = (float)vectordistance(&piece->rot[1], &piece->rot[0]);
         piece->spin.y = (float)vectordistance(&piece->rot[2], &piece->rot[1]);
         piece->spin.z = (float)vectordistance(&piece->rot[0], &piece->rot[2]);
-        cl_data_sprite_count++;
+        sr_data_numofsprites++;
     }
 }

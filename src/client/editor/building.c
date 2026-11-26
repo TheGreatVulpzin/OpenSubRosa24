@@ -58,7 +58,7 @@ void building_reloadtextures(void)
     for (entry = 0; entry < building->num_materials; ++entry)
         for (material = 0; material < sr_data_materiallist.num_materials; ++material)
             if (strcmp(building->materials + entry * MATERIAL_NAME,
-                       cl_data_material_records[material].name) == 0)
+                       sr_data_materials.records[material].name) == 0)
                 building->material_textures[entry] = material;
 }
 

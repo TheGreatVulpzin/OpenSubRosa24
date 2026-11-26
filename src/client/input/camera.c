@@ -23,25 +23,25 @@
 /* Translate the camera in key order. Each coordinate write rounds to float. */
 static void camera_translate(InputCamera *camera, float speed)
 {
-    if (cl_data_audio_keys[KEY_W]) {
+    if (cl_data_keyboard[KEY_W]) {
         camera->pos.x = (float)(x87_sin(camera->yaw) * speed + camera->pos.x);
         camera->pos.z = (float)(camera->pos.z - x87_cos(camera->yaw) * speed);
     }
-    if (cl_data_audio_keys[KEY_S]) {
+    if (cl_data_keyboard[KEY_S]) {
         camera->pos.x = (float)(camera->pos.x - x87_sin(camera->yaw) * speed);
         camera->pos.z = (float)(x87_cos(camera->yaw) * speed + camera->pos.z);
     }
-    if (cl_data_audio_keys[KEY_A]) {
+    if (cl_data_keyboard[KEY_A]) {
         camera->pos.x = (float)(camera->pos.x - x87_cos(camera->yaw) * speed);
         camera->pos.z = (float)(camera->pos.z - x87_sin(camera->yaw) * speed);
     }
-    if (cl_data_audio_keys[KEY_D]) {
+    if (cl_data_keyboard[KEY_D]) {
         camera->pos.x = (float)(x87_cos(camera->yaw) * speed + camera->pos.x);
         camera->pos.z = (float)(x87_sin(camera->yaw) * speed + camera->pos.z);
     }
-    if (cl_data_audio_keys[KEY_Q])
+    if (cl_data_keyboard[KEY_Q])
         camera->pos.y = (float)((double)camera->pos.y + speed);
-    if (cl_data_audio_keys[KEY_Z])
+    if (cl_data_keyboard[KEY_Z])
         camera->pos.y = (float)((double)camera->pos.y - speed);
 }
 
@@ -50,9 +50,9 @@ void movecamera(int camera_index)
 {
     InputCamera *camera = &cl_data_input_cameras[camera_index];
     InputMouse *mouse = &cl_data_input_mouse;
-    float speed = cl_data_audio_keys[KEY_SHIFT] ? FREE_CAMERA_FAST_SPEED : FREE_CAMERA_SPEED;
+    float speed = cl_data_keyboard[KEY_SHIFT] ? FREE_CAMERA_FAST_SPEED : FREE_CAMERA_SPEED;
     float sensitivity;
-    if (cl_data_audio_keys[KEY_CONTROL])
+    if (cl_data_keyboard[KEY_CONTROL])
         speed = (float)((double)speed * FREE_CAMERA_SLOW_SCALE);
     camera_translate(camera, speed);
     sensitivity = (float)(1.0 - camera->zoom);
@@ -74,8 +74,8 @@ void movecamera2(int camera_index)
 {
     InputCamera *camera = &cl_data_input_cameras[camera_index];
     InputMouse *mouse = &cl_data_input_mouse;
-    float speed = cl_data_audio_keys[KEY_SHIFT] ? SPECTATOR_FAST_SPEED : SPECTATOR_SPEED;
-    if (cl_data_audio_keys[KEY_CONTROL])
+    float speed = cl_data_keyboard[KEY_SHIFT] ? SPECTATOR_FAST_SPEED : SPECTATOR_SPEED;
+    if (cl_data_keyboard[KEY_CONTROL])
         speed = (float)((double)speed * SPECTATOR_SLOW_SCALE);
     camera_translate(camera, speed);
     camera->yaw = (float)((double)(float)mouse->dx / CAMERA_MOUSE_SCALE + camera->yaw);

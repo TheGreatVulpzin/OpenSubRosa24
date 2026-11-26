@@ -174,7 +174,7 @@ static void draw_opaque(void)
     use_program(0);
     use_program(cl_data_programs[PROGRAM_MODEL].program);
     rendermodellist(0);
-    for (i = 0; i < cl_data_sprite_model_count; ++i) {
+    for (i = 0; i < sr_data_numofsprite_models; ++i) {
         const SpriteModel *piece = &cl_data_sprite_models[i];
         if (!piece->active)
             continue;
@@ -311,7 +311,7 @@ static void draw_debug_lines(void)
 {
     int i;
     for (i = 0; i < sr_data_numofbonds; ++i) {
-        const Bond *bond = &cl_data_bonds[i];
+        const Bond *bond = &sr_data_bond[i];
         if (bond->type == BOND_BONES) {
             const Human *human = &sr_data_human[bond->owner];
             glVertex3fv(&human->bones[bond->bone_a].pos.x);

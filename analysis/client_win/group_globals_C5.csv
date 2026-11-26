@@ -1,40 +1,39 @@
 name,type,count,client_rva,evidence
 menu_items,MenuItem,256,0x5350d00,"checkmenuitems, drawmenuitems and createmenuitemempty: 256 records of 0x284 bytes. Item 0 is the back button of each menu: the menu loops end when it is pressed"
-menu_item_count,int,1,0x9065240,"createmenuitemempty adds 1; the menu loops set it to 0 each frame"
+menu_item_count,int,1,0x9065240,createmenuitemempty adds 1; the menu loops set it to 0 each frame
 menu_item_index,int,1,0xfefe288,"checkmenuitems uses it as the loop index; the callbacks menutoggle, menuset and menuslider read it"
-textinput_start,int,1,0x29e752a4,"menutextbox: the start of the selection in the text that the player edits"
-textinput_end,int,1,0x29e752a8,"menutextbox: the end of the selection and the place of the cursor"
-textinput_text,char,16384,0x29e752b0,"menutextbox copies the value of a text field here and writes it back each frame. The Linux client names the record textinput"
+textinput_start,int,1,0x29e752a4,menutextbox: the start of the selection in the text that the player edits
+textinput_end,int,1,0x29e752a8,menutextbox: the end of the selection and the place of the cursor
+textinput_text,char,16384,0x29e752b0,menutextbox copies the value of a text field here and writes it back each frame. The Linux client names the record textinput
 textinput_shown,char,16384,0x29e792b0,"drawmenuitems puts the text of a field here before it draws it, with stars for a password"
 menu_vertices,float,32,0x1bbdf40,"drawmenubutton and drawmenubutton2: the corners of the button, two floats each"
-menu_texcoords,float,32,0x1bbdfc0,"drawmenubutton2: the texture corners of the 16 vertices"
+menu_texcoords,float,32,0x1bbdfc0,drawmenubutton2: the texture corners of the 16 vertices
 menu_alpha,float,16,0x1bbe040,"drawmenubutton2: the alpha of each vertex, from 1 at the top to 0.25 at the bottom"
-menu_quad_count,int,1,0x1bbe080,"drawmenubutton2: the number of quads in menu_quads"
+menu_quad_count,int,1,0x1bbe080,drawmenubutton2: the number of quads in menu_quads
 menu_quads,int,64,0x1bbe084,"drawmenubutton2: four vertex numbers for each quad, 9 quads used"
-wrap_line_ends,int,64,0x90f6524,"0x105b80 writes the index of the last character of each line of a wrapped text; drawmenutextfield reads it"
-menu_clear_color,float,3,0x1234c8,"connectmenu, hostmenu, joinmenu and mainmenu clear the screen to this color"
-client_account_id,int,2,0xf3eafc8,"connectmenu sends both ints after the name; joinmenu creates them with createclientaccount; the server finds the account by them"
+wrap_line_ends,int,64,0x90f6524,0x105b80 writes the index of the last character of each line of a wrapped text; drawmenutextfield reads it
+client_account_id,int,2,0xf3eafc8,connectmenu sends both ints after the name; joinmenu creates them with createclientaccount; the server finds the account by them
 textinput_overwrite,int,1,0x29e752ac,"addmenuinputchar: 0 inserts the letter, else the letter writes over the one at the cursor"
-wrap_line_count,int,1,0x90f6520,"formattextbox: the number of lines in wrap_line_ends"
+wrap_line_count,int,1,0x90f6520,formattextbox: the number of lines in wrap_line_ends
 screen_bits,int,1,0xb7330e4,"optionsmenu: the color depth of the window, 16 or 32; the mode test compares it with the bits of each video mode"
-screen_fullscreen,int,1,0xb7330e8,"optionsmenu: 1 when the window is fullscreen; Apply writes it and passes it to SDL_SetWindowFullscreen"
+screen_fullscreen,int,1,0xb7330e8,optionsmenu: 1 when the window is fullscreen; Apply writes it and passes it to SDL_SetWindowFullscreen
 joystick_names,char,2560,0x1a68ca0,"optionsmenu writes the input names: 0x200 bytes for each device, 16 for each name (axes of devices 1 and 2, 16 buttons of device 3, hats of device 4)"
-join_servers,JoinServer,1024,0x29e7d360,"joinmenu: the servers that answered a ping; the list has no size test"
-join_server_count,int,1,0xfbfe26c,"joinmenu: the number of join_servers"
+join_servers,JoinServer,1024,0x29e7d360,joinmenu: the servers that answered a ping; the list has no size test
+join_server_count,int,1,0xfbfe26c,joinmenu: the number of join_servers
 join_addresses,JoinAddress,8192,0x17668bc0,"joinmenu: the addresses to ping: the LAN and Direct IP ones, then the master list (at most 0x1fff in one packet)"
-join_address_count,int,1,0xababc30,"joinmenu: the number of join_addresses"
-join_master_first,int,1,0x9b676c0,"joinmenu: the master list replaces the addresses from this index"
+join_address_count,int,1,0xababc30,joinmenu: the number of join_addresses
+join_master_first,int,1,0x9b676c0,joinmenu: the master list replaces the addresses from this index
 join_columns,float,10,0xfefe300,"joinmenu: x and y of the list columns: name, players, ping, version, game type"
-join_debug,int,3,0x5350c80,"joinmenu with debugit: the first two addresses and the address count"
-gl_create_program,void *,1,0x115b0c,"pointer to glCreateProgramObjectARB that the extension loader fills; mainmenu makes 32 programs"
-gl_create_shader,void *,1,0x115b00,"pointer to glCreateShaderObjectARB that the extension loader fills"
-gl_gen_buffers,void *,1,0x115ab0,"pointer to glGenBuffersARB that the extension loader fills; mainmenu makes 0x1000 buffer pairs"
-gl_gen_framebuffers,void *,1,0x115bd0,"pointer to glGenFramebuffers that the extension loader fills"
-gl_gen_renderbuffers,void *,1,0x115bb8,"pointer to glGenRenderbuffers that the extension loader fills"
-vbo_next,int,1,0x1033fd20,"mainmenu: the next free buffer number; 0 and 1 go to sector_vbo and sector_shadow_vbo"
-framebuffer_ready,int,1,0xfefe290,"mainmenu writes 1 next to framebuffer_index; no reader"
-vbo_spare_a,int,1,0x1033fd2c,"mainmenu gives it the buffer number 2; no reader"
-vbo_spare_b,int,1,0x1033fd34,"mainmenu gives it the buffer number 4; no reader"
-vbo_spare_c,int,1,0x1033fd38,"mainmenu gives it the buffer number 5; no reader"
-camera_velocity,vec3,1,0xfefe2d8,"mainmenu passes it to soundsimulation as the velocity of the listener"
-version_marks,char,2,0x127eb2,"joinmenu: the mark of a server of this version and the mark of another version"
+join_debug,int,3,0x5350c80,joinmenu with debugit: the first two addresses and the address count
+gl_create_program,void *,1,0x115b0c,pointer to glCreateProgramObjectARB that the extension loader fills; mainmenu makes 32 programs
+gl_create_shader,void *,1,0x115b00,pointer to glCreateShaderObjectARB that the extension loader fills
+gl_gen_buffers,void *,1,0x115ab0,pointer to glGenBuffersARB that the extension loader fills; mainmenu makes 0x1000 buffer pairs
+gl_gen_framebuffers,void *,1,0x115bd0,pointer to glGenFramebuffers that the extension loader fills
+gl_gen_renderbuffers,void *,1,0x115bb8,pointer to glGenRenderbuffers that the extension loader fills
+vbo_next,int,1,0x1033fd20,mainmenu: the next free buffer number; 0 and 1 go to sector_vbo and sector_shadow_vbo
+framebuffer_ready,int,1,0xfefe290,mainmenu writes 1 next to framebuffer_index; no reader
+vbo_spare_a,int,1,0x1033fd2c,mainmenu gives it the buffer number 2; no reader
+vbo_spare_b,int,1,0x1033fd34,mainmenu gives it the buffer number 4; no reader
+vbo_spare_c,int,1,0x1033fd38,mainmenu gives it the buffer number 5; no reader
+camera_velocity,vec3,1,0xfefe2d8,mainmenu passes it to soundsimulation as the velocity of the listener
+version_marks,char,2,0x127eb2,joinmenu: the mark of a server of this version and the mark of another version

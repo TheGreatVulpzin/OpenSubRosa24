@@ -23,7 +23,7 @@
 #include "textures/mesh_edit.h"
 
 #define g_temp cl_data_modeltemp
-#define g_keys cl_data_audio_keys
+#define g_keys cl_data_keyboard
 
 /* createheadmodel2 */
 

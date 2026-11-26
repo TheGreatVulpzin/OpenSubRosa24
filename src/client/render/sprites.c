@@ -79,21 +79,21 @@ static void land_sprite(ClientSprite *sprite)
 
     sprite->life = 0;
     if (sprite->kind == SPRITE_GLASS) {
-        if (cl_data_glass_vertex_count >= DECAL_LIMIT)
+        if (sr_data_sprite_lines >= DECAL_LIMIT)
             return;
         rotateorientation(sprite->rot, &sprite->rot[2],
                           (float)(((float)((unsigned)os_rand() & 0xff) * 3.14159265359) / 256.0));
         for (corner = 0; corner < 4; ++corner) {
-            GlassVertex *vertex = &cl_data_glass_vertices[cl_data_glass_vertex_count++];
+            GlassVertex *vertex = &cl_data_glass_vertices[sr_data_sprite_lines++];
 
             vertex->pos = decal_corner(sprite, signs[corner][0] * size, signs[corner][1] * size);
             vertex->normal = sprite->rot[2];
         }
     } else {
-        if (cl_data_sprite_decal_count >= DECAL_LIMIT)
+        if (sr_data_sprite_points >= DECAL_LIMIT)
             return;
         for (corner = 0; corner < 4; ++corner) {
-            SpriteDecalVertex *vertex = &cl_data_sprite_decals[cl_data_sprite_decal_count++];
+            SpriteDecalVertex *vertex = &cl_data_sprite_decals[sr_data_sprite_points++];
 
             vertex->pos = decal_corner(sprite, signs[corner][0] * size, signs[corner][1] * size);
             memcpy(vertex->texcoord, uv[corner], sizeof(vertex->texcoord));
@@ -141,8 +141,8 @@ void __cdecl spritesimulation(void)
     LevelIntersectFn intersect = lineintersectlevel;
     SpinFn spin = rotateorientationfast;
 
-    debug_addataint("sprites", cl_data_sprite_count);
-    for (index = 0; index < cl_data_sprite_count; ++index) {
+    debug_addataint("sprites", sr_data_numofsprites);
+    for (index = 0; index < sr_data_numofsprites; ++index) {
         ClientSprite *sprite = &cl_data_sprites[index];
         vec3 before;
 
@@ -227,8 +227,8 @@ void __cdecl createwindowsprites(int object, int face, const vec3 *hit, const ve
         subtractvectors(&step, &right, &left);
         scalevector(&step, &step, 0.125f);
         for (column = 0; column <= WINDOW_GRID; ++column) {
-            if (cl_data_sprite_count < SPRITE_LIMIT) {
-                ClientSprite *sprite = &cl_data_sprites[cl_data_sprite_count];
+            if (sr_data_numofsprites < SPRITE_LIMIT) {
+                ClientSprite *sprite = &cl_data_sprites[sr_data_numofsprites];
                 vec3 away;
                 float strength;
 
@@ -252,7 +252,7 @@ void __cdecl createwindowsprites(int object, int face, const vec3 *hit, const ve
                 sprite->spin.z = (float)((float)((unsigned)os_rand() & 0xff) / 512.0 - 0.25);
                 normalizevector(&sprite->spin, &sprite->spin);
                 sprite->spin_rate = (float)(((float)((unsigned)os_rand() & 0xff) / 512.0 - 0.25) * 0.5);
-                ++cl_data_sprite_count;
+                ++sr_data_numofsprites;
             }
             addvectors(&position, &position, &step);
         }

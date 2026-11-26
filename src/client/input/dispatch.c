@@ -114,13 +114,13 @@ static void chat_input(void)
             cl_data_input_chat_text[0] = '\0';
             cl_data_menu_items[0].pressed = 1;
         }
-        if (cl_data_audio_keys[KEY_T]) cl_data_audio_voice_mode = 1;
-        if (cl_data_audio_keys[KEY_Y]) cl_data_audio_voice_mode = 2;
-        if (cl_data_audio_keys[KEY_U]) cl_data_audio_voice_mode = 0;
+        if (cl_data_keyboard[KEY_T]) cl_data_audio_voice_mode = 1;
+        if (cl_data_keyboard[KEY_Y]) cl_data_audio_voice_mode = 2;
+        if (cl_data_keyboard[KEY_U]) cl_data_audio_voice_mode = 0;
     }
     if (!cl_data_menu_items[0].pressed) {
-        if (!cl_data_audio_keys[KEY_RETURN]) {
-            if (cl_data_input_chat && cl_data_input_chat_text[0] && !cl_data_audio_keys[KEY_ESCAPE]) {
+        if (!cl_data_keyboard[KEY_RETURN]) {
+            if (cl_data_input_chat && cl_data_input_chat_text[0] && !cl_data_keyboard[KEY_ESCAPE]) {
                 cl_data_input_chat_length = (uint32_t)strlen(cl_data_input_chat_text);
                 player_addaction_chat(
                     sr_data_view, cl_data_input_chat_text);
@@ -139,7 +139,7 @@ static void spectator_input(void)
     unsigned index, stop;
     if (sr_game.gametype != GAME_ROUND || sr_game.death_camera_ticks || cl_data_audio_input_blocked)
         return;
-    if (cl_data_audio_keys[KEY_1]) sr_game.spectator_human = -1;
+    if (cl_data_keyboard[KEY_1]) sr_game.spectator_human = -1;
     if (!input_pressed(KEY_SPACE))
         return;
     stop = sr_game.spectator_human;
@@ -212,7 +212,7 @@ void getinputs(int player_index)
         sr_data_connection[connection].idle_ticks = CONNECTION_TIMEOUT;
     }
     chat_input();
-    if (cl_data_audio_debug) debug_getinputs();
+    if (sr_data_debugit) debug_getinputs();
     if (!player)
         return;
     if (player->menu_action) {
@@ -230,8 +230,8 @@ void getinputs(int player_index)
         if (sr_game.gametype == GAME_ROUND && !cl_data_input_cursor) movecamera2(1);
         if (!cl_data_input_cursor && !cl_data_audio_input_blocked) {
             for (key = 0; key < SPECTATOR_SLOT_KEYS; key++)
-                if (cl_data_audio_keys[KEY_1 + key]) player->input_buttons |= INPUT_SLOT_1 << key;
-            if (cl_data_audio_keys[KEY_R]) player->input_buttons |= INPUT_RELOAD;
+                if (cl_data_keyboard[KEY_1 + key]) player->input_buttons |= INPUT_SLOT_1 << key;
+            if (cl_data_keyboard[KEY_R]) player->input_buttons |= INPUT_RELOAD;
         }
     }
     if (player->input_mode == CONTROL_HUMAN) getinputs_human(player_index);

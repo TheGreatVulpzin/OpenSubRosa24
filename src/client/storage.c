@@ -2197,20 +2197,14 @@ SR_STATIC_ASSERT(sizeof(cl_data_game_textures) == 1024 * 68, "cl_data_game_textu
 
 /* An object that lies inside a bigger object must fit in it. */
 SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(cl_data_audio_camera), "sr_data_view");
-SR_STATIC_ASSERT(0x1f + sizeof(uint8_t) <= sizeof(cl_data_zlib_default_distance), "cl_data_zlib_defaults_ready");
 SR_STATIC_ASSERT(0x0 + 4096 * sizeof(ImageTexture) <= sizeof(cl_data_texture), "cl_data_image_textures");
 SR_STATIC_ASSERT(0x0 + sizeof(uint32_t) <= sizeof(cl_data_image), "cl_data_image_width");
 SR_STATIC_ASSERT(0x4 + sizeof(uint32_t) <= sizeof(cl_data_image), "cl_data_image_height");
 SR_STATIC_ASSERT(0x8 + 16777216 * sizeof(uint32_t) <= sizeof(cl_data_image), "cl_data_image_pixels");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(cl_data_bigendian), "cl_data_font_alpha_low");
 SR_STATIC_ASSERT(0x0 + 1024 * sizeof(uint32_t) <= sizeof(sr_data_level_marks), "cl_data_sector_mesh_bitmap");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(cl_data_sector_block), "cl_data_sector_mesh_next");
 SR_STATIC_ASSERT(0x2d000c + 16 * sizeof(int) <= sizeof(sr_data_tempmesh), "cl_data_sector_mesh_remap");
 SR_STATIC_ASSERT(0x22fdc + 128 * sizeof(ScenarioEventData) <= sizeof(sr_data_game), "cl_data_scenario_event_data");
 SR_STATIC_ASSERT(0x1000004 + 32 * sizeof(WindowRect) <= sizeof(sr_data_buildingtype), "cl_data_windowrect");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_numofsprite_models), "cl_data_sprite_model_count");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_sprite_quads), "cl_data_shell_count");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_sprite_triangles), "cl_data_debris_count");
 SR_STATIC_ASSERT(0x0 + sizeof(LevelHit) <= sizeof(sr_data_intersect), "cl_data_level_hit");
 SR_STATIC_ASSERT(0x257e0 + sizeof(int) <= sizeof(sr_data_game), "cl_data_map_shown");
 SR_STATIC_ASSERT(0x34 + sizeof(float) <= sizeof(cl_data_audio_camera), "cl_data_view_zoom");
@@ -2219,21 +2213,13 @@ SR_STATIC_ASSERT(0x25974 + sizeof(int) <= sizeof(sr_data_game), "cl_data_round_g
 SR_STATIC_ASSERT(0x40 + 8192 * sizeof(BlockSector) <= sizeof(sr_data_area_sector), "cl_data_block_sectors");
 SR_STATIC_ASSERT(0x4 + sizeof(vec3) <= sizeof(cl_data_audio_camera), "cl_data_camera_position");
 SR_STATIC_ASSERT(0x10 + 3 * sizeof(vec3) <= sizeof(cl_data_audio_camera), "cl_data_camera_rotation");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_numofsprites), "cl_data_sprite_count");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_sprite_points), "cl_data_sprite_decal_count");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_sprite_lines), "cl_data_glass_vertex_count");
-SR_STATIC_ASSERT(0x0 + sizeof(uint32_t) <= sizeof(sr_data_tiremarkend), "cl_data_tiremark_head");
-SR_STATIC_ASSERT(0x0 + sizeof(uint32_t) <= sizeof(sr_data_tiremarkstart), "cl_data_tiremark_tail");
-SR_STATIC_ASSERT(0x10 + 4 * sizeof(float) <= sizeof(cl_data_blur_params_near), "cl_data_blur_params_far");
 SR_STATIC_ASSERT(0x50124 + sizeof(float) <= sizeof(sr_data_debug), "cl_data_frame_rate");
 SR_STATIC_ASSERT(0x50230 + sizeof(int) <= sizeof(sr_data_debug), "cl_data_debug_player_count");
 SR_STATIC_ASSERT(0x50234 + 16 * sizeof(int) <= sizeof(sr_data_debug), "cl_data_debug_counters");
-SR_STATIC_ASSERT(0x0 + 16384 * sizeof(Bond) <= sizeof(sr_data_bond), "cl_data_bonds");
 SR_STATIC_ASSERT(0x18014 + 8191 * sizeof(DebugSphere) <= sizeof(sr_data_debug), "cl_data_debug_spheres");
 SR_STATIC_ASSERT(0x0 + 16 * sizeof(InputCamera) <= sizeof(sr_data_camera), "cl_data_input_cameras");
 SR_STATIC_ASSERT(0x8 + 2 * sizeof(float) <= sizeof(sr_data_area_sector), "cl_data_input_heli_mouse");
 SR_STATIC_ASSERT(0x50 + sizeof(uint32_t) <= sizeof(sr_data_game), "cl_data_input_game_running");
-SR_STATIC_ASSERT(0x0 + 3 * sizeof(float) <= sizeof(sr_data_menucolor), "cl_data_menu_clear_color");
 SR_STATIC_ASSERT(0x76040 + 3 * sizeof(int) <= sizeof(sr_data_blocktemp), "cl_data_join_debug");
 SR_STATIC_ASSERT(0x38 + sizeof(vec3) <= sizeof(cl_data_audio_camera), "cl_data_camera_velocity");
 SR_STATIC_ASSERT(0x0 + 160 * sizeof(float) <= sizeof(sr_data_speex), "cl_data_audio_samples");
@@ -2245,14 +2231,11 @@ SR_STATIC_ASSERT(0x12c + sizeof(int) <= sizeof(sr_data_option), "cl_data_audio_p
 SR_STATIC_ASSERT(0x130 + sizeof(int) <= sizeof(sr_data_option), "cl_data_audio_voice_key");
 SR_STATIC_ASSERT(0x134 + sizeof(uint32_t) <= sizeof(sr_data_option), "cl_data_audio_voice_mouse");
 SR_STATIC_ASSERT(0x144 + sizeof(float) <= sizeof(sr_data_option), "cl_data_audio_voice_gain");
-SR_STATIC_ASSERT(0x0 + 512 * sizeof(uint8_t) <= sizeof(cl_data_keyboard), "cl_data_audio_keys");
 SR_STATIC_ASSERT(0x28 + sizeof(uint32_t) <= sizeof(cl_data_input_mouse), "cl_data_audio_mouse_buttons");
 SR_STATIC_ASSERT(0x20 + sizeof(int) <= sizeof(sr_data_game), "cl_data_audio_mode");
 SR_STATIC_ASSERT(0x24 + sizeof(int) <= sizeof(sr_data_game), "cl_data_audio_fade_ticks");
 SR_STATIC_ASSERT(0x1100 + sizeof(int) <= sizeof(sr_data_texturelist), "cl_data_audio_voice_icon");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_debugit), "cl_data_audio_debug");
 SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_game), "cl_data_audio_simulation");
-SR_STATIC_ASSERT(0x0 + 512 * sizeof(uint8_t) <= sizeof(cl_data_prevkeyboard), "cl_data_audio_keys_previous");
 SR_STATIC_ASSERT(0x50 + sizeof(int) <= sizeof(sr_data_game), "cl_data_relative_mouse");
 SR_STATIC_ASSERT(0x44 + sizeof(int) <= sizeof(sr_data_game), "cl_data_slow_tick");
 SR_STATIC_ASSERT(0x38 + sizeof(uint32_t) <= sizeof(sr_data_game), "cl_data_last_tick_ms");
@@ -2280,7 +2263,6 @@ SR_STATIC_ASSERT(0x7602c + sizeof(uint32_t) <= sizeof(sr_data_blocktemp), "cl_da
 SR_STATIC_ASSERT(0x257d8 + sizeof(int) <= sizeof(sr_data_game), "cl_data_spectated_human");
 SR_STATIC_ASSERT(0x54 + sizeof(uint32_t) <= sizeof(sr_data_server), "cl_data_server_address");
 SR_STATIC_ASSERT(0x58 + sizeof(uint16_t) <= sizeof(sr_data_server), "cl_data_server_port");
-SR_STATIC_ASSERT(0x0 + 1024 * sizeof(MaterialRecClient) <= sizeof(sr_data_materials), "cl_data_material_records");
 SR_STATIC_ASSERT(0x25d58 + sizeof(int) <= sizeof(sr_data_game), "cl_data_hide_messages");
 SR_STATIC_ASSERT(0x0 + 400 * sizeof(uint8_t) <= sizeof(sr_data_wsadata), "cl_data_wsa_data");
 SR_STATIC_ASSERT(0x1c6850 + sizeof(EditorView) <= sizeof(sr_data_level_editor), "cl_data_level_view");
@@ -2948,10 +2930,6 @@ void cl_storage_init(void)
     {
         static const unsigned char value[] = { 0x73, 0x68, 0x61, 0x64, 0x6f, 0x77, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x69, 0x6f, 0x72, 0x00 };
         memcpy(cl_data_input_label_timer_shadow, value, sizeof value);
-    }
-    {
-        static const unsigned char value[] = { 0xa9, 0xa8, 0x28, 0x3e, 0x89, 0x88, 0x88, 0x3e, 0xb5, 0xb4, 0xb4, 0x3e };
-        memcpy(cl_data_menu_clear_color, value, sizeof value);
     }
 }
 

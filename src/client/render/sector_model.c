@@ -26,7 +26,7 @@
 #define g_area_block sr_data_area_block
 #define g_buildingtype sr_data_buildingtype
 #define g_materiallist sr_data_materiallist
-#define g_materials cl_data_material_records
+#define g_materials sr_data_materials.records
 #define g_block_sectors cl_data_block_sectors
 #define g_cubevertex sr_data_cubevertex
 #define g_cubenormal sr_data_cubenormal

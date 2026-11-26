@@ -89,7 +89,7 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
 {
-    audio_glClearColor()(cl_data_menu_clear_color[0], cl_data_menu_clear_color[1], cl_data_menu_clear_color[2], 0.0f);
+    audio_glClearColor()(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2], 0.0f);
     audio_glClear()(bits);
 }
 
@@ -745,7 +745,7 @@ static void join_row(int page, int i)
 
     drawtext("/i", col[4], row_y(i, col[5]), size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f, s->ping);
     drawtext("/i///i", col[2], row_y(i, col[3]), size, 2, 1.0f, 1.0f, 1.0f, 1.0f, s->players, s->max_players);
-    if (cl_data_audio_debug != 0) {
+    if (sr_data_debugit != 0) {
         const JoinServer *d = &cl_data_join_servers[i + page * 8];
         uint32_t a = d->address;
 
@@ -780,7 +780,7 @@ static void join_texts(int page, int master_done)
     drawtext("Players", col[2], col[3], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
     drawtext("Game Type", col[8], col[9], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
     drawtext("Version", col[6], col[7], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
-    if (cl_data_audio_debug != 0) {
+    if (sr_data_debugit != 0) {
         cl_data_join_debug[0] = (int)cl_data_join_addresses[0].address;
         cl_data_join_debug[1] = (int)cl_data_join_addresses[1].address;
         cl_data_join_debug[2] = cl_data_join_address_count;
@@ -788,9 +788,9 @@ static void join_texts(int page, int master_done)
     for (i = 0; i < JOIN_ROWS; i++)
         if (page * JOIN_ROWS + i < cl_data_join_server_count)
             join_row(page, i);
-    if (cl_data_audio_debug != 0)
+    if (sr_data_debugit != 0)
         drawtext("/i", 16.0f, 400.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, cl_data_debug_counters[0]);
-    if (cl_data_audio_debug != 0)
+    if (sr_data_debugit != 0)
         drawtext("/i./i./i./i:/i", 320.0f, 560.0f, 12.0f, 2, 1.0f, 1.0f, 1.0f, 1.0f, master >> 24, master >> 16 & 0xff,
                  master >> 8 & 0xff, master & 0xff, (uint32_t)(uint16_t)sr_data_masterserver.port);
     if (!master_done) {
@@ -1173,7 +1173,7 @@ static void main_scene(void)
     rotateorientation(rot, &sr_data_yaxis, (float)MODEL_TURN);
     textures[0] = sr_data_texturelist.human[0];
     textures[1] = sr_data_texturelist.human[0];
-    if (cl_data_audio_keys[KEY_H] != 0) {
+    if (cl_data_keyboard[KEY_H] != 0) {
         audio_glPolygonMode()(GL_FRONT, GL_LINE);
         audio_glPolygonMode()(GL_BACK, GL_LINE);
     }
@@ -1230,9 +1230,9 @@ static void main_actions(void)
         cl_data_menu_items[MAIN_EXIT].pressed = 1;
     }
     if (sr_data_debugit != 0 && cl_data_audio_input_blocked == 0) {
-        if (cl_data_audio_keys[KEY_A] != 0)
+        if (cl_data_keyboard[KEY_A] != 0)
             model_viewer();
-        if (cl_data_audio_keys[KEY_U] != 0)
+        if (cl_data_keyboard[KEY_U] != 0)
             usermenu();
     }
 }
@@ -1245,10 +1245,10 @@ static void main_test_sounds(void)
     int i;
 
     for (i = 0; i < 4; i++)
-        if (cl_data_audio_keys[KEY_1 + i] != 0 && cl_data_prevkeyboard[KEY_1 + i] == 0) {
+        if (cl_data_keyboard[KEY_1 + i] != 0 && cl_data_prevkeyboard[KEY_1 + i] == 0) {
             copyvector((unsigned *)&place, (const unsigned *)&cl_data_camera_position);
             createsound(sr_data_soundlist.menu_test[i], &place, 0, 1.0f,
-                        cl_data_audio_keys[KEY_LEFT_SHIFT] == 0 ? 1.0f : 0.25f);
+                        cl_data_keyboard[KEY_LEFT_SHIFT] == 0 ? 1.0f : 0.25f);
         }
 }
 

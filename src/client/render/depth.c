@@ -83,7 +83,7 @@ static void blur_quad(const float step[2])
     cl_glUniform4fvARB(
         program->uniforms[2], 1, cl_data_blur_params_near);
     cl_glUniform4fvARB(
-        program->uniforms[3], 1, cl_data_blur_params_far);
+        program->uniforms[3], 1, (cl_data_blur_params_near + 4));
     depth_texture(sr_data_texturelist.shadow_map);
     glBegin(GL_QUADS);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -123,7 +123,7 @@ void __cdecl renderframedepth(void)
     glDisableClientState(ARRAY_POSITION);
     renderlandscape(1);
     rendermodellist(1);
-    for (i = 0; i < cl_data_sprite_model_count; ++i) {
+    for (i = 0; i < sr_data_numofsprite_models; ++i) {
         const SpriteModel *piece = &cl_data_sprite_models[i];
         if (!piece->active)
             continue;

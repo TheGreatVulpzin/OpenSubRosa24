@@ -60,15 +60,15 @@ static SectorPart *start_part(BlockSector *sector, int material)
     SectorPart *part = &sector->parts[sector->num_meshes];
     part->material = (uint8_t)material;
     part->num_triangles = 0;
-    part->first_index = cl_data_sector_mesh_next;
+    part->first_index = cl_data_sector_block;
     return part;
 }
 
 /* Mark the current block, then select the next free one. */
 static void finish_part(BlockSector *sector)
 {
-    area_setsectormesh(cl_data_sector_mesh_next, 1);
-    cl_data_sector_mesh_next = area_getnextsectormesh();
+    area_setsectormesh(cl_data_sector_block, 1);
+    cl_data_sector_block = area_getnextsectormesh();
     ++sector->num_meshes;
 }
 

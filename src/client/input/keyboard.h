@@ -30,6 +30,6 @@ void checkkeyboard(void);
 /* Return nonzero for a key press with no press in the transition buffer. */
 static INPUT_INLINE int input_pressed(int key)
 {
-    return cl_data_audio_keys[key] && !cl_data_audio_keys_previous[key];
+    return cl_data_keyboard[key] && !cl_data_prevkeyboard[key];
 }
 #endif

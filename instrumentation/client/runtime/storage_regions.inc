@@ -58,4 +58,3 @@
 { "cl_data_input_label_timer_setup", (const void *)cl_data_input_label_timer_setup, 0x123e3cu, 14u },
 { "cl_data_input_label_timer_alloc", (const void *)cl_data_input_label_timer_alloc, 0x123e4cu, 14u },
 { "cl_data_input_label_timer_shadow", (const void *)cl_data_input_label_timer_shadow, 0x123e5cu, 15u },
-{ "cl_data_menu_clear_color", (const void *)cl_data_menu_clear_color, 0x1234c8u, 12u },

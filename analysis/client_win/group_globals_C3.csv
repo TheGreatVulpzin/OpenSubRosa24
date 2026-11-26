@@ -1,64 +1,56 @@
 name,type,count,client_rva,evidence
 draw_text,char,1024,0x1779ae00,"drawtext builds the text in it, up to 1000 letters and an end mark"
-draw_number,char,1024,0x1779b200,"drawtext formats one number or string in it before it adds it to the text. The 1024 bytes run to the next object"
+draw_number,char,1024,0x1779b200,drawtext formats one number or string in it before it adds it to the text. The 1024 bytes run to the next object
 glext,int,17,0x29e7d2c0,"flags of the OpenGL extensions that the client checks at start. The Linux client names the symbol glext, 0x44 bytes. Entry 8 is the two sided stencil and entry 9 the separate stencil operation"
-programs,ProgramObject,32,0x128260,"setupprogramobjects and compileprogramobject: one record of 0x50 bytes for each of the 32 program slots. Ten of them hold a compiled program"
-shader_log,char,65536,0x13c1e6c0,"compileprogramobject adds the info logs to it. setupprogramobjects writes it to shaderoutput.txt"
-info_log,char,65536,0x163129e0,"compileprogramobject reads the info log of an object into it"
-render_width,int,1,0xb7330c0,"setupprogramobjects gives the shaders the size of one pixel: 1 over this width"
-render_height,int,1,0xb7330c4,"setupprogramobjects gives the shaders the size of one pixel: 1 over this height"
+programs,ProgramObject,32,0x128260,setupprogramobjects and compileprogramobject: one record of 0x50 bytes for each of the 32 program slots. Ten of them hold a compiled program
+shader_log,char,65536,0x13c1e6c0,compileprogramobject adds the info logs to it. setupprogramobjects writes it to shaderoutput.txt
+info_log,char,65536,0x163129e0,compileprogramobject reads the info log of an object into it
+render_width,int,1,0xb7330c0,setupprogramobjects gives the shaders the size of one pixel: 1 over this width
+render_height,int,1,0xb7330c4,setupprogramobjects gives the shaders the size of one pixel: 1 over this height
 open_file,int,1,0x13e61828,"the handle of the open text or image file: shaderoutput.txt, a screenshot and the settings file"
 light_position,float,4,0x19c0cd78,"the direction of the light, in world space. The model, landscape, sector and sky passes pass it to OpenGL and to the shaders"
-world_position,vec3,1,0x19c750c4,"renderframeatmosphere and render_sectorlist pass it to the shaders as the world position"
-viewport_width,float,1,0x19c07cc8,"renderframeatmosphere sets the viewport from it"
-viewport_height,float,1,0x19c07ccc,"renderframeatmosphere sets the viewport from it"
-track_vbo,int,1,0x1033fd30,"rendertrackmodel: the index into vbo of the buffer of the track"
-track_vertex_floats,int,1,0x147129a8,"rendertrackmodel: the floats of one vertex of the track buffer"
-track_vertex_count,int,1,0x147129ac,"rendertrackmodel: the vertices of the track buffer"
-frustum_planes,vec3,5,0x122b90,"boxinsidefrustum writes the five plane normals into it each time it runs"
-shadow_corners,vec3,6,0x1033ecc0,"rendermodelshadow: the three pushed corners and the three corners of the triangle in work"
-shadow_count,int,1,0x13bee6a0,"rendermodelshadow: the points in the list of the shadow"
+world_position,vec3,1,0x19c750c4,renderframeatmosphere and render_sectorlist pass it to the shaders as the world position
+viewport_width,float,1,0x19c07cc8,renderframeatmosphere sets the viewport from it
+viewport_height,float,1,0x19c07ccc,renderframeatmosphere sets the viewport from it
+track_vbo,int,1,0x1033fd30,rendertrackmodel: the index into vbo of the buffer of the track
+track_vertex_floats,int,1,0x147129a8,rendertrackmodel: the floats of one vertex of the track buffer
+track_vertex_count,int,1,0x147129ac,rendertrackmodel: the vertices of the track buffer
+frustum_planes,vec3,5,0x122b90,boxinsidefrustum writes the five plane normals into it each time it runs
+shadow_corners,vec3,6,0x1033ecc0,rendermodelshadow: the three pushed corners and the three corners of the triangle in work
+shadow_count,int,1,0x13bee6a0,rendermodelshadow: the points in the list of the shadow
 shadow_list,vec3,16384,0x13bee6a4,"rendermodelshadow: the triangles of the shadow volume, as points. The next object starts 0x2fffc bytes after it"
-chat_head,uint32_t,1,0xf3eafc0,"frame_drawmessages walks the ring of messages from this index back. createmessage moves it"
-sprite_models,SpriteModel,16384,0x5379100,"createsprite_model and sprite_model_simulation: the flying pieces. A record has 0x68 bytes"
-sprite_model_count,int,1,0x12a7d604,"createsprite_model adds 1. deletesprite_model moves the last piece into the freed place"
-shell_count,int,1,0x76558a8,"sprite_model_simulation adds the corners of a landed shell casing to shell_verts"
-shell_verts,SpriteVertex,262144,0x76558ac,"the corners of the landed shell casings. renderspritemodels draws them"
-debris_count,int,1,0x7e558ac,"sprite_model_simulation adds the corners of a landed piece of debris to debris_verts"
-debris_verts,SpriteVertex,65536,0x7e558b0,"the corners of the landed pieces of debris. renderspritemodels draws them"
-level_hit,LevelHit,1,0x1033ec20,"lineintersectlevel writes the point and the normal of the hit into it"
-score_count,int,1,0x163229e0,"drawplayerinfo: the number of players in the column that it builds"
+chat_head,uint32_t,1,0xf3eafc0,frame_drawmessages walks the ring of messages from this index back. createmessage moves it
+sprite_models,SpriteModel,16384,0x5379100,createsprite_model and sprite_model_simulation: the flying pieces. A record has 0x68 bytes
+shell_verts,SpriteVertex,262144,0x76558ac,the corners of the landed shell casings. renderspritemodels draws them
+debris_verts,SpriteVertex,65536,0x7e558b0,the corners of the landed pieces of debris. renderspritemodels draws them
+level_hit,LevelHit,1,0x1033ec20,lineintersectlevel writes the point and the normal of the hit into it
+score_count,int,1,0x163229e0,drawplayerinfo: the number of players in the column that it builds
 score_entries,ScoreEntry,256,0x163229e4,"drawplayerinfo: the player and the worth of each player of the column, before the sort"
-map_shown,int,1,0x908aae0,"drawhud: not zero draws the map over the display"
+map_shown,int,1,0x908aae0,drawhud: not zero draws the map over the display
 view_zoom,float,1,0xfefe2d4,"the zoom of the view: 1 normally, larger while a gun aims. drawhud scales the aim marks by it"
-display_text,char,256,0x126728,"drawdisplay builds a stock price or a chat line in it before drawtext"
+display_text,char,256,0x126728,drawdisplay builds a stock price or a chat line in it before drawtext
 round_ticks,int,1,0x908ac70,"drawdisplay: the ticks of the timed round, shown as minutes, seconds and tenths"
-round_goal,int,1,0x908ac74,"drawdisplay: the right number of the round score line"
-light_ambient,float,4,0x19c07d00,"renderframe sets it as the ambient color of the light 0 and the interior window pass draws with it"
-interior_corners,vec3,6,0x1271e8,"render_sector_interior_shadow2: the three corners of a triangle and the same corners pushed away from the light"
-block_sectors,BlockSector,8192,0x1dda5280,"the sectors of the city: renderframe lists the ones near the camera. The record starts 0x40 bytes after the start of the area block"
-sector_part_count,int,128,0x17c04860,"clearsectorlist: the number of runs of triangles for each material"
+round_goal,int,1,0x908ac74,drawdisplay: the right number of the round score line
+light_ambient,float,4,0x19c07d00,renderframe sets it as the ambient color of the light 0 and the interior window pass draws with it
+interior_corners,vec3,6,0x1271e8,render_sector_interior_shadow2: the three corners of a triangle and the same corners pushed away from the light
+block_sectors,BlockSector,8192,0x1dda5280,the sectors of the city: renderframe lists the ones near the camera. The record starts 0x40 bytes after the start of the area block
+sector_part_count,int,128,0x17c04860,clearsectorlist: the number of runs of triangles for each material
 sector_draw_counts,int,1048576,0x17c04c60,"clearsectorlist: the index count of each run, 0x4000 runs for each material"
 sector_draw_offsets,void*,1048576,0x18c04c60,"clearsectorlist: the place of the indices of each run, 0x4000 runs for each material"
-sector_count,int,1,0x19c04c60,"clearsectorlist: the number of sectors with an interior to draw"
+sector_count,int,1,0x19c04c60,clearsectorlist: the number of sectors with an interior to draw
 sector_list,int,1024,0x19c04c64,"clearsectorlist: the sectors with an interior, from the nearest"
 sector_entries,SectorEntry,1024,0x19c05c64,"clearsectorlist: the sectors with an interior and their distance, before the sort"
-interior_model_count,int,1,0x19c07c64,"clearsectorlist clears it. The interior model builder adds 1 for each model"
+interior_model_count,int,1,0x19c07c64,clearsectorlist clears it. The interior model builder adds 1 for each model
 sector_vertices,uint8_t,33554432,0x1047c604,"render_sectorlist: the vertices of the sectors, 64 bytes each"
 sector_indices,uint8_t,6291456,0x1247c604,"clearsectorlist: the triangle indices of the sectors, 12 bytes for each triangle"
-sector_vbo,int,1,0x1033fd24,"render_sectorlist: the number of the buffer of the sector vertices"
-camera_position,vec3,1,0xfefe2a4,"the place of the camera"
-camera_rotation,vec3,3,0xfefe2b0,"spritesimulation copies the camera rows to a particle in flight"
-sprites,ClientSprite,16384,0xf9ae260,"spritesimulation and rendersprites: particles and glass with a stride of 0x94"
-sprite_count,int,1,0x75a5120,"createwindowsprites adds a particle and spritesimulation reads the count"
-sprite_decal_count,int,1,0x75a58a0,"spritesimulation adds four decal vertices when a particle lands"
-sprite_decals,SpriteDecalVertex,16384,0x75a58a4,"rendersprites draws the landed particles as textured quads"
-glass_vertex_count,int,1,0x75f58a4,"spritesimulation adds four vertices when a glass shard lands"
-glass_vertices,GlassVertex,16384,0x75f58a8,"rendersprites draws the landed glass with a normal at each vertex"
-tiremark_head,uint32_t,1,0xb73312c,"tiremark_simulation advances the head with a mask of 0x3fff"
-tiremark_tail,uint32_t,1,0xb77c580,"the oldest tire strip in the ring"
-tiremarks,Tiremark,16384,0x1036c5e0,"tiremark_simulation writes four position and opacity pairs in each strip"
-selected_item,int,1,0x2a7593c0,"the free item nearest to the viewed human within the 1.5 unit reach segment"
+sector_vbo,int,1,0x1033fd24,render_sectorlist: the number of the buffer of the sector vertices
+camera_position,vec3,1,0xfefe2a4,the place of the camera
+camera_rotation,vec3,3,0xfefe2b0,spritesimulation copies the camera rows to a particle in flight
+sprites,ClientSprite,16384,0xf9ae260,spritesimulation and rendersprites: particles and glass with a stride of 0x94
+sprite_decals,SpriteDecalVertex,16384,0x75a58a4,rendersprites draws the landed particles as textured quads
+glass_vertices,GlassVertex,16384,0x75f58a8,rendersprites draws the landed glass with a normal at each vertex
+tiremarks,Tiremark,16384,0x1036c5e0,tiremark_simulation writes four position and opacity pairs in each strip
+selected_item,int,1,0x2a7593c0,the free item nearest to the viewed human within the 1.5 unit reach segment
 sector_shadow_corners,vec3,6,0x127890,Six corners of the current sector shadow volume
 sector_shadow_count,int,1,0xfbfe280,Number of vertices in the sector shadow list
 sector_shadow_vertices,vec3,262144,0xfbfe284,Sector shadow side faces and caps
@@ -71,7 +63,6 @@ video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height an
 video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
 screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
 blur_params_near,float,8,0x19c750dc,The eight weights of the depth blur. The first four go to the shader as the near parameters and the last four as the far parameters (blur_params_far)
-blur_params_far,float,4,0x19c750ec,The second four parameters of the depth blur shader
 frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
 debug_player_count,int,1,0x14f88b0,The active player count without bots
 debug_counters,int,16,0x14f88b4,The integer rows of diagnostic page two
@@ -88,5 +79,4 @@ window_quad_count,int,1,0x19c75120,buildframelist adds one for each car window. 
 window_quads,WindowQuad,16384,0x19c75124,buildframelist writes four corners a normal a distance and a facing flag with a stride of 0x44
 framebuffers,ClientFramebuffer,2,0x9063240,mainmenu creates two framebuffers with their depth renderbuffers
 framebuffer_index,int,1,0xfefe294,mainmenu writes 0. renderframe and setupframetextures bind this framebuffer
-bonds,Bond,16384,0x1779b820,renderframe draws the bone joints and particle pairs of the bonds in the world debug view
 debug_spheres,DebugSphere,8191,0x14c0694,renderframe draws each sphere with its color and radius in the world debug view

@@ -20,7 +20,6 @@ audio_push_to_talk,int,1,0x906320c,getaudioinput capture mode
 audio_voice_key,int,1,0x9063210,getaudioinput key index
 audio_voice_mouse,uint32_t,1,0x9063214,getaudioinput mouse mask
 audio_voice_gain,float,1,0x9063224,getaudioinput input gain
-audio_keys,uint8_t,512,0x75a5140,getaudioinput key state
 audio_mouse_buttons,uint32_t,1,0x19c07ca8,getaudioinput mouse state
 audio_input_blocked,int,1,0x29e752a0,getaudioinput talk suppression
 audio_voice_mode,int,1,0x52daba4,Whisper and Yell labels and keyboard voice mode selection
@@ -28,8 +27,6 @@ audio_mode,int,1,0x9065320,soundsimulation fade mode
 audio_fade_ticks,int,1,0x9065324,soundsimulation fade timer
 audio_voice_icon,int,1,0x14312940,frame_drawvoiceicons texture
 audio_menu_back,int,1,0xb7330ec,voiceoptionsmenu back condition
-audio_debug,int,1,0x127ea8,voiceoptionsmenu frame sizes display
 audio_window,void*,1,0x103675a8,voiceoptionsmenu SDL window
 audio_simulation,int,1,0x9065300,voiceoptionsmenu simulation switch
-audio_keys_previous,uint8_t,512,0x1bbe1a0,voiceoptionsmenu key transitions
 audio_key_names,char,8192,0x17798e00,voiceoptionsmenu key labels stride 16

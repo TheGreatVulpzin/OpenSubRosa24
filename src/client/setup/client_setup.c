@@ -34,7 +34,7 @@
 #define g_textures cl_data_texture
 #define g_soundlist sr_data_soundlist
 #define g_materiallist sr_data_materiallist
-#define g_materials cl_data_material_records
+#define g_materials sr_data_materials.records
 #define g_logo ((const int *)sr_data_cslogo)
 
 enum {

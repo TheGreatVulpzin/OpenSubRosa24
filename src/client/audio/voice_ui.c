@@ -158,7 +158,7 @@ static void voice_bind_key(void)
     int key;
     for (key = 1; key < MENU_KEYS; key++) {
         if (cl_data_audio_key_names[key * MENU_KEY_NAME_BYTES] &&
-            cl_data_audio_keys[key] && !cl_data_audio_keys_previous[key]) {
+            cl_data_keyboard[key] && !cl_data_prevkeyboard[key]) {
             cl_data_audio_voice_key = key;
             cl_data_menu_items[1].pressed = 0;
         }
@@ -170,7 +170,7 @@ static void voice_bind_key(void)
             cl_data_menu_items[1].pressed = 0;
         }
     }
-    if (cl_data_audio_keys[MENU_ESCAPE] && !cl_data_audio_keys_previous[MENU_ESCAPE])
+    if (cl_data_keyboard[MENU_ESCAPE] && !cl_data_prevkeyboard[MENU_ESCAPE])
         cl_data_menu_items[1].pressed = 0;
 }
 
@@ -225,7 +225,7 @@ void voiceoptionsmenu(void)
                     cl_data_audio_key_names + cl_data_audio_voice_key * MENU_KEY_NAME_BYTES,
                     MENU_BIND_X, MENU_BIND_Y, MENU_HEIGHT, ICON_CENTER, 1.0f, 1.0f, 1.0f, 1.0f);
         }
-        if (cl_data_audio_debug)
+        if (sr_data_debugit)
             for (frame = 0; frame < ICON_FRAMES; frame++)
                 drawtext(
                     TEXT_SIZE, MENU_MARGIN, (float)frame * MENU_DEBUG_FONT, MENU_DEBUG_FONT, 0,

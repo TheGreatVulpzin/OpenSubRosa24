@@ -278,10 +278,10 @@ static void texturemenu_list(void)
 
     cl_data_game_texture_count = 0;
     for (i = 0; i < sr_data_materiallist.num_materials; i++)
-        if (cl_data_material_records[i].name[0] != '\0') {
+        if (sr_data_materials.records[i].name[0] != '\0') {
             EditorEntry *e = &cl_data_game_textures[cl_data_game_texture_count];
 
-            strcpy(e->name, cl_data_material_records[i].name);
+            strcpy(e->name, sr_data_materials.records[i].name);
             e->index = i;
             cl_data_game_texture_count++;
         }

@@ -34,7 +34,7 @@
 #define g_building sr_data_building
 #define g_mouse cl_data_input_mouse
 #define g_mouse_previous cl_data_input_mouse_previous
-#define g_keys cl_data_audio_keys
+#define g_keys cl_data_keyboard
 
 GL_IMPORT(glClearColor, (float red, float green, float blue, float alpha), (red, green, blue, alpha))
 GL_IMPORT(glClear, (uint32_t mask), (mask))
@@ -119,7 +119,7 @@ static void building_find_types(void)
         g_building.material_textures[i] = 0;
     for (i = 0; i < g_building.num_materials; i++)
         for (j = 0; j < sr_data_materiallist.num_materials; j++)
-            if (strcmp(&g_building.materials[i * 64], cl_data_material_records[j].name) == 0)
+            if (strcmp(&g_building.materials[i * 64], sr_data_materials.records[j].name) == 0)
                 g_building.material_textures[i] = j;
     for (i = 0; i < 1024; i++)
         g_building.block_types[i] = 0;

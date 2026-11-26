@@ -373,9 +373,9 @@ void __cdecl checkmenuitems(void)
             }
         }
         if (item->disabled == 0) {
-            if (cl_data_audio_input_blocked == 0 && cl_data_audio_keys[item->key] != 0 &&
-                (item->key2 == 0 || cl_data_audio_keys[item->key2] != 0) &&
-                (cl_data_audio_keys_previous[item->key] == 0 || item->repeat != 0))
+            if (cl_data_audio_input_blocked == 0 && cl_data_keyboard[item->key] != 0 &&
+                (item->key2 == 0 || cl_data_keyboard[item->key2] != 0) &&
+                (cl_data_prevkeyboard[item->key] == 0 || item->repeat != 0))
                 item->pressed = 1;
             if (item->pressed != 0)
                 item->lit = 1;
@@ -436,7 +436,7 @@ void __cdecl menuslider(void)
     if (t > 1.0)
         t = 1.0f;
     *item->value = cl_ftoi((double)(item->slider_max - item->slider_min) * t + (double)item->slider_min);
-    if (cl_data_audio_keys[KEY_LEFT_CTRL] != 0 && item->slider_step > 0 && *item->value < item->slider_max) {
+    if (cl_data_keyboard[KEY_LEFT_CTRL] != 0 && item->slider_step > 0 && *item->value < item->slider_max) {
         *item->value = (item->slider_step >> 1) + *item->value;
         *item->value /= item->slider_step;
         *item->value *= item->slider_step;

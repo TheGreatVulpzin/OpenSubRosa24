@@ -81,7 +81,7 @@ void getaudioinput(int player)
             else if (ring->silence_ticks < SILENCE_LIMIT) ring->silence_ticks++;
             if (ring->silence_ticks < VOICE_RELEASE) quiet = 0;
         } else if (!cl_data_audio_input_blocked &&
-                   (cl_data_audio_keys[cl_data_audio_voice_key] ||
+                   (cl_data_keyboard[cl_data_audio_voice_key] ||
                     (cl_data_audio_mouse_buttons & cl_data_audio_voice_mouse))) {
             quiet = 0;
             ring->silence_ticks = 0;

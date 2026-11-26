@@ -26,20 +26,20 @@ void debug_getinputs(void)
     };
     int timer;
     if (!cl_data_audio_input_blocked) {
-        if (cl_data_audio_keys[KEY_6]) {
+        if (cl_data_keyboard[KEY_6]) {
             sr_game.death_camera_ticks = 0;
             sr_data_view = -1;
         }
-        if (cl_data_audio_keys[KEY_7]) sr_data_view = 0;
-        if (cl_data_audio_keys[KEY_8]) sr_data_view = 1;
-        if (cl_data_audio_keys[KEY_9]) sr_data_view = 2;
-        if (cl_data_audio_keys[KEY_0]) sr_data_view = 3;
+        if (cl_data_keyboard[KEY_7]) sr_data_view = 0;
+        if (cl_data_keyboard[KEY_8]) sr_data_view = 1;
+        if (cl_data_keyboard[KEY_9]) sr_data_view = 2;
+        if (cl_data_keyboard[KEY_0]) sr_data_view = 3;
         if (input_pressed(KEY_F10)) cl_data_input_debug_toggle ^= 1;
         if (input_pressed(KEY_U))
             for (timer = 0; timer < INTERIOR_TIMERS; timer++)
                 resettimer(
                     timers[timer], labels[timer]);
-        if (cl_data_audio_keys[KEY_INSERT] && sr_players[0].human_id != -1)
+        if (cl_data_keyboard[KEY_INSERT] && sr_players[0].human_id != -1)
             cl_data_input_cameras[0].pos = sr_humans[sr_players[0].human_id].bones[2].pos;
         if (input_pressed(KEY_F2)) sr_data_debug.human_view ^= 1;
         if (input_pressed(KEY_INSERT)) sr_players[0].money += DEBUG_MONEY;

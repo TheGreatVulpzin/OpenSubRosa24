@@ -21,7 +21,7 @@
 #include "items.h"
 
 #define g_materiallist sr_data_materiallist
-#define g_materials cl_data_material_records
+#define g_materials sr_data_materials.records
 #define g_filelist sr_data_filelist
 
 enum { NUM_MATERIALS = 256, NUM_PRESETS = 4, FIRST_PRESET_MATERIAL = 21 };

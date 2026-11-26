@@ -314,7 +314,7 @@ int parse_zlib(ZlibBuffer *buffer, int header)
             if (type == 3)
                 return 0;
             if (type == 1) {
-                if (!cl_data_zlib_defaults_ready)
+                if (!cl_data_zlib_default_distance[31])
                     init_defaults();
                 if (!zbuild_huffman(&buffer->length, cl_data_zlib_default_length, ZLIB_LENGTH_CODES) ||
                     !zbuild_huffman(&buffer->distance, cl_data_zlib_default_distance, ZLIB_DISTANCE_CODES))

@@ -17,8 +17,8 @@ void checkkeyboard(void)
     static KeyboardState state;
     if (!state)
         *(void **)&state = sr_import("SDL2.DLL", "SDL_GetKeyboardState");
-    memcpy(cl_data_audio_keys_previous, cl_data_audio_keys, KEY_COPY_COUNT);
-    memcpy(cl_data_audio_keys, state(NULL), KEY_COPY_COUNT);
-    if (cl_data_audio_keys[KEY_RIGHT_SHIFT])
-        cl_data_audio_keys[KEY_SHIFT] = 1;
+    memcpy(cl_data_prevkeyboard, cl_data_keyboard, KEY_COPY_COUNT);
+    memcpy(cl_data_keyboard, state(NULL), KEY_COPY_COUNT);
+    if (cl_data_keyboard[KEY_RIGHT_SHIFT])
+        cl_data_keyboard[KEY_SHIFT] = 1;
 }

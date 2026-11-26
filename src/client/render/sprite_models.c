@@ -22,10 +22,10 @@
 #include "collide.h"
 
 #define g_sprites cl_data_sprite_models
-#define g_count cl_data_sprite_model_count
-#define g_shell_count cl_data_shell_count
+#define g_count sr_data_numofsprite_models
+#define g_shell_count sr_data_sprite_quads
 #define g_shell_verts cl_data_shell_verts
-#define g_debris_count cl_data_debris_count
+#define g_debris_count sr_data_sprite_triangles
 #define g_debris_verts cl_data_debris_verts
 #define g_hit cl_data_level_hit
 #define g_models cl_data_model

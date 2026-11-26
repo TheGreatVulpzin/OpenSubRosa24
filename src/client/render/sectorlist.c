@@ -17,7 +17,7 @@
 #define g_timerlist sr_data_timerlist
 #define g_texturelist sr_data_texturelist
 #define g_textures cl_data_texture
-#define g_materials cl_data_material_records
+#define g_materials sr_data_materials.records
 #define g_materiallist sr_data_materiallist
 #define g_programs cl_data_programs
 #define g_block_sectors cl_data_block_sectors

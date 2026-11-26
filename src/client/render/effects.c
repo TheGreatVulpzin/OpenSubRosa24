@@ -46,7 +46,7 @@ void __cdecl tiremark_simulation(void)
             Wheel *tire = &body->wheels[wheel];
 
             if (0.03125f < tire->slip) {
-                Tiremark *mark = &cl_data_tiremarks[cl_data_tiremark_head];
+                Tiremark *mark = &cl_data_tiremarks[sr_data_tiremarkend];
                 vec3 direction;
                 vec3 side;
                 int corner;
@@ -68,9 +68,9 @@ void __cdecl tiremark_simulation(void)
                         vertex->pos.y = (float)(cl_data_level_hit.pos.y + 0.03125);
                     vertex->alpha = (float)((corner < 2 ? tire->slip : tire->mark_slip) * 8.0);
                 }
-                cl_data_tiremark_head = (cl_data_tiremark_head + 1) & TIREMARK_MASK;
-                if (cl_data_tiremark_tail == cl_data_tiremark_head)
-                    cl_data_tiremark_tail = (cl_data_tiremark_tail + 1) & TIREMARK_MASK;
+                sr_data_tiremarkend = (sr_data_tiremarkend + 1) & TIREMARK_MASK;
+                if (sr_data_tiremarkstart == sr_data_tiremarkend)
+                    sr_data_tiremarkstart = (sr_data_tiremarkstart + 1) & TIREMARK_MASK;
             }
             tire->mark_pos = tire->pos;
             tire->mark_slip = tire->slip;
@@ -90,7 +90,7 @@ void __cdecl tiremark_render(void)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(DEPTH_LEQUAL);
     glBegin(GL_QUADS);
-    for (strip = cl_data_tiremark_tail; strip != cl_data_tiremark_head; strip = (strip + 1) & TIREMARK_MASK)
+    for (strip = sr_data_tiremarkstart; strip != sr_data_tiremarkend; strip = (strip + 1) & TIREMARK_MASK)
         for (corner = 0; corner < 4; ++corner) {
             const TiremarkVertex *vertex = &cl_data_tiremarks[strip].corners[corner];
 

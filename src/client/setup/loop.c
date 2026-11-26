@@ -52,7 +52,7 @@
 #define g_player sr_data_player
 #define g_debugit sr_data_debugit
 #define g_view cl_data_view_player
-#define g_keys cl_data_audio_keys
+#define g_keys cl_data_keyboard
 
 #define NUM_PLAYERS 256
 #define NUM_HUMANS 512
@@ -156,7 +156,7 @@ static void game_wait_events(void)
     while (cl_data_menu_items[0].pressed == 0 && cl_data_audio_menu_back == 0 &&
            (link->client_connected == 0 || (int)sr_data_numofevents < link->client_event_total)) {
         if (link->client_event_total != ALL_EVENTS) {
-            audio_glClearColor()(cl_data_menu_clear_color[0], cl_data_menu_clear_color[1], cl_data_menu_clear_color[2],
+            audio_glClearColor()(sr_data_menucolor[0], sr_data_menucolor[1], sr_data_menucolor[2],
                                  0.0f);
             audio_glClear()(GL_COLOR_BUFFER_BIT);
             cl_data_menu_item_count = 0;

@@ -104,7 +104,7 @@ static void viewer_view(void)
     zerovector((unsigned int *)&cl_data_camera_position);
     resetorientation(cl_data_camera_rotation);
     rotateorientation(cl_data_camera_rotation, &sr_data_yaxis, VIEW_TURN);
-    if (cl_data_audio_keys[KEY_LEFT_SHIFT] != 0)
+    if (cl_data_keyboard[KEY_LEFT_SHIFT] != 0)
         rotateorientation(cl_data_camera_rotation, &sr_data_yaxis, SHIFT_TURN);
     scaleaddvectors(&cl_data_camera_position, &cl_data_camera_position, &cl_data_camera_rotation[2], 0.5f);
     setupperspectiveviewport(0, 0, 0x400, 0x280, 0.125f, 1024.0f, 1.0f);

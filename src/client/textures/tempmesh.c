@@ -19,7 +19,7 @@
 
 #define g_tempmesh sr_data_tempmesh
 
-#define g_materials cl_data_material_records
+#define g_materials sr_data_materials.records
 #define JOIN_TIMER 3
 #define SAME_LINE 0.999750018119812f /* the cosine limit of two sides in one line */
 

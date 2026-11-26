@@ -47,7 +47,7 @@ enum {
 /* Return the first item of the selected hand, or -1 for an empty hand. */
 static int selected_item(const Human *human)
 {
-    const InventorySlot *hand = &human->inventory[cl_data_audio_keys[KEY_SHIFT] != 0];
+    const InventorySlot *hand = &human->inventory[cl_data_keyboard[KEY_SHIFT] != 0];
     return hand->count > 0 ? hand->items[0] : -1;
 }
 
@@ -92,12 +92,12 @@ static INPUT_INLINE void item_buttons(int player_index, Player *player, int item
         getinputs_phone(player_index, item);
     } else {
         for (key = 0; key < INVENTORY_KEYS; key++)
-            if (cl_data_audio_keys[KEY_1 + key])
+            if (cl_data_keyboard[KEY_1 + key])
                 player->input_buttons |= INPUT_SLOT_1 << key;
     }
-    if (cl_data_audio_keys[KEY_E]) player->input_buttons |= INPUT_USE;
-    if (cl_data_audio_keys[KEY_R]) player->input_buttons |= INPUT_RELOAD;
-    if (cl_data_audio_keys[KEY_F]) player->input_buttons |= INPUT_DROP;
+    if (cl_data_keyboard[KEY_E]) player->input_buttons |= INPUT_USE;
+    if (cl_data_keyboard[KEY_R]) player->input_buttons |= INPUT_RELOAD;
+    if (cl_data_keyboard[KEY_F]) player->input_buttons |= INPUT_DROP;
 }
 
 /* Fill on-foot controls. A missing human clears only movement and action fields. */
@@ -171,15 +171,15 @@ void getinputs_human(int player_index)
     if (player->crouch_toggle) player->input_buttons |= INPUT_CROUCH;
     if (cl_data_audio_input_blocked)
         return;
-    if (cl_data_audio_keys[KEY_W]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] + 1.0);
-    if (cl_data_audio_keys[KEY_S]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - 1.0);
-    if (cl_data_audio_keys[KEY_A]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] - 1.0);
-    if (cl_data_audio_keys[KEY_D]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] + 1.0);
+    if (cl_data_keyboard[KEY_W]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] + 1.0);
+    if (cl_data_keyboard[KEY_S]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - 1.0);
+    if (cl_data_keyboard[KEY_A]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] - 1.0);
+    if (cl_data_keyboard[KEY_D]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] + 1.0);
     if (cl_data_input_mouse.left && !cl_data_input_fire_blocked) player->input_buttons |= INPUT_FIRE;
-    if (cl_data_audio_keys[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
-    if (cl_data_audio_keys[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
-    if (cl_data_audio_keys[KEY_GRAVE]) player->input_buttons |= INPUT_GRAVE;
-    if (cl_data_audio_keys[KEY_DELETE]) player->input_buttons |= INPUT_LEAVE;
+    if (cl_data_keyboard[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
+    if (cl_data_keyboard[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
+    if (cl_data_keyboard[KEY_GRAVE]) player->input_buttons |= INPUT_GRAVE;
+    if (cl_data_keyboard[KEY_DELETE]) player->input_buttons |= INPUT_LEAVE;
     if (input_pressed(KEY_CONTROL)) player->crouch_toggle ^= 1;
     item_buttons(player_index, player, item);
 }
@@ -232,9 +232,9 @@ void getinputs_car(int player_index)
     view_limit(&player->yaw, &player->input_pitch, INPUT_PI);
     if (cl_data_input_mouse.right) player->input_buttons |= INPUT_LOOK;
     if (!cl_data_audio_input_blocked) {
-        if (cl_data_audio_keys[KEY_W]) {
+        if (cl_data_keyboard[KEY_W]) {
             player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] + DRIVE_RATE);
-        } else if (cl_data_audio_keys[KEY_S]) {
+        } else if (cl_data_keyboard[KEY_S]) {
             player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - DRIVE_RATE);
         } else if (CAR_FORWARD_RETURN <= player->input_axes[AXIS_FORWARD]) {
             player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - CAR_FORWARD_RETURN);
@@ -243,7 +243,7 @@ void getinputs_car(int player_index)
         } else {
             player->input_axes[AXIS_FORWARD] = 0.0f;
         }
-        if (cl_data_audio_keys[KEY_A]) {
+        if (cl_data_keyboard[KEY_A]) {
             if (-CAR_STEER_BOUND < player->input_axes[AXIS_STEER])
                 player->input_axes[AXIS_STEER] = (float)(player->input_axes[AXIS_STEER] - CAR_STEER_RATE);
             else
@@ -253,7 +253,7 @@ void getinputs_car(int player_index)
         } else {
             if (player->input_axes[AXIS_STEER] < 0.0f) player->input_axes[AXIS_STEER] = 0.0f;
         }
-        if (cl_data_audio_keys[KEY_D]) {
+        if (cl_data_keyboard[KEY_D]) {
             if (player->input_axes[AXIS_STEER] < CAR_STEER_BOUND)
                 player->input_axes[AXIS_STEER] = (float)(player->input_axes[AXIS_STEER] + CAR_STEER_RATE);
             else
@@ -264,12 +264,12 @@ void getinputs_car(int player_index)
             if (0.0f < player->input_axes[AXIS_STEER]) player->input_axes[AXIS_STEER] = 0.0f;
         }
         if (cl_data_input_mouse.left && !cl_data_input_fire_blocked) player->input_buttons |= INPUT_FIRE;
-        if (cl_data_audio_keys[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
-        if (cl_data_audio_keys[KEY_CONTROL]) player->input_buttons |= INPUT_CROUCH;
-        if (cl_data_audio_keys[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
-        if (cl_data_audio_keys[KEY_GRAVE]) player->input_buttons |= INPUT_GRAVE;
+        if (cl_data_keyboard[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
+        if (cl_data_keyboard[KEY_CONTROL]) player->input_buttons |= INPUT_CROUCH;
+        if (cl_data_keyboard[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
+        if (cl_data_keyboard[KEY_GRAVE]) player->input_buttons |= INPUT_GRAVE;
         item_buttons(player_index, player, item);
-        if (cl_data_audio_keys[KEY_DELETE]) player->input_buttons |= INPUT_LEAVE;
+        if (cl_data_keyboard[KEY_DELETE]) player->input_buttons |= INPUT_LEAVE;
     }
     if (player->input_axes[AXIS_FORWARD] < -1.0f) player->input_axes[AXIS_FORWARD] = -1.0f;
     if (1.0f < player->input_axes[AXIS_FORWARD]) player->input_axes[AXIS_FORWARD] = 1.0f;
@@ -321,21 +321,21 @@ void getinputs_heli(int player_index)
     }
     vehicle_zoom(player, HELI_ZOOM_LIMIT);
     if (!cl_data_audio_input_blocked) {
-        if (cl_data_audio_keys[KEY_W]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] + DRIVE_RATE);
-        if (cl_data_audio_keys[KEY_S]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - DRIVE_RATE);
-        if (cl_data_audio_keys[KEY_A]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] - 1.0);
-        if (cl_data_audio_keys[KEY_D]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] + 1.0);
+        if (cl_data_keyboard[KEY_W]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] + DRIVE_RATE);
+        if (cl_data_keyboard[KEY_S]) player->input_axes[AXIS_FORWARD] = (float)((double)player->input_axes[AXIS_FORWARD] - DRIVE_RATE);
+        if (cl_data_keyboard[KEY_A]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] - 1.0);
+        if (cl_data_keyboard[KEY_D]) player->input_axes[AXIS_STEER] = (float)((double)player->input_axes[AXIS_STEER] + 1.0);
         if (mouse->left && !cl_data_input_fire_blocked) player->input_buttons |= INPUT_FIRE;
-        if (cl_data_audio_keys[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
-        if (cl_data_audio_keys[KEY_CONTROL]) player->input_buttons |= INPUT_CROUCH;
-        if (cl_data_audio_keys[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
+        if (cl_data_keyboard[KEY_SPACE]) player->input_buttons |= INPUT_JUMP;
+        if (cl_data_keyboard[KEY_CONTROL]) player->input_buttons |= INPUT_CROUCH;
+        if (cl_data_keyboard[KEY_SHIFT]) player->input_buttons |= INPUT_SHIFT;
         for (key = 0; key < INVENTORY_KEYS; key++)
-            if (cl_data_audio_keys[KEY_1 + key]) player->input_buttons |= INPUT_SLOT_1 << key;
-        if (cl_data_audio_keys[KEY_E]) player->input_buttons |= INPUT_USE;
-        if (cl_data_audio_keys[KEY_R]) player->input_buttons |= INPUT_RELOAD;
-        if (cl_data_audio_keys[KEY_PAD_0]) player->input_buttons |= INPUT_PAD_0;
+            if (cl_data_keyboard[KEY_1 + key]) player->input_buttons |= INPUT_SLOT_1 << key;
+        if (cl_data_keyboard[KEY_E]) player->input_buttons |= INPUT_USE;
+        if (cl_data_keyboard[KEY_R]) player->input_buttons |= INPUT_RELOAD;
+        if (cl_data_keyboard[KEY_PAD_0]) player->input_buttons |= INPUT_PAD_0;
         for (key = 1; key < HELI_PAD_KEYS; key++)
-            if (cl_data_audio_keys[KEY_PAD_1 + key - 1]) player->input_buttons |= INPUT_PAD_0 << key;
+            if (cl_data_keyboard[KEY_PAD_1 + key - 1]) player->input_buttons |= INPUT_PAD_0 << key;
     }
     for (key = 0; key < INPUT_AXIS_COUNT; key++) {
         if (player->input_axes[key] < -1.0f) player->input_axes[key] = -1.0f;

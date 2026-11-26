@@ -78,9 +78,9 @@ void __cdecl rendersprites(void)
     float blue = (float)(cl_data_light_ambient[2] * 0.0);
     const ProgramObject *program = &cl_data_programs[PROGRAM_REFLECT];
 
-    for (index = 0; index < cl_data_sprite_count; ++index)
+    for (index = 0; index < sr_data_numofsprites; ++index)
         sr_data_radix.keys[index] = cl_ftoi((double)dotproduct(&cl_data_sprites[index].pos, &cl_data_camera_rotation[2]) * 1024.0 + 16777216.0);
-    sr_data_radix.count = cl_data_sprite_count;
+    sr_data_radix.count = sr_data_numofsprites;
     csradixsort();
     glDepthMask(0);
     glEnable(GL_BLEND);
@@ -92,12 +92,12 @@ void __cdecl rendersprites(void)
     glColor3f(red, green, blue);
     glVertexPointer(3, GL_FLOAT, sizeof(SpriteDecalVertex), &cl_data_sprite_decals[0].pos);
     glTexCoordPointer(2, GL_FLOAT, sizeof(SpriteDecalVertex), cl_data_sprite_decals[0].texcoord);
-    glDrawArrays(GL_QUADS, 0, cl_data_sprite_decal_count);
+    glDrawArrays(GL_QUADS, 0, sr_data_sprite_points);
     glDisableClientState(ARRAY_TEXCOORD);
     glDisableClientState(ARRAY_POSITION);
     glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.rough_disc].gl_name);
     glBegin(GL_QUADS);
-    for (index = 0; index < cl_data_sprite_count; ++index) {
+    for (index = 0; index < sr_data_numofsprites; ++index) {
         const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         float alpha = sprite_alpha(sprite->life);
 
@@ -126,11 +126,11 @@ void __cdecl rendersprites(void)
     glTexCoord2f(0.5f, 0.5f);
     glVertexPointer(3, GL_FLOAT, sizeof(GlassVertex), &cl_data_glass_vertices[0].pos);
     glNormalPointer(GL_FLOAT, sizeof(GlassVertex), &cl_data_glass_vertices[0].normal);
-    glDrawArrays(GL_QUADS, 0, cl_data_glass_vertex_count);
+    glDrawArrays(GL_QUADS, 0, sr_data_sprite_lines);
     glDisableClientState(ARRAY_NORMAL);
     glDisableClientState(ARRAY_POSITION);
     glBegin(GL_TRIANGLES);
-    for (index = 0; index < cl_data_sprite_count; ++index) {
+    for (index = 0; index < sr_data_numofsprites; ++index) {
         const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         vec3 normal;
         int corner;
@@ -156,7 +156,7 @@ void __cdecl rendersprites(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_TEXTURE_2D);
     glBegin(LINES);
-    for (index = 0; index < cl_data_sprite_count; ++index) {
+    for (index = 0; index < sr_data_numofsprites; ++index) {
         const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         int corner;
 
@@ -173,7 +173,7 @@ void __cdecl rendersprites(void)
     glDisable(GL_TEXTURE_2D);
     glEnable(LINE_SMOOTH);
     glBegin(LINES);
-    for (index = 0; index < cl_data_sprite_count; ++index) {
+    for (index = 0; index < sr_data_numofsprites; ++index) {
         const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         float alpha;
 
