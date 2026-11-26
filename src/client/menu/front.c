@@ -86,32 +86,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glLightfv, (unsigned, unsigned, co
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 
-/* Game functions of other files. */
-#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
-#define setuptextdisplay CL_FN_NAMED(setuptextdisplay, 0x5079d0, void(__cdecl *)(void))
-#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
-                                                 float red, float green, float blue, float alpha, ...))
-#define launchwebpage CL_FN_NAMED(launchwebpage, 0x4ac0a0, void(__cdecl *)(const char *url))
-#define gameloop CL_FN_NAMED(gameloop, 0x47b100, void(__cdecl *)(void))
-#define recvpacket CL_FN_NAMED(recvpacket, 0x4fe420, int(__cdecl *)(void))
-#define sendpacket CL_FN_NAMED(sendpacket, 0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
-#define cs_pwrite CL_FN_NAMED(cs_pwrite, 0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
-#define pbitwrite CL_FN_NAMED(pbitwrite, 0x4fe6c0, int(__cdecl *)(const uint32_t *value, uint32_t bits))
-#define pbitread CL_FN_NAMED(pbitread, 0x4fe800, int(__cdecl *)(uint32_t *value, uint32_t bits))
-#define enablesocketserver CL_FN_NAMED(enablesocketserver, 0x4fe2b0, void(__cdecl *)(int lan))
-#define closesocketserver CL_FN_NAMED(disablesocket, 0x4fe3f0, void(__cdecl *)(int lan))
-#define saveaccountsclient CL_FN_NAMED(saveaccountsclient, 0x434470, void(__cdecl *)(void))
-#define reactivategame CL_FN_NAMED(reactivategame, 0x47d060, void(__cdecl *)(void))
-#define checksimulation CL_FN_NAMED(checksimulation, 0x47d900, int(__cdecl *)(int))
-#define set_cpu_affinity CL_FN_NAMED(setcpuaffinity, 0x4faf30, void(__cdecl *)(void)) /* setcpuaffinity */
-#define enablesocketclient CL_FN_NAMED(enablesocketclient, 0x4fe360, void(__cdecl *)(int lan))
-#define getonlineserverlist CL_FN_NAMED(getonlineserverlist, 0x494c00, void(__cdecl *)(void))
-#define getmasterserverip CL_FN_NAMED(getmasterserverip, 0x494c50, int(__cdecl *)(void))
-#define buildingedit_menu CL_FN_NAMED(buildingedit_menu, 0x45dbd0, void(__cdecl *)(void))
-#define model_viewer CL_FN_NAMED(model_viewer, 0x4c14a0, void(__cdecl *)(void))
-#define setupclient CL_FN_NAMED(setupclient, 0x481a80, void(__cdecl *)(void))
-
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
 {
@@ -334,7 +308,6 @@ void __cdecl usermenu(void)
 /* --- hostmenu --- */
 
 #define TICKS_PER_MINUTE 3600
-
 
 /* Build the items of the host screen. The broadcast toggle and the server name show only for
  * a server on the network. */
@@ -605,7 +578,7 @@ void __cdecl optionsmenu(void)
             checksimulation(0);
     }
     if (sr_data_option.setcpuaffinity != 0)
-        set_cpu_affinity();
+        setcpuaffinity();
     if (cl_data_menu_items[1].pressed != 0)
         options_apply(mode, start_mode, fullscreen);
     resetmenuitems();

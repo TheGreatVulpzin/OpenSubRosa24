@@ -38,9 +38,6 @@ GL_IMPORT(glPolygonMode, (uint32_t face, uint32_t mode), (face, mode))
 
 GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 
-/* Game functions of other files. */
-#define area_block_createbuildinginterior CL_FN_NAMED(area_block_createbuildinginterior, 0x43e0e0, uint32_t(__cdecl *)(int layer, uint32_t key))
-
 #define MATERIAL_NAME 64
 #define DELETE_LIMIT 31
 

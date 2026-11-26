@@ -175,7 +175,7 @@ static void play_voice(int index, const vec3 *velocity)
         audio_alSourceUnqueueBuffers()(voice->source, 1, &buffer);
         for (frame = 0; frame < AUDIO_BUFFER_FRAMES; frame++) {
             voice->mode = voice->frame_mode[voice->tail];
-            CL_FN_NAMED(decodespeex, 0x4e13c0, void (__cdecl *)(int, int, int))(index, index, voice->tail);
+            decodespeex(index, index, voice->tail);
             memcpy(cl_data_audio_play_buffer + frame * AUDIO_FRAME_SAMPLES,
                    voice->samples + voice->tail * AUDIO_FRAME_SAMPLES,
                    AUDIO_FRAME_SAMPLES * sizeof(int16_t));

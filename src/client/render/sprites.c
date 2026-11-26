@@ -138,8 +138,8 @@ static void simulate_triangle(ClientSprite *sprite, LevelIntersectFn intersect)
 void __cdecl spritesimulation(void)
 {
     int index;
-    LevelIntersectFn intersect = CL_FN_NAMED(lineintersectlevel, 0x4a0f40, LevelIntersectFn);
-    SpinFn spin = CL_FN_NAMED(rotateorientationfast, 0x4e4f10, SpinFn);
+    LevelIntersectFn intersect = lineintersectlevel;
+    SpinFn spin = rotateorientationfast;
 
     debug_addataint("sprites", cl_data_sprite_count);
     for (index = 0; index < cl_data_sprite_count; ++index) {
@@ -203,7 +203,7 @@ void __cdecl createwindowsprites(int object, int face, const vec3 *hit, const ve
     vec3 right;
     vec3 left_step;
     vec3 right_step;
-    RandomVectorFn random_vector = CL_FN_NAMED(getrandomvector3d, 0x4c5700, RandomVectorFn);
+    RandomVectorFn random_vector = getrandomvector3d;
 
     for (index = 0; index < model->num_windows; ++index)
         if (model->windows[index].face == face)
@@ -304,7 +304,7 @@ void __cdecl selectnearitem(void)
         return;
     head = &human->bones[HEAD_BONE];
     scaleaddvectors(&end, &head->pos, &head->rot[2], -1.5f);
-    distance_to_line = CL_FN_NAMED(pointdistanceline, 0x4fd150, PointDistanceFn);
+    distance_to_line = pointdistanceline;
     for (item = 0; item < MAX_ITEMS; ++item) {
         const Item *candidate = &sr_data_item[item];
         float distance;

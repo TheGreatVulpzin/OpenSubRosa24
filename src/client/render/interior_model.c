@@ -35,9 +35,6 @@
 #define g_interior_model_count cl_data_interior_model_count
 #define g_yaxis sr_data_yaxis
 
-/* Game functions of other files. */
-#define tempmesh_vertnormalequal CL_FN_NAMED(tempmesh_vertnormalequal, 0x50b290, int(__cdecl *)(int a, int b))
-
 #define NUM_SECTORS 0x2000
 #define MAX_MODELS 0x1000
 #define NO_INTERIOR (-2)

@@ -106,8 +106,8 @@ original executable fills past its end into idle data. Give the real size, or ad
 - `tools/build_native.bat <target> ...` builds native targets. Its exit code is 0 only when the build passes.
   The log is `build/native_build.log`. Targets: `subvulpes-client-native`, `-smoke`, `-guard`, `-guard-smoke`.
 - `tools/native_test.sh [--guard] [--hidden] [--build-only] [--timeout N] [scenario ...]` builds, checks that the
-  executable is current and runs the scenarios (default: `menus level`). Output goes to `build/nt/<plain|guard>`.
-  Keep the path short: the capture path must stay under 90 characters.
+  executable is current and runs the scenarios (default: `menus level`). Output goes to `C:\svnt\<plain|guard>`
+  (`SV_NT_OUT` changes the folder). Keep the path short: the capture path must stay under 90 characters.
 - `tools/re/gen_client_native.py` makes `src/client/storage.c` and `src/include/sr_client_storage.h` from
   `analysis/client_win/*.csv`. It also makes the guard holders and `cl_guards_scan`.
 - `analysis/client_win/native_slack.csv` gives extra bytes to an object that the original code fills past its end.

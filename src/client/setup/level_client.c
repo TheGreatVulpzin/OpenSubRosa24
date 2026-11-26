@@ -22,9 +22,6 @@
 #define SECTOR_BUFFER_SIZE 0x2000000
 #define NUM_SECTORS 0x2000
 
-/* Game functions of other files. */
-#define area_resetsector CL_FN_NAMED(area_resetsector, 0x439370, void(__cdecl *)(int sector))
-
 /* Make the mesh of the landscape and clear the list of window cells. */
 void level_client_landscape(void)
 {

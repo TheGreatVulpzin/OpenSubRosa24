@@ -16,9 +16,6 @@
 
 #define g_temp cl_data_modeltemp
 
-/* Game functions of other files. */
-#define addboxtomodelquad CL_FN_NAMED(addboxtomodelquad, 0x4b2ad0, void(__cdecl *)(const vec3 *center, float x, float y, float z))
-
 #define FOOT_DROP 0.03125f
 #define LENS_CENTER_X 0.0421875f
 #define LENS_CENTER_Z (-0.125f)

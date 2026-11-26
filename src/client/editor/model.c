@@ -97,13 +97,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
-/* Game functions of other files. */
-#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
-#define setuptextdisplay CL_FN_NAMED(setuptextdisplay, 0x5079d0, void(__cdecl *)(void))
-#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
-                                                 float red, float green, float blue, float alpha, ...))
-
 /* Place the camera half a unit behind the center and turn it to face the model. Left shift turns
  * it a quarter more. Light 0 shines from the front in white. */
 static void viewer_view(void)

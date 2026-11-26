@@ -21,9 +21,6 @@
 #define g_cursor cl_data_input_cursor
 #define g_view_zoom cl_data_view_zoom
 
-/* Game functions of other files. */
-#define vectorlength CL_FN_NAMED(vectorlength, 0x50b890, double(__cdecl *)(const float *vector))
-
 enum {
     NO_PLAYER = -1,
     NO_HUMAN = -1,
@@ -202,7 +199,7 @@ static void draw_vehicle(const Player *player, const Human *human)
         draw_mark(818.0f, (float)(512.0 - (player->input_axes[3] * 16.0 + player->input_axes[3] * 16.0)));
     }
     if (vehicle != NO_VEHICLE && human->vehicle_seat == SEAT_DRIVER && player->input_mode == INPUT_MODE_CAR) {
-        double speed = vectorlength(&sr_data_object[vehicle].vel.x);
+        double speed = vectorlength(&sr_data_object[vehicle].vel);
         float turn;
 
         turn = (float)((speed * 60.0 * 60.0 * 60.0 * 0.6213712096214294) / 1000.0);

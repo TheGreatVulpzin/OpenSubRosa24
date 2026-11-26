@@ -25,9 +25,6 @@
 #define g_temp cl_data_modeltemp
 #define g_keys cl_data_audio_keys
 
-/* Game functions of other files. */
-#define model_addvertex CL_FN_NAMED(model_addvertex, 0x4badd0, int(__cdecl *)(const vec3 *pos, float tolerance))
-
 /* createheadmodel2 */
 
 /* The point at weights a, b and c of a cubic Bezier triangle. The 10 control points are edit

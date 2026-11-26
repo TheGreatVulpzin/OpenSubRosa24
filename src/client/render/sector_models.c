@@ -16,8 +16,6 @@
 enum { SECTOR_LIMIT = 8192, MESH_WORDS = 1024, WORD_BITS = 32,
        MESH_SIZE = 16, VERTEX_BYTES = 64, MATERIAL_LIMIT = 256, GLEXT_BUFFERS = 6 };
 
-#define area_buildsectormodel CL_FN_NAMED(area_buildsectormodel, 0x44a650, void(__cdecl *)(int))
-
 typedef void(__stdcall *BufferSubData)(uint32_t, int, int, const void *);
 
 /* Return the first free mesh, as an offset in the vertex and triangle arrays. */

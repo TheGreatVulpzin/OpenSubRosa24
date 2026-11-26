@@ -33,16 +33,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
-/* Game functions of other files. */
-#define building_load CL_FN_NAMED(building_load, 0x4614e0, void(__cdecl *)(const char *name, int rotate))
-#define building_setupfloorplannewer CL_FN_NAMED(building_setupfloorplannewer, 0x462ab0, void(__cdecl *)(void))
-#define gameloop CL_FN_NAMED(gameloop, 0x47b100, void(__cdecl *)(void))
-#define listfiles CL_FN_NAMED(listfiles, 0x4fdde0, void(__cdecl *)(const char *pattern, int list, int flags))
-#define removeflieextentions CL_FN_NAMED(removeflieextentions, 0x4fe200, void(__cdecl *)(int list))
-#define checkkeyboard CL_FN_NAMED(checkkeyboard, 0x4fec50, void(__cdecl *)(void))
-#define checkmouse CL_FN_NAMED(checkmouse, 0x4feca0, void(__cdecl *)(void))
-#define setuptextdisplay CL_FN_NAMED(setuptextdisplay, 0x5079d0, void(__cdecl *)(void))
-
 /* List the building files without their extensions. */
 static void list_buildings(void)
 {
@@ -102,10 +92,6 @@ enum { TILE_BUILDING_TEXTURE = 0, TILE_BUILDING_BLOCK = 2, TILE_GAME_TEXTURE = 3
 
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
-
-/* Game functions of other files. */
-#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
-                                                 float red, float green, float blue, float alpha, ...))
 
 /* Add a tile of 64 by 64 at x, y that writes index into target when clicked. Move the place to
  * the next tile: 72 units on, and to the start of a new row at x 960. */
@@ -282,8 +268,6 @@ void __cdecl buildingedit_blockmenu(void)
     }
     resetmenuitems();
 }
-
-/* Game functions of other files. */
 
 enum { TEXTURE_REMOVE = 0, TEXTURE_INSERT = 1, TEXTURE_REPLACE = 2 };
 

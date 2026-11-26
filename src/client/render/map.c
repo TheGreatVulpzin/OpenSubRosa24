@@ -18,10 +18,6 @@
 #define g_view_player cl_data_view_player
 #define g_keyboard cl_data_keyboard
 
-/* Game functions of other files. */
-#define render_sectorlist CL_FN_NAMED(render_sectorlist, 0x4d7ed0, void(__cdecl *)(int mode))
-#define clearsectorlist CL_FN_NAMED(clearsectorlist, 0x4d7850, void(__cdecl *)(int mode))
-
 enum {
     MAP_SIZE = 512,
     SCREEN_WIDTH = 0x400,

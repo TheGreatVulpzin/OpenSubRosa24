@@ -26,12 +26,6 @@
 #include "render/view.h"
 #include "render/debug_cylinder.h"
 
-/* Game functions of other files. */
-#define setupperspectiveviewport CL_FN_NAMED(setupperspectiveviewport, 0x506320, void(__cdecl *)(int, int, int, int, float, float, float))
-#define setupviewpoint CL_FN_NAMED(setupviewpoint, 0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
-#define setupobjectrender CL_FN_NAMED(setupobjectrender, 0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))
-#define debug_rendercylinder CL_FN_NAMED(debug_rendercylinder, 0x469ea0, void(__cdecl *)(const vec3 *, const vec3 *))
-
 enum { CULL_FACE = 0xb44, DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, LIGHT0 = 0x4000,
        LIGHT_AMBIENT = 0x1200, LIGHT_DIFFUSE = 0x1201, LIGHT_POSITION = 0x1203,
        FACE_FRONT = 0x404, FACE_BACK = 0x405, MODE_LINE = 0x1b01, MODE_FILL = 0x1b02,
@@ -70,7 +64,6 @@ typedef void(__stdcall *ActiveTextureFn)(uint32_t unit);
 typedef void(__stdcall *Uniform3Fn)(int location, int count, const float *value);
 typedef void(__stdcall *BindFramebufferFn)(uint32_t target, uint32_t framebuffer);
 typedef void(__stdcall *AttachTextureFn)(uint32_t, uint32_t, uint32_t, uint32_t, int);
-
 
 static void use_program(uint32_t program)
 {

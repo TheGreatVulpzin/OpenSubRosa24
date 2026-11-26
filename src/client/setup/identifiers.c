@@ -24,15 +24,6 @@
 #define g_materials cl_data_material_records
 #define g_filelist sr_data_filelist
 
-/* Game functions of other files. */
-#define removeflieextentions CL_FN_NAMED(removeflieextentions, 0x4fe200, void(__cdecl *)(int list))
-#define area_createsblocks CL_FN_NAMED(area_createsblocks, 0x4395a0, void(__cdecl *)(void))
-#define setupbuildingtypes CL_FN_NAMED(setupbuildingtypes, 0x455bc0, void(__cdecl *)(void))
-#define setupbullettypes CL_FN_NAMED(setupbullettypes, 0x464110, void(__cdecl *)(void))
-#define setupcityobjecttypes CL_FN_NAMED(setupcityobjecttypes, 0x466810, void(__cdecl *)(void))
-#define setupbody CL_FN_NAMED(setupbody, 0x48e8d0, void(__cdecl *)(void))
-#define setupitemtypes CL_FN_NAMED(setupitemtypes, 0x4951c0, void(__cdecl *)(void))
-
 enum { NUM_MATERIALS = 256, NUM_PRESETS = 4, FIRST_PRESET_MATERIAL = 21 };
 
 /* The text of the texture folder. */

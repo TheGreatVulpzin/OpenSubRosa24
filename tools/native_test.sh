@@ -9,6 +9,8 @@
 #   --build-only  build and check the executable, run no scenario
 #   scenarios     menus, level, play, ... (default: menus level)
 #
+# The captures go to /c/svnt/<plain|guard> (SV_NT_OUT changes the folder).
+#
 # The script stops with exit code 1 when:
 #   - the build prints an error or returns a code other than 0
 #   - an executable is older than the start of the script (an old executable must not be tested)
@@ -69,8 +71,10 @@ echo "== executables are current"
 [ $build_only -eq 1 ] && exit 0
 
 export SR_SMOKE_HIDDEN=$hidden
-output="build/nt/$kind"
-mkdir -p build/nt
+# The capture path must stay short (the driver limits it), so the output is outside the repository.
+out_root="${SV_NT_OUT:-/c/svnt}"
+output="$out_root/$kind"
+mkdir -p "$out_root"
 rm -rf "$output"
 echo "== smoke: ${scenarios[*]} (hidden=$hidden)"
 python -I instrumentation/client/smoke.py "build/hook/$smoke.exe" "${scenarios[@]}" --timeout "$timeout" \

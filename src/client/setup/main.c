@@ -58,22 +58,6 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, void *, SDL_GL_CreateContext, (void *))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_SetSwapInterval, (int))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glGenTextures, (int, uint32_t *))
 
-/* Game functions of other files. */
-#define debug_resetlogfile CL_FN_NAMED(debug_resetlogfile, 0x46ac30, void(__cdecl *)(void))
-#define getcpufrequency CL_FN_NAMED(getcpufrequency, 0x4fb110, void(__cdecl *)(void))
-#define setuptimers CL_FN_NAMED(setuptimers, 0x4fb1b0, void(__cdecl *)(void))
-#define checkbigendian CL_FN_NAMED(checkbigendian, 0x4fdc70, void(__cdecl *)(void))
-#define getpaths CL_FN_NAMED(getpaths, 0x50b1f0, void(__cdecl *)(void))
-#define loadsaveoptions CL_FN_NAMED(loadsaveoptions, 0x4d3350, void(__cdecl *)(int save))
-#define listvideomodes CL_FN_NAMED(listvideomodes, 0x5061e0, void(__cdecl *)(void))
-#define loadtexture CL_FN_NAMED(loadtexture, 0x50a0f0, int(__cdecl *)(int texture, const char *path, int mipmap, int wrap_s, \
-                                                   int wrap_t, int mag_filter, int min_filter))
-#define generatemenutextures CL_FN_NAMED(generatemenutextures, 0x500660, void(__cdecl *)(void))
-#define setupmenuitems CL_FN_NAMED(setupmenuitems, 0x5039c0, void(__cdecl *)(void))
-#define setupaudio CL_FN_NAMED(setupaudio, 0x4339e0, void(__cdecl *)(void))
-#define shutdownaudio CL_FN_NAMED(shutdownaudio, 0x433a70, void(__cdecl *)(void))
-#define mainmenu CL_FN_NAMED(mainmenu, 0x4aa920, void(__cdecl *)(void))
-
 /* Call a WSOCK32 function by its ordinal. */
 static int wsock_startup(void)
 {

@@ -38,11 +38,6 @@ enum { KIND_TEXT = 1, KIND_TEXT_2 = 2, KIND_TOGGLE = 3, KIND_SLIDER = 5 };
 GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
-/* Game functions of other files. */
-#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
-                                                 float red, float green, float blue, float alpha, ...))
-
-
 /* Make the texture of the round button corners: a quarter of a white disc. The distance is from
  * the corner of the texture. Pixels inside radius 24 are faint, the ring up to radius 32 is
  * opaque and the pixels outside are clear. */

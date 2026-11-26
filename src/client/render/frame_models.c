@@ -97,7 +97,7 @@ void __cdecl rendermodellist(int mode)
         glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.shadow_map].gl_name);
         glLightfv(LIGHT0, LIGHT_POSITION, cl_data_light_position);
     }
-    placement = CL_FN_NAMED(setupobjectrender, 0x5066b0, PlacementFn);
+    placement = setupobjectrender;
     for (i = 0; i < cl_data_frame_model_count; ++i) {
         const FrameEntry *entry = &cl_data_frame_models[cl_data_frame_model_order[i]];
         const Model *model;

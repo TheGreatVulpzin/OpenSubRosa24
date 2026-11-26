@@ -37,10 +37,6 @@
 #define g_materials cl_data_material_records
 #define g_logo ((const int *)sr_data_cslogo)
 
-/* Game functions of other files. */
-#define setupframetextures CL_FN_NAMED(setupframetextures, 0x4742f0, void(__cdecl *)(void))
-#define createbillmodel CL_FN_NAMED(model_createcash, 0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
-
 enum {
     NUM_VEHICLE_MODELS = 16,
     NUM_BULLET_MODELS = 4,
@@ -97,8 +93,8 @@ static void make_other_item_models(void)
     createboxmodel(item[ITEM_BANDAGE], 0.125f, 0.0625f, 0.125f);
     createkeymodel(item[ITEM_KEY]);
     createboxmodel(item[ITEM_DOOR], 0.5f, 1.0625f, 0.03125f);
-    createbillmodel(item[ITEM_CASH], 0.078125f, 0.03125f, 0.1875f);
-    createbillmodel(item[ITEM_CASH_2], 0.068359375f, 0.01171875f, 0.1640625f);
+    model_createcash(item[ITEM_CASH], 0.078125f, 0.03125f, 0.1875f);
+    model_createcash(item[ITEM_CASH_2], 0.068359375f, 0.01171875f, 0.1640625f);
     createboxmodel(item[ITEM_NEWSPAPER], 0.375f, 0.015625f, 0.375f);
     createrotormodel(g_modellist.rotor, 0.125f, 0.03125f, 2.5f);
     createcellphonemodel(item[ITEM_CELL_PHONE], 0.0625f, 0.1875f, 0.0625f);

@@ -194,7 +194,7 @@ void getinputs(int player_index)
     checkkeyboard();
     if (!cl_data_input_cursor) checkmouserelative();
     else checkmouse();
-    CL_FN_NAMED(checkmenuitems, 0x501be0, void (__cdecl *)(void))();
+    checkmenuitems();
     if (!sr_game.link_state && !running) cl_data_input_cursor = 0;
     if (!cl_data_input_cursor) {
         if (!cl_data_input_mouse.left) cl_data_input_fire_blocked = 0;
@@ -216,7 +216,7 @@ void getinputs(int player_index)
     if (!player)
         return;
     if (player->menu_action) {
-        CL_FN_NAMED(player_addaction_menu, 0x4d5490, void (__cdecl *)(int, int, int))(player_index, player->menu, player->menu_action);
+        player_addaction_menu(player_index, player->menu, player->menu_action);
         player->menu_action = 0;
     }
     spectator_input();

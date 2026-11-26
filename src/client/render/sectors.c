@@ -108,7 +108,6 @@ void __cdecl render_sector_alpha(int sector, int mode)
 }
 
 /* The dot product of two vectors, returned as a double. */
-#define dotproduct_wide CL_FN_NAMED(dotproduct, 0x50b7f0, double(__cdecl *)(const float *a, const float *b))
 
 #define SHADOW_PUSH_LENGTH (-16.0f)
 
@@ -141,15 +140,15 @@ static void add_shadow_triangle(const InteriorMesh *mesh, int triangle, const fl
         corner[k] = *(const vec3 *)((const char *)vertices + index[k] * VERTEX_SIZE);
     for (k = 0; k < 3; ++k)
         scaleaddvectors(&corner[k + 3], &corner[k], (const vec3 *)light, SHADOW_PUSH_LENGTH);
-    if (0.0 <= dotproduct_wide(&mesh->edge_normals[triangle * 3].x, light)) {
+    if (0.0 <= dotproduct(&mesh->edge_normals[triangle * 3], (const vec3 *)light)) {
         push_triangle(&corner[1], &corner[0], &corner[3]);
         push_triangle(&corner[1], &corner[3], &corner[4]);
     }
-    if (0.0 <= dotproduct_wide(&mesh->edge_normals[triangle * 3 + 1].x, light)) {
+    if (0.0 <= dotproduct(&mesh->edge_normals[triangle * 3 + 1], (const vec3 *)light)) {
         push_triangle(&corner[2], &corner[1], &corner[4]);
         push_triangle(&corner[2], &corner[4], &corner[5]);
     }
-    if (0.0 <= dotproduct_wide(&mesh->edge_normals[triangle * 3 + 2].x, light)) {
+    if (0.0 <= dotproduct(&mesh->edge_normals[triangle * 3 + 2], (const vec3 *)light)) {
         push_triangle(&corner[0], &corner[2], &corner[5]);
         push_triangle(&corner[0], &corner[5], &corner[3]);
     }
@@ -176,7 +175,7 @@ void __cdecl render_sector_interior_shadow2(int sector)
         for (triangle = 0; triangle < mesh->num_triangles; ++triangle) {
             if (g_materials[mesh->triangle_material[triangle]].flags != 0)
                 continue;
-            if (!(dotproduct_wide(&mesh->triangle_plane[triangle].x, light) < 0.0))
+            if (!(dotproduct(&mesh->triangle_plane[triangle], (const vec3 *)light) < 0.0))
                 continue;
             add_shadow_triangle(mesh, triangle, light);
         }

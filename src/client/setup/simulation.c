@@ -44,23 +44,6 @@ void *sr_import(const char *dll, const char *name);
 #define g_prevkeyboard cl_data_prevkeyboard
 #define g_messages cl_data_chatmessage
 
-/* Game functions of other files. */
-#define getinputs CL_FN_NAMED(getinputs, 0x490bf0, void(__cdecl *)(int player))
-#define movecamera CL_FN_NAMED(movecamera, 0x47d0e0, void(__cdecl *)(int mode))
-#define resetgame CL_FN_NAMED(resetgame, 0x479ad0, void(__cdecl *)(void))
-#define clientsend CL_FN_NAMED(clientsend, 0x468030, void(__cdecl *)(void))
-#define clientrecv CL_FN_NAMED(clientrecv, 0x4676d0, void(__cdecl *)(void))
-#define humansimulationclient CL_FN_NAMED(humansimulationclient, 0x4896d0, void(__cdecl *)(void))
-#define itemsimulationclient CL_FN_NAMED(itemsimulationclient, 0x499500, void(__cdecl *)(void))
-#define playerai CL_FN_NAMED(playerai, 0x4348d0, void(__cdecl *)(int player))
-#define servercycle CL_FN_NAMED(servercycle, 0x4df550, void(__cdecl *)(void))
-#define serverrecv CL_FN_NAMED(serverrecv, 0x4df6a0, void(__cdecl *)(void))
-#define playersimulation CL_FN_NAMED(playersimulation, 0x4d4b80, void(__cdecl *)(void))
-#define logicsimulation CL_FN_NAMED(logicsimulation, 0x4a3940, void(__cdecl *)(void))
-#define serversend CL_FN_NAMED(serversend, 0x4deb20, void(__cdecl *)(void))
-#define bulletsimulation CL_FN_NAMED(bulletsimulation, 0x4646b0, void(__cdecl *)(void))
-#define timetolive_records CL_FN_NAMED(bullettimetolive, 0x4645e0, void(__cdecl *)(void))
-
 /* SDL scancodes of the keys. */
 enum {
     KEY_V = 25,
@@ -308,7 +291,7 @@ static void simulate(void)
         spritesimulation();
         sprite_model_simulation();
         tiremark_simulation();
-        timetolive_records();
+        bullettimetolive();
         spritetimetolive();
         if (g_server.active == 0)
             set_traffic_lights();

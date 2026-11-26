@@ -1,19 +1,14 @@
 /* Shared header of the clean client code (src/client).
  *
- * CL_FN(va, type) calls a game function that is still lifted C. va is the address in subrosa.exe
- * (base 0x400000). In the standalone client it finds the C function. In the test tools it is the
- * original code in the image. When the function is rewritten in src/client, call it directly. */
+ * The client code calls every game function by its name. The test tools of instrumentation/ use
+ * CL_FN(va, type) to reach a function of the original executable by its address. */
 #ifndef CL_CLIENT_H
 #define CL_CLIENT_H
 
 #include <emmintrin.h>
 #include <stdint.h>
 
-#ifdef SR_CLIENT_NATIVE
-/* The native client calls a game function by its name, through the type of the call site. The
- * address is for the test builds. */
-#define CL_FN_NAMED(name, va, type) (name)
-#else
+#ifndef SR_CLIENT_NATIVE
 extern uintptr_t sr_base;
 extern void *(*cl_fn_hook)(unsigned va);
 
@@ -23,7 +18,6 @@ static __inline void *cl_fn(unsigned va)
 }
 
 #define CL_FN(va, type) ((type)cl_fn(va))
-#define CL_FN_NAMED(name, va, type) CL_FN(va, type)
 #endif
 
 /* Convert a float value to an int. The value rounds to a double, then loses its fraction. A

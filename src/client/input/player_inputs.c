@@ -123,7 +123,7 @@ void getinputs_human(int player_index)
         pitch = human->pitch;
         player->input_pitch = (float)pitch;
         player->crouch_toggle = 0;
-        CL_FN_NAMED(debug_addatafloat, 0x46ab70, void (__cdecl *)(const char *, float))(
+        debug_addatafloat(
             cl_data_input_label_human_axis, player->yaw);
     }
     if (cl_data_input_cursor)

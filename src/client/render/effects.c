@@ -35,7 +35,7 @@ void __cdecl tiremark_simulation(void)
 {
     int object;
     int wheel;
-    LevelIntersectFn intersect = CL_FN_NAMED(lineintersectlevel, 0x4a0f40, LevelIntersectFn);
+    LevelIntersectFn intersect = lineintersectlevel;
 
     for (object = 0; object < MAX_OBJECTS; ++object) {
         Object *body = &sr_data_object[object];

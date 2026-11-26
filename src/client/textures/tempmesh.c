@@ -19,10 +19,6 @@
 
 #define g_tempmesh sr_data_tempmesh
 
-/* Game functions of other files. */
-#define tempmesh_deletequad CL_FN_NAMED(tempmesh_deletequad, 0x44d920, void(__cdecl *)(int quad))
-#define tempmesh_vertnormalequal CL_FN_NAMED(tempmesh_vertnormalequal, 0x50b290, int(__cdecl *)(int a, int b))
-
 #define g_materials cl_data_material_records
 #define JOIN_TIMER 3
 #define SAME_LINE 0.999750018119812f /* the cosine limit of two sides in one line */

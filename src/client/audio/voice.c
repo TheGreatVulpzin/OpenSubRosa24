@@ -97,7 +97,7 @@ void getaudioinput(int player)
             }
         }
         encodespeex(0, player, frame);
-        CL_FN_NAMED(debug_addataint, 0x46aaa0, void (__cdecl *)(char *, int))(
+        debug_addataint(
             cl_data_text_speex_frame_size, ring->size[frame]);
         ring->mode[frame] = cl_data_audio_voice_mode;
         if (quiet) {

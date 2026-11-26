@@ -7,8 +7,6 @@
 
 /* Game functions of other files (GLee). The client links GLee, so it keeps its own flags and
  * slots: GLeeInit fills them, and GLeeEnabled reads a flag. */
-#define GLeeInit CL_FN_NAMED(GLeeInit, 0x430740, int(__cdecl *)(void))
-#define GLeeEnabled CL_FN_NAMED(GLeeEnabled, 0x430720, char(__cdecl *)(const uint8_t *flag))
 
 enum {
     GLEXT_MULTITEXTURE = 0,

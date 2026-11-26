@@ -45,9 +45,6 @@ enum {
 #define BOX_TRIS 12
 #define FACE_TRIS 2
 
-/* Game functions of other files. */
-#define addhumantorso CL_FN_NAMED(addwaisttomodel, 0x4bed80, void(__cdecl *)(const vec3 *center, float half_x, float half_y, float half_z))
-
 /* 1 when a and b differ by less than tolerance. */
 static int is_near(float a, float b, float tolerance)
 {

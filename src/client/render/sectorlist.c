@@ -37,9 +37,6 @@
 #define g_sort_order sr_data_radix.order
 #define g_sort_keys sr_data_radix.keys
 
-/* Game functions of other files. */
-#define markinteriors CL_FN_NAMED(render_raycast2, 0x4d9fa0, void(__cdecl *)(void))
-
 /* The slots of the extension functions: the client holds a pointer to each one. */
 
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
@@ -168,7 +165,7 @@ void __cdecl clearsectorlist(int mode)
         if ((float)vectordistance(&center, &g_camera) < NEAR_DISTANCE)
             block->near_camera = 1;
     }
-    markinteriors();
+    render_raycast2();
     for (sector = 0; sector < MAX_SECTORS; ++sector) {
         BlockSector *block = &g_block_sectors[sector];
         int found = 0;

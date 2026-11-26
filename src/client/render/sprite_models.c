@@ -34,9 +34,6 @@
 #define g_texturelist sr_data_texturelist
 #define g_light_position cl_data_light_position
 
-/* Game functions of other files. */
-#define lineintersectlevel CL_FN_NAMED(lineintersectlevel, 0x4a0f40, int(__cdecl *)(float *from, float *to, int with_objects))
-
 enum {
     MAX_PIECES = 0x4000,
     KIND_SHELL = 0,

@@ -68,14 +68,6 @@
 
 #define NO_BITMAP (-1) /* drawbitmap draws a plain rectangle */
 
-/* Game functions of other files. */
-#define getrandomvector3d CL_FN_NAMED(getrandomvector3d, 0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
-#define drawtext CL_FN_NAMED(drawtext, 0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
-                                                 float red, float green, float blue, float alpha, ...))
-#define drawbitmap CL_FN_NAMED(drawbitmap, 0x507ac0, void(__cdecl *)(int texture, float x, float y, float width, float height, \
-                                                   uint32_t flags, float red, float green, float blue, float alpha))
-#define setfontresolution CL_FN_NAMED(setfontresolution, 0x509f30, void(__cdecl *)(int width, int height))
-
 /* The word of a pixel. On a big endian machine the bytes have the other order. */
 /* Reuse an atlas cell or append one. A full atlas replaces its last cell. */
 int addwindowatlas(int texture, int type)
@@ -181,7 +173,7 @@ void __cdecl generatetexture_randomvec(int texture)
         for (x = 0; x < g_image.width; x++) {
             vec3 v;
             int red, green, blue;
-            getrandomvector3d(&v, 0.0f, 1.0f);
+            getrandomvector3d(&v.x, 0.0f, 1.0f);
             red = cl_ftoi(v.x * 127.0 + 128.0);
             green = cl_ftoi(v.y * 127.0 + 128.0);
             blue = cl_ftoi(v.z * 127.0 + 128.0);

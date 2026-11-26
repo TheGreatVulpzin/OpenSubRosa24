@@ -15,13 +15,6 @@
 #include "sr_runtime.h"
 #include "vectors.h"
 
-/* Game functions of other files. */
-#define unpackorientation CL_FN_NAMED(unpackorientation, 0x468bd0, void(__cdecl *)(vec3 *out, int bits))
-#define unpackangle CL_FN_NAMED(unpackangle, 0x468ec0, void(__cdecl *)(float *out, uint32_t bits))
-#define unpackposition CL_FN_NAMED(unpackposition, 0x468f80, void(__cdecl *)(vec3 *out))
-#define unpackscalar CL_FN_NAMED(unpackscalar, 0x469110, void(__cdecl *)(float *out, float scale, uint32_t bits))
-#define crossproduct CL_FN_NAMED(crossproduct, 0x50b830, void(__cdecl *)(vec3 *out, const vec3 *a, const vec3 *b))
-
 #define BONES 15
 #define FIRST_LEG_BONE 9 /* a human in a vehicle sends only bones 0 to 8 */
 #define HEALTH_BIAS 10

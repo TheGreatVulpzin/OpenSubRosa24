@@ -35,12 +35,6 @@
 #define g_cubetexcoord sr_data_cubetexcoord
 #define g_cubequad sr_data_cubequad
 
-/* Game functions of other files. */
-#define area_sectorvertequal CL_FN_NAMED(area_sectorvertequal, 0x50b590, int(__cdecl *)(int sector, int a, int b))
-#define area_getnextsectormesh CL_FN_NAMED(area_getnextsectormesh, 0x44da00, int(__cdecl *)(void))
-#define area_setsectormesh CL_FN_NAMED(area_setsectormesh, 0x44da70, void(__cdecl *)(int block, int used))
-#define area_removesectormodel CL_FN_NAMED(area_removesectormodel, 0x44daf0, void(__cdecl *)(int sector))
-
 #define EXT_BUFFERS 6 /* the buffer extension in glext */
 #define NUM_SECTORS 0x2000
 

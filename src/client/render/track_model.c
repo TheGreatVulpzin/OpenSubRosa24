@@ -27,9 +27,6 @@
 #define SLEEPER_U 0.5f
 #define SLEEPER_FACES 3
 
-/* Game functions of other files. */
-#define negvector CL_FN_NAMED(negvector, 0x50b980, void(__cdecl *)(vec3 *out, const vec3 *v))
-
 /* The 8 corners of a sleeper end: corners 0 and 3 at the first rail point, 4 and 7 at the
  * second, each pair the width of the sleeper apart, moved by reach along the first rail.
  * Corners 1, 2, 5 and 6 are above them. */

@@ -29,10 +29,6 @@
 #define CASH_BASE 1000
 #define CASH_GROWTH 2.499999936844688e-05
 
-/* Game functions of other files. */
-#define scenario_createchase_client CL_FN_NAMED(scenario_createchase, 0x4dd100, int(__cdecl *)(int item_type, int expire))
-#define scenario_createguards_client CL_FN_NAMED(scenario_createguards, 0x4dca90, void(__cdecl *)(int building, int item_type, int expire))
-
 /* The type of the building at an index: 3 is a mission building. */
 static int building_kind(int building)
 {
@@ -54,7 +50,7 @@ int __cdecl client_createmission_acquisition(int kind, int n, const int *teams)
     if (g_scenario.item_cycle + FIRST_ITEM_TYPE > LAST_ITEM_TYPE)
         g_scenario.item_cycle = 0;
     if (kind == KIND_CHASE)
-        scenario_createchase_client(type, expire);
+        scenario_createchase(type, expire);
     if (kind == KIND_BUILDING) {
         int r;
 
@@ -71,7 +67,7 @@ int __cdecl client_createmission_acquisition(int kind, int n, const int *teams)
         }
         if (building_kind(building) != BUILDING_MISSION)
             return quotient;
-        scenario_createguards_client(building, type, expire);
+        scenario_createguards(building, type, expire);
     }
     for (i = 0; i < n; i++) {
         int team = teams[i];
