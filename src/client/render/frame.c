@@ -89,7 +89,7 @@ static void bind_image(int image)
 static void frame_view(void)
 {
     setupperspectiveviewport(0, 0, VIEW_WIDTH, VIEW_HEIGHT, cl_data_view_near, cl_data_view_far, cl_data_view_fov);
-    setupviewpoint(&cl_data_camera_position, cl_data_camera_rotation);
+    setupviewpoint(&cl_data_audio_camera.pos, cl_data_audio_camera.rot);
 }
 
 /* Reset the profiler timers of the frame passes. */
@@ -120,13 +120,13 @@ static void setup_view(void)
     cl_data_viewport_height = (float)cl_data_render_height;
     cl_data_view_near = 0.0625f;
     cl_data_view_far = 16384.0f;
-    cl_data_view_fov = cl_data_view_zoom;
+    cl_data_view_fov = cl_data_audio_camera.projection;
     cl_data_view_side_right = (vec3){0.7071f, 0.0f, 0.7071f};
-    projectvector(&cl_data_view_side_right, &cl_data_view_side_right, cl_data_camera_rotation);
+    projectvector(&cl_data_view_side_right, &cl_data_view_side_right, cl_data_audio_camera.rot);
     cl_data_view_side_left = (vec3){-0.7071f, 0.0f, 0.7071f};
-    projectvector(&cl_data_view_side_left, &cl_data_view_side_left, cl_data_camera_rotation);
+    projectvector(&cl_data_view_side_left, &cl_data_view_side_left, cl_data_audio_camera.rot);
     cl_data_world_position = (vec3){0.0f, 637.1f, 0.0f};
-    scaleaddvectors(&cl_data_world_position, &cl_data_world_position, &cl_data_camera_position, 0.0001f);
+    scaleaddvectors(&cl_data_world_position, &cl_data_world_position, &cl_data_audio_camera.pos, 0.0001f);
 }
 
 /* Point light 0 at the sun. The tilt is the angle from straight up. */
@@ -370,12 +370,12 @@ static void draw_name_tags(void)
         vec3 point;
         if (!human->active || human->player_id == -1)
             continue;
-        if (!(vectordistance(&cl_data_camera_position, &human->pos) < 32.0f))
+        if (!(vectordistance(&cl_data_audio_camera.pos, &human->pos) < 32.0f))
             continue;
         glPushMatrix();
         point = human->pos;
         point.y = (float)(point.y + 1.25);
-        setupobjectrender(&point, cl_data_camera_rotation);
+        setupobjectrender(&point, cl_data_audio_camera.rot);
         drawtext(sr_data_player[human->player_id].name, 0.0f, 0.0f, 0.5f, 0xc1, 1.0f, 1.0f, 1.0f, 1.0f);
         glPopMatrix();
     }
@@ -387,7 +387,7 @@ static void draw_race_checkpoints(void)
     const ClientGameView *game = (const ClientGameView *)&sr_data_game;
     int i;
     for (i = 0; i < game->num_checkpoints; ++i) {
-        if (cl_data_view_player == -1 || !(sr_data_player[cl_data_view_player].checkpoint_mask & (1u << (i & 31))))
+        if (cl_data_audio_camera.player == -1 || !(sr_data_player[cl_data_audio_camera.player].checkpoint_mask & (1u << (i & 31))))
             glColor4f(0.0f, 1.0f, 0.0f, 0.5f);
         else
             glColor4f(0.25f, 0.25f, 0.25f, 0.5f);
@@ -407,7 +407,7 @@ static void draw_sun(void)
 {
     vec3 point;
     vec3 color;
-    scaleaddvectors(&point, &cl_data_camera_position, (const vec3 *)cl_data_light_position, 2048.0f);
+    scaleaddvectors(&point, &cl_data_audio_camera.pos, (const vec3 *)cl_data_light_position, 2048.0f);
     normalizevector(&color, (const vec3 *)cl_data_light_diffuse);
     glColor3fv(&color.x);
     rendersphere(&point, 32.0f, 3);
@@ -419,7 +419,7 @@ static void draw_sector_alpha(void)
     const ProgramObject *program = &cl_data_programs[PROGRAM_REFLECT];
     int i;
     use_program(program->program);
-    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_audio_camera.pos.x);
     cl_glUniform3fvARB(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
     cl_glUniform3fvARB(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
     glEnableClientState(ARRAY_POSITION);

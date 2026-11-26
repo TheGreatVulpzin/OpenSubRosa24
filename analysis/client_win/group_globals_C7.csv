@@ -3,21 +3,14 @@ relative_mouse,int,1,0x9065350,reactivategame turns on the relative mouse mode o
 slow_tick,int,1,0x9065344,"checksimulation: the tick interval is 100 ms when it is not zero, 16 ms otherwise. debug_getinputs sets it"
 last_tick_ms,uint32_t,1,0x9065338,checksimulation: the SDL time of the last tick
 tick_start_ms,uint32_t,1,0x14f8698,"checksimulation: the SDL time when the tick started, for the frame time ring"
-view_player,int,1,0xfefe2a0,"checksimulation and gameloop: the index of the player whose eyes the camera uses, -1 for none. First field of the record that the Linux client names view"
-show_help,int,1,0x9063218,checksimulation: F1 toggles it (the = key when the debug flag is on). gameloop draws the help while it is not 0. loadsaveoptions saves it as help=
 hide_hud,int,1,0x908b054,checksimulation: F4 toggles it. gameloop draws the display only when it is 0
-mic_gain_percent,int,1,0x9063220,"checksimulation: Page Up and Page Down change it by 10, from 30 to 250. gameloop prints it as Mic"
 mic_text_timer,float,1,0x908b050,checksimulation sets it to 4.0 when the gain changes and counts it down. gameloop uses it as the alpha of the Mic text
 paused,int,1,0x906533c,checksimulation: the simulation does not run while it is not zero
 step_once,int,1,0x9065340,"checksimulation: runs one tick while paused, then clears. debug_getinputs sets it"
-game_state,int,1,0x9065320,"checksimulation: the simulation functions run in the states 0, 1 and 2. Same place as Game.state"
-game_tick,uint32_t,1,0x9065334,"checksimulation counts it in a hosted game; a client reads it as the tick of the server. The traffic lights use its low 11 bits, and the smoothing of humans and objects reads it"
 sim_ticks,int,1,0x1dda5240,checksimulation: counts every simulated tick. First word of the area sector record
 last_health,int,1,0x908aae4,checksimulation: the health of the viewed human in the last tick
 damage_flash,float,1,0x908aae8,"checksimulation: set to 1.0 when the health drops, then it fades by 1/16 for each tick"
 death_fade,float,1,0x908b04c,checksimulation: grows by 1/240 for each tick while the viewed human is dead and the state is 2
-light_angle_a,float,1,0x9065348,checksimulation: the first angle of the light. Gametype 4 sets it from the clock. The [ and ] keys change it when the debug flag is on
-light_angle_b,float,1,0x906534c,checksimulation: the second angle of the light. Shift with [ and ] changes it when the debug flag is on
 keyboard,uint8_t,512,0x75a5140,"checksimulation: one byte for each SDL key, not zero while the key is down. The Linux client names the symbol keyboard"
 prevkeyboard,uint8_t,512,0x1bbe1a0,checksimulation: the keyboard bytes of the last tick. The Linux client names the symbol prevkeyboard
 frame_time_index,uint32_t,1,0x14f87a8,"checksimulation: the next entry of frame_times, 0 to 31"
@@ -26,7 +19,6 @@ frame_time_average,float,1,0x14f88ac,checksimulation: the mean of frame_times
 debug_extra_count,int,1,0x14c0690,checksimulation clears it each tick. A debug array that renderframe reads
 chatmessage,ChatMessage,256,0x129660,checksimulation counts down the timer of each message. createmessage and frame_drawmessages use them. Records of 0x98 bytes
 last_event,uint32_t,1,0x5350c6c,clientsend sends its low 16 bits to the server. eventsimulation and resetgame also use it
-spectated_human,int,1,0x908aad8,"the human that the player watches, -1 for none. clientsend sends it as a signed 8 bit value. getinputs writes it. drawhud makes the map follow it when the player has no human"
 server_address,uint32_t,1,0x75a5854,clientsend: the address of the server that the packets go to. joinmenu and connectmenu write it
 server_port,uint16_t,1,0x75a5858,clientsend: the port of the server that the packets go to. joinmenu and connectmenu write it
 render_aspect,float,1,0xb7330c8,main: render_height divided by render_width
@@ -36,4 +28,3 @@ gl_context,void*,1,0x103675ac,main: the OpenGL context of the window
 steam_active,int,1,0x10367380,main: the result of steam_init
 hide_messages,int,1,0x908b058,gameloop draws the chat messages only when it is 0. No code writes it
 player_marks,int,256,0x75a53c0,gameloop writes -2 for each of the 256 players at the start. No code reads it
-wsa_data,uint8_t,400,0xababc40,main: the WSADATA record of WSAStartup

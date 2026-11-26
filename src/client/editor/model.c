@@ -38,10 +38,10 @@ void __cdecl model_editor(void)
     /* The mouse on the screen from -1 to 1 in x, with the same scale in y (y up). */
     mx = (float)(((double)cl_data_input_mouse.x - 512.0) / 512.0);
     my = (float)((320.0 - (double)cl_data_input_mouse.y) / 512.0);
-    copyvector((unsigned int *)&from, (const unsigned int *)&cl_data_camera_position);
-    scaleaddvectors(&to, &from, &cl_data_camera_rotation[2], -512.0f);
-    scaleaddvectors(&to, &to, &cl_data_camera_rotation[0], (float)(mx * RAY_LENGTH));
-    scaleaddvectors(&to, &to, &cl_data_camera_rotation[1], (float)(my * RAY_LENGTH));
+    copyvector((unsigned int *)&from, (const unsigned int *)&cl_data_audio_camera.pos);
+    scaleaddvectors(&to, &from, &cl_data_audio_camera.rot[2], -512.0f);
+    scaleaddvectors(&to, &to, &cl_data_audio_camera.rot[0], (float)(mx * RAY_LENGTH));
+    scaleaddvectors(&to, &to, &cl_data_audio_camera.rot[1], (float)(my * RAY_LENGTH));
     if (cl_data_input_mouse.left != 0 && cl_data_input_mouse_previous.left == 0) {
         for (i = 0; i < model->num_verts; i++) {
             cl_data_edit_grabbed[i] = 0;
@@ -54,9 +54,9 @@ void __cdecl model_editor(void)
     if (cl_data_input_mouse.left != 0)
         for (i = 0; i < model->num_verts; i++)
             if (cl_data_edit_grabbed[i] != 0) {
-                scaleaddvectors(&cl_data_edit_vertices[i], &cl_data_edit_vertices[i], &cl_data_camera_rotation[0],
+                scaleaddvectors(&cl_data_edit_vertices[i], &cl_data_edit_vertices[i], &cl_data_audio_camera.rot[0],
                                 (float)((mx - cl_data_edit_mouse_before[0]) * 0.5));
-                scaleaddvectors(&cl_data_edit_vertices[i], &cl_data_edit_vertices[i], &cl_data_camera_rotation[1],
+                scaleaddvectors(&cl_data_edit_vertices[i], &cl_data_edit_vertices[i], &cl_data_audio_camera.rot[1],
                                 (float)((my - cl_data_edit_mouse_before[1]) * 0.5));
             }
     cl_data_edit_mouse_before[0] = mx;
@@ -101,14 +101,14 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
  * it a quarter more. Light 0 shines from the front in white. */
 static void viewer_view(void)
 {
-    zerovector((unsigned int *)&cl_data_camera_position);
-    resetorientation(cl_data_camera_rotation);
-    rotateorientation(cl_data_camera_rotation, &sr_data_yaxis, VIEW_TURN);
+    zerovector((unsigned int *)&cl_data_audio_camera.pos);
+    resetorientation(cl_data_audio_camera.rot);
+    rotateorientation(cl_data_audio_camera.rot, &sr_data_yaxis, VIEW_TURN);
     if (cl_data_keyboard[KEY_LEFT_SHIFT] != 0)
-        rotateorientation(cl_data_camera_rotation, &sr_data_yaxis, SHIFT_TURN);
-    scaleaddvectors(&cl_data_camera_position, &cl_data_camera_position, &cl_data_camera_rotation[2], 0.5f);
+        rotateorientation(cl_data_audio_camera.rot, &sr_data_yaxis, SHIFT_TURN);
+    scaleaddvectors(&cl_data_audio_camera.pos, &cl_data_audio_camera.pos, &cl_data_audio_camera.rot[2], 0.5f);
     setupperspectiveviewport(0, 0, 0x400, 0x280, 0.125f, 1024.0f, 1.0f);
-    setupviewpoint(&cl_data_camera_position, cl_data_camera_rotation);
+    setupviewpoint(&cl_data_audio_camera.pos, cl_data_audio_camera.rot);
     cl_data_light_position[0] = 0.0f;
     cl_data_light_position[1] = 0.0f;
     cl_data_light_position[2] = 1.0f;

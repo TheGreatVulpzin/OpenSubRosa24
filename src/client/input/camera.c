@@ -48,7 +48,7 @@ static void camera_translate(InputCamera *camera, float speed)
 /* Move the free camera. Right drag turns the view without a pitch limit. */
 void movecamera(int camera_index)
 {
-    InputCamera *camera = &cl_data_input_cameras[camera_index];
+    InputCamera *camera = &((InputCamera *)sr_data_camera)[camera_index];
     InputMouse *mouse = &cl_data_input_mouse;
     float speed = cl_data_keyboard[KEY_SHIFT] ? FREE_CAMERA_FAST_SPEED : FREE_CAMERA_SPEED;
     float sensitivity;
@@ -72,7 +72,7 @@ void movecamera(int camera_index)
 /* Move the spectator camera and limit its pitch and target distance. */
 void movecamera2(int camera_index)
 {
-    InputCamera *camera = &cl_data_input_cameras[camera_index];
+    InputCamera *camera = &((InputCamera *)sr_data_camera)[camera_index];
     InputMouse *mouse = &cl_data_input_mouse;
     float speed = cl_data_keyboard[KEY_SHIFT] ? SPECTATOR_FAST_SPEED : SPECTATOR_SPEED;
     if (cl_data_keyboard[KEY_CONTROL])

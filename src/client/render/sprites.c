@@ -168,7 +168,7 @@ void __cdecl spritesimulation(void)
             spin(sprite->rot, &sprite->spin, sprite->spin_rate);
         if (!intersect(&before, &sprite->pos, 0)) {
             if (sprite->kind != SPRITE_GLASS)
-                memcpy(sprite->rot, cl_data_camera_rotation, sizeof(sprite->rot));
+                memcpy(sprite->rot, cl_data_audio_camera.rot, sizeof(sprite->rot));
             continue;
         }
         scaleaddvectors(&sprite->pos, &cl_data_level_hit.pos, &cl_data_level_hit.normal, 0.015625f);
@@ -292,9 +292,9 @@ void __cdecl selectnearitem(void)
     float nearest = 0.5f;
     PointDistanceFn distance_to_line;
 
-    if (cl_data_view_player == -1)
+    if (cl_data_audio_camera.player == -1)
         return;
-    player = &sr_data_player[cl_data_view_player];
+    player = &sr_data_player[cl_data_audio_camera.player];
     if (player->human_id == -1)
         return;
     human = &sr_data_human[player->human_id];

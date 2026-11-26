@@ -65,7 +65,7 @@ void frame_drawvoiceicons(void)
 {
     int channel, sample;
     for (channel = 0; channel < ICON_CHANNELS; channel++) {
-        AudioChannel *voice = &cl_data_audio_channels[channel];
+        AudioChannel *voice = &((AudioChannel *)sr_data_voice)[channel];
         vec3 direction;
         float amplitude = 0.0f, horizontal, vertical, depth, size, radius, x, y, color;
         double angle;
@@ -97,7 +97,7 @@ void frame_drawvoiceicons(void)
         if (ICON_BOTTOM < y) y = ICON_BOTTOM;
         color = depth <= ICON_BEHIND ? ICON_REAR_COLOR : 1.0f;
         drawbitmap(
-            cl_data_audio_voice_icon, x, y, (float)(size * ICON_SIZE_SCALE), (float)(size * ICON_SIZE_SCALE),
+            sr_data_texturelist.mic, x, y, (float)(size * ICON_SIZE_SCALE), (float)(size * ICON_SIZE_SCALE),
             ICON_CENTER, color, color, color, (float)(amplitude * ICON_ALPHA_SCALE));
     }
 }
@@ -127,7 +127,7 @@ static void voice_waveform(void)
     audio_glDisable()(GL_TEXTURE_MODE);
     audio_glBegin()(GL_LINES_MODE);
     audio_glColor3f()(1.0f, 1.0f, 1.0f);
-    if (cl_data_audio_voice_enabled) {
+    if (sr_data_option.voicechat) {
         for (point = 0; point < MENU_WAVE_POINTS; point++) {
             const int16_t *samples = &ring->samples[0][0];
             int next = (point + 1) * MENU_WAVE_STRIDE;
@@ -139,9 +139,9 @@ static void voice_waveform(void)
                 (float)(endpoint / MENU_WAVE_SCALE + MENU_WAVE_Y));
         }
         audio_glColor3f()(1.0f, 1.0f, 1.0f);
-        if (!cl_data_audio_push_to_talk) {
-            float low = (float)(MENU_WAVE_Y - (float)cl_data_audio_threshold / MENU_WAVE_SCALE);
-            float high = (float)((float)cl_data_audio_threshold / MENU_WAVE_SCALE + MENU_WAVE_Y);
+        if (!sr_data_option.voiceholdtotalk) {
+            float low = (float)(MENU_WAVE_Y - (float)sr_data_option.voicemin / MENU_WAVE_SCALE);
+            float high = (float)((float)sr_data_option.voicemin / MENU_WAVE_SCALE + MENU_WAVE_Y);
             audio_glVertex2f()(MENU_LEFT, low);
             audio_glVertex2f()(MENU_WAVE_RIGHT, low);
             audio_glVertex2f()(MENU_LEFT, high);
@@ -159,14 +159,14 @@ static void voice_bind_key(void)
     for (key = 1; key < MENU_KEYS; key++) {
         if (cl_data_audio_key_names[key * MENU_KEY_NAME_BYTES] &&
             cl_data_keyboard[key] && !cl_data_prevkeyboard[key]) {
-            cl_data_audio_voice_key = key;
+            sr_data_option.voicekey = key;
             cl_data_menu_items[1].pressed = 0;
         }
     }
     for (key = MENU_MOUSE_FIRST; key < MENU_MOUSE_END; key++) {
         unsigned mask = 1u << key;
-        if ((cl_data_audio_mouse_buttons & mask) == mask) {
-            cl_data_audio_voice_mouse = mask;
+        if ((cl_data_input_mouse.buttons & mask) == mask) {
+            sr_data_option.voicemb = mask;
             cl_data_menu_items[1].pressed = 0;
         }
     }
@@ -183,21 +183,21 @@ void voiceoptionsmenu(void)
         cl_data_menu_item_count = 0;
         voice_label(TEXT_BACK, MENU_MARGIN, MENU_MARGIN, MENU_BACK_WIDTH, MENU_BACK_HEIGHT);
         if (!binding) setmenuitem(MENU_BUTTON, MENU_ESCAPE);
-        if (!cl_data_audio_voice_enabled) {
+        if (!sr_data_option.voicechat) {
             createmenuitemempty();
-        } else if (!cl_data_audio_push_to_talk) {
+        } else if (!sr_data_option.voiceholdtotalk) {
             createmenuitemempty();
             voice_label(TEXT_THRESHOLD, MENU_LEFT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            setmenuitem(MENU_SLIDER, &cl_data_audio_threshold, 0, MENU_THRESHOLD_MAX, MENU_THRESHOLD_QUANTUM);
+            setmenuitem(MENU_SLIDER, &sr_data_option.voicemin, 0, MENU_THRESHOLD_MAX, MENU_THRESHOLD_QUANTUM);
             voice_label(TEXT_PUSH_LABEL, MENU_RIGHT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            setmenuitem(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
+            setmenuitem(MENU_TOGGLE, &sr_data_option.voiceholdtotalk, 1);
         } else {
             voice_label(TEXT_EMPTY, MENU_LEFT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
             voice_label(TEXT_PUSH_KEY, MENU_RIGHT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            setmenuitem(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
+            setmenuitem(MENU_TOGGLE, &sr_data_option.voiceholdtotalk, 1);
         }
         voice_label(TEXT_VOICE, MENU_LEFT, MENU_VOICE_Y, MENU_WIDTH, MENU_HEIGHT);
-        setmenuitem(MENU_TOGGLE, &cl_data_audio_voice_enabled, 1);
+        setmenuitem(MENU_TOGGLE, &sr_data_option.voicechat, 1);
         checksystemmessages();
         checkkeyboard();
         checkmouse();
@@ -208,7 +208,7 @@ void voiceoptionsmenu(void)
         voice_waveform();
         setuptextdisplay();
         drawmenuitems();
-        if (cl_data_audio_voice_enabled) {
+        if (sr_data_option.voicechat) {
             if (!sr_data_speex.voice_ring[0].voice_off) {
                 drawbitmap(
                     -1, MENU_LEFT, MENU_WAVE_Y, MENU_ACTIVE_SIZE, MENU_ACTIVE_SIZE, ICON_CENTER,
@@ -220,9 +220,9 @@ void voiceoptionsmenu(void)
                     TEXT_LEVEL, MENU_LEFT, MENU_ACTIVE_DETAIL_Y, MENU_DETAIL_FONT,
                     ICON_CENTER, 1.0f, 1.0f, 1.0f, MENU_ACTIVE_ALPHA);
             }
-            if (cl_data_audio_push_to_talk)
+            if (sr_data_option.voiceholdtotalk)
                 drawtext(
-                    cl_data_audio_key_names + cl_data_audio_voice_key * MENU_KEY_NAME_BYTES,
+                    cl_data_audio_key_names + sr_data_option.voicekey * MENU_KEY_NAME_BYTES,
                     MENU_BIND_X, MENU_BIND_Y, MENU_HEIGHT, ICON_CENTER, 1.0f, 1.0f, 1.0f, 1.0f);
         }
         if (sr_data_debugit)
@@ -236,7 +236,7 @@ void voiceoptionsmenu(void)
         drawmousecursor(
             cl_data_input_mouse.x, cl_data_input_mouse.y, MENU_CURSOR_SIZE, 1.0f, 1.0f, 1.0f, 1.0f);
         audio_SDL_GL_SwapWindow()(cl_data_audio_window);
-        if (cl_data_audio_simulation) checksimulation(0);
+        if (sr_data_game.running) checksimulation(0);
         binding = cl_data_menu_items[1].pressed != 0;
         if (binding) voice_bind_key();
         soundsimulation(&cl_data_audio_camera.pos, cl_data_audio_camera.rot, &cl_data_audio_camera.vel);

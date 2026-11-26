@@ -41,7 +41,7 @@ void __cdecl displaydebuginfo(void)
         debug_integer_row("Cheat:/i", 0.0f, &y, 16.0f, cl_data_input_debug_toggle);
         for (i = 0; i < 8; ++i)
             drawtext("V:/i", 1020.0f, (float)((float)i * 16.0 + 320.0), 16.0f, 2,
-                1.0f, 1.0f, 1.0f, 1.0f, cl_data_audio_channels[i].active);
+                1.0f, 1.0f, 1.0f, 1.0f, ((AudioChannel *)sr_data_voice)[i].active);
     }
     if (sr_data_debug.display_mode == 1) {
         for (i = 0; i < sr_data_debug.num_values; ++i) {

@@ -23,7 +23,7 @@
 #define g_block_sectors cl_data_block_sectors
 #define g_glext cl_data_glext
 #define g_vbo cl_data_vbo
-#define g_camera cl_data_camera_position
+#define g_camera cl_data_audio_camera.pos
 #define g_light_position cl_data_light_position
 #define g_world_position cl_data_world_position
 #define g_part_count cl_data_sector_part_count

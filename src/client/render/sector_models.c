@@ -22,9 +22,9 @@ typedef void(__stdcall *BufferSubData)(uint32_t, int, int, const void *);
 int area_getnextsectormesh(void)
 {
     int word = 0, bit = 0;
-    while (cl_data_sector_mesh_bitmap[word] == UINT32_MAX && word < MESH_WORDS - 1)
+    while (((uint32_t *)sr_data_level_marks)[word] == UINT32_MAX && word < MESH_WORDS - 1)
         ++word;
-    while ((cl_data_sector_mesh_bitmap[word] >> (bit & 31)) & 1u)
+    while ((((uint32_t *)sr_data_level_marks)[word] >> (bit & 31)) & 1u)
         ++bit;
     return (word * WORD_BITS + bit) * MESH_SIZE;
 }
@@ -37,8 +37,8 @@ void area_setsectormesh(int first, int used)
     int bit = (adjusted >> 4) & 31;
     if (word < MESH_WORDS - 1) {
         uint32_t mask = 1u << bit;
-        cl_data_sector_mesh_bitmap[word] &= ~mask;
-        cl_data_sector_mesh_bitmap[word] |= (uint32_t)used << bit;
+        ((uint32_t *)sr_data_level_marks)[word] &= ~mask;
+        ((uint32_t *)sr_data_level_marks)[word] |= (uint32_t)used << bit;
     }
 }
 

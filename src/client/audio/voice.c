@@ -54,7 +54,7 @@ void getaudioinput(int player)
 {
     VoiceRing *ring = &sr_data_speex.voice_ring[player];
     int available, batch, sample;
-    if (!cl_data_audio_voice_enabled) {
+    if (!sr_data_option.voicechat) {
         for (sample = 0; sample < VOICE_FRAMES; sample++)
             ring->size[sample] = 0;
         ring->voice_off = 1;
@@ -68,21 +68,21 @@ void getaudioinput(int player)
         int frame = ring->head;
         audio_alcCaptureSamples()(cl_data_audio_capture, ring->samples[frame], VOICE_SAMPLES);
         for (sample = 0; sample < VOICE_SAMPLES; sample++) {
-            int value = (int)((double)(float)ring->samples[frame][sample] * cl_data_audio_voice_gain);
+            int value = (int)((double)(float)ring->samples[frame][sample] * sr_data_option.voiceboost_scale);
             if (value < -SAMPLE_LIMIT) value = -SAMPLE_LIMIT;
             if (value > SAMPLE_LIMIT) value = SAMPLE_LIMIT;
-            if (value < -cl_data_audio_threshold || value > cl_data_audio_threshold)
+            if (value < -sr_data_option.voicemin || value > sr_data_option.voicemin)
                 quiet = 0;
             ring->samples[frame][sample] = (int16_t)value;
         }
         preprocessspeex(0, player, frame);
-        if (!cl_data_audio_push_to_talk) {
+        if (!sr_data_option.voiceholdtotalk) {
             if (!quiet) ring->silence_ticks = 0;
             else if (ring->silence_ticks < SILENCE_LIMIT) ring->silence_ticks++;
             if (ring->silence_ticks < VOICE_RELEASE) quiet = 0;
         } else if (!cl_data_audio_input_blocked &&
-                   (cl_data_keyboard[cl_data_audio_voice_key] ||
-                    (cl_data_audio_mouse_buttons & cl_data_audio_voice_mouse))) {
+                   (cl_data_keyboard[sr_data_option.voicekey] ||
+                    (cl_data_input_mouse.buttons & sr_data_option.voicemb))) {
             quiet = 0;
             ring->silence_ticks = 0;
         } else {

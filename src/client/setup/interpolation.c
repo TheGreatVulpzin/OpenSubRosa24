@@ -73,7 +73,7 @@ static void extrapolate(vec3 *out, int tick, const vec3 *pos, int tick_prev, con
     subtractvectors(&step, pos, pos_prev);
     if (0.0 < span)
         scalevector(&step, &step, (float)(1.0 / span));
-    elapsed = (float)((int)cl_data_game_tick - tick);
+    elapsed = (float)((int)sr_data_game.ticks - tick);
     if (64.0 < elapsed)
         elapsed = MAX_EXTRAPOLATION;
     scaleaddvectors(out, pos, &step, elapsed);
@@ -111,7 +111,7 @@ void __cdecl client_simulation(void)
     for (i = 0; i < NUM_HUMANS; i++) {
         Human *human = &g_human[i];
 
-        if (human->active == 0 || human->net_tick >= (int)cl_data_game_tick)
+        if (human->active == 0 || human->net_tick >= (int)sr_data_game.ticks)
             continue;
         extrapolate(&human->bones[0].pos, human->net_tick, &human->net_pos, human->net_tick_prev,
                     &human->net_pos_prev);
@@ -123,7 +123,7 @@ void __cdecl client_simulation(void)
     for (i = 0; i < NUM_OBJECTS; i++) {
         Object *object = &g_object[i];
 
-        if (object->active == 0 || object->net_tick >= (int)cl_data_game_tick)
+        if (object->active == 0 || object->net_tick >= (int)sr_data_game.ticks)
             continue;
         extrapolate(&object->pos, object->net_tick, &object->net_pos, object->net_tick_prev, &object->net_pos_prev);
     }

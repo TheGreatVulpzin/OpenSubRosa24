@@ -35,11 +35,11 @@ void __cdecl setupsounds(void)
         audio_alGenBuffers()(1, &cl_data_sound_buffers[i].buffer);
     for (i = 0; i < CHANNELS; i++)
         for (k = 0; k < CHANNEL_BUFFERS; k++)
-            audio_alGenBuffers()(1, &cl_data_audio_channels[i].buffers[k]);
+            audio_alGenBuffers()(1, &((AudioChannel *)sr_data_voice)[i].buffers[k]);
     for (i = 0; i < CHANNELS; i++) {
-        audio_alGenSources()(1, &cl_data_audio_channels[i].source);
+        audio_alGenSources()(1, &((AudioChannel *)sr_data_voice)[i].source);
         if (audio_alGetError()() != 0)
-            cl_data_audio_channels[i].source = 0xffffffffu;
+            ((AudioChannel *)sr_data_voice)[i].source = 0xffffffffu;
     }
     cl_data_audio_source_limit = 0;
     audio_alGenSources()(1, &cl_data_audio_sounds[0].source);

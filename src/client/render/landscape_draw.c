@@ -114,7 +114,7 @@ void __cdecl setupframelandscapelod(void)
             }
             addvectors(&center, &low, &high);
             scalevector(&center, &center, 0.5f);
-            subtractvectors(&center, &center, &cl_data_camera_position);
+            subtractvectors(&center, &center, &cl_data_audio_camera.pos);
             center.y = 0.0f;
             distance = vectorlength(&center);
             /* A NaN distance fails the first test and gives level 0. */

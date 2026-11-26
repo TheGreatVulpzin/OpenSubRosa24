@@ -159,9 +159,9 @@ static void add_windows(const Object *object)
             addvectors(&middle, &middle, &corner);
         }
         scalevector(&middle, &middle, 0.25f);
-        quad->distance = vectordistance(&middle, &cl_data_camera_position);
+        quad->distance = vectordistance(&middle, &cl_data_audio_camera.pos);
         generatetrinormal(&quad->normal, &quad->corners[0], &quad->corners[1], &quad->corners[2]);
-        subtractvectors(&to_camera, &cl_data_camera_position, &quad->corners[0]);
+        subtractvectors(&to_camera, &cl_data_audio_camera.pos, &quad->corners[0]);
         /* A NaN gives 1. */
         quad->facing = dotproduct(&to_camera, &quad->normal) < 0.0f ? 0 : 1;
         ++cl_data_window_quad_count;
@@ -180,7 +180,7 @@ static void add_objects(void)
 
         if (object->active == 0 || object->state == OBJECT_BROKEN)
             continue;
-        distance = vectordistance(&cl_data_camera_position, &object->pos);
+        distance = vectordistance(&cl_data_audio_camera.pos, &object->pos);
         add_model(g_modellist.vehicle[object->type], g_textures.paint[object->color], g_textures.paint[0],
                   FLAG_SHADOW, &object->pos, object->rot);
         if (object->health < 1) {

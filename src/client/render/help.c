@@ -6,7 +6,7 @@
 #include "render/text.h"
 #include "sr_runtime.h"
 
-#define g_view_player cl_data_view_player
+#define g_view_player cl_data_audio_camera.player
 
 enum {
     HELP_X = 16,

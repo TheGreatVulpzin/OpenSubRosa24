@@ -19,6 +19,6 @@ void __cdecl reloadopengl(void)
     setupprogramobjects();
     setupframetextures();
     for (texture = 0; texture < TEXTURE_COUNT; texture++)
-        if (cl_data_image_textures[texture].width != 0)
+        if (((ImageTexture *)cl_data_texture)[texture].width != 0)
             setuptexture(texture);
 }

@@ -65,7 +65,7 @@ static int wsock_startup(void)
 
     if (!call)
         *(void **)&call = sr_import_ordinal("WSOCK32.DLL", WSOCK_STARTUP);
-    return call(WINSOCK_VERSION_1_1, cl_data_wsa_data);
+    return call(WINSOCK_VERSION_1_1, sr_data_wsadata);
 }
 
 static int wsock_cleanup(void)

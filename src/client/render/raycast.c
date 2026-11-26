@@ -86,12 +86,12 @@ void __cdecl render_raycast2(void)
             dir.z = -0.5f;
             normalizevector(&dir, &dir);
             scalevector(&dir, &dir, 0.699999988079071f);
-            projectvector(&step, &dir, cl_data_camera_rotation);
-            px = (int)(long long)((cl_data_camera_rotation[2].x * 0.0 + cl_data_camera_position.x) *
+            projectvector(&step, &dir, cl_data_audio_camera.rot);
+            px = (int)(long long)((cl_data_audio_camera.rot[2].x * 0.0 + cl_data_audio_camera.pos.x) *
                                   sr_data_area[0].inv_block_size * 256.0);
-            py = (int)(long long)((cl_data_camera_rotation[2].y * 0.0 + cl_data_camera_position.y) *
+            py = (int)(long long)((cl_data_audio_camera.rot[2].y * 0.0 + cl_data_audio_camera.pos.y) *
                                   sr_data_area[0].inv_block_size * 256.0);
-            pz = (int)(long long)((cl_data_camera_rotation[2].z * 0.0 + cl_data_camera_position.z) *
+            pz = (int)(long long)((cl_data_audio_camera.rot[2].z * 0.0 + cl_data_audio_camera.pos.z) *
                                   sr_data_area[0].inv_block_size * 256.0);
             scale = (float)((float)(column & 7) + 248.0);
             step_x = step.x * scale;

@@ -162,7 +162,7 @@ static void update_vehicle_sound(AudioSound *sound, int in_vehicle)
 /* Refill processed voice buffers and restart an active voice when it stops. */
 static void play_voice(int index, const vec3 *velocity)
 {
-    AudioChannel *voice = &cl_data_audio_channels[index];
+    AudioChannel *voice = &((AudioChannel *)sr_data_voice)[index];
     int queued = voice->head < voice->tail ? voice->head + AUDIO_FRAMES - voice->tail :
                                            voice->head - voice->tail;
     int processed, frame, state;
@@ -208,9 +208,9 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
     if (cl_data_audio_camera.player != -1 && sr_players[cl_data_audio_camera.player].human_id != -1)
         vehicle = sr_humans[sr_players[cl_data_audio_camera.player].human_id].vehicle_id;
     for (index = 0; index < AUDIO_VOICES; index++) {
-        AudioChannel *voice = &cl_data_audio_channels[index];
+        AudioChannel *voice = &((AudioChannel *)sr_data_voice)[index];
         if (!voice->active) continue;
-        if (voice->human == -1 || cl_data_audio_mode == AUDIO_SILENT) {
+        if (voice->human == -1 || sr_data_game.state == AUDIO_SILENT) {
             if (voice->item == -1)
                 scaleaddvectors(&voice->pos, &cl_data_audio_camera.pos, &cl_data_audio_camera.rot[2], AUDIO_CAMERA_OFFSET);
             else voice->pos = sr_items[voice->item].pos;
@@ -223,11 +223,11 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
     if (!velocity) speed.x = speed.y = speed.z = 0.0f;
     else scalevector(&speed, velocity, (float)AUDIO_TICK_RATE);
     audio_alListenerfv()(AL_VELOCITY, &speed.x);
-    if (cl_data_audio_mode == AUDIO_FADE) {
-        gain = (float)((double)(float)cl_data_audio_fade_ticks / AUDIO_TICK_RATE);
+    if (sr_data_game.state == AUDIO_FADE) {
+        gain = (float)((double)(float)sr_data_game.timer / AUDIO_TICK_RATE);
         if (gain < 0.0f) gain = 0.0f;
         if (1.0f < gain) gain = 1.0f;
-    } else if (cl_data_audio_mode == AUDIO_SILENT) gain = 0.0f;
+    } else if (sr_data_game.state == AUDIO_SILENT) gain = 0.0f;
     gain = (float)((double)((float)sr_data_option.soundvolume * gain) / AUDIO_VOLUME_MAX);
     gain = (float)(gain * gain);
     audio_alListenerf()(AL_GAIN, gain);

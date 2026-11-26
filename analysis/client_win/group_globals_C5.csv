@@ -35,5 +35,4 @@ framebuffer_ready,int,1,0xfefe290,mainmenu writes 1 next to framebuffer_index; n
 vbo_spare_a,int,1,0x1033fd2c,mainmenu gives it the buffer number 2; no reader
 vbo_spare_b,int,1,0x1033fd34,mainmenu gives it the buffer number 4; no reader
 vbo_spare_c,int,1,0x1033fd38,mainmenu gives it the buffer number 5; no reader
-camera_velocity,vec3,1,0xfefe2d8,mainmenu passes it to soundsimulation as the velocity of the listener
 version_marks,char,2,0x127eb2,joinmenu: the mark of a server of this version and the mark of another version

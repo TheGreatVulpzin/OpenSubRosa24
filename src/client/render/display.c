@@ -11,8 +11,8 @@
 #include "render/text.h"
 #include "sr_runtime.h"
 
-#define g_view_player cl_data_view_player
-#define g_game_state cl_data_game_state
+#define g_view_player cl_data_audio_camera.player
+#define g_game_state sr_data_game.state
 #define g_keyboard cl_data_keyboard
 #define g_map_shown cl_data_map_shown
 #define g_fontnum cl_data_fontnum

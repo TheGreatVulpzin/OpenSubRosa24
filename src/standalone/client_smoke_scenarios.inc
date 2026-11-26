@@ -84,9 +84,9 @@ static int play(void)
     if (!click("Start") || !wait_screen(game_screen, 3, 0, START_MS, "world load") || !shot("world")) return 0;
     if (!shot("round-before-team") || !record_screen("round-before-team", 0)) return 0;
     fprintf(stderr, "SMOKE CAMERA pos=%f %f %f free=%f %f %f yaw=%f pitch=%f zoom=%f\n",
-            cl_data_camera_position.x, cl_data_camera_position.y, cl_data_camera_position.z,
-            cl_data_input_cameras[0].pos.x, cl_data_input_cameras[0].pos.y, cl_data_input_cameras[0].pos.z,
-            cl_data_input_cameras[0].yaw, cl_data_input_cameras[0].pitch, cl_data_view_zoom);
+            cl_data_audio_camera.pos.x, cl_data_audio_camera.pos.y, cl_data_audio_camera.pos.z,
+            ((InputCamera *)sr_data_camera)[0].pos.x, ((InputCamera *)sr_data_camera)[0].pos.y, ((InputCamera *)sr_data_camera)[0].pos.z,
+            ((InputCamera *)sr_data_camera)[0].yaw, ((InputCamera *)sr_data_camera)[0].pitch, cl_data_audio_camera.projection);
     before = snapshot();
     if (before.human < 0) {
         if (item_index(&before, "Enter City") >= 0) { if (!click("Enter City")) return 0; }

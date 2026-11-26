@@ -40,7 +40,7 @@ void debug_getinputs(void)
                 resettimer(
                     timers[timer], labels[timer]);
         if (cl_data_keyboard[KEY_INSERT] && sr_players[0].human_id != -1)
-            cl_data_input_cameras[0].pos = sr_humans[sr_players[0].human_id].bones[2].pos;
+            ((InputCamera *)sr_data_camera)[0].pos = sr_humans[sr_players[0].human_id].bones[2].pos;
         if (input_pressed(KEY_F2)) sr_data_debug.human_view ^= 1;
         if (input_pressed(KEY_INSERT)) sr_players[0].money += DEBUG_MONEY;
         if (sr_server) {

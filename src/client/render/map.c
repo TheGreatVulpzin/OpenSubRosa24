@@ -15,7 +15,7 @@
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
-#define g_view_player cl_data_view_player
+#define g_view_player cl_data_audio_camera.player
 #define g_keyboard cl_data_keyboard
 
 enum {

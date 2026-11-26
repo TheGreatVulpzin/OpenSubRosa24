@@ -27,7 +27,6 @@ level_hit,LevelHit,1,0x1033ec20,lineintersectlevel writes the point and the norm
 score_count,int,1,0x163229e0,drawplayerinfo: the number of players in the column that it builds
 score_entries,ScoreEntry,256,0x163229e4,"drawplayerinfo: the player and the worth of each player of the column, before the sort"
 map_shown,int,1,0x908aae0,drawhud: not zero draws the map over the display
-view_zoom,float,1,0xfefe2d4,"the zoom of the view: 1 normally, larger while a gun aims. drawhud scales the aim marks by it"
 display_text,char,256,0x126728,drawdisplay builds a stock price or a chat line in it before drawtext
 round_ticks,int,1,0x908ac70,"drawdisplay: the ticks of the timed round, shown as minutes, seconds and tenths"
 round_goal,int,1,0x908ac74,drawdisplay: the right number of the round score line
@@ -44,8 +43,6 @@ interior_model_count,int,1,0x19c07c64,clearsectorlist clears it. The interior mo
 sector_vertices,uint8_t,33554432,0x1047c604,"render_sectorlist: the vertices of the sectors, 64 bytes each"
 sector_indices,uint8_t,6291456,0x1247c604,"clearsectorlist: the triangle indices of the sectors, 12 bytes for each triangle"
 sector_vbo,int,1,0x1033fd24,render_sectorlist: the number of the buffer of the sector vertices
-camera_position,vec3,1,0xfefe2a4,the place of the camera
-camera_rotation,vec3,3,0xfefe2b0,spritesimulation copies the camera rows to a particle in flight
 sprites,ClientSprite,16384,0xf9ae260,spritesimulation and rendersprites: particles and glass with a stride of 0x94
 sprite_decals,SpriteDecalVertex,16384,0x75a58a4,rendersprites draws the landed particles as textured quads
 glass_vertices,GlassVertex,16384,0x75f58a8,rendersprites draws the landed glass with a normal at each vertex

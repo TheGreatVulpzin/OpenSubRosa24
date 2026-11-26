@@ -145,7 +145,7 @@ void __cdecl rendermuzzleflashes(void)
 void __cdecl rendercheckpoints(void)
 {
     const RenderCheckpoint *checkpoints = (const RenderCheckpoint *)((const char *)&sr_data_game + CHECKPOINTS_OFFSET);
-    int player = cl_data_view_player == -1 ? 0 : cl_data_view_player;
+    int player = cl_data_audio_camera.player == -1 ? 0 : cl_data_audio_camera.player;
     int index;
     vec3 first;
     vec3 second;

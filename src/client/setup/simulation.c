@@ -38,8 +38,8 @@ void *sr_import(const char *dll, const char *name);
 #define g_debugit sr_data_debugit
 #define g_world sr_data_game_world
 #define g_area sr_data_area_sector
-#define g_state cl_data_game_state
-#define g_view cl_data_view_player
+#define g_state sr_data_game.state
+#define g_view cl_data_audio_camera.player
 #define g_keyboard cl_data_keyboard
 #define g_prevkeyboard cl_data_prevkeyboard
 #define g_messages cl_data_chatmessage
@@ -116,26 +116,26 @@ static unsigned ticks_now(void)
 static void read_display_keys(void)
 {
     if (g_debugit == 0 ? key_pressed(KEY_F1) : key_pressed(KEY_EQUALS))
-        cl_data_show_help ^= 1;
+        sr_data_option.help ^= 1;
     if (key_pressed(KEY_F4))
         cl_data_hide_hud ^= 1;
     if (key_pressed(KEY_PAGE_UP)) {
-        cl_data_mic_gain_percent += MIC_GAIN_STEP;
-        if (cl_data_mic_gain_percent > MIC_GAIN_MAX)
-            cl_data_mic_gain_percent = MIC_GAIN_MAX;
+        sr_data_option.voiceboost += MIC_GAIN_STEP;
+        if (sr_data_option.voiceboost > MIC_GAIN_MAX)
+            sr_data_option.voiceboost = MIC_GAIN_MAX;
         cl_data_mic_text_timer = MIC_TEXT_SECONDS;
     }
     if (key_pressed(KEY_PAGE_DOWN)) {
-        cl_data_mic_gain_percent -= MIC_GAIN_STEP;
-        if (cl_data_mic_gain_percent < MIC_GAIN_MIN)
-            cl_data_mic_gain_percent = MIC_GAIN_MIN;
+        sr_data_option.voiceboost -= MIC_GAIN_STEP;
+        if (sr_data_option.voiceboost < MIC_GAIN_MIN)
+            sr_data_option.voiceboost = MIC_GAIN_MIN;
         cl_data_mic_text_timer = MIC_TEXT_SECONDS;
     }
-    cl_data_audio_voice_gain = (float)((float)cl_data_mic_gain_percent / 100.0);
-    if (cl_data_audio_voice_gain < 0.125)
-        cl_data_audio_voice_gain = 0.125f;
-    if (4.0 < cl_data_audio_voice_gain)
-        cl_data_audio_voice_gain = 4.0f;
+    sr_data_option.voiceboost_scale = (float)((float)sr_data_option.voiceboost / 100.0);
+    if (sr_data_option.voiceboost_scale < 0.125)
+        sr_data_option.voiceboost_scale = 0.125f;
+    if (4.0 < sr_data_option.voiceboost_scale)
+        sr_data_option.voiceboost_scale = 4.0f;
     if (g_server.active != 0 && key_pressed(KEY_F5))
         resetgame();
 }
@@ -182,13 +182,13 @@ static void host_tick(void)
         physicssimulation();
     logicsimulation();
     serversend();
-    cl_data_game_tick++;
+    sr_data_game.ticks++;
 }
 
 /* The lights of every intersection by the tick of the host: the sides take turns. */
 static void set_traffic_lights(void)
 {
-    unsigned phase = cl_data_game_tick & LIGHT_CYCLE_MASK;
+    unsigned phase = sr_data_game.ticks & LIGHT_CYCLE_MASK;
     int a, b, i;
 
     if (phase < LIGHT_PHASE_ENDS_A) {
@@ -247,21 +247,21 @@ static void update_effects(void)
 static void update_light_angles(void)
 {
     if (g_game.gametype == GAMETYPE_DAY_CYCLE) {
-        cl_data_light_angle_a = (float)(((float)g_world.clock * 3.14159265359) / 2592000.0 + 3.14159265359);
-        cl_data_light_angle_b = 0.5f;
+        sr_data_game.start_angle_a = (float)(((float)g_world.clock * 3.14159265359) / 2592000.0 + 3.14159265359);
+        sr_data_game.start_angle_b = 0.5f;
     }
     if (g_debugit == 0)
         return;
     if (g_keyboard[KEY_LEFT_SHIFT] == 0) {
         if (g_keyboard[KEY_LEFT_BRACKET] != 0)
-            cl_data_light_angle_a = (float)(cl_data_light_angle_a - 0.0078125);
+            sr_data_game.start_angle_a = (float)(sr_data_game.start_angle_a - 0.0078125);
         if (g_keyboard[KEY_RIGHT_BRACKET] != 0)
-            cl_data_light_angle_a = (float)(cl_data_light_angle_a + 0.0078125);
+            sr_data_game.start_angle_a = (float)(sr_data_game.start_angle_a + 0.0078125);
     } else {
         if (g_keyboard[KEY_LEFT_BRACKET] != 0)
-            cl_data_light_angle_b = (float)(cl_data_light_angle_b - 0.024543692606171875);
+            sr_data_game.start_angle_b = (float)(sr_data_game.start_angle_b - 0.024543692606171875);
         if (g_keyboard[KEY_RIGHT_BRACKET] != 0)
-            cl_data_light_angle_b = (float)(cl_data_light_angle_b + 0.024543692606171875);
+            sr_data_game.start_angle_b = (float)(sr_data_game.start_angle_b + 0.024543692606171875);
     }
     if (g_keyboard[KEY_LEFT_BRACKET] != 0 || g_keyboard[KEY_RIGHT_BRACKET] != 0)
         render_buildareasectorshadow();

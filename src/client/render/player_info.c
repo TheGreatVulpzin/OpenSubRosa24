@@ -8,7 +8,7 @@
 #include "sr_runtime.h"
 #include "util.h"
 
-#define g_game_state cl_data_game_state
+#define g_game_state sr_data_game.state
 #define g_score_count cl_data_score_count
 #define g_score_entries cl_data_score_entries
 #define g_sort_count sr_data_radix.count

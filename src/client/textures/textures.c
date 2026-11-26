@@ -33,7 +33,7 @@
 #define g_fontlist cl_data_fontlist
 #define g_newspaper sr_data_newspaper
 #define g_windowatlas cl_data_texture_windowatlas
-#define g_windowrect cl_data_windowrect
+#define g_windowrect ((WindowRect *)sr_data_buildingtype.pieces)
 #define g_humanlook cl_data_texture_human
 #define g_materiallist sr_data_materiallist
 

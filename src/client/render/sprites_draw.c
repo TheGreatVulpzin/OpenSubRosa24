@@ -60,7 +60,7 @@ static void glass_normal(vec3 *normal, const vec3 *position)
 {
     vec3 direction;
 
-    subtractvectors(&direction, position, &cl_data_camera_position);
+    subtractvectors(&direction, position, &cl_data_audio_camera.pos);
     if (dotproduct(normal, &direction) < 0.0f) {
         normal->x = -normal->x;
         normal->y = -normal->y;
@@ -79,7 +79,7 @@ void __cdecl rendersprites(void)
     const ProgramObject *program = &cl_data_programs[PROGRAM_REFLECT];
 
     for (index = 0; index < sr_data_numofsprites; ++index)
-        sr_data_radix.keys[index] = cl_ftoi((double)dotproduct(&cl_data_sprites[index].pos, &cl_data_camera_rotation[2]) * 1024.0 + 16777216.0);
+        sr_data_radix.keys[index] = cl_ftoi((double)dotproduct(&cl_data_sprites[index].pos, &cl_data_audio_camera.rot[2]) * 1024.0 + 16777216.0);
     sr_data_radix.count = sr_data_numofsprites;
     csradixsort();
     glDepthMask(0);
@@ -103,7 +103,7 @@ void __cdecl rendersprites(void)
 
         if (sprite->kind == SPRITE_SPARK) {
             glColor4f(1, 1, 0.75f, alpha);
-            sprite_quad(sprite, cl_data_camera_rotation, 0);
+            sprite_quad(sprite, cl_data_audio_camera.rot, 0);
         }
         if (sprite->kind == SPRITE_STAIN || sprite->kind == SPRITE_MARK) {
             if (sprite->kind == SPRITE_STAIN)
@@ -116,7 +116,7 @@ void __cdecl rendersprites(void)
     glEnd();
     glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
     cl_glUseProgramObjectARB(program->program);
-    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_audio_camera.pos.x);
     cl_glUniform3fvARB(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
     cl_glUniform3fvARB(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
     glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.material[sr_data_materiallist.flagged_material]].gl_name);

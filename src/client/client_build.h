@@ -7,7 +7,7 @@
 /* The text parser keeps its file handle in one global, not in a field of Parser. */
 #define sr_parser_file (*(void **)&cl_data_open_file)
 /* The client keeps the tick before the place of Game.ticks. Shared code reads a signed int. */
-#define sr_game_ticks (*(int *)&cl_data_game_tick)
+#define sr_game_ticks (*(int *)&sr_data_game.ticks)
 /* The OpenGL extension loader of GLee: it fills the pointers of the slots and sets the extension flags. */
 int __cdecl GLeeInit(void);
 char __cdecl GLeeEnabled(const uint8_t *flag);

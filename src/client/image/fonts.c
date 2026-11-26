@@ -27,7 +27,7 @@ static void font_upload(int texture)
 /* Set texture storage and sampling. Return the pixel buffer. */
 static uint32_t *font_texture(int index, int width, int height, int mag, int min)
 {
-    ImageTexture *texture = &cl_data_image_textures[index];
+    ImageTexture *texture = &((ImageTexture *)cl_data_texture)[index];
     texture->width = width;
     texture->height = height;
     texture->levels = 1;
@@ -172,16 +172,16 @@ static float font_width(const ImageTexture *texture, int cell, int glyph, int st
 void loadfont(int texture_index, char *path, float size)
 {
     Font *font = &cl_data_fonts[cl_data_fontnum];
-    ImageTexture *texture = &cl_data_image_textures[texture_index];
+    ImageTexture *texture = &((ImageTexture *)cl_data_texture)[texture_index];
     int cell, glyph, coordinate, x, y;
     uint32_t *pixels, alpha;
     font->texture = texture_index;
     if (!loadimage(path) ||
-        ((cl_data_image_width - 1) & cl_data_image_width) ||
-        ((cl_data_image_height - 1) & cl_data_image_height))
+        ((cl_data_image.width - 1) & cl_data_image.width) ||
+        ((cl_data_image.height - 1) & cl_data_image.height))
         return;
-    pixels = font_texture(texture_index, cl_data_image_width, cl_data_image_height, IMAGE_LINEAR, IMAGE_LINEAR);
-    memcpy(pixels, cl_data_image_pixels, texture->width * texture->height * sizeof *pixels);
+    pixels = font_texture(texture_index, cl_data_image.width, cl_data_image.height, IMAGE_LINEAR, IMAGE_LINEAR);
+    memcpy(pixels, cl_data_image.pixels, texture->width * texture->height * sizeof *pixels);
     if (!texture->width)
         return;
     cell = texture->width >> 4;

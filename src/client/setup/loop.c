@@ -51,7 +51,7 @@
 #define g_human sr_data_human
 #define g_player sr_data_player
 #define g_debugit sr_data_debugit
-#define g_view cl_data_view_player
+#define g_view cl_data_audio_camera.player
 #define g_keys cl_data_keyboard
 
 #define NUM_PLAYERS 256
@@ -114,9 +114,9 @@ static void game_start_players(void)
 {
     int i, player;
 
-    cl_data_input_cameras[0].pos.x = 512.0f;
-    cl_data_input_cameras[0].pos.y = 64.0f;
-    cl_data_input_cameras[0].pos.z = 512.0f;
+    ((InputCamera *)sr_data_camera)[0].pos.x = 512.0f;
+    ((InputCamera *)sr_data_camera)[0].pos.y = 64.0f;
+    ((InputCamera *)sr_data_camera)[0].pos.z = 512.0f;
     cl_data_audio_voice_mode = 1;
     cl_data_chat_head = 0;
     memset(cl_data_chatmessage, 0, sizeof(ChatMessage) * NUM_PLAYERS);
@@ -189,7 +189,7 @@ static void game_start_voice(void)
     int i, k;
 
     for (i = 0; i < NUM_CHANNELS; i++) {
-        AudioChannel *channel = &cl_data_audio_channels[i];
+        AudioChannel *channel = &((AudioChannel *)sr_data_voice)[i];
 
         for (k = 0; k < 4; k++)
             audio_alBufferData()(channel->buffers[k], AL_FORMAT_MONO16, channel->samples, VOICE_BYTES, VOICE_RATE);
@@ -240,45 +240,45 @@ static void frame_textures(void)
 /* Turn the camera from a yaw and a pitch, at a distance behind its place. */
 static void camera_from_angles(const InputCamera *from, int back)
 {
-    vec3 *rot = cl_data_camera_rotation;
+    vec3 *rot = cl_data_audio_camera.rot;
 
-    cl_data_camera_position = from->pos;
-    cl_data_view_zoom = 1.0f;
+    cl_data_audio_camera.pos = from->pos;
+    cl_data_audio_camera.projection = 1.0f;
     resetorientation(rot);
     rotateorientation(rot, &rot[1], from->yaw);
     rotateorientation(rot, rot, from->pitch);
     if (back)
-        scaleaddvectors(&cl_data_camera_position, &cl_data_camera_position, &rot[2], from->zoom);
+        scaleaddvectors(&cl_data_audio_camera.pos, &cl_data_audio_camera.pos, &rot[2], from->zoom);
 }
 
 /* The camera with no living human: the free camera with no viewed player, else the camera
  * that follows the spectated human. It waits until the death count is 0. */
 static void frame_camera_free(void)
 {
-    InputCamera *follow = &cl_data_input_cameras[1];
+    InputCamera *follow = &((InputCamera *)sr_data_camera)[1];
 
     if (g_game.death_camera_ticks > 0)
         g_game.death_camera_ticks--;
     if (g_game.death_camera_ticks != 0)
         return;
     if (g_view == -1) {
-        cl_data_camera_position = cl_data_input_cameras[0].pos;
-        resetorientation(cl_data_camera_rotation);
-        rotateorientation(cl_data_camera_rotation, &cl_data_camera_rotation[1], cl_data_input_cameras[0].yaw);
-        rotateorientation(cl_data_camera_rotation, cl_data_camera_rotation, cl_data_input_cameras[0].pitch);
-        cl_data_view_zoom = 1.0f;
-        zerovector((unsigned int *)&cl_data_camera_velocity);
+        cl_data_audio_camera.pos = ((InputCamera *)sr_data_camera)[0].pos;
+        resetorientation(cl_data_audio_camera.rot);
+        rotateorientation(cl_data_audio_camera.rot, &cl_data_audio_camera.rot[1], ((InputCamera *)sr_data_camera)[0].yaw);
+        rotateorientation(cl_data_audio_camera.rot, cl_data_audio_camera.rot, ((InputCamera *)sr_data_camera)[0].pitch);
+        cl_data_audio_camera.projection = 1.0f;
+        zerovector((unsigned int *)&cl_data_audio_camera.vel);
         return;
     }
     camera_from_angles(follow, 1);
-    zerovector((unsigned int *)&cl_data_camera_velocity);
+    zerovector((unsigned int *)&cl_data_audio_camera.vel);
     if (g_game.spectator_human != -1 && g_human[g_game.spectator_human].active == 0)
         g_game.spectator_human = -1;
     if (g_game.spectator_human == -1)
         return;
     follow->pos = g_human[g_game.spectator_human].pos;
     camera_from_angles(follow, 1);
-    cl_data_camera_velocity = g_human[g_game.spectator_human].vel;
+    cl_data_audio_camera.vel = g_human[g_game.spectator_human].vel;
 }
 
 /* Turn the head view a part of the way to where the human looks: the yaw from the view, the
@@ -287,7 +287,7 @@ static void frame_camera_free(void)
  * the vehicle and the turn is full. */
 static void frame_camera_look(const Human *human, int index)
 {
-    vec3 *rot = cl_data_camera_rotation;
+    vec3 *rot = cl_data_audio_camera.rot;
     float weight, angle;
 
     if (human->vehicle_id == -1) {
@@ -321,7 +321,7 @@ static void frame_camera_head(int index)
 {
     const Human *human = &g_human[index];
     const Bone *head = &human->bones[BONE_HEAD];
-    vec3 *rot = cl_data_camera_rotation;
+    vec3 *rot = cl_data_audio_camera.rot;
 
     if (human->health < 1) {
         g_game.spectator_human = index;
@@ -330,21 +330,21 @@ static void frame_camera_head(int index)
         g_game.death_camera_ticks = LIVE_CAMERA_TICKS;
     }
     resetorientation(rot);
-    cl_data_camera_position = head->pos;
+    cl_data_audio_camera.pos = head->pos;
     rotateorientation(rot, &rot[1], human->axis);
     rotateorientation(rot, rot, (float)(human->pitch * 0.5));
     rotateorientation(rot, rot, (float)(human->pitch * 0.5));
-    cl_data_view_zoom = (float)(1.0 - g_player[g_view].zoom);
+    cl_data_audio_camera.projection = (float)(1.0 - g_player[g_view].zoom);
     rot[0] = head->rot[0];
     rot[1] = head->rot[1];
     rot[2] = head->rot[2];
-    scaleaddvectors(&cl_data_camera_position, &cl_data_camera_position, &rot[1], EYE_STEP);
+    scaleaddvectors(&cl_data_audio_camera.pos, &cl_data_audio_camera.pos, &rot[1], EYE_STEP);
     frame_camera_look(human, index);
     if (g_debugit != 0 && cl_data_audio_input_blocked == 0 && g_keys[KEY_X] != 0) {
         resetorientation(rot);
-        scaleaddvectors(&cl_data_camera_position, &cl_data_camera_position, &rot[2], DEBUG_EYE_BACK);
+        scaleaddvectors(&cl_data_audio_camera.pos, &cl_data_audio_camera.pos, &rot[2], DEBUG_EYE_BACK);
     }
-    cl_data_camera_velocity = head->vel;
+    cl_data_audio_camera.vel = head->vel;
 }
 
 /* Place the camera: at the head of the viewed human while it lives (or the death count still
@@ -369,7 +369,7 @@ static void frame_voice(void)
     sr_data_connection[NUM_PLAYERS - 1].spectate = g_game.spectator_human;
     calculateplayervoice(NUM_PLAYERS - 1, g_view);
     for (i = 0; i < NUM_CHANNELS; i++) {
-        AudioChannel *channel = &cl_data_audio_channels[i];
+        AudioChannel *channel = &((AudioChannel *)sr_data_voice)[i];
         const VoiceRing *ring;
 
         channel->active = slots[i].active;
@@ -504,10 +504,10 @@ static void frame_display(void)
     drawmenuitems();
     frame_spectator_texts();
     drawtext("Mic:/i", 4.0f, 64.0f, 12.0f, 0x20, 1.0f, 1.0f, 1.0f, cl_data_mic_text_timer,
-             cl_data_mic_gain_percent);
+             sr_data_option.voiceboost);
     if (voice_shown)
         frame_voice_wave();
-    if (cl_data_show_help != 0)
+    if (sr_data_option.help != 0)
         drawhelp();
     if (g_debugit != 0) {
         glDisable(GL_BLEND);
@@ -618,7 +618,7 @@ static void game_end(void)
         sendpacket(cl_data_server_address, cl_data_server_port);
     }
     for (i = 0; i < NUM_CHANNELS; i++) {
-        uint32_t source = cl_data_audio_channels[i].source;
+        uint32_t source = ((AudioChannel *)sr_data_voice)[i].source;
 
         if (source == 0xffffffffu)
             continue;
@@ -646,7 +646,7 @@ void __cdecl gameloop(void)
         renderframe();
         if (sr_data_server.active != 0)
             frame_voice();
-        soundsimulation(&cl_data_camera_position, cl_data_camera_rotation, &cl_data_camera_velocity);
+        soundsimulation(&cl_data_audio_camera.pos, cl_data_audio_camera.rot, &cl_data_audio_camera.vel);
         getaudioinput(g_view == -1 ? 0 : g_view);
         sr_data_area_sector.client_connected = 0;
         frame_display();

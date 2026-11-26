@@ -150,8 +150,8 @@ static int read_connect_replies(void)
             cs_pread(&sr_data_area_sector.client_game_id, 4, 1);
             pbitread((uint32_t *)&sr_data_game.gametype, 4);
             pbitread((uint32_t *)&sr_data_game.round_mode, 4);
-            unpackangle(&cl_data_light_angle_a, 16);
-            unpackangle(&cl_data_light_angle_b, 16);
+            unpackangle(&sr_data_game.start_angle_a, 16);
+            unpackangle(&sr_data_game.start_angle_b, 16);
             connected = 1;
         }
     }
@@ -574,7 +574,7 @@ void __cdecl optionsmenu(void)
         options_texts(gl, al);
         drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
         audio_SDL_GL_SwapWindow()(cl_data_audio_window);
-        if (cl_data_audio_simulation != 0)
+        if (sr_data_game.running != 0)
             checksimulation(0);
     }
     if (sr_data_option.setcpuaffinity != 0)
@@ -1147,10 +1147,10 @@ static void main_scene(void)
     vec3 place, rot[3];
     int textures[2];
 
-    zerovector((unsigned *)&cl_data_camera_position);
-    resetorientation(cl_data_camera_rotation);
+    zerovector((unsigned *)&cl_data_audio_camera.pos);
+    resetorientation(cl_data_audio_camera.rot);
     setupperspectiveviewport(0, 0, 0x400, 0x280, 0.125f, 1024.0f, 1.0f);
-    setupviewpoint(&cl_data_camera_position, cl_data_camera_rotation);
+    setupviewpoint(&cl_data_audio_camera.pos, cl_data_audio_camera.rot);
     main_pose_human(&sr_data_human[0]);
     buildhumanmodel(0, sr_data_modellist.human[0]);
     cl_data_light_position[0] = 0.0f;
@@ -1246,7 +1246,7 @@ static void main_test_sounds(void)
 
     for (i = 0; i < 4; i++)
         if (cl_data_keyboard[KEY_1 + i] != 0 && cl_data_prevkeyboard[KEY_1 + i] == 0) {
-            copyvector((unsigned *)&place, (const unsigned *)&cl_data_camera_position);
+            copyvector((unsigned *)&place, (const unsigned *)&cl_data_audio_camera.pos);
             createsound(sr_data_soundlist.menu_test[i], &place, 0, 1.0f,
                         cl_data_keyboard[KEY_LEFT_SHIFT] == 0 ? 1.0f : 0.25f);
         }
@@ -1271,7 +1271,7 @@ void __cdecl mainmenu(void)
         clear_menu_screen(GL_CLEAR_BITS);
         if (sr_data_debugit != 0)
             main_scene();
-        soundsimulation(&cl_data_camera_position, cl_data_camera_rotation, &cl_data_camera_velocity);
+        soundsimulation(&cl_data_audio_camera.pos, cl_data_audio_camera.rot, &cl_data_audio_camera.vel);
         getaudioinput(0);
         setuptextdisplay();
         drawtext("Sub Rosa", 512.0f, 160.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -1279,10 +1279,10 @@ void __cdecl mainmenu(void)
         if (sr_data_debugit != 0)
             drawtext("DEBUG", 512.0f, 196.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
         menu_show(24);
-        if (cl_data_audio_threshold < 0)
-            cl_data_audio_threshold = 0;
-        if (cl_data_audio_threshold > 0x8000)
-            cl_data_audio_threshold = 0x8000;
+        if (sr_data_option.voicemin < 0)
+            sr_data_option.voicemin = 0;
+        if (sr_data_option.voicemin > 0x8000)
+            sr_data_option.voicemin = 0x8000;
         main_actions();
         audio_SDL_Delay()(1);
         if (sr_data_debugit != 0)

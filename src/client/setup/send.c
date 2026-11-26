@@ -15,7 +15,7 @@
 #define g_game sr_data_game
 #define g_player sr_data_player
 #define g_speex sr_data_speex
-#define g_view cl_data_view_player
+#define g_view cl_data_audio_camera.player
 #define g_view_pos cl_data_audio_camera.pos
 
 #define PACKET_PLAYER_INPUT 4
@@ -116,6 +116,6 @@ void __cdecl clientsend(void)
     write_actions(player);
     write_voice(&g_speex.voice_ring[g_view]);
     pbitwrite((const uint32_t *)&g_speex.voice_ring[g_view].voice_off, 1);
-    pbitwritenego((const uint32_t *)&cl_data_spectated_human, 8);
+    pbitwritenego((const uint32_t *)&sr_data_game.spectator_human, 8);
     sendpacket(cl_data_server_address, cl_data_server_port);
 }
