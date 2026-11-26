@@ -5,7 +5,7 @@
 #include "client.h"
 #include "sr_runtime.h"
 
-#define g_block_sectors cl_data_block_sectors
+#define g_block_sectors sr_data_area_sector.records
 
 /* Mark the sector that holds the block (x, y, z) of an area as near the camera, and mark the
  * interior slot of the block as in use. Each slot covers two block layers. A block outside the

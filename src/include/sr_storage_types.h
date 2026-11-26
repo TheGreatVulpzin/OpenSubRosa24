@@ -24,9 +24,10 @@ typedef struct SrSurface {
 } SrSurface;
 
 typedef struct SrSectorStore {
-    int unused_0;
+    int sim_ticks;
     int client_game_id;
-    uint8_t reserved[0x1c];
+    float input_heli_mouse[2];
+    uint8_t reserved[0x14];
     int client_connected;
     int client_timeout;
     int client_event_total;

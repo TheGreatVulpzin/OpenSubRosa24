@@ -5,4 +5,3 @@ sound_buffers,SoundBuffer,256,0xf8ab240,setupsounds makes one OpenAL buffer for 
 audio_source_limit,int,1,0x1bbe3a0,setupsounds counts the OpenAL sources it could make. createsound and createsoundobject stop at this number
 source_buffer,char,131072,0xf3ca9c0,loadsource reads the whole file into it before it copies it. The next object starts 0x20000 bytes after it
 gl_buffer_sub_data,void *,1,0x115abc,area_submitsectormodel calls the glBufferSubDataARB extension slot.
-scenario_event_data,ScenarioEventData,128,0x90882dc,createevent_updatescenario reads words at offsets 0 4 8 12 and 68 with stride 80; the final padding overlaps the spectator field.

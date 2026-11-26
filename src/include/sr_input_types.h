@@ -8,23 +8,6 @@
 
 #pragma pack(push, 1)
 
-/* scenario_event_data[]: record of 0x50 bytes. */
-typedef union ScenarioEventData { struct {
-    int first_low;                       /* +0x0000 Low part of the first scenario event word. */
-    int second_low;                      /* +0x0004 Low part of the second scenario event word. */
-    int second_high;                     /* +0x0008 High part of the second scenario event word. */
-    int third;                           /* +0x000c Third scenario event word. */
-    uint8_t pad_0010[0x34];
-    int first_high;                      /* +0x0044 High part of the first scenario event word. */
-    uint8_t pad_0048[0x8];
-}; uint8_t lf_raw[0x50]; } ScenarioEventData;
-SR_STATIC_ASSERT(sizeof(ScenarioEventData) == 0x50, "ScenarioEventData");
-SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_low) == 0x0, "ScenarioEventData.first_low");
-SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_low) == 0x4, "ScenarioEventData.second_low");
-SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_high) == 0x8, "ScenarioEventData.second_high");
-SR_STATIC_ASSERT(offsetof(ScenarioEventData, third) == 0xc, "ScenarioEventData.third");
-SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_high) == 0x44, "ScenarioEventData.first_high");
-
 /* input_mouse[]: record of 0x2c bytes. */
 typedef union InputMouse { struct {
     int x;                               /* +0x0000 Absolute horizontal coordinate on a 1024 pixel canvas */
@@ -164,27 +147,6 @@ SR_STATIC_ASSERT(offsetof(MenuItem, cursor) == 0x274, "MenuItem.cursor");
 SR_STATIC_ASSERT(offsetof(MenuItem, spare_278) == 0x278, "MenuItem.spare_278");
 SR_STATIC_ASSERT(offsetof(MenuItem, value) == 0x27c, "MenuItem.value");
 SR_STATIC_ASSERT(offsetof(MenuItem, callback) == 0x280, "MenuItem.callback");
-
-/* editor_view[]: record of 0x48 bytes. */
-typedef union EditorView { struct {
-    float x;                             /* +0x0000 buildingedit_setup and leveledit_setup: the viewport of the editor, 32 */
-    float y;                             /* +0x0004 the viewport: 32 */
-    float width;                         /* +0x0008 the viewport: 768 */
-    float height;                        /* +0x000c the viewport: 576 */
-    vec3 camera;                         /* +0x0010 the camera place: 12 0 9 for the building editor, 160 0 160 for the level editor */
-    float orientation[9];                /* +0x001c the camera turns by pi/2 about its first row: it looks down */
-    float zoom;                          /* +0x0040 12 for the building editor, 64 for the level editor */
-    float scale;                         /* +0x0044 0.75 */
-}; uint8_t lf_raw[0x48]; } EditorView;
-SR_STATIC_ASSERT(sizeof(EditorView) == 0x48, "EditorView");
-SR_STATIC_ASSERT(offsetof(EditorView, x) == 0x0, "EditorView.x");
-SR_STATIC_ASSERT(offsetof(EditorView, y) == 0x4, "EditorView.y");
-SR_STATIC_ASSERT(offsetof(EditorView, width) == 0x8, "EditorView.width");
-SR_STATIC_ASSERT(offsetof(EditorView, height) == 0xc, "EditorView.height");
-SR_STATIC_ASSERT(offsetof(EditorView, camera) == 0x10, "EditorView.camera");
-SR_STATIC_ASSERT(offsetof(EditorView, orientation) == 0x1c, "EditorView.orientation");
-SR_STATIC_ASSERT(offsetof(EditorView, zoom) == 0x40, "EditorView.zoom");
-SR_STATIC_ASSERT(offsetof(EditorView, scale) == 0x44, "EditorView.scale");
 
 /* editor_tile[]: record of 0x24 bytes. */
 typedef union EditorTile { struct {

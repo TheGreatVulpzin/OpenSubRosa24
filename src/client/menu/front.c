@@ -134,7 +134,7 @@ static void send_connect_request(void)
     cs_pwrite(sr_data_option.name, 1, 0x20);
     cs_pwrite(&cl_data_client_account_id[0], 4, 1);
     cs_pwrite(&cl_data_client_account_id[1], 4, 1);
-    sendpacket(cl_data_server_address, cl_data_server_port);
+    sendpacket(sr_data_server.address, sr_data_server.port);
 }
 
 /* Read the packets that came. A reply of kind 6 gives the round number, the game type, the
@@ -781,15 +781,15 @@ static void join_texts(int page, int master_done)
     drawtext("Game Type", col[8], col[9], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
     drawtext("Version", col[6], col[7], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
     if (sr_data_debugit != 0) {
-        cl_data_join_debug[0] = (int)cl_data_join_addresses[0].address;
-        cl_data_join_debug[1] = (int)cl_data_join_addresses[1].address;
-        cl_data_join_debug[2] = cl_data_join_address_count;
+        sr_data_blocktemp.join_debug[0] = (int)cl_data_join_addresses[0].address;
+        sr_data_blocktemp.join_debug[1] = (int)cl_data_join_addresses[1].address;
+        sr_data_blocktemp.join_debug[2] = cl_data_join_address_count;
     }
     for (i = 0; i < JOIN_ROWS; i++)
         if (page * JOIN_ROWS + i < cl_data_join_server_count)
             join_row(page, i);
     if (sr_data_debugit != 0)
-        drawtext("/i", 16.0f, 400.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, cl_data_debug_counters[0]);
+        drawtext("/i", 16.0f, 400.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, sr_data_debug.counters[0]);
     if (sr_data_debugit != 0)
         drawtext("/i./i./i./i:/i", 320.0f, 560.0f, 12.0f, 2, 1.0f, 1.0f, 1.0f, 1.0f, master >> 24, master >> 16 & 0xff,
                  master >> 8 & 0xff, master & 0xff, (uint32_t)(uint16_t)sr_data_masterserver.port);
@@ -891,7 +891,7 @@ static int join_read_packets(void)
                     cs_pread(&cl_data_join_addresses[cl_data_join_address_count].port, 2, 1);
                     cl_data_join_address_count++;
                 }
-            cl_data_debug_counters[0] = count;
+            sr_data_debug.counters[0] = count;
         }
     }
     return master;
@@ -945,8 +945,8 @@ void __cdecl joinmenu(void)
         if (join_read_packets())
             master_done = 1;
         if (chosen != -1) {
-            cl_data_server_address = cl_data_join_servers[chosen].address;
-            cl_data_server_port = cl_data_join_servers[chosen].port;
+            sr_data_server.address = cl_data_join_servers[chosen].address;
+            sr_data_server.port = cl_data_join_servers[chosen].port;
             sr_data_game.client_account_key = cl_data_join_servers[chosen].account_key;
             createclientaccount(&cl_data_client_account_id[0], &cl_data_client_account_id[1],
                                 sr_data_game.client_account_key);

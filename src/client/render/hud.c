@@ -16,7 +16,7 @@
 #define g_game_state sr_data_game.state
 #define g_keyboard cl_data_keyboard
 #define g_voice_mode cl_data_audio_voice_mode
-#define g_map_shown cl_data_map_shown
+#define g_map_shown sr_data_game.map_shown
 #define g_spectated_human sr_data_game.spectator_human
 #define g_cursor cl_data_input_cursor
 #define g_view_zoom cl_data_audio_camera.projection

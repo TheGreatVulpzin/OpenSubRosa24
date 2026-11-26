@@ -1,14 +1,13 @@
 name,type,count,client_rva,evidence
 building_editor,BuildingEditor,1,0x1b9b500,"buildingedit_setup, buildingedit_addblock and buildingedit_render: the state of the building editor (mode, tool, texture slots, cursor, drag)"
 building_view,EditorView,1,0x1b9b5ec,"buildingedit_setup: the view of the building editor (viewport, camera, orientation, zoom, scale)"
-editor_tile_count,int,1,0x1b9b634,"buildingedit_blockmenu and buildingedit_texturemenu: the number of tiles in editor_tiles"
+editor_tile_count,int,1,0x1b9b634,buildingedit_blockmenu and buildingedit_texturemenu: the number of tiles in editor_tiles
 editor_tiles,EditorTile,64,0x1b9b638,"buildingedit_blockmenu and buildingedit_texturemenu: the picker tiles (kind, place, size, target, index)."
-level_view,EditorView,1,0xf3ca970,"leveledit_setup: the view of the level editor"
-edit_vertices,vec3,256,0x1bf7f60,"model_editor: the working copy of the vertices"
-edit_grabbed,int,256,0x103675c0,"model_editor: 1 for a vertex that the mouse holds"
-edit_offsets,vec3,256,0x103679c0,"model_editor: the vertex minus the hit point of the grab"
-edit_mouse_before,float,2,0x103685c0,"model_editor: the mouse place of the frame before"
-game_block_count,int,1,0x1bacf3c,"buildingedit_blockmenu: the number of game_blocks"
+edit_vertices,vec3,256,0x1bf7f60,model_editor: the working copy of the vertices
+edit_grabbed,int,256,0x103675c0,model_editor: 1 for a vertex that the mouse holds
+edit_offsets,vec3,256,0x103679c0,model_editor: the vertex minus the hit point of the grab
+edit_mouse_before,float,2,0x103685c0,model_editor: the mouse place of the frame before
+game_block_count,int,1,0x1bacf3c,buildingedit_blockmenu: the number of game_blocks
 game_blocks,EditorEntry,1024,0x1bacf40,"buildingedit_blockmenu: the blocks of the game that the building can add, from the block list of the files"
-game_texture_count,int,1,0x1b9bf38,"buildingedit_texturemenu: the number of game_textures"
-game_textures,EditorEntry,1024,0x1b9bf3c,"buildingedit_texturemenu: the materials of the game that have a name"
+game_texture_count,int,1,0x1b9bf38,buildingedit_texturemenu: the number of game_textures
+game_textures,EditorEntry,1024,0x1b9bf3c,buildingedit_texturemenu: the materials of the game that have a name

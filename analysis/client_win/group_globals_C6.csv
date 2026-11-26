@@ -5,14 +5,12 @@ audio_capture,void*,1,0x163231e4,setupaudio stores alcCaptureOpenDevice
 audio_enabled,int,1,0x29e7d304,setupaudio and shutdownaudio
 audio_encoder,AudioEncoder,1,0x1033eb60,enablespeex encoder and preprocess state
 audio_decoders,AudioDecoder,8,0x1bf7e20,enablespeex decoder stride 0x28
-audio_samples,float,160,0x12a7d680,encodespeex converts 160 signed samples
 audio_camera,AudioCamera,1,0xfefe2a0,soundsimulation camera vectors
 audio_sounds,AudioSound,256,0x17c028a0,deletesound stride 0x18 and Linux sound size 0x1800
 audio_sound_count,int,1,0x90652e4,deletesound packed list count
 audio_objects,int,8,0x90f60a4,soundsimulation vehicle indices
 audio_object_count,int,1,0x90f60a0,soundsimulation vehicle list count
 audio_play_buffer,int16_t,65536,0x102feb60,soundsimulation combines four voice frames. createwav makes its waves in it
-audio_capture_backup,int16_t,10240,0x1339c260,getaudioinput saves muted samples
 audio_input_blocked,int,1,0x29e752a0,getaudioinput talk suppression
 audio_voice_mode,int,1,0x52daba4,Whisper and Yell labels and keyboard voice mode selection
 audio_menu_back,int,1,0xb7330ec,voiceoptionsmenu back condition

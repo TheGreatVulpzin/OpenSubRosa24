@@ -166,13 +166,13 @@ void resetgame(void)
         sr_game.state = 2;
         sr_game.timer = sr_game.round_time;
     }
-    sr_game.unused_257e8 = 0;
+    sr_game.last_health = 0;
     g_camera[0] = 160.0f;
     g_camera[1] = 32.0f;
     g_camera[2] = 128.0f;
     sr_resetgame_camera_counter();
-    sr_game.unused_257e0 = 0;
-    sr_game.unused_257ec = 0;
+    sr_game.map_shown = 0;
+    sr_game.damage_flash = 0;
     for (i = 0; i < 5; ++i) {
         *(int *)TEAM_FIELD(team0_unused_8c, i) = 0;
         *(int *)TEAM_FIELD(team0_members, i) = 0;
@@ -191,13 +191,13 @@ void resetgame(void)
         if (sr_game.gametype == 3)
             s->open_price = (float)s->price_int;
     }
-    sr_game.unused_25978 = 0;
-    sr_game.unused_25974 = 0;
+    sr_game.round_goal = 0;
+    sr_game.round_ticks = 0;
     sr_game.num_newspapers = 0;
     sr_game.unused_22fd8 = 0;
     round = sr_server ? sr_game.round_number + 1 : g_area_sector.client_game_id;
     sr_game_ticks = 0;
-    g_area_sector.unused_0 = 0;
+    g_area_sector.sim_ticks = 0;
     *((int *)&sr_data_newspaper.texture_done) = 0;
     sr_game.round_number = round;
     if (!sr_server)
@@ -254,7 +254,7 @@ void resetgame(void)
     g_tiremarkstart = 0;
     g_tiremarkend = 0;
     sr_numofevents = 0;
-    g_blocktemp.unused_7602c = 0;
+    g_blocktemp.last_event = 0;
     for (i = 0; i < sr_numofconnections; ++i) {
         sr_connections[i].event_ack = 0;
         for (j = 0; j < 8; ++j)

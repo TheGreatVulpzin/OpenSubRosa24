@@ -14,7 +14,7 @@ void createevent_updatescenario(int scenario)
     uint32_t state;
     if (!sr_server)
         return;
-    data = &cl_data_scenario_event_data[scenario];
+    data = &sr_data_game.scenario_events[scenario];
     event = &sr_events[sr_numofevents];
     event->type = 11;
     event->tick = sr_game_ticks;

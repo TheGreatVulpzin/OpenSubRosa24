@@ -23,16 +23,11 @@ chat_head,uint32_t,1,0xf3eafc0,frame_drawmessages walks the ring of messages fro
 sprite_models,SpriteModel,16384,0x5379100,createsprite_model and sprite_model_simulation: the flying pieces. A record has 0x68 bytes
 shell_verts,SpriteVertex,262144,0x76558ac,the corners of the landed shell casings. renderspritemodels draws them
 debris_verts,SpriteVertex,65536,0x7e558b0,the corners of the landed pieces of debris. renderspritemodels draws them
-level_hit,LevelHit,1,0x1033ec20,lineintersectlevel writes the point and the normal of the hit into it
 score_count,int,1,0x163229e0,drawplayerinfo: the number of players in the column that it builds
 score_entries,ScoreEntry,256,0x163229e4,"drawplayerinfo: the player and the worth of each player of the column, before the sort"
-map_shown,int,1,0x908aae0,drawhud: not zero draws the map over the display
 display_text,char,256,0x126728,drawdisplay builds a stock price or a chat line in it before drawtext
-round_ticks,int,1,0x908ac70,"drawdisplay: the ticks of the timed round, shown as minutes, seconds and tenths"
-round_goal,int,1,0x908ac74,drawdisplay: the right number of the round score line
 light_ambient,float,4,0x19c07d00,renderframe sets it as the ambient color of the light 0 and the interior window pass draws with it
 interior_corners,vec3,6,0x1271e8,render_sector_interior_shadow2: the three corners of a triangle and the same corners pushed away from the light
-block_sectors,BlockSector,8192,0x1dda5280,the sectors of the city: renderframe lists the ones near the camera. The record starts 0x40 bytes after the start of the area block
 sector_part_count,int,128,0x17c04860,clearsectorlist: the number of runs of triangles for each material
 sector_draw_counts,int,1048576,0x17c04c60,"clearsectorlist: the index count of each run, 0x4000 runs for each material"
 sector_draw_offsets,void*,1048576,0x18c04c60,"clearsectorlist: the place of the indices of each run, 0x4000 runs for each material"
@@ -60,9 +55,6 @@ video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height an
 video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
 screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
 blur_params_near,float,8,0x19c750dc,The eight weights of the depth blur. The first four go to the shader as the near parameters and the last four as the far parameters (blur_params_far)
-frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
-debug_player_count,int,1,0x14f88b0,The active player count without bots
-debug_counters,int,16,0x14f88b4,The integer rows of diagnostic page two
 viewport_x,float,1,0x19c07cc0,renderframe clears the left edge of the frame viewport
 viewport_y,float,1,0x19c07cc4,renderframe clears the bottom edge of the frame viewport
 light_diffuse,float,4,0x19c07d10,getsuncolors writes the diffuse color of light 0. renderframe colors the sun with it
@@ -76,4 +68,3 @@ window_quad_count,int,1,0x19c75120,buildframelist adds one for each car window. 
 window_quads,WindowQuad,16384,0x19c75124,buildframelist writes four corners a normal a distance and a facing flag with a stride of 0x44
 framebuffers,ClientFramebuffer,2,0x9063240,mainmenu creates two framebuffers with their depth renderbuffers
 framebuffer_index,int,1,0xfefe294,mainmenu writes 0. renderframe and setupframetextures bind this framebuffer
-debug_spheres,DebugSphere,8191,0x14c0694,renderframe draws each sphere with its color and radius in the world debug view

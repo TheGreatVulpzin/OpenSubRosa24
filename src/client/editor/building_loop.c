@@ -582,7 +582,7 @@ static void building_finish(void)
         InteriorMesh *mesh = &((InteriorMesh *)&sr_data_interior)[i];
 
         if (mesh->sector != -1)
-            cl_data_block_sectors[mesh->sector].interior_models[mesh->slot] = -1;
+            sr_data_area_sector.records[mesh->sector].interior_models[mesh->slot] = -1;
         mesh->sector = -1;
     }
 }

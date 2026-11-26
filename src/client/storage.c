@@ -2195,45 +2195,6 @@ EditorEntry cl_data_game_textures[1024];
 #endif
 SR_STATIC_ASSERT(sizeof(cl_data_game_textures) == 1024 * 68, "cl_data_game_textures");
 
-/* An object that lies inside a bigger object must fit in it. */
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(cl_data_audio_camera), "sr_data_view");
-SR_STATIC_ASSERT(0x22fdc + 128 * sizeof(ScenarioEventData) <= sizeof(sr_data_game), "cl_data_scenario_event_data");
-SR_STATIC_ASSERT(0x0 + sizeof(LevelHit) <= sizeof(sr_data_intersect), "cl_data_level_hit");
-SR_STATIC_ASSERT(0x257e0 + sizeof(int) <= sizeof(sr_data_game), "cl_data_map_shown");
-SR_STATIC_ASSERT(0x25970 + sizeof(int) <= sizeof(sr_data_game), "cl_data_round_ticks");
-SR_STATIC_ASSERT(0x25974 + sizeof(int) <= sizeof(sr_data_game), "cl_data_round_goal");
-SR_STATIC_ASSERT(0x40 + 8192 * sizeof(BlockSector) <= sizeof(sr_data_area_sector), "cl_data_block_sectors");
-SR_STATIC_ASSERT(0x50124 + sizeof(float) <= sizeof(sr_data_debug), "cl_data_frame_rate");
-SR_STATIC_ASSERT(0x50230 + sizeof(int) <= sizeof(sr_data_debug), "cl_data_debug_player_count");
-SR_STATIC_ASSERT(0x50234 + 16 * sizeof(int) <= sizeof(sr_data_debug), "cl_data_debug_counters");
-SR_STATIC_ASSERT(0x18014 + 8191 * sizeof(DebugSphere) <= sizeof(sr_data_debug), "cl_data_debug_spheres");
-SR_STATIC_ASSERT(0x8 + 2 * sizeof(float) <= sizeof(sr_data_area_sector), "cl_data_input_heli_mouse");
-SR_STATIC_ASSERT(0x50 + sizeof(uint32_t) <= sizeof(sr_data_game), "cl_data_input_game_running");
-SR_STATIC_ASSERT(0x76040 + 3 * sizeof(int) <= sizeof(sr_data_blocktemp), "cl_data_join_debug");
-SR_STATIC_ASSERT(0x0 + 160 * sizeof(float) <= sizeof(sr_data_speex), "cl_data_audio_samples");
-SR_STATIC_ASSERT(0x91ebe0 + 10240 * sizeof(int16_t) <= sizeof(sr_data_speex), "cl_data_audio_capture_backup");
-SR_STATIC_ASSERT(0x50 + sizeof(int) <= sizeof(sr_data_game), "cl_data_relative_mouse");
-SR_STATIC_ASSERT(0x44 + sizeof(int) <= sizeof(sr_data_game), "cl_data_slow_tick");
-SR_STATIC_ASSERT(0x38 + sizeof(uint32_t) <= sizeof(sr_data_game), "cl_data_last_tick_ms");
-SR_STATIC_ASSERT(0x50018 + sizeof(uint32_t) <= sizeof(sr_data_debug), "cl_data_tick_start_ms");
-SR_STATIC_ASSERT(0x25d54 + sizeof(int) <= sizeof(sr_data_game), "cl_data_hide_hud");
-SR_STATIC_ASSERT(0x25d50 + sizeof(float) <= sizeof(sr_data_game), "cl_data_mic_text_timer");
-SR_STATIC_ASSERT(0x3c + sizeof(int) <= sizeof(sr_data_game), "cl_data_paused");
-SR_STATIC_ASSERT(0x40 + sizeof(int) <= sizeof(sr_data_game), "cl_data_step_once");
-SR_STATIC_ASSERT(0x0 + sizeof(int) <= sizeof(sr_data_area_sector), "cl_data_sim_ticks");
-SR_STATIC_ASSERT(0x257e4 + sizeof(int) <= sizeof(sr_data_game), "cl_data_last_health");
-SR_STATIC_ASSERT(0x257e8 + sizeof(float) <= sizeof(sr_data_game), "cl_data_damage_flash");
-SR_STATIC_ASSERT(0x25d4c + sizeof(float) <= sizeof(sr_data_game), "cl_data_death_fade");
-SR_STATIC_ASSERT(0x50128 + sizeof(uint32_t) <= sizeof(sr_data_debug), "cl_data_frame_time_index");
-SR_STATIC_ASSERT(0x5012c + 32 * sizeof(int) <= sizeof(sr_data_debug), "cl_data_frame_times");
-SR_STATIC_ASSERT(0x5022c + sizeof(float) <= sizeof(sr_data_debug), "cl_data_frame_time_average");
-SR_STATIC_ASSERT(0x18010 + sizeof(int) <= sizeof(sr_data_debug), "cl_data_debug_extra_count");
-SR_STATIC_ASSERT(0x7602c + sizeof(uint32_t) <= sizeof(sr_data_blocktemp), "cl_data_last_event");
-SR_STATIC_ASSERT(0x54 + sizeof(uint32_t) <= sizeof(sr_data_server), "cl_data_server_address");
-SR_STATIC_ASSERT(0x58 + sizeof(uint16_t) <= sizeof(sr_data_server), "cl_data_server_port");
-SR_STATIC_ASSERT(0x25d58 + sizeof(int) <= sizeof(sr_data_game), "cl_data_hide_messages");
-SR_STATIC_ASSERT(0x1c6850 + sizeof(EditorView) <= sizeof(sr_data_level_editor), "cl_data_level_view");
-
 /* Objects that the client has no place for. */
 char sr_unplaced_gamedir[9];
 float sr_unplaced_lightwavelength[3];

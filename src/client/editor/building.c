@@ -109,7 +109,7 @@ void __cdecl buildingedit_setup(void)
 /* Start the level editor: the view and no chosen block. */
 void __cdecl leveledit_setup(void)
 {
-    editor_view_setup(&cl_data_level_view, 64.0f, 160.0f, 160.0f);
+    editor_view_setup(&sr_data_level_editor.view, 64.0f, 160.0f, 160.0f);
     sr_data_level_editor.street_lanes_a = 3;
     sr_data_level_editor.street_lanes_b = 3;
     sr_data_level_editor.place_type = 0;

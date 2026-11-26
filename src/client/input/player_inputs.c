@@ -304,12 +304,12 @@ void getinputs_heli(int player_index)
         return;
     sensitivity = (float)(1.0 - player->zoom);
     if (!mouse->right || mouse->left) {
-        cl_data_input_heli_mouse[0] = heli_decay(cl_data_input_heli_mouse[0]);
-        cl_data_input_heli_mouse[1] = heli_decay(cl_data_input_heli_mouse[1]);
-        cl_data_input_heli_mouse[0] = (float)((double)(float)mouse->dx * 0.125 * 0.5 + cl_data_input_heli_mouse[0]);
-        cl_data_input_heli_mouse[1] = (float)((double)(float)mouse->dy * 0.125 * 0.5 + cl_data_input_heli_mouse[1]);
-        player->input_axes[AXIS_SHIFT] = (float)((double)player->input_axes[AXIS_SHIFT] + cl_data_input_heli_mouse[0]);
-        player->input_axes[AXIS_GEAR] = (float)((double)player->input_axes[AXIS_GEAR] - cl_data_input_heli_mouse[1]);
+        sr_data_area_sector.input_heli_mouse[0] = heli_decay(sr_data_area_sector.input_heli_mouse[0]);
+        sr_data_area_sector.input_heli_mouse[1] = heli_decay(sr_data_area_sector.input_heli_mouse[1]);
+        sr_data_area_sector.input_heli_mouse[0] = (float)((double)(float)mouse->dx * 0.125 * 0.5 + sr_data_area_sector.input_heli_mouse[0]);
+        sr_data_area_sector.input_heli_mouse[1] = (float)((double)(float)mouse->dy * 0.125 * 0.5 + sr_data_area_sector.input_heli_mouse[1]);
+        player->input_axes[AXIS_SHIFT] = (float)((double)player->input_axes[AXIS_SHIFT] + sr_data_area_sector.input_heli_mouse[0]);
+        player->input_axes[AXIS_GEAR] = (float)((double)player->input_axes[AXIS_GEAR] - sr_data_area_sector.input_heli_mouse[1]);
         if (!mouse->left) {
             player->yaw = (float)((double)player->yaw * 0.875);
             player->input_pitch = (float)((double)player->input_pitch * 0.875);

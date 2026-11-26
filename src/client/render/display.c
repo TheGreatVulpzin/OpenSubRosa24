@@ -14,14 +14,14 @@
 #define g_view_player cl_data_audio_camera.player
 #define g_game_state sr_data_game.state
 #define g_keyboard cl_data_keyboard
-#define g_map_shown cl_data_map_shown
+#define g_map_shown sr_data_game.map_shown
 #define g_fontnum cl_data_fontnum
 #define g_debug_toggle cl_data_input_debug_toggle
 #define g_chat_head cl_data_chat_head
 #define g_chatmessage cl_data_chatmessage
 #define g_display_text cl_data_display_text
-#define g_round_ticks cl_data_round_ticks
-#define g_round_goal cl_data_round_goal
+#define g_round_ticks sr_data_game.round_ticks
+#define g_round_goal sr_data_game.round_goal
 #define g_input_blocked cl_data_audio_input_blocked
 
 enum {

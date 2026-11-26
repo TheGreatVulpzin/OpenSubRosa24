@@ -111,11 +111,11 @@ void __cdecl clientsend(void)
     cs_pwrite(&player->input_buttons, 4, 1);
     pbitwrite((const uint32_t *)&player->input_mode, 8);
     pbitwrite((const uint32_t *)&player->move_mode, 4);
-    pbitwrite(&cl_data_last_event, 16);
+    pbitwrite(&sr_data_blocktemp.last_event, 16);
     cs_pwrite(&g_view_pos, 4, 3);
     write_actions(player);
     write_voice(&g_speex.voice_ring[g_view]);
     pbitwrite((const uint32_t *)&g_speex.voice_ring[g_view].voice_off, 1);
     pbitwritenego((const uint32_t *)&sr_data_game.spectator_human, 8);
-    sendpacket(cl_data_server_address, cl_data_server_port);
+    sendpacket(sr_data_server.address, sr_data_server.port);
 }

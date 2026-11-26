@@ -1,4 +1,5 @@
 /* The clock, the process and the log files of the game. */
+#include "sr_debug_counters.h"
 #include "system.h"
 
 #include <string.h>
@@ -24,12 +25,12 @@ void setcpuaffinity(void)
     uintptr_t process_mask, system_mask;
 
     if (os_getprocessaffinitymask(os_getcurrentprocess(), &process_mask, &system_mask)) {
-        d->affinity_before = (int)process_mask + 10000;
+        d->counters[DEBUG_COUNTER_AFFINITY_BEFORE] = (int)process_mask + 10000;
         if (process_mask & 1) {
             if (os_setprocessaffinitymask(os_getcurrentprocess(), 1))
-                d->affinity_set = 1234;
+                d->counters[DEBUG_COUNTER_AFFINITY_SET] = 1234;
             if (os_getprocessaffinitymask(os_getcurrentprocess(), &process_mask, &system_mask))
-                d->affinity_after = (int)process_mask + 10000;
+                d->counters[DEBUG_COUNTER_AFFINITY_AFTER] = (int)process_mask + 10000;
         }
     }
 }

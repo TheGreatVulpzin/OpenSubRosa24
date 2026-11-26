@@ -45,7 +45,7 @@ static void surface_rows(vec3 rows[3])
 /* Reduce speed across the surface and reflect speed into the surface. */
 static void bounce(vec3 *velocity, float drag)
 {
-    const vec3 *normal = &cl_data_level_hit.normal;
+    const vec3 *normal = &(*(LevelHit *)&sr_data_intersect).normal;
     vec3 side;
     float into = (float)dotproduct(velocity, normal);
     float length;
@@ -113,7 +113,7 @@ static void simulate_triangle(ClientSprite *sprite, LevelIntersectFn intersect)
         sprite->corner_vel[corner].y = (float)(sprite->corner_vel[corner].y - sprite->gravity);
         addvectors(&sprite->rot[corner], &sprite->rot[corner], &sprite->corner_vel[corner]);
         if (intersect(&before, &sprite->rot[corner], 0)) {
-            scaleaddvectors(&sprite->rot[corner], &cl_data_level_hit.pos, &cl_data_level_hit.normal, 0.001953125f);
+            scaleaddvectors(&sprite->rot[corner], &(*(LevelHit *)&sr_data_intersect).pos, &(*(LevelHit *)&sr_data_intersect).normal, 0.001953125f);
             bounce(&sprite->corner_vel[corner], 0.875f);
         }
     }
@@ -152,7 +152,7 @@ void __cdecl spritesimulation(void)
             before = sprite->pos;
             addvectors(&sprite->pos, &sprite->pos, &sprite->vel);
             if (intersect(&before, &sprite->pos, 0)) {
-                scaleaddvectors(&sprite->pos, &cl_data_level_hit.pos, &cl_data_level_hit.normal, 0.015625f);
+                scaleaddvectors(&sprite->pos, &(*(LevelHit *)&sr_data_intersect).pos, &(*(LevelHit *)&sr_data_intersect).normal, 0.015625f);
                 bounce(&sprite->vel, 0.9375f);
             }
         }
@@ -171,8 +171,8 @@ void __cdecl spritesimulation(void)
                 memcpy(sprite->rot, cl_data_audio_camera.rot, sizeof(sprite->rot));
             continue;
         }
-        scaleaddvectors(&sprite->pos, &cl_data_level_hit.pos, &cl_data_level_hit.normal, 0.015625f);
-        if (sprite->kind == SPRITE_GLASS && !(0.0f < cl_data_level_hit.normal.y)) {
+        scaleaddvectors(&sprite->pos, &(*(LevelHit *)&sr_data_intersect).pos, &(*(LevelHit *)&sr_data_intersect).normal, 0.015625f);
+        if (sprite->kind == SPRITE_GLASS && !(0.0f < (*(LevelHit *)&sr_data_intersect).normal.y)) {
             bounce(&sprite->vel, 0.9375f);
             continue;
         }
@@ -182,7 +182,7 @@ void __cdecl spritesimulation(void)
             sprite->size = (float)((float)((unsigned)os_rand() & 0x3f) / 1024.0 + 0.0625);
             sprite->size = (float)(sprite->size * 0.5);
         }
-        sprite->rot[2] = cl_data_level_hit.normal;
+        sprite->rot[2] = (*(LevelHit *)&sr_data_intersect).normal;
         surface_rows(sprite->rot);
         land_sprite(sprite);
     }

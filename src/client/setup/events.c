@@ -205,7 +205,7 @@ static void event_human(const Event *event)
 static void event_scenario(const Event *event)
 {
     unsigned index = (event->param >> 4) & NIBBLE_MASK;
-    ScenarioEventData *data = &cl_data_scenario_event_data[index];
+    ScenarioEventData *data = &sr_data_game.scenario_events[index];
     sr_game.round_mode = (unsigned)event->param & NIBBLE_MASK;
     *(int *)TEAM_FIELD(team0_scenario_state, 0) = (event->param >> 8) & 3;
     *(int *)TEAM_FIELD(team0_scenario_state, 1) = (event->param >> 10) & 3;
@@ -298,9 +298,9 @@ static void event_block_damage(const Event *event)
 /* Apply each event before advancing the ring cursor with word wrap. */
 void client_eventsimulation(void)
 {
-    for (; cl_data_last_event != sr_numofevents;
-         cl_data_last_event = (cl_data_last_event + 1) & EVENT_RING_MASK) {
-        const Event *event = &sr_events[cl_data_last_event];
+    for (; sr_data_blocktemp.last_event != sr_numofevents;
+         sr_data_blocktemp.last_event = (sr_data_blocktemp.last_event + 1) & EVENT_RING_MASK) {
+        const Event *event = &sr_events[sr_data_blocktemp.last_event];
         switch (event->type) {
         case EVENT_SOUND:
             if (sound_is_recent(event))

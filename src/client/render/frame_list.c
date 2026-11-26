@@ -342,7 +342,7 @@ static void add_fixtures(void)
 
     for (s = 0; s < cl_data_sector_count; ++s)
         for (slot = 0; slot < 4; ++slot) {
-            int m = cl_data_block_sectors[cl_data_sector_list[s]].interior_models[slot];
+            int m = sr_data_area_sector.records[cl_data_sector_list[s]].interior_models[slot];
             const InteriorMesh *mesh;
 
             if (m < 0)

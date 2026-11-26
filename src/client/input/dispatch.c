@@ -89,7 +89,7 @@ static void input_menu(int *connection)
 static void player_menu_state(Player *player)
 {
     if (!cl_data_audio_input_blocked) {
-        if (input_pressed(KEY_C)) sr_game.unused_257e0 ^= 1;
+        if (input_pressed(KEY_C)) sr_game.map_shown ^= 1;
         if (input_pressed(KEY_TAB))
             cl_data_input_cursor = !cl_data_input_cursor && player->menu != 0;
     }
@@ -187,7 +187,7 @@ void getinputs(int player_index)
     if (player) player_menu_state(player);
     running = sr_game.link_state != 1;
     if (!running) cl_data_input_cursor = 1;
-    cl_data_input_game_running = running;
+    sr_data_game.relative_mouse = running;
     if (!sr_game.link_state && player && cl_data_input_cursor)
         playermenu(player_index);
     checksystemmessages();

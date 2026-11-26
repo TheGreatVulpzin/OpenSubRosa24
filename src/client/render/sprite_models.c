@@ -27,7 +27,7 @@
 #define g_shell_verts cl_data_shell_verts
 #define g_debris_count sr_data_sprite_triangles
 #define g_debris_verts cl_data_debris_verts
-#define g_hit cl_data_level_hit
+#define g_hit (*(LevelHit *)&sr_data_intersect)
 #define g_models cl_data_model
 #define g_modellist sr_data_modellist
 #define g_textures cl_data_texture

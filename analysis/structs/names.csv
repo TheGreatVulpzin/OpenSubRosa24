@@ -500,7 +500,7 @@ account,0x50,ban_time,int,,"serverrecv: above 0 drops the player; /bany writes i
 server,0x0,active,int,,"sr_server"
 server,0xc,last_packet_size,int,,"serversend and clientrecv"
 server,0x10,max_packet_size,int,,"clientrecv"
-server,0x14,name,char,72,"serverrecv type 0 reply sends the first 32 bytes; dedicatedserverloop copies Option.servername here"
+server,0x14,name,char,64,"serverrecv type 0 reply sends the first 32 bytes; dedicatedserverloop copies Option.servername here"
 server,0x5c,max_players,int,,"serverrecv"
 server,0x64,num_players,int,,"serverrecv: count of the human players"
 server,0x78,packets_in,int,,"serverrecv: +1 for each packet"
@@ -564,19 +564,11 @@ object,0x8210,net_tick,int,,"unpackobjectpacket: the tick of the last state of t
 object,0x8214,net_pos,vec3,,"unpackobjectpacket: the place at net_tick"
 object,0x8220,net_tick_prev,int,,"unpackobjectpacket: the tick of the state before"
 object,0x8224,net_pos_prev,vec3,,"unpackobjectpacket: the place at net_tick_prev"
-debug,0x50248,affinity_set,int,,setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds
-debug,0x5024c,affinity_before,int,,setcpuaffinity writes the process mask plus 10000
-debug,0x50250,affinity_after,int,,setcpuaffinity writes the process mask plus 10000 after the change
 debug,0x50014,frame_start,uint32_t,,"gameloop: the SDL time when the frame started"
 debug,0x5001c,frame_ms_index,int,,"gameloop: the next entry of frame_ms, 0 to 31"
 debug,0x50020,frame_ms,int,32,"gameloop: the milliseconds that each of the last 32 frames took"
 debug,0x50120,frame_ms_max,int,,"gameloop: the longest frame. F3 clears it when the debug flag is on"
 debug,0x50124,frame_ms_average,float,,"gameloop: the mean of frame_ms"
-debug,0x50244,shown_team,int,,"gameloop with the debug flag: the team of player 0, for displaydebuginfo"
-debug,0x50254,shown_bonds,int,,"gameloop with the debug flag: numofbonds, for displaydebuginfo"
-debug,0x50258,shown_humans,int,,"gameloop with the debug flag: the count of active humans, for displaydebuginfo"
-debug,0x5025c,shown_parts,int,,"gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo"
-debug,0x50264,shown_mouse,int,,"gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo"
 debug,0x52284,log_text,char,256,dedicatedserverloop writes the physics line with sprintf
 debug,0x52384,log_path,char,64,debug_resetlogfile writes the file name dedlog.txt
 debug,0x523c4,log_file,void*,,debug_resetlogfile and dedicatedserverloop: FILE * of the log
@@ -741,12 +733,12 @@ city,0x2ffa4,prize_pos,vec3,,scenario_createguards: the place of the prize item
 city,0x30368,car_spawn_next,int,,"logic_cardealer_buy: the next car place, (n + 1) & 7"
 city,0x3036c,car_spawn_pos,vec3,,logic_cardealer_buy: car place n is at z - 4 n
 game,0x257dc,death_camera_ticks,int,,"resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server"
-game,0x257e0,unused_257e0,int,,resetgame clears this field. No reader in the server
-game,0x257e8,unused_257e8,int,,resetgame clears this field. No reader in the server
-game,0x257ec,unused_257ec,float,,resetgame clears this field. No reader in the server
+game,0x257e0,map_shown,int,,"Client: 1 while the map is shown. resetgame clears it"
+game,0x257e8,last_health,int,,"Client: the health of the last frame. resetgame clears it"
+game,0x257ec,damage_flash,float,,"Client: the red flash after a hit. resetgame clears it"
 game,0x22fd8,unused_22fd8,int,,resetgame clears this field. No reader in the server
-game,0x25974,unused_25974,int,,resetgame clears this field. No reader in the server
-game,0x25978,unused_25978,int,,resetgame clears this field. No reader in the server
+game,0x25974,round_ticks,int,,"Client: the ticks of the round. resetgame clears it"
+game,0x25978,round_goal,int,,"Client: the goal of the round. resetgame clears it"
 soundlist,0x0,num_sounds,int,,setupgame: count 47 after sound identifiers 0 through 46
 materiallist,0x0,num_materials,int,,setupgame: material identifiers and the file list
 materiallist,0x4,presets,int,160,setupgame: material identifiers and the file list
@@ -766,8 +758,8 @@ materiallist,0x2c4,misc_2c4,int,,setupgame: material identifiers and the file li
 materiallist,0x2d0,flagged_material,int,,setupgame: material identifiers and the file list
 materiallist,0x2f0,sign,int,,setupgame: material identifiers and the file list
 materiallist,0x380,file_materials,int,128,setupgame: material identifiers and the file list
-area_sector,0x0,unused_0,int,,resetgame writes 0. No reader in the server
-blocktemp,0x7602c,unused_7602c,int,,resetgame writes 0. No reader in the server
+area_sector,0x0,sim_ticks,int,,"Client: counts each simulation tick. resetgame writes 0"
+blocktemp,0x7602c,last_event,int,,"events.c reads it as the last event number. resetgame writes 0"
 player,0xcc,unused_cc,int,,resetgame writes 0 for the test player next to input_mode. No reader in the server
 city,0x4,unused_04,int,,createlevel writes 0. No reader in the server
 city,0x2380c,num_blocks,int,,"createlevel writes 0, then appends one record of 0x30 at +0x23810 (the ELF has addcityblock)"
@@ -1016,9 +1008,9 @@ player,0xe0,menu_action,int,,getinputs queues a menu action and clears it
 game,0x10,option_menu,int,,Client options menu switch
 game,0x14,voice_menu,int,,Client voice menu switch
 game,0x18,connections_menu,int,,Client connection menu switch
-game,0x3c,debug_p,uint32_t,,Client P key diagnostic switch
-game,0x40,debug_o,int,,Client O key diagnostic switch
-game,0x44,debug_i,uint32_t,,Client I key diagnostic switch
+game,0x3c,last_tick_ms,uint32_t,,"Client gameloop: the SDL time of the last tick. The debug key P flips its low bit"
+game,0x40,paused,int,,"Client: 1 while the simulation is paused. The debug key O sets it"
+game,0x44,step_once,int,,"Client: 1 runs one tick while paused. The debug key I flips it"
 game,0x257d8,spectator_human,int,,Client spectator target or minus one
 debug,0x0,display,uint32_t,,F6 toggles the diagnostic display
 debug,0x4,display_mode,int,,F11 cycles six diagnostic display modes
@@ -1238,3 +1230,24 @@ app_ticket,0x14,call_high,uint32_t,,The high word of the pending asynchronous ca
 app_ticket,0x18,receiver,void*,,The callback method receives this object in ECX.
 app_ticket,0x1c,method,void*,,The callback method takes a response and an I/O failure flag.
 app_ticket,0x20,ticket_callback,void*,,The encrypted ticket response method calls this function with the ticket bytes and their length.
+area_sector,0x8,input_heli_mouse,float,2,"Client: the smoothed mouse motion that steers a helicopter"
+blocktemp,0x76040,join_debug,int,3,"joinmenu writes it when debugit is set"
+debug,0x18010,sphere_count,int,,"Client: the debug spheres of this frame"
+debug,0x18014,spheres,DebugSphere,8191,"Client: the debug spheres that the frame draws"
+debug,0x50018,tick_start_ms,uint32_t,,"Client: the SDL time when the tick started"
+debug,0x50128,frame_time_index,uint32_t,,"Client: the next entry of frame_times, 0 to 31"
+debug,0x5012c,frame_times,int,32,"Client: the milliseconds that each of the last 32 ticks took"
+debug,0x5022c,frame_time_average,float,,"Client: the mean of frame_times"
+debug,0x50230,player_count,int,,"Client displaydebuginfo: the players that are not bots"
+debug,0x50234,counters,int,16,"The diagnostic counters that page 2 of displaydebuginfo shows. DEBUG_COUNTER_* in sr_debug_counters.h names the used entries"
+game,0x48,slow_tick,int,,"Client: 1 makes a tick last longer"
+game,0x54,relative_mouse,int,,"Client: 1 while the mouse moves the view"
+game,0x25d50,death_fade,float,,"Client: the fade after the death of the viewed human"
+game,0x25d54,mic_text_timer,float,,"Client: how long the microphone text shows"
+game,0x25d58,hide_hud,int,,"Client: 1 hides the HUD"
+game,0x25d5c,hide_messages,int,,"Client: 1 hides the chat messages"
+game,0x22fe0,scenario_events,ScenarioEventData,127,"Client: the event words of the scenarios. The last record of the client layout lies over spectator_human"
+level_editor,0x1c6850,view,EditorView,,"Client: the viewport and the camera of the level editor"
+server,0x54,address,uint32_t,,"Client: the address that the client joins"
+server,0x58,port,uint16_t,,"Client: the port that the client joins"
+speex,0x0,samples,float,160,"Client: the samples of the voice that the microphone gave"

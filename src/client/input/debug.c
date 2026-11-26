@@ -44,9 +44,9 @@ void debug_getinputs(void)
         if (input_pressed(KEY_F2)) sr_data_debug.human_view ^= 1;
         if (input_pressed(KEY_INSERT)) sr_players[0].money += DEBUG_MONEY;
         if (sr_server) {
-            if (input_pressed(KEY_I)) sr_game.debug_i ^= 1;
-            if (input_pressed(KEY_P)) sr_game.debug_p ^= 1;
-            if (input_pressed(KEY_O)) sr_game.debug_o = 1;
+            if (input_pressed(KEY_I)) sr_game.slow_tick ^= 1;
+            if (input_pressed(KEY_P)) sr_game.paused ^= 1;
+            if (input_pressed(KEY_O)) sr_game.step_once = 1;
         }
         if (input_pressed(KEY_B)) sr_data_debug.world_view ^= 1;
     }

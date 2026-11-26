@@ -14,7 +14,7 @@
 #define g_materials sr_data_materials.records
 #define g_interiors ((const InteriorMesh *)&sr_data_interior)
 #define g_light_ambient cl_data_light_ambient
-#define g_block_sectors cl_data_block_sectors
+#define g_block_sectors sr_data_area_sector.records
 
 GL_IMPORT(glColorPointer, (int size, uint32_t type, int stride, const void *pointer), (size, type, stride, pointer))
 GL_IMPORT(glNormalPointer, (uint32_t type, int stride, const void *pointer), (type, stride, pointer))

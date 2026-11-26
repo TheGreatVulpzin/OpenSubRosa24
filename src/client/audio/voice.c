@@ -13,6 +13,8 @@ enum { VOICE_SLOTS = 8, VOICE_SAMPLES = 160, VOICE_FRAMES = 64,
        CAPTURE_BATCH = 16, SILENCE_LIMIT = 64, VOICE_RELEASE = 16, TALK_RELEASE = 24,
        SAMPLE_LIMIT = 32767, ALC_CAPTURE_SAMPLES = 0x312 };
 #define VOICE_DISTANCE_LIMIT 65536.0f
+/* The capture keeps a copy of its samples in the voice ring of this slot. */
+#define VOICE_BACKUP_RING 254
 
 /* Choose a free slot or a replacement. Return -1 when no slot qualifies. */
 int getnextvoice(int listener, float distance)
@@ -92,7 +94,7 @@ void getaudioinput(int player)
         }
         if (quiet) {
             for (sample = 0; sample < VOICE_SAMPLES; sample++) {
-                cl_data_audio_capture_backup[frame * VOICE_SAMPLES + sample] = ring->samples[frame][sample];
+                ((int16_t *)&sr_data_speex.voice_ring[VOICE_BACKUP_RING])[frame * VOICE_SAMPLES + sample] = ring->samples[frame][sample];
                 ring->samples[frame][sample] = 0;
             }
         }
@@ -102,7 +104,7 @@ void getaudioinput(int player)
         ring->mode[frame] = cl_data_audio_voice_mode;
         if (quiet) {
             for (sample = 0; sample < VOICE_SAMPLES; sample++)
-                ring->samples[frame][sample] = cl_data_audio_capture_backup[frame * VOICE_SAMPLES + sample];
+                ring->samples[frame][sample] = ((int16_t *)&sr_data_speex.voice_ring[VOICE_BACKUP_RING])[frame * VOICE_SAMPLES + sample];
             ring->size[frame] = 0;
         }
         ring->voice_off = quiet;

@@ -65,7 +65,7 @@ void __cdecl tiremark_simulation(void)
                     scaleaddvectors(&vertex->pos, center, &side, offset);
                     scaleaddvectors(&below, &vertex->pos, &sr_data_yaxis, -1.0f);
                     if (intersect(&vertex->pos, &below, 0))
-                        vertex->pos.y = (float)(cl_data_level_hit.pos.y + 0.03125);
+                        vertex->pos.y = (float)((*(LevelHit *)&sr_data_intersect).pos.y + 0.03125);
                     vertex->alpha = (float)((corner < 2 ? tire->slip : tire->mark_slip) * 8.0);
                 }
                 sr_data_tiremarkend = (sr_data_tiremarkend + 1) & TIREMARK_MASK;
@@ -152,15 +152,15 @@ void __cdecl rendercheckpoints(void)
 
     glDisable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
-    for (index = 0; index < cl_data_round_goal; ++index) {
+    for (index = 0; index < sr_data_game.round_goal; ++index) {
         const RenderCheckpoint *checkpoint = &checkpoints[index];
         vec3 bottom_first;
         vec3 bottom_second;
         float width;
 
-        if (cl_data_round_ticks <= 0 && index != 0)
+        if (sr_data_game.round_ticks <= 0 && index != 0)
             continue;
-        if (cl_data_round_ticks < 1)
+        if (sr_data_game.round_ticks < 1)
             glColor3f(0.5f, 0, 0);
         else if (index < sr_data_player[player].round_points)
             glColor3f(0, 0.5f, 0);

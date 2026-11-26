@@ -1,4 +1,5 @@
 /* City object allocation and collision meshes. */
+#include "sr_debug_counters.h"
 #include "buildings.h"
 
 #include <string.h>
@@ -37,7 +38,7 @@ int city_createelevator(const vec3 *pos)
     int i, building = -1, object;
     int *block;
     vec3 center;
-    g_debug.affinity_before = 0x457;
+    g_debug.counters[DEBUG_COUNTER_AFFINITY_BEFORE] = 0x457;
     for (i = 0; i < g_city.num_buildings; i++) {
         const vec3 *min = BLD_PTR(vec3, building_min, i);
         const vec3 *max = BLD_PTR(vec3, building_max, i);
@@ -60,7 +61,7 @@ int city_createelevator(const vec3 *pos)
     BLD_INT(elevator, building) = object;
     g_cityobjects[object].building = building;
     g_cityobjects[object].num_floors = BLD_INT(num_floors, building);
-    g_debug.affinity_after = 0x457;
+    g_debug.counters[DEBUG_COUNTER_AFFINITY_AFTER] = 0x457;
     return object;
 }
 

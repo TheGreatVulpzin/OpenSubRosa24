@@ -8,9 +8,9 @@ This tool writes the other form of the same names:
   src/client/storage.c             one definition per object and the start values
   instrumentation/client/runtime/storage_regions.inc  the objects with start values, for the test
 
-An alias (analysis/client_win/storage_aliases.csv) is an object that lies inside a bigger
-object. It becomes a macro that points into the bigger one. The compiler checks that the alias
-fits (static assert). The start values come from the .data of the client executable. A text
+A name in analysis/client_win/storage_aliases.csv is an object that has no storage of its own.
+It becomes a macro for the C expression of its "expr" column (a field of a bigger object). The
+start values come from the .data of the client executable. A text
 pointer table starts with C strings. The OpenGL pointer slots start empty: the native build gets
 them from GLee.
 
@@ -127,12 +127,13 @@ def load():
         if plain in by_plain:
             raise SystemExit(f"two objects named {plain}")
         by_plain[plain] = r
-    aliases = {}
+    aliases, exprs = {}, {}
     path = ROOT / "analysis/client_win/storage_aliases.csv"
     for a in csv.DictReader(path.open(encoding="utf-8")):
         if a["inner"] not in by_plain or a["outer"] not in by_plain:
             raise SystemExit(f"alias {a['inner']} in {a['outer']}: unknown name")
         aliases[a["inner"]] = a["outer"]
+        exprs[a["inner"]] = a["expr"]
     for r in rows:
         plain = re.sub(r"^(sr|cl)_data_", "", r["name"])
         root, seen = plain, set()
@@ -142,10 +143,7 @@ def load():
             seen.add(root)
             root = aliases[root]
         r["root"] = by_plain[root] if root != plain else None
-        if r["root"] is not None:
-            r["offset"] = r["rva"] - r["root"]["rva"]
-            if r["offset"] < 0:
-                raise SystemExit(f"{r['name']}: starts before {r['root']['name']}")
+        r["expr"] = exprs.get(plain)
     return rows, dummies
 
 
@@ -168,10 +166,7 @@ def holder(r):
 
 
 def alias_macro(r):
-    base = f"((char *)&{r['root']['name']} + 0x{r['offset']:x})"
-    if r["count"] > 1:
-        return f"#define {r['name']} (({r['type']} *){base})"
-    return f"#define {r['name']} (*({r['type']} *){base})"
+    return f"#define {r['name']} ({r['expr']})"
 
 
 def header(rows, dummies):
@@ -264,11 +259,6 @@ def source(rows, dummies):
             out.append(declaration(r) + ";")
             out.append("#endif")
             out.append(f'SR_STATIC_ASSERT(sizeof({r["name"]}) == {r["count"]} * {r["bytes"] // r["count"]}, "{r["name"]}");')
-    out += ["", "/* An object that lies inside a bigger object must fit in it. */"]
-    for r in rows:
-        if r["root"] is not None and not r["glee"]:
-            elems = f"{r['count']} * " if r["count"] > 1 else ""
-            out.append(f'SR_STATIC_ASSERT(0x{r["offset"]:x} + {elems}sizeof({r["type"]}) <= sizeof({r["root"]["name"]}), "{r["name"]}");')
     out += ["", "/* Objects that the client has no place for. */"]
     for name, typ, count, size in dummies:
         if count * size <= DUMMY_LIMIT:

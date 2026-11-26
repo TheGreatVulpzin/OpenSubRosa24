@@ -3,6 +3,7 @@
  * A hosted game runs the server in the same process. A joined game first waits until the
  * events of the server are in.
  */
+#include "sr_debug_counters.h"
 #include "setup/loop.h"
 
 #include <math.h>
@@ -214,7 +215,7 @@ static void game_start(void)
     checkmouse();
     checkmouserelative();
     audio_SDL_SetRelativeMouseMode()(1);
-    cl_data_relative_mouse = 1;
+    sr_data_game.relative_mouse = 1;
     checkmouserelative();
     checkmouserelative();
     g_game.link_state = 0;
@@ -459,14 +460,14 @@ static void frame_debug_values(void)
     Debug *debug = &sr_data_debug;
     int i;
 
-    debug->shown_team = g_player[0].team;
-    debug->shown_bonds = sr_data_numofbonds;
-    debug->shown_humans = 0;
+    debug->counters[DEBUG_COUNTER_SHOWN_TEAM] = g_player[0].team;
+    debug->counters[DEBUG_COUNTER_SHOWN_BONDS] = sr_data_numofbonds;
+    debug->counters[DEBUG_COUNTER_SHOWN_HUMANS] = 0;
     for (i = 0; i < NUM_HUMANS; i++)
         if (g_human[i].active != 0)
-            debug->shown_humans++;
-    debug->shown_parts = g_human[0].num_joints + g_human[0].num_muscles;
-    debug->shown_mouse = cl_data_input_mouse.left + 100;
+            debug->counters[DEBUG_COUNTER_SHOWN_HUMANS]++;
+    debug->counters[DEBUG_COUNTER_SHOWN_PARTS] = g_human[0].num_joints + g_human[0].num_muscles;
+    debug->counters[DEBUG_COUNTER_SHOWN_MOUSE] = cl_data_input_mouse.left + 100;
     displaydebuginfo();
 }
 
@@ -479,13 +480,13 @@ static void frame_display(void)
     setuptextdisplay();
     if (sr_data_option.frame_overlay != 0)
         frame_overlay();
-    if (cl_data_hide_hud == 0 && g_game.state != 0 && g_view != -1)
+    if (sr_data_game.hide_hud == 0 && g_game.state != 0 && g_view != -1)
         drawhud(g_view);
-    if (cl_data_hide_hud == 0)
+    if (sr_data_game.hide_hud == 0)
         frame_drawvoiceicons();
-    if (cl_data_hide_messages == 0)
+    if (sr_data_game.hide_messages == 0)
         frame_drawmessages();
-    if (cl_data_hide_hud == 0)
+    if (sr_data_game.hide_hud == 0)
         drawdisplay();
     if (voice_shown) {
         drawbitmap(-1, 20.0f, 596.0f, 32.0f, 32.0f, 5, 0.5f, 0.5f, 0.5f, 0.5f);
@@ -494,16 +495,16 @@ static void frame_display(void)
     }
     if (cl_data_input_chat != 0)
         frame_chat_label();
-    if (cl_data_death_fade > 0.0f) {
-        drawbitmap(-1, 0.0f, 0.0f, 1024.0f, 640.0f, 0, 0.0f, 0.0f, 0.0f, cl_data_death_fade);
-        if (cl_data_death_fade > 0.9375f)
+    if (sr_data_game.death_fade > 0.0f) {
+        drawbitmap(-1, 0.0f, 0.0f, 1024.0f, 640.0f, 0, 0.0f, 0.0f, 0.0f, sr_data_game.death_fade);
+        if (sr_data_game.death_fade > 0.9375f)
             drawtext("You are dead", 512.0f, 320.0f, 16.0f, 0x21, 1.0f, 1.0f, 1.0f, 1.0f);
     }
     if (g_game.link_state > 0)
         drawbitmap(-1, 0.0f, 0.0f, 1024.0f, 640.0f, 0, 0.0f, 0.0f, 0.0f, 0.5f);
     drawmenuitems();
     frame_spectator_texts();
-    drawtext("Mic:/i", 4.0f, 64.0f, 12.0f, 0x20, 1.0f, 1.0f, 1.0f, cl_data_mic_text_timer,
+    drawtext("Mic:/i", 4.0f, 64.0f, 12.0f, 0x20, 1.0f, 1.0f, 1.0f, sr_data_game.mic_text_timer,
              sr_data_option.voiceboost);
     if (voice_shown)
         frame_voice_wave();
@@ -576,7 +577,7 @@ static void frame_menus(void)
             building_editorloop();
         else
             leveleditor_loop();
-        cl_data_last_tick_ms = audio_SDL_GetTicks()();
+        sr_data_game.last_tick_ms = audio_SDL_GetTicks()();
         checkmouse();
         checkmouserelative();
     }
@@ -606,7 +607,7 @@ static void game_end(void)
     uint8_t quit = QUIT_PACKET;
 
     g_game.running = 0;
-    cl_data_relative_mouse = 0;
+    sr_data_game.relative_mouse = 0;
     audio_SDL_SetRelativeMouseMode()(0);
     if (sr_data_server.active != 0) {
         for (i = 0; i < NUM_PLAYERS; i++)
@@ -615,7 +616,7 @@ static void game_end(void)
     } else {
         resetsendpacket();
         cs_pwrite(&quit, 1, 1);
-        sendpacket(cl_data_server_address, cl_data_server_port);
+        sendpacket(sr_data_server.address, sr_data_server.port);
     }
     for (i = 0; i < NUM_CHANNELS; i++) {
         uint32_t source = ((AudioChannel *)sr_data_voice)[i].source;

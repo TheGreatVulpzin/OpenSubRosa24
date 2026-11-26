@@ -23,16 +23,16 @@ void __cdecl displaydebuginfo(void)
     int i;
     float x, y;
     const float height = 20.0f;
-    cl_data_debug_player_count = 0;
+    sr_data_debug.player_count = 0;
     for (i = 0; i < 256; ++i)
         if (sr_data_player[i].active && !sr_data_player[i].is_bot)
-            ++cl_data_debug_player_count;
+            ++sr_data_debug.player_count;
     if (sr_data_debug.display_mode > 0) {
         if (!format_text)
             *(void **)&format_text = sr_import("MSVCR100.DLL", "sprintf");
-        format_text(text, "%.2f", (double)cl_data_frame_rate);
+        format_text(text, "%.2f", (double)sr_data_debug.frame_ms_average);
         drawtext(text, 0.0f, 500.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
-        format_text(text, "%.2f", (double)cl_data_frame_time_average);
+        format_text(text, "%.2f", (double)sr_data_debug.frame_time_average);
         drawtext(text, 0.0f, 516.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         y = 532.0f;
         debug_integer_row("Toggle 1:/i", 0.0f, &y, 16.0f, sr_data_debug.human_view);
@@ -57,7 +57,7 @@ void __cdecl displaydebuginfo(void)
     if (sr_data_debug.display_mode == 2) {
         for (i = 0; i < 16; ++i)
             drawtext("/i", 0.0f, (float)((float)i * height + 128.0), height, 0x20,
-                1.0f, 1.0f, 1.0f, 1.0f, cl_data_debug_counters[i]);
+                1.0f, 1.0f, 1.0f, 1.0f, sr_data_debug.counters[i]);
         y = 64.0f;
         for (i = 0; i < 256; ++i) {
             if (sr_data_player[i].active && !sr_data_player[i].is_bot) {
@@ -96,6 +96,6 @@ void __cdecl displaydebuginfo(void)
         debug_integer_row("Numofevents:/i", 4.0f, &y, height, sr_data_numofevents);
         debug_integer_row("objpacketsize:/i", 4.0f, &y, height, sr_data_debug.net_flag);
         debug_integer_row("conn0bytes:/i", 4.0f, &y, height, sr_data_connection[0].credit);
-        debug_integer_row("players:/i", 4.0f, &y, height, cl_data_debug_player_count);
+        debug_integer_row("players:/i", 4.0f, &y, height, sr_data_debug.player_count);
     }
 }

@@ -115,7 +115,8 @@ TYPE_SIZE = {'BondVectorClient': 0x10, 'int': 4, 'uint32_t': 4, 'float': 4, 'cha
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
              'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'InteriorFixture': 0x3c, 'VideoMode': 12,
-             'WindowQuad': 0x44, 'ClientFramebuffer': 8, 'DebugSphere': 0x1c}
+             'WindowQuad': 0x44, 'ClientFramebuffer': 8, 'DebugSphere': 0x1c,
+             'ScenarioEventData': 0x50, 'EditorView': 0x48}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -138,13 +139,16 @@ AUDIO_STRUCTS = {
     'AudioCamera': ('audio_camera', 0x44),
     'SoundBuffer': ('sound_buffer', 0xc),
 }
-INPUT_STRUCTS = {
+# Records that a field of a bigger record has as its type. They come before the other records.
+EARLY_STRUCTS = {
     'ScenarioEventData': ('scenario_event_data', 0x50),
+    'EditorView': ('editor_view', 0x48),
+}
+INPUT_STRUCTS = {
     'InputMouse': ('input_mouse', 0x2c),
     'InputCamera': ('input_camera', 0x1c),
     'MenuInfo': ('menu_info', 0x60),
     'MenuItem': ('menu_item', 0x284),
-    'EditorView': ('editor_view', 0x48),
     'EditorTile': ('editor_tile', 0x24),
     'KeyEvent': ('key_event', 0xc),
     'Joystick': ('joystick', 0x1a4),
@@ -1198,6 +1202,8 @@ def gen_voice_client():
 def main():
     names = load_names()
     parts = [HEADER]
+    for cname, (glob, size) in EARLY_STRUCTS.items():
+        parts.append(gen_struct(cname, glob, size, names.get(glob, {}), {}))
     for cname, (glob, size) in {**STRUCTS, **CLIENT_STRUCTS}.items():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
     parts.append(gen_game_client(names))

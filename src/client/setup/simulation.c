@@ -118,18 +118,18 @@ static void read_display_keys(void)
     if (g_debugit == 0 ? key_pressed(KEY_F1) : key_pressed(KEY_EQUALS))
         sr_data_option.help ^= 1;
     if (key_pressed(KEY_F4))
-        cl_data_hide_hud ^= 1;
+        sr_data_game.hide_hud ^= 1;
     if (key_pressed(KEY_PAGE_UP)) {
         sr_data_option.voiceboost += MIC_GAIN_STEP;
         if (sr_data_option.voiceboost > MIC_GAIN_MAX)
             sr_data_option.voiceboost = MIC_GAIN_MAX;
-        cl_data_mic_text_timer = MIC_TEXT_SECONDS;
+        sr_data_game.mic_text_timer = MIC_TEXT_SECONDS;
     }
     if (key_pressed(KEY_PAGE_DOWN)) {
         sr_data_option.voiceboost -= MIC_GAIN_STEP;
         if (sr_data_option.voiceboost < MIC_GAIN_MIN)
             sr_data_option.voiceboost = MIC_GAIN_MIN;
-        cl_data_mic_text_timer = MIC_TEXT_SECONDS;
+        sr_data_game.mic_text_timer = MIC_TEXT_SECONDS;
     }
     sr_data_option.voiceboost_scale = (float)((float)sr_data_option.voiceboost / 100.0);
     if (sr_data_option.voiceboost_scale < 0.125)
@@ -220,26 +220,26 @@ static void update_effects(void)
     if (g_view != -1 && g_player[g_view].human_id != -1)
         viewed = &g_human[g_player[g_view].human_id];
     if (viewed == 0) {
-        cl_data_last_health = 0;
+        sr_data_game.last_health = 0;
     } else {
-        if (viewed->health < cl_data_last_health)
-            cl_data_damage_flash = 1.0f;
-        cl_data_last_health = viewed->health;
+        if (viewed->health < sr_data_game.last_health)
+            sr_data_game.damage_flash = 1.0f;
+        sr_data_game.last_health = viewed->health;
     }
-    if (cl_data_damage_flash <= 0.0625)
-        cl_data_damage_flash = 0.0f;
+    if (sr_data_game.damage_flash <= 0.0625)
+        sr_data_game.damage_flash = 0.0f;
     else
-        cl_data_damage_flash = (float)(cl_data_damage_flash - 0.0625);
+        sr_data_game.damage_flash = (float)(sr_data_game.damage_flash - 0.0625);
     if (viewed == 0 || 0 < viewed->health || g_state != STATE_RUNNING)
-        cl_data_death_fade = 0.0f;
-    else if (viewed->health < -4 || cl_data_death_fade < 0.75)
-        cl_data_death_fade = (float)(cl_data_death_fade + 0.004166666883975267);
-    if (1.0 < cl_data_death_fade)
-        cl_data_death_fade = 1.0f;
-    if (cl_data_mic_text_timer <= 0.0)
-        cl_data_mic_text_timer = 0.0f;
+        sr_data_game.death_fade = 0.0f;
+    else if (viewed->health < -4 || sr_data_game.death_fade < 0.75)
+        sr_data_game.death_fade = (float)(sr_data_game.death_fade + 0.004166666883975267);
+    if (1.0 < sr_data_game.death_fade)
+        sr_data_game.death_fade = 1.0f;
+    if (sr_data_game.mic_text_timer <= 0.0)
+        sr_data_game.mic_text_timer = 0.0f;
     else
-        cl_data_mic_text_timer = (float)(cl_data_mic_text_timer - 0.01666666753590107);
+        sr_data_game.mic_text_timer = (float)(sr_data_game.mic_text_timer - 0.01666666753590107);
 }
 
 /* The light angles: gametype 4 follows the clock. With the debug flag on, [ and ] turn the
@@ -271,7 +271,7 @@ static void update_light_angles(void)
 static void simulate(void)
 {
     g_debug.num_lines = 0;
-    cl_data_debug_extra_count = 0;
+    sr_data_debug.sphere_count = 0;
     if (g_server.active == 0) {
         clientsend();
         clientrecv();
@@ -283,7 +283,7 @@ static void simulate(void)
     } else {
         host_tick();
     }
-    cl_data_sim_ticks++;
+    sr_data_area_sector.sim_ticks++;
     if (SIMULATING(g_state))
         bulletsimulation();
     client_eventsimulation();
@@ -305,46 +305,46 @@ static void record_frame_time(void)
 {
     int i;
 
-    cl_data_frame_times[cl_data_frame_time_index] = (int)(ticks_now() - cl_data_tick_start_ms);
-    cl_data_frame_time_index = (cl_data_frame_time_index + 1) & (NUM_FRAME_TIMES - 1);
-    cl_data_frame_time_average = 0.0f;
+    sr_data_debug.frame_times[sr_data_debug.frame_time_index] = (int)(ticks_now() - sr_data_debug.tick_start_ms);
+    sr_data_debug.frame_time_index = (sr_data_debug.frame_time_index + 1) & (NUM_FRAME_TIMES - 1);
+    sr_data_debug.frame_time_average = 0.0f;
     for (i = 0; i < NUM_FRAME_TIMES; i++)
-        cl_data_frame_time_average = (float)((float)cl_data_frame_times[i] + cl_data_frame_time_average);
-    cl_data_frame_time_average = (float)(cl_data_frame_time_average / 32.0);
+        sr_data_debug.frame_time_average = (float)((float)sr_data_debug.frame_times[i] + sr_data_debug.frame_time_average);
+    sr_data_debug.frame_time_average = (float)(sr_data_debug.frame_time_average / 32.0);
 }
 
 /* Run one tick when its time has come. The result is 1 when it ran and 0 when it is too
  * early. With allow_input, the keys and the camera of the viewer update first. */
 int __cdecl checksimulation(int allow_input)
 {
-    unsigned interval = cl_data_slow_tick != 0 ? SLOW_TICK_MS : TICK_MS;
+    unsigned interval = sr_data_game.slow_tick != 0 ? SLOW_TICK_MS : TICK_MS;
     unsigned now = ticks_now();
     int i;
 
-    if (now - cl_data_last_tick_ms < interval)
+    if (now - sr_data_game.last_tick_ms < interval)
         return 0;
-    if (now - cl_data_last_tick_ms < MAX_LATE_MS)
-        now = cl_data_last_tick_ms + interval;
-    cl_data_last_tick_ms = now;
-    cl_data_tick_start_ms = ticks_now();
+    if (now - sr_data_game.last_tick_ms < MAX_LATE_MS)
+        now = sr_data_game.last_tick_ms + interval;
+    sr_data_game.last_tick_ms = now;
+    sr_data_debug.tick_start_ms = ticks_now();
     if (allow_input != 0) {
         getinputs(g_view);
         if (g_view == -1)
             movecamera(0);
         read_display_keys();
     }
-    if (cl_data_step_once != 0)
-        cl_data_paused = 0;
-    if (cl_data_paused == 0)
+    if (sr_data_game.step_once != 0)
+        sr_data_game.paused = 0;
+    if (sr_data_game.paused == 0)
         simulate();
     for (i = 0; i < NUM_MESSAGES; i++) {
         if (0 < g_messages[i].timer)
             g_messages[i].timer--;
     }
     update_light_angles();
-    if (cl_data_step_once != 0) {
-        cl_data_paused = 1;
-        cl_data_step_once = 0;
+    if (sr_data_game.step_once != 0) {
+        sr_data_game.paused = 1;
+        sr_data_game.step_once = 0;
     }
     record_frame_time();
     return 1;

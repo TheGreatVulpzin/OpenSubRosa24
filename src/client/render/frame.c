@@ -500,9 +500,9 @@ static void draw_world_debug(int world_view)
         draw_debug_lines();
     glEnd();
     if (world_view)
-        for (i = 0; i < cl_data_debug_extra_count; ++i) {
-            glColor3fv(&cl_data_debug_spheres[i].color.x);
-            rendersphere(&cl_data_debug_spheres[i].pos, cl_data_debug_spheres[i].radius, 1);
+        for (i = 0; i < sr_data_debug.sphere_count; ++i) {
+            glColor3fv(&sr_data_debug.spheres[i].color.x);
+            rendersphere(&sr_data_debug.spheres[i].pos, sr_data_debug.spheres[i].radius, 1);
         }
     if (world_view)
         draw_debug_wheels();

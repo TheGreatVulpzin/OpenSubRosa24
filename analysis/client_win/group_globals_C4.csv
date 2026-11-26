@@ -4,12 +4,10 @@ input_mouse_previous,InputMouse,1,0xb733100,checkmouse preserves the complete mo
 input_cursor,int,1,0xb77c594,getinputs mouse capture and player menu
 input_cursor_previous,int,1,0xb77c598,getinputs mouse capture transition
 input_fire_blocked,int,1,0xb77c59c,getinputs waits for left button release
-input_heli_mouse,float,2,0x1dda5248,getinputs_heli mouse control decay
 input_chat,int,1,0x52daba0,getinputs chat visibility
 input_chat_head,uint32_t,1,0x52daba8,getinputs chat ring wraps at eight
 input_chat_length,uint32_t,1,0x52dabac,getinputs chat length
 input_chat_text,char,64,0x52dabb0,Linux chat size 0x50 and text offset 0x10
-input_game_running,uint32_t,1,0x9065350,Client input flag at the byte position of Game.start_angle_b
 kickedip,uint32_t,1024,0x1033ed20,Linux kickedip size 0x1000 and getinputs selected connection addresses
 numofkicked,int,1,0x103675a4,Client count is at packet workspace plus 0x28884 instead of the server offset 0x28660
 input_debug_toggle,uint32_t,1,0x102feb48,debug_getinputs F10 toggle

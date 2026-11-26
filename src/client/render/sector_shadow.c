@@ -46,7 +46,7 @@ void __cdecl render_buildareasectorshadow(void)
         return;
     cl_data_sector_shadow_count = 0;
     for (s = 0; s < MAX_SECTORS; ++s) {
-        BlockSector *sector = &cl_data_block_sectors[s];
+        BlockSector *sector = &sr_data_area_sector.records[s];
         float extrusion;
         if (!sector->used)
             continue;

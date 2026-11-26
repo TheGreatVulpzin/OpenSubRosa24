@@ -19,7 +19,7 @@
 #define BLOCK_LINK 0xc0000000u
 
 /* Game functions of other files. */
-#define g_sectors cl_data_block_sectors
+#define g_sectors sr_data_area_sector.records
 
 /* Mark the origin of a block that is a link to a larger block. The link holds the offset to the origin. */
 static void add_link_origin(uint32_t word, int x, int y, int z)

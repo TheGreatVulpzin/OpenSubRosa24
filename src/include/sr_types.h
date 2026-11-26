@@ -828,6 +828,44 @@ SR_STATIC_ASSERT(offsetof(VoiceSlot, distance) == 0x1c, "VoiceSlot.distance");
 SR_STATIC_ASSERT(offsetof(Account, ban_time) == 0x48, "Account.ban_time");
 
 
+/* scenario_event_data[]: record of 0x50 bytes. */
+typedef union ScenarioEventData { struct {
+    int first_low;                       /* +0x0000 Low part of the first scenario event word. */
+    int second_low;                      /* +0x0004 Low part of the second scenario event word. */
+    int second_high;                     /* +0x0008 High part of the second scenario event word. */
+    int third;                           /* +0x000c Third scenario event word. */
+    uint8_t pad_0010[0x34];
+    int first_high;                      /* +0x0044 High part of the first scenario event word. */
+    uint8_t pad_0048[0x8];
+}; uint8_t lf_raw[0x50]; } ScenarioEventData;
+SR_STATIC_ASSERT(sizeof(ScenarioEventData) == 0x50, "ScenarioEventData");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_low) == 0x0, "ScenarioEventData.first_low");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_low) == 0x4, "ScenarioEventData.second_low");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_high) == 0x8, "ScenarioEventData.second_high");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, third) == 0xc, "ScenarioEventData.third");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_high) == 0x44, "ScenarioEventData.first_high");
+
+/* editor_view[]: record of 0x48 bytes. */
+typedef union EditorView { struct {
+    float x;                             /* +0x0000 buildingedit_setup and leveledit_setup: the viewport of the editor, 32 */
+    float y;                             /* +0x0004 the viewport: 32 */
+    float width;                         /* +0x0008 the viewport: 768 */
+    float height;                        /* +0x000c the viewport: 576 */
+    vec3 camera;                         /* +0x0010 the camera place: 12 0 9 for the building editor, 160 0 160 for the level editor */
+    float orientation[9];                /* +0x001c the camera turns by pi/2 about its first row: it looks down */
+    float zoom;                          /* +0x0040 12 for the building editor, 64 for the level editor */
+    float scale;                         /* +0x0044 0.75 */
+}; uint8_t lf_raw[0x48]; } EditorView;
+SR_STATIC_ASSERT(sizeof(EditorView) == 0x48, "EditorView");
+SR_STATIC_ASSERT(offsetof(EditorView, x) == 0x0, "EditorView.x");
+SR_STATIC_ASSERT(offsetof(EditorView, y) == 0x4, "EditorView.y");
+SR_STATIC_ASSERT(offsetof(EditorView, width) == 0x8, "EditorView.width");
+SR_STATIC_ASSERT(offsetof(EditorView, height) == 0xc, "EditorView.height");
+SR_STATIC_ASSERT(offsetof(EditorView, camera) == 0x10, "EditorView.camera");
+SR_STATIC_ASSERT(offsetof(EditorView, orientation) == 0x1c, "EditorView.orientation");
+SR_STATIC_ASSERT(offsetof(EditorView, zoom) == 0x40, "EditorView.zoom");
+SR_STATIC_ASSERT(offsetof(EditorView, scale) == 0x44, "EditorView.scale");
+
 /* player[]: record of 0x2408 bytes. */
 typedef union Player { struct {
     int active;                          /* +0x0000 createplayer writes 1 */
@@ -1661,13 +1699,13 @@ typedef union Game { struct {
     float teamkill_rate;                 /* +0x0030 playerteamkilltax writes 0.05f (no reader in the server) */
     int end_time;                        /* +0x0034 dedicatedserverloop writes 0x4ec (1260 ticks); logicsimulation copies it to timer when the state changes to 3 */
     int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
-    uint32_t debug_p;                    /* +0x003c Client P key diagnostic switch */
-    int debug_o;                         /* +0x0040 Client O key diagnostic switch */
-    uint32_t debug_i;                    /* +0x0044 Client I key diagnostic switch */
-    uint8_t pad_0048[0x4];
+    uint32_t last_tick_ms;               /* +0x003c Client gameloop: the SDL time of the last tick. The debug key P flips its low bit */
+    int paused;                          /* +0x0040 Client: 1 while the simulation is paused. The debug key O sets it */
+    int step_once;                       /* +0x0044 Client: 1 runs one tick while paused. The debug key I flips it */
+    int slow_tick;                       /* +0x0048 Client: 1 makes a tick last longer */
     float start_angle_a;                 /* +0x004c serversend: packangle 16 in the new game packet */
     float start_angle_b;                 /* +0x0050 serversend: packangle 16 in the new game packet */
-    uint8_t pad_0054[0x4];
+    int relative_mouse;                  /* +0x0054 Client: 1 while the mouse moves the view */
     vec3 team0_base_min;                 /* +0x0058 pointinsidebase: the box of the base of team 0; team records are 0x117c bytes */
     vec3 team0_base_max;                 /* +0x0064 pointinsidebase */
     vec3 team0_safe_min;                 /* +0x0070 pointinsidebasesafe: the box of the safe zone of team 0 */
@@ -1766,20 +1804,25 @@ typedef union Game { struct {
     int unk_7f34;                        /* +0x7f34 1 functions */
     uint8_t pad_7f38[0x1b0a0];
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
-    uint8_t pad_22fdc[0x27fc];
+    uint8_t pad_22fdc[0x4];
+    ScenarioEventData scenario_events[127]; /* +0x22fe0 Client: the event words of the scenarios. The last record of the client layout lies over spectator_human */
+    uint8_t pad_25790[0x48];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
     int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
-    int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
+    int map_shown;                       /* +0x257e0 Client: 1 while the map is shown. resetgame clears it */
     uint8_t pad_257e4[0x4];
-    int unused_257e8;                    /* +0x257e8 resetgame clears this field. No reader in the server */
-    float unused_257ec;                  /* +0x257ec resetgame clears this field. No reader in the server */
+    int last_health;                     /* +0x257e8 Client: the health of the last frame. resetgame clears it */
+    float damage_flash;                  /* +0x257ec Client: the red flash after a hit. resetgame clears it */
     int num_checkpoints;                 /* +0x257f0 logicsimulation_driving loop limit */
     vec3 checkpoints[32];                /* +0x257f4 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
-    int unused_25974;                    /* +0x25974 resetgame clears this field. No reader in the server */
-    int unused_25978;                    /* +0x25978 resetgame clears this field. No reader in the server */
+    int round_ticks;                     /* +0x25974 Client: the ticks of the round. resetgame clears it */
+    int round_goal;                      /* +0x25978 Client: the goal of the round. resetgame clears it */
     uint8_t pad_2597c[0x3d0];
     uint32_t client_account_key;         /* +0x25d4c hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48) */
-    uint8_t pad_25d50[0x10];
+    float death_fade;                    /* +0x25d50 Client: the fade after the death of the viewed human */
+    float mic_text_timer;                /* +0x25d54 Client: how long the microphone text shows */
+    int hide_hud;                        /* +0x25d58 Client: 1 hides the HUD */
+    int hide_messages;                   /* +0x25d5c Client: 1 hides the chat messages */
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
@@ -1798,11 +1841,13 @@ SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
 SR_STATIC_ASSERT(offsetof(Game, teamkill_rate) == 0x30, "Game.teamkill_rate");
 SR_STATIC_ASSERT(offsetof(Game, end_time) == 0x34, "Game.end_time");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
-SR_STATIC_ASSERT(offsetof(Game, debug_p) == 0x3c, "Game.debug_p");
-SR_STATIC_ASSERT(offsetof(Game, debug_o) == 0x40, "Game.debug_o");
-SR_STATIC_ASSERT(offsetof(Game, debug_i) == 0x44, "Game.debug_i");
+SR_STATIC_ASSERT(offsetof(Game, last_tick_ms) == 0x3c, "Game.last_tick_ms");
+SR_STATIC_ASSERT(offsetof(Game, paused) == 0x40, "Game.paused");
+SR_STATIC_ASSERT(offsetof(Game, step_once) == 0x44, "Game.step_once");
+SR_STATIC_ASSERT(offsetof(Game, slow_tick) == 0x48, "Game.slow_tick");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_a) == 0x4c, "Game.start_angle_a");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_b) == 0x50, "Game.start_angle_b");
+SR_STATIC_ASSERT(offsetof(Game, relative_mouse) == 0x54, "Game.relative_mouse");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_min) == 0x58, "Game.team0_base_min");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_max) == 0x64, "Game.team0_base_max");
 SR_STATIC_ASSERT(offsetof(Game, team0_safe_min) == 0x70, "Game.team0_safe_min");
@@ -1824,16 +1869,21 @@ SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
 SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
 SR_STATIC_ASSERT(offsetof(Game, unused_22fd8) == 0x22fd8, "Game.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(Game, scenario_events) == 0x22fe0, "Game.scenario_events");
 SR_STATIC_ASSERT(offsetof(Game, spectator_human) == 0x257d8, "Game.spectator_human");
 SR_STATIC_ASSERT(offsetof(Game, death_camera_ticks) == 0x257dc, "Game.death_camera_ticks");
-SR_STATIC_ASSERT(offsetof(Game, unused_257e0) == 0x257e0, "Game.unused_257e0");
-SR_STATIC_ASSERT(offsetof(Game, unused_257e8) == 0x257e8, "Game.unused_257e8");
-SR_STATIC_ASSERT(offsetof(Game, unused_257ec) == 0x257ec, "Game.unused_257ec");
+SR_STATIC_ASSERT(offsetof(Game, map_shown) == 0x257e0, "Game.map_shown");
+SR_STATIC_ASSERT(offsetof(Game, last_health) == 0x257e8, "Game.last_health");
+SR_STATIC_ASSERT(offsetof(Game, damage_flash) == 0x257ec, "Game.damage_flash");
 SR_STATIC_ASSERT(offsetof(Game, num_checkpoints) == 0x257f0, "Game.num_checkpoints");
 SR_STATIC_ASSERT(offsetof(Game, checkpoints) == 0x257f4, "Game.checkpoints");
-SR_STATIC_ASSERT(offsetof(Game, unused_25974) == 0x25974, "Game.unused_25974");
-SR_STATIC_ASSERT(offsetof(Game, unused_25978) == 0x25978, "Game.unused_25978");
+SR_STATIC_ASSERT(offsetof(Game, round_ticks) == 0x25974, "Game.round_ticks");
+SR_STATIC_ASSERT(offsetof(Game, round_goal) == 0x25978, "Game.round_goal");
 SR_STATIC_ASSERT(offsetof(Game, client_account_key) == 0x25d4c, "Game.client_account_key");
+SR_STATIC_ASSERT(offsetof(Game, death_fade) == 0x25d50, "Game.death_fade");
+SR_STATIC_ASSERT(offsetof(Game, mic_text_timer) == 0x25d54, "Game.mic_text_timer");
+SR_STATIC_ASSERT(offsetof(Game, hide_hud) == 0x25d58, "Game.hide_hud");
+SR_STATIC_ASSERT(offsetof(Game, hide_messages) == 0x25d5c, "Game.hide_messages");
 SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
 
 /* particle[]: record of 0xf0 bytes. */
@@ -2032,7 +2082,10 @@ typedef union Server { struct {
     int unused_08;                       /* +0x0008 dedicatedserverloop writes 1; no reader in the 024d or the Linux 0.24c */
     int last_packet_size;                /* +0x000c serversend and clientrecv */
     int max_packet_size;                 /* +0x0010 clientrecv */
-    char name[72];                       /* +0x0014 serverrecv type 0 reply sends the first 32 bytes; dedicatedserverloop copies Option.servername here */
+    char name[64];                       /* +0x0014 serverrecv type 0 reply sends the first 32 bytes; dedicatedserverloop copies Option.servername here */
+    uint32_t address;                    /* +0x0054 Client: the address that the client joins */
+    uint16_t port;                       /* +0x0058 Client: the port that the client joins */
+    uint8_t pad_005a[0x2];
     int max_players;                     /* +0x005c serverrecv */
     uint8_t pad_0060[0x4];
     int num_players;                     /* +0x0064 serverrecv: count of the human players */
@@ -2047,6 +2100,8 @@ SR_STATIC_ASSERT(offsetof(Server, unused_08) == 0x8, "Server.unused_08");
 SR_STATIC_ASSERT(offsetof(Server, last_packet_size) == 0xc, "Server.last_packet_size");
 SR_STATIC_ASSERT(offsetof(Server, max_packet_size) == 0x10, "Server.max_packet_size");
 SR_STATIC_ASSERT(offsetof(Server, name) == 0x14, "Server.name");
+SR_STATIC_ASSERT(offsetof(Server, address) == 0x54, "Server.address");
+SR_STATIC_ASSERT(offsetof(Server, port) == 0x58, "Server.port");
 SR_STATIC_ASSERT(offsetof(Server, max_players) == 0x5c, "Server.max_players");
 SR_STATIC_ASSERT(offsetof(Server, num_players) == 0x64, "Server.num_players");
 SR_STATIC_ASSERT(offsetof(Server, packets_in) == 0x78, "Server.packets_in");
@@ -2500,10 +2555,12 @@ SR_STATIC_ASSERT(offsetof(TimerList, bondtest) == 0x94, "TimerList.bondtest");
 
 /* speex[]: record of 0x931000 bytes. */
 typedef union Speex { struct {
-    uint8_t pad_0000[0x10000];
+    float samples[160];                  /* +0x0000 Client: the samples of the voice that the microphone gave */
+    uint8_t pad_0280[0xfd80];
     VoiceRing voice_ring[256];           /* +0x10000 serverrecv type 4 writes the voice frames of each player; calculateplayervoice and serversend read them */
 }; uint8_t lf_raw[0x931000]; } Speex;
 SR_STATIC_ASSERT(sizeof(Speex) == 0x931000, "Speex");
+SR_STATIC_ASSERT(offsetof(Speex, samples) == 0x0, "Speex.samples");
 SR_STATIC_ASSERT(offsetof(Speex, voice_ring) == 0x10000, "Speex.voice_ring");
 
 /* bsdsocket[]: record of 0x20070 bytes. */
@@ -2545,49 +2602,23 @@ typedef union Debug { struct {
     uint32_t world_view;                 /* +0x0008 B toggles the world diagnostic view */
     int num_lines;                       /* +0x000c debug_addcross adds 3 for each cross */
     DebugLine lines[4096];               /* +0x0010 debug_addcross: the lines of the crosses */
-    uint8_t pad_18010[0x37874];
-    int unk_4f884;                       /* +0x4f884 1 functions */
-    uint8_t pad_4f888[0x1c];
-    int unk_4f8a4;                       /* +0x4f8a4 1 functions */
-    uint8_t pad_4f8a8[0x8];
-    int unk_4f8b0;                       /* +0x4f8b0 1 functions */
-    uint8_t pad_4f8b4[0xc];
-    int unk_4f8c0;                       /* +0x4f8c0 1 functions */
-    uint8_t pad_4f8c4[0x80];
-    float unk_4f944;                     /* +0x4f944 1 functions */
-    float unk_4f948;                     /* +0x4f948 1 functions */
-    float unk_4f94c;                     /* +0x4f94c 1 functions */
-    uint8_t pad_4f950[0xc];
-    float unk_4f95c;                     /* +0x4f95c 1 functions */
-    float unk_4f960;                     /* +0x4f960 1 functions */
-    float unk_4f964;                     /* +0x4f964 1 functions */
-    uint8_t pad_4f968[0x30];
-    float unk_4f998;                     /* +0x4f998 1 functions */
-    float unk_4f99c;                     /* +0x4f99c 1 functions */
-    float unk_4f9a0;                     /* +0x4f9a0 1 functions */
-    uint8_t pad_4f9a4[0x2c];
-    float unk_4f9d0;                     /* +0x4f9d0 1 functions */
-    uint8_t pad_4f9d4[0x6c];
-    float unk_4fa40;                     /* +0x4fa40 1 functions */
-    uint8_t pad_4fa44[0x5d0];
+    int sphere_count;                    /* +0x18010 Client: the debug spheres of this frame */
+    DebugSphere spheres[8191];           /* +0x18014 Client: the debug spheres that the frame draws */
+    uint8_t pad_4fff8[0x1c];
     uint32_t frame_start;                /* +0x50014 gameloop: the SDL time when the frame started */
-    uint8_t pad_50018[0x4];
+    uint32_t tick_start_ms;              /* +0x50018 Client: the SDL time when the tick started */
     int frame_ms_index;                  /* +0x5001c gameloop: the next entry of frame_ms, 0 to 31 */
     int frame_ms[32];                    /* +0x50020 gameloop: the milliseconds that each of the last 32 frames took */
     uint8_t pad_500a0[0x80];
     int frame_ms_max;                    /* +0x50120 gameloop: the longest frame. F3 clears it when the debug flag is on */
     float frame_ms_average;              /* +0x50124 gameloop: the mean of frame_ms */
-    uint8_t pad_50128[0x11c];
-    int shown_team;                      /* +0x50244 gameloop with the debug flag: the team of player 0, for displaydebuginfo */
-    int affinity_set;                    /* +0x50248 setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds */
-    int affinity_before;                 /* +0x5024c setcpuaffinity writes the process mask plus 10000 */
-    int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
-    int shown_bonds;                     /* +0x50254 gameloop with the debug flag: numofbonds, for displaydebuginfo */
-    int shown_humans;                    /* +0x50258 gameloop with the debug flag: the count of active humans, for displaydebuginfo */
-    int shown_parts;                     /* +0x5025c gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo */
-    uint8_t pad_50260[0x4];
-    int shown_mouse;                     /* +0x50264 gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo */
-    uint8_t pad_50268[0xdc];
+    uint32_t frame_time_index;           /* +0x50128 Client: the next entry of frame_times, 0 to 31 */
+    int frame_times[32];                 /* +0x5012c Client: the milliseconds that each of the last 32 ticks took */
+    uint8_t pad_501ac[0x80];
+    float frame_time_average;            /* +0x5022c Client: the mean of frame_times */
+    int player_count;                    /* +0x50230 Client displaydebuginfo: the players that are not bots */
+    int counters[16];                    /* +0x50234 The diagnostic counters that page 2 of displaydebuginfo shows. DEBUG_COUNTER_* in sr_debug_counters.h names the used entries */
+    uint8_t pad_50274[0xd0];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     int interior_vert_sum;               /* +0x50348 area_interior_buildsectormodel: the vertices of all interior meshes */
     int interior_builds;                 /* +0x5034c area_interior_buildsectormodel: the count of interior meshes */
@@ -2610,19 +2641,19 @@ SR_STATIC_ASSERT(offsetof(Debug, display_mode) == 0x4, "Debug.display_mode");
 SR_STATIC_ASSERT(offsetof(Debug, world_view) == 0x8, "Debug.world_view");
 SR_STATIC_ASSERT(offsetof(Debug, num_lines) == 0xc, "Debug.num_lines");
 SR_STATIC_ASSERT(offsetof(Debug, lines) == 0x10, "Debug.lines");
+SR_STATIC_ASSERT(offsetof(Debug, sphere_count) == 0x18010, "Debug.sphere_count");
+SR_STATIC_ASSERT(offsetof(Debug, spheres) == 0x18014, "Debug.spheres");
 SR_STATIC_ASSERT(offsetof(Debug, frame_start) == 0x50014, "Debug.frame_start");
+SR_STATIC_ASSERT(offsetof(Debug, tick_start_ms) == 0x50018, "Debug.tick_start_ms");
 SR_STATIC_ASSERT(offsetof(Debug, frame_ms_index) == 0x5001c, "Debug.frame_ms_index");
 SR_STATIC_ASSERT(offsetof(Debug, frame_ms) == 0x50020, "Debug.frame_ms");
 SR_STATIC_ASSERT(offsetof(Debug, frame_ms_max) == 0x50120, "Debug.frame_ms_max");
 SR_STATIC_ASSERT(offsetof(Debug, frame_ms_average) == 0x50124, "Debug.frame_ms_average");
-SR_STATIC_ASSERT(offsetof(Debug, shown_team) == 0x50244, "Debug.shown_team");
-SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
-SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
-SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
-SR_STATIC_ASSERT(offsetof(Debug, shown_bonds) == 0x50254, "Debug.shown_bonds");
-SR_STATIC_ASSERT(offsetof(Debug, shown_humans) == 0x50258, "Debug.shown_humans");
-SR_STATIC_ASSERT(offsetof(Debug, shown_parts) == 0x5025c, "Debug.shown_parts");
-SR_STATIC_ASSERT(offsetof(Debug, shown_mouse) == 0x50264, "Debug.shown_mouse");
+SR_STATIC_ASSERT(offsetof(Debug, frame_time_index) == 0x50128, "Debug.frame_time_index");
+SR_STATIC_ASSERT(offsetof(Debug, frame_times) == 0x5012c, "Debug.frame_times");
+SR_STATIC_ASSERT(offsetof(Debug, frame_time_average) == 0x5022c, "Debug.frame_time_average");
+SR_STATIC_ASSERT(offsetof(Debug, player_count) == 0x50230, "Debug.player_count");
+SR_STATIC_ASSERT(offsetof(Debug, counters) == 0x50234, "Debug.counters");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 SR_STATIC_ASSERT(offsetof(Debug, interior_vert_sum) == 0x50348, "Debug.interior_vert_sum");
 SR_STATIC_ASSERT(offsetof(Debug, interior_builds) == 0x5034c, "Debug.interior_builds");
@@ -2903,7 +2934,7 @@ typedef union LevelEditor { struct {
     LevelBuilding buildings[1024];       /* +0x10b84c stride 0x54, the name is at +0 (the x of record 0 is read at 0x10b88c); the count is likely */
     uint8_t pad_12084c[0x93004];
     LevelBuildingType types[1024];       /* +0x1b3850 leveleditor_loop: the name and the size of each building file */
-    uint8_t pad_1c6850[0x48];
+    EditorView view;                     /* +0x1c6850 Client: the viewport and the camera of the level editor */
 }; uint8_t lf_raw[0x1c6898]; } LevelEditor;
 SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
 SR_STATIC_ASSERT(offsetof(LevelEditor, mode) == 0x0, "LevelEditor.mode");
@@ -2928,6 +2959,7 @@ SR_STATIC_ASSERT(offsetof(LevelEditor, tiles) == 0xb844, "LevelEditor.tiles");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_buildings) == 0x10b844, "LevelEditor.num_buildings");
 SR_STATIC_ASSERT(offsetof(LevelEditor, buildings) == 0x10b84c, "LevelEditor.buildings");
 SR_STATIC_ASSERT(offsetof(LevelEditor, types) == 0x1b3850, "LevelEditor.types");
+SR_STATIC_ASSERT(offsetof(LevelEditor, view) == 0x1c6850, "LevelEditor.view");
 
 /* blocktemp[]: record of 0x7606c bytes. */
 typedef union BlockTemp { struct {
@@ -2944,8 +2976,10 @@ typedef union BlockTemp { struct {
     BlockSurface surfaces[1024];         /* +0x0028 loadblock reads this field from the block file */
     int num_boxes;                       /* +0x57028 loadblock reads this field from the block file */
     BlockBox boxes[1024];                /* +0x5702c loadblock reads this field from the block file */
-    int unused_7602c;                    /* +0x7602c resetgame writes 0. No reader in the server */
-    uint8_t pad_76030[0x3c];
+    int last_event;                      /* +0x7602c events.c reads it as the last event number. resetgame writes 0 */
+    uint8_t pad_76030[0x10];
+    int join_debug[3];                   /* +0x76040 joinmenu writes it when debugit is set */
+    uint8_t pad_7604c[0x20];
 }; uint8_t lf_raw[0x7606c]; } BlockTemp;
 SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
 SR_STATIC_ASSERT(offsetof(BlockTemp, size_x) == 0x0, "BlockTemp.size_x");
@@ -2961,7 +2995,8 @@ SR_STATIC_ASSERT(offsetof(BlockTemp, num_surfaces) == 0x24, "BlockTemp.num_surfa
 SR_STATIC_ASSERT(offsetof(BlockTemp, surfaces) == 0x28, "BlockTemp.surfaces");
 SR_STATIC_ASSERT(offsetof(BlockTemp, num_boxes) == 0x57028, "BlockTemp.num_boxes");
 SR_STATIC_ASSERT(offsetof(BlockTemp, boxes) == 0x5702c, "BlockTemp.boxes");
-SR_STATIC_ASSERT(offsetof(BlockTemp, unused_7602c) == 0x7602c, "BlockTemp.unused_7602c");
+SR_STATIC_ASSERT(offsetof(BlockTemp, last_event) == 0x7602c, "BlockTemp.last_event");
+SR_STATIC_ASSERT(offsetof(BlockTemp, join_debug) == 0x76040, "BlockTemp.join_debug");
 
 /* bondopt[]: record of 0x40 bytes. */
 typedef union BondOpt { struct {
@@ -3176,9 +3211,10 @@ SR_STATIC_ASSERT(offsetof(Building, block_types) == 0x36158f8, "Building.block_t
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {
-    int unused_0;                        /* +0x0000 resetgame writes 0. No reader in the server */
+    int sim_ticks;                       /* +0x0000 Client: counts each simulation tick. resetgame writes 0 */
     int client_game_id;                  /* +0x0004 clientrecv type 6: the round number of the new game */
-    uint8_t pad_0008[0x1c];
+    float input_heli_mouse[2];           /* +0x0008 Client: the smoothed mouse motion that steers a helicopter */
+    uint8_t pad_0010[0x14];
     int client_connected;                /* +0x0024 clientrecv writes 1 after a state packet */
     int client_timeout;                  /* +0x0028 clientrecv: ticks without a packet; above 0x4af the client leaves the game */
     int client_event_total;              /* +0x002c clientrecv: 16 bits in the state packet */
@@ -3233,8 +3269,9 @@ typedef union AreaSector { struct {
     uint8_t pad_6db9858[0x53167a8];
 }; uint8_t lf_raw[0xc0d0000]; } AreaSector;
 SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
-SR_STATIC_ASSERT(offsetof(AreaSector, unused_0) == 0x0, "AreaSector.unused_0");
+SR_STATIC_ASSERT(offsetof(AreaSector, sim_ticks) == 0x0, "AreaSector.sim_ticks");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_game_id) == 0x4, "AreaSector.client_game_id");
+SR_STATIC_ASSERT(offsetof(AreaSector, input_heli_mouse) == 0x8, "AreaSector.input_heli_mouse");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_connected) == 0x24, "AreaSector.client_connected");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_timeout) == 0x28, "AreaSector.client_timeout");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_event_total) == 0x2c, "AreaSector.client_event_total");
@@ -3580,13 +3617,13 @@ typedef union GameClient { struct {
     int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
     float teamkill_rate;                 /* +0x0030 playerteamkilltax writes 0.05f (no reader in the server) */
     int ticks;                           /* +0x0034 adds 1 each tick; createevent_message copies it to Event.tick */
-    uint32_t debug_p;                    /* +0x0038 Client P key diagnostic switch */
-    int debug_o;                         /* +0x003c Client O key diagnostic switch */
-    uint32_t debug_i;                    /* +0x0040 Client I key diagnostic switch */
-    uint8_t pad_0044[0x4];
+    uint32_t last_tick_ms;               /* +0x0038 Client gameloop: the SDL time of the last tick. The debug key P flips its low bit */
+    int paused;                          /* +0x003c Client: 1 while the simulation is paused. The debug key O sets it */
+    int step_once;                       /* +0x0040 Client: 1 runs one tick while paused. The debug key I flips it */
+    int slow_tick;                       /* +0x0044 Client: 1 makes a tick last longer */
     float start_angle_a;                 /* +0x0048 serversend: packangle 16 in the new game packet */
     float start_angle_b;                 /* +0x004c serversend: packangle 16 in the new game packet */
-    uint8_t pad_0050[0x4];
+    int relative_mouse;                  /* +0x0050 Client: 1 while the mouse moves the view */
     vec3 team0_base_min;                 /* +0x0054 pointinsidebase: the box of the base of team 0; team records are 0x117c bytes */
     vec3 team0_base_max;                 /* +0x0060 pointinsidebase */
     vec3 team0_safe_min;                 /* +0x006c pointinsidebasesafe: the box of the safe zone of team 0 */
@@ -3685,19 +3722,24 @@ typedef union GameClient { struct {
     int unk_7f30;                        /* +0x7f30 1 functions */
     uint8_t pad_7f34[0x1b0a0];
     int unused_22fd8;                    /* +0x22fd4 resetgame clears this field. No reader in the server */
-    uint8_t pad_22fd8[0x2800];
+    uint8_t pad_22fd8[0x4];
+    ScenarioEventData scenario_events[127]; /* +0x22fdc Client: the event words of the scenarios. The last record of the client layout lies over spectator_human */
+    uint8_t pad_2578c[0x4c];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
     int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
-    int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
-    int unused_257e8;                    /* +0x257e4 resetgame clears this field. No reader in the server */
-    float unused_257ec;                  /* +0x257e8 resetgame clears this field. No reader in the server */
+    int map_shown;                       /* +0x257e0 Client: 1 while the map is shown. resetgame clears it */
+    int last_health;                     /* +0x257e4 Client: the health of the last frame. resetgame clears it */
+    float damage_flash;                  /* +0x257e8 Client: the red flash after a hit. resetgame clears it */
     int num_checkpoints;                 /* +0x257ec logicsimulation_driving loop limit */
     vec3 checkpoints[32];                /* +0x257f0 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
-    int unused_25974;                    /* +0x25970 resetgame clears this field. No reader in the server */
-    int unused_25978;                    /* +0x25974 resetgame clears this field. No reader in the server */
+    int round_ticks;                     /* +0x25970 Client: the ticks of the round. resetgame clears it */
+    int round_goal;                      /* +0x25974 Client: the goal of the round. resetgame clears it */
     uint8_t pad_25978[0x3d0];
     uint32_t client_account_key;         /* +0x25d48 hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48) */
-    uint8_t pad_25d4c[0x10];
+    float death_fade;                    /* +0x25d4c Client: the fade after the death of the viewed human */
+    float mic_text_timer;                /* +0x25d50 Client: how long the microphone text shows */
+    int hide_hud;                        /* +0x25d54 Client: 1 hides the HUD */
+    int hide_messages;                   /* +0x25d58 Client: 1 hides the chat messages */
     int num_newspapers;                  /* +0x25d5c itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d60]; } GameClient;
 SR_STATIC_ASSERT(sizeof(GameClient) == 0x25d60, "GameClient");
@@ -3715,11 +3757,13 @@ SR_STATIC_ASSERT(offsetof(GameClient, wait_time) == 0x28, "GameClient.wait_time"
 SR_STATIC_ASSERT(offsetof(GameClient, round_time) == 0x2c, "GameClient.round_time");
 SR_STATIC_ASSERT(offsetof(GameClient, teamkill_rate) == 0x30, "GameClient.teamkill_rate");
 SR_STATIC_ASSERT(offsetof(GameClient, ticks) == 0x34, "GameClient.ticks");
-SR_STATIC_ASSERT(offsetof(GameClient, debug_p) == 0x38, "GameClient.debug_p");
-SR_STATIC_ASSERT(offsetof(GameClient, debug_o) == 0x3c, "GameClient.debug_o");
-SR_STATIC_ASSERT(offsetof(GameClient, debug_i) == 0x40, "GameClient.debug_i");
+SR_STATIC_ASSERT(offsetof(GameClient, last_tick_ms) == 0x38, "GameClient.last_tick_ms");
+SR_STATIC_ASSERT(offsetof(GameClient, paused) == 0x3c, "GameClient.paused");
+SR_STATIC_ASSERT(offsetof(GameClient, step_once) == 0x40, "GameClient.step_once");
+SR_STATIC_ASSERT(offsetof(GameClient, slow_tick) == 0x44, "GameClient.slow_tick");
 SR_STATIC_ASSERT(offsetof(GameClient, start_angle_a) == 0x48, "GameClient.start_angle_a");
 SR_STATIC_ASSERT(offsetof(GameClient, start_angle_b) == 0x4c, "GameClient.start_angle_b");
+SR_STATIC_ASSERT(offsetof(GameClient, relative_mouse) == 0x50, "GameClient.relative_mouse");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_base_min) == 0x54, "GameClient.team0_base_min");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_base_max) == 0x60, "GameClient.team0_base_max");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_safe_min) == 0x6c, "GameClient.team0_safe_min");
@@ -3741,16 +3785,21 @@ SR_STATIC_ASSERT(offsetof(GameClient, team2_manager) == 0x2390, "GameClient.team
 SR_STATIC_ASSERT(offsetof(GameClient, team3_manager) == 0x350c, "GameClient.team3_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, team4_manager) == 0x4688, "GameClient.team4_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd4, "GameClient.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(GameClient, scenario_events) == 0x22fdc, "GameClient.scenario_events");
 SR_STATIC_ASSERT(offsetof(GameClient, spectator_human) == 0x257d8, "GameClient.spectator_human");
 SR_STATIC_ASSERT(offsetof(GameClient, death_camera_ticks) == 0x257dc, "GameClient.death_camera_ticks");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_257e0) == 0x257e0, "GameClient.unused_257e0");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_257e8) == 0x257e4, "GameClient.unused_257e8");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_257ec) == 0x257e8, "GameClient.unused_257ec");
+SR_STATIC_ASSERT(offsetof(GameClient, map_shown) == 0x257e0, "GameClient.map_shown");
+SR_STATIC_ASSERT(offsetof(GameClient, last_health) == 0x257e4, "GameClient.last_health");
+SR_STATIC_ASSERT(offsetof(GameClient, damage_flash) == 0x257e8, "GameClient.damage_flash");
 SR_STATIC_ASSERT(offsetof(GameClient, num_checkpoints) == 0x257ec, "GameClient.num_checkpoints");
 SR_STATIC_ASSERT(offsetof(GameClient, checkpoints) == 0x257f0, "GameClient.checkpoints");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_25974) == 0x25970, "GameClient.unused_25974");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_25978) == 0x25974, "GameClient.unused_25978");
+SR_STATIC_ASSERT(offsetof(GameClient, round_ticks) == 0x25970, "GameClient.round_ticks");
+SR_STATIC_ASSERT(offsetof(GameClient, round_goal) == 0x25974, "GameClient.round_goal");
 SR_STATIC_ASSERT(offsetof(GameClient, client_account_key) == 0x25d48, "GameClient.client_account_key");
+SR_STATIC_ASSERT(offsetof(GameClient, death_fade) == 0x25d4c, "GameClient.death_fade");
+SR_STATIC_ASSERT(offsetof(GameClient, mic_text_timer) == 0x25d50, "GameClient.mic_text_timer");
+SR_STATIC_ASSERT(offsetof(GameClient, hide_hud) == 0x25d54, "GameClient.hide_hud");
+SR_STATIC_ASSERT(offsetof(GameClient, hide_messages) == 0x25d58, "GameClient.hide_messages");
 SR_STATIC_ASSERT(offsetof(GameClient, num_newspapers) == 0x25d5c, "GameClient.num_newspapers");
 
 /* option (client)[]: record of 0x150 bytes. */

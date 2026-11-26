@@ -46,7 +46,7 @@ void area_setsectormesh(int first, int used)
 void area_removesectormodel(int sector)
 {
     if ((unsigned)sector < SECTOR_LIMIT) {
-        BlockSector *block = &cl_data_block_sectors[sector];
+        BlockSector *block = &sr_data_area_sector.records[sector];
         int part;
         for (part = 0; part < block->num_meshes; ++part)
             area_setsectormesh(block->parts[part].first_index, 0);
@@ -75,8 +75,8 @@ static void finish_part(BlockSector *sector)
 /* Build and submit a used sector, then invalidate its four interior models. */
 void area_resetsector(int sector)
 {
-    if ((unsigned)sector < SECTOR_LIMIT && cl_data_block_sectors[sector].used) {
-        BlockSector *block = &cl_data_block_sectors[sector];
+    if ((unsigned)sector < SECTOR_LIMIT && sr_data_area_sector.records[sector].used) {
+        BlockSector *block = &sr_data_area_sector.records[sector];
         int slot;
         area_buildsectormodel(sector);
         area_submitsectormodel(sector);
@@ -94,7 +94,7 @@ int area_sectorvertequal(int sector, int first, int second)
     int axis;
     if ((unsigned)sector >= SECTOR_LIMIT)
         return 0;
-    mesh = (const SectorShadowMesh *)&cl_data_block_sectors[sector];
+    mesh = (const SectorShadowMesh *)&sr_data_area_sector.records[sector];
     a = (const float *)(mesh->vertices + first * VERTEX_BYTES);
     b = (const float *)(mesh->vertices + second * VERTEX_BYTES);
     for (axis = 0; axis < 3; ++axis) {

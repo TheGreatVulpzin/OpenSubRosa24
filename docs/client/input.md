@@ -18,7 +18,7 @@ Keyboard arrays hold 512 SDL scan codes. `checkkeyboard` copies 323 bytes into t
 
 The camera array has sixteen records. Chat text reserves 64 bytes and accepts up to 60 characters from its text control.
 
-The shared game fields `death_camera_ticks` (the death camera count) and `unused_257e0` (the map display) control camera following and the map display. `Option.invertmouse` selects the vertical mouse sign. The selected player uses `sr_data_view`, and the server switch uses `sr_server`.
+The shared game fields `death_camera_ticks` (the death camera count) and `map_shown` (the map display) control camera following and the map display. `Option.invertmouse` selects the vertical mouse sign. The selected player uses `sr_data_view`, and the server switch uses `sr_server`.
 
 Connection removal uses 1024 IPv4 slots. The client count lies 0x28884 bytes after the list base. Its address is independent of the server packet workspace layout. The client input switch uses an integer at the byte position of `Game.start_angle_b`.
 

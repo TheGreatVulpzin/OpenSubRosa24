@@ -16,7 +16,7 @@
 #define MAX_ITEMS 0x400
 #define sr_market sr_data_market
 /* The first event that eventsimulation did not handle yet (it lives in BlockTemp). */
-#define lastevent (*((uint32_t *)&sr_data_blocktemp.unused_7602c))
+#define lastevent (*((uint32_t *)&sr_data_blocktemp.last_event))
 
 /* The next free event, with its type and the tick of now. */
 static Event *new_event(int type)

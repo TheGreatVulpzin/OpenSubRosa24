@@ -24,7 +24,6 @@ join_addresses,JoinAddress,8192,0x17668bc0,"joinmenu: the addresses to ping: the
 join_address_count,int,1,0xababc30,joinmenu: the number of join_addresses
 join_master_first,int,1,0x9b676c0,joinmenu: the master list replaces the addresses from this index
 join_columns,float,10,0xfefe300,"joinmenu: x and y of the list columns: name, players, ping, version, game type"
-join_debug,int,3,0x5350c80,joinmenu with debugit: the first two addresses and the address count
 gl_create_program,void *,1,0x115b0c,pointer to glCreateProgramObjectARB that the extension loader fills; mainmenu makes 32 programs
 gl_create_shader,void *,1,0x115b00,pointer to glCreateShaderObjectARB that the extension loader fills
 gl_gen_buffers,void *,1,0x115ab0,pointer to glGenBuffersARB that the extension loader fills; mainmenu makes 0x1000 buffer pairs

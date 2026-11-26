@@ -20,7 +20,7 @@
 #define g_materials sr_data_materials.records
 #define g_materiallist sr_data_materiallist
 #define g_programs cl_data_programs
-#define g_block_sectors cl_data_block_sectors
+#define g_block_sectors sr_data_area_sector.records
 #define g_glext cl_data_glext
 #define g_vbo cl_data_vbo
 #define g_camera cl_data_audio_camera.pos

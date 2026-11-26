@@ -64,9 +64,9 @@ void encodespeex(int channel, int player, int frame)
     VoiceRing *ring = &sr_data_speex.voice_ring[player];
     (void)channel;
     for (sample = 0; sample < SPEEX_SAMPLES; sample++)
-        cl_data_audio_samples[sample] = (float)ring->samples[frame][sample];
+        sr_data_speex.samples[sample] = (float)ring->samples[frame][sample];
     audio_speex_bits_reset()(encoder->bits);
-    audio_speex_encode()(encoder->state, cl_data_audio_samples, encoder->bits);
+    audio_speex_encode()(encoder->state, sr_data_speex.samples, encoder->bits);
     ring->size[frame] = audio_speex_bits_write()(encoder->bits, (char *)ring->data[frame], SPEEX_BYTES);
 }
 
@@ -83,9 +83,9 @@ void decodespeex(int decoder_index, int channel_index, int frame)
             channel->samples[frame][sample] = 0;
     } else {
         audio_speex_bits_read_from()(decoder->bits, (char *)channel->data[frame], channel->size[frame]);
-        audio_speex_decode()(decoder->state, decoder->bits, cl_data_audio_samples);
+        audio_speex_decode()(decoder->state, decoder->bits, sr_data_speex.samples);
         for (sample = 0; sample < SPEEX_SAMPLES; sample++)
-            channel->samples[frame][sample] = (int16_t)(long long)cl_data_audio_samples[sample];
+            channel->samples[frame][sample] = (int16_t)(long long)sr_data_speex.samples[sample];
         channel->size[frame] = 0;
     }
     for (sample = 0; sample < SPEEX_SAMPLES; sample += 32)

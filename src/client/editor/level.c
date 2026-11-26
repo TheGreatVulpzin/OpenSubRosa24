@@ -173,7 +173,7 @@ static void level_items(void)
 /* Set the view of the map from above. */
 static void level_view(void)
 {
-    const EditorView *view = &cl_data_level_view;
+    const EditorView *view = &sr_data_level_editor.view;
 
     setuporthoviewport(cl_ftoi(view->x), cl_ftoi(view->y), cl_ftoi(view->width), cl_ftoi(view->height), view->zoom,
                        (float)(view->zoom * view->scale), (float)(view->zoom + view->zoom));
@@ -208,7 +208,7 @@ static void level_draw_streets(void)
     int i;
 
     glEnable(GL_LINE_SMOOTH);
-    glLineWidth((float)(128.0 / cl_data_level_view.zoom));
+    glLineWidth((float)(128.0 / sr_data_level_editor.view.zoom));
     glBegin(GL_LINES);
     glColor3f(0.5f, 0.5f, 0.5f);
     for (i = 0; i < level->num_streets; i++) {
@@ -243,7 +243,7 @@ static void level_draw_points(void)
     int i;
 
     glEnable(GL_POINT_SMOOTH);
-    glPointSize((float)(512.0 / cl_data_level_view.zoom));
+    glPointSize((float)(512.0 / sr_data_level_editor.view.zoom));
     glBegin(GL_POINTS);
     for (i = 0; i < level->num_intersections; i++) {
         const LevelIntersection *point = &level->intersections[i];
@@ -352,8 +352,8 @@ static void level_draw_labels(void)
     int i, width, depth;
 
     level_view();
-    position.x = cl_data_level_view.camera.x;
-    position.y = cl_data_level_view.camera.z;
+    position.x = sr_data_level_editor.view.camera.x;
+    position.y = sr_data_level_editor.view.camera.z;
     position.z = 0.0f;
     resetorientation(rotation);
     rotateorientation(rotation, &rotation[0], PI_F);
@@ -401,7 +401,7 @@ static void level_draw_texts(void)
  * makes the steps 4 times longer. After 2 steps, the clock jumps to the time now. */
 static void level_move_camera(uint32_t *last)
 {
-    vec3 *camera = &cl_data_level_view.camera;
+    vec3 *camera = &sr_data_level_editor.view.camera;
     float step;
     int steps = 0;
 
@@ -550,7 +550,7 @@ int __cdecl leveleditor_addstreet(int a, int b)
  * the half width. */
 static void level_mouse_point(float *x, float *z)
 {
-    const EditorView *view = &cl_data_level_view;
+    const EditorView *view = &sr_data_level_editor.view;
     const InputMouse *mouse = &cl_data_input_mouse;
 
     *x = (float)((float)((float)((double)mouse->x - (view->width * 0.5 + view->x)) * view->zoom) /
@@ -610,7 +610,7 @@ static void level_edit_streets(float x, float z)
 {
     LevelEditor *level = &sr_data_level_editor;
     const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
-    const EditorView *view = &cl_data_level_view;
+    const EditorView *view = &sr_data_level_editor.view;
     int added;
 
     x = (float)(view->camera.x + 0.5 + x);
@@ -666,7 +666,7 @@ static void level_edit_tiles(float x, float z)
 {
     LevelEditor *level = &sr_data_level_editor;
     const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
-    const EditorView *view = &cl_data_level_view;
+    const EditorView *view = &sr_data_level_editor.view;
     uint8_t *tile;
     int tx, tz, i, j;
 
@@ -741,7 +741,7 @@ static void level_edit_buildings(float x, float z)
 {
     LevelEditor *level = &sr_data_level_editor;
     const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
-    const EditorView *view = &cl_data_level_view;
+    const EditorView *view = &sr_data_level_editor.view;
     const FileListSlot *files = &sr_data_filelist.list[FILE_LIST];
     LevelBuilding *next = &level->buildings[level->num_buildings];
     const LevelBuildingType *type;
@@ -781,7 +781,7 @@ void __cdecl level_checkeditor(void)
 {
     LevelEditor *level = &sr_data_level_editor;
     InputMouse *mouse = &cl_data_input_mouse;
-    EditorView *view = &cl_data_level_view;
+    EditorView *view = &sr_data_level_editor.view;
     float x, z;
 
     if (cl_data_audio_input_blocked == 0) {
@@ -857,7 +857,7 @@ void __cdecl leveleditor_loop(void)
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_CLEAR_MASK);
         level_view();
-        setupviewpoint(&cl_data_level_view.camera, cl_data_level_view.orientation);
+        setupviewpoint(&sr_data_level_editor.view.camera, sr_data_level_editor.view.orientation);
         glDisable(GL_TEXTURE_2D);
         level_draw_grid();
         level_draw_streets();

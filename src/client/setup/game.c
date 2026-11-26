@@ -6,7 +6,7 @@
 
 void *sr_import(const char *dll, const char *name);
 
-#define g_relative_mouse cl_data_relative_mouse
+#define g_relative_mouse sr_data_game.relative_mouse
 
 /* The ticket update has no code. */
 void __cdecl updateplayticket(void)

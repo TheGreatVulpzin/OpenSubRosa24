@@ -1,6 +1,7 @@
 /* The two sound tests of the client: a WAV file that goes through the voice encoder, and a ring of
  * recorded voice frames that plays back through the decoder.
  */
+#include "sr_debug_counters.h"
 #include "audio/test_voice.h"
 
 #include <stdint.h>
@@ -74,11 +75,11 @@ void __cdecl testvoice(int sound, int player)
     const VoiceRing *source = &sr_data_speex.voice_ring[player];
     int frame, i;
 
-    sr_data_debug.shown_team = 0;
+    sr_data_debug.counters[DEBUG_COUNTER_SHOWN_TEAM] = 0;
     for (frame = 0; frame < VOICE_FRAMES; frame++) {
         memcpy(stage->data[frame], source->data[frame], (size_t)source->size[frame]);
         stage->size[frame] = source->size[frame];
-        sr_data_debug.shown_team += source->size[frame];
+        sr_data_debug.counters[DEBUG_COUNTER_SHOWN_TEAM] += source->size[frame];
     }
     stage->head = 0;
     for (frame = 0; frame < VOICE_FRAMES; frame++) {

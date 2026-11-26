@@ -1,30 +1,10 @@
 name,type,count,client_rva,evidence
-relative_mouse,int,1,0x9065350,reactivategame turns on the relative mouse mode of SDL when it is not zero
-slow_tick,int,1,0x9065344,"checksimulation: the tick interval is 100 ms when it is not zero, 16 ms otherwise. debug_getinputs sets it"
-last_tick_ms,uint32_t,1,0x9065338,checksimulation: the SDL time of the last tick
-tick_start_ms,uint32_t,1,0x14f8698,"checksimulation: the SDL time when the tick started, for the frame time ring"
-hide_hud,int,1,0x908b054,checksimulation: F4 toggles it. gameloop draws the display only when it is 0
-mic_text_timer,float,1,0x908b050,checksimulation sets it to 4.0 when the gain changes and counts it down. gameloop uses it as the alpha of the Mic text
-paused,int,1,0x906533c,checksimulation: the simulation does not run while it is not zero
-step_once,int,1,0x9065340,"checksimulation: runs one tick while paused, then clears. debug_getinputs sets it"
-sim_ticks,int,1,0x1dda5240,checksimulation: counts every simulated tick. First word of the area sector record
-last_health,int,1,0x908aae4,checksimulation: the health of the viewed human in the last tick
-damage_flash,float,1,0x908aae8,"checksimulation: set to 1.0 when the health drops, then it fades by 1/16 for each tick"
-death_fade,float,1,0x908b04c,checksimulation: grows by 1/240 for each tick while the viewed human is dead and the state is 2
 keyboard,uint8_t,512,0x75a5140,"checksimulation: one byte for each SDL key, not zero while the key is down. The Linux client names the symbol keyboard"
 prevkeyboard,uint8_t,512,0x1bbe1a0,checksimulation: the keyboard bytes of the last tick. The Linux client names the symbol prevkeyboard
-frame_time_index,uint32_t,1,0x14f87a8,"checksimulation: the next entry of frame_times, 0 to 31"
-frame_times,int,32,0x14f87ac,checksimulation: the milliseconds that each of the last 32 ticks took
-frame_time_average,float,1,0x14f88ac,checksimulation: the mean of frame_times
-debug_extra_count,int,1,0x14c0690,checksimulation clears it each tick. A debug array that renderframe reads
 chatmessage,ChatMessage,256,0x129660,checksimulation counts down the timer of each message. createmessage and frame_drawmessages use them. Records of 0x98 bytes
-last_event,uint32_t,1,0x5350c6c,clientsend sends its low 16 bits to the server. eventsimulation and resetgame also use it
-server_address,uint32_t,1,0x75a5854,clientsend: the address of the server that the packets go to. joinmenu and connectmenu write it
-server_port,uint16_t,1,0x75a5858,clientsend: the port of the server that the packets go to. joinmenu and connectmenu write it
 render_aspect,float,1,0xb7330c8,main: render_height divided by render_width
 render_depth_bits,int,1,0xb7330dc,"main: the depth bits of the window, from the depthbits option"
 render_stencil_bits,int,1,0xb7330e0,"main: the stencil bits of the window, from the stencilbits option"
 gl_context,void*,1,0x103675ac,main: the OpenGL context of the window
 steam_active,int,1,0x10367380,main: the result of steam_init
-hide_messages,int,1,0x908b058,gameloop draws the chat messages only when it is 0. No code writes it
 player_marks,int,256,0x75a53c0,gameloop writes -2 for each of the 256 players at the start. No code reads it
