@@ -26,6 +26,14 @@ void os_free(void *pointer)
     call(pointer);
 }
 
+void *os_realloc(void *pointer, size_t size)
+{
+    static void *(__cdecl *call)(void *, size_t);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "realloc");
+    return call(pointer, size);
+}
+
 /* WSOCK32 ordinals of the game. */
 #define WSOCK_CLOSESOCKET 3
 #define WSOCK_BIND 2

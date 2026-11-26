@@ -20,6 +20,11 @@ void os_free(void *pointer)
     free(pointer);
 }
 
+void *os_realloc(void *pointer, size_t size)
+{
+    return realloc(pointer, size);
+}
+
 int os_recvfrom(uintptr_t socket, char *buf, int len, int flags, void *from, int *fromlen)
 {
     return recvfrom(socket, buf, len, flags, (struct sockaddr *)from, fromlen);

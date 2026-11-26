@@ -24,7 +24,10 @@ Later on 2026-11-26:
 - B4: the root `CMakeLists.txt` holds the native client and the server. All verification targets (hook libraries, harness, recorder, image executables, storage checks) are in `instrumentation/targets.cmake`, which the root includes only when `SV_BUILD_INSTRUMENTATION` is ON. With it OFF, the server and the native client build.
 - The owner accepts the server gate coverage of the recordings that came back (`20261013-query`: 188 functions, 2230 calls same). The gate lists the functions of the lost recordings as "DROP". The baseline is not updated.
 
-Not done: `sr_import` in `src/server` and in the `src/platform` files that only the server and the image targets use (`x87_math.c` needs the `_CI` math forms, and the test environment replaces the other calls). The image targets `cl_wsock32` and `harness_client` still need a new hook table. The frame time against the first executable.
+- The image targets `cl_wsock32` (the recording proxy) and `harness_client` build and work again. `gen_system_thunks.py` gives them the system library calls (OpenGL, SDL2, OpenAL, Speex, winsock). The lifter leaves a rewritten function without a hook when its first bytes hold a relative call (`setupobjecttypes` crashed the recorded client). The harness sees a call only when it goes through `src/include/sr_os.h`: `os_fread`, `os_fseek`, `os_realloc` and the other file and memory calls. The image loader called `realloc` directly, and its buffer was freed by another allocator.
+- Check on a new recording of the original client at its menu (`build/recordings/client-menu-*`, 20 s snapshot): 126 functions with calls, 110 the same as the original, 0 different, 0 crashed. 15 are skipped by the harness and 1 is the harness copy of the third party GLee. Only the menu is covered. The client gate (`client_win.json`) still points at the three lost recordings.
+
+Not done: `sr_import` in `src/server` and in the `src/platform` files that only the server and the image targets use (`x87_math.c` needs the `_CI` math forms, and the test environment replaces the other calls). The client gate has no baseline: record a play session with the launcher and run `gate.py --target client_win --update` (ask first). The frame time against the first executable.
 
 ## State on 2026-11-25
 

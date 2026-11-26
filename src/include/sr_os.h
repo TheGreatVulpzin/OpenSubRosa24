@@ -13,6 +13,7 @@
 
 void *os_malloc(size_t size);
 void os_free(void *pointer);
+void *os_realloc(void *pointer, size_t size);
 
 int os_recvfrom(uintptr_t socket, char *buf, int len, int flags, void *from, int *fromlen);
 int os_sendto(uintptr_t socket, const char *buf, int len, int flags, const void *to, int tolen);

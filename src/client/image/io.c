@@ -137,7 +137,7 @@ size_t image_read(void *data, size_t count, void *file)
 /* Resize an allocation. Return null when memory is full. */
 void *image_realloc(void *data, size_t size)
 {
-    return realloc(data, size);
+    return os_realloc(data, size);
 }
 
 /* Return the end flag of a file. */
