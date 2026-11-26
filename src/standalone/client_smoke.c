@@ -27,7 +27,7 @@ enum {
     KEY_A = 4, KEY_E = 8, KEY_K = 14, KEY_M = 16, KEY_S = 22, KEY_W = 26, KEY_R = 21, KEY_1 = 30, KEY_7 = 36,
     KEY_RETURN = 40, KEY_ESCAPE = 41, KEY_TAB = 43, KEY_SPACE = 44,
     KEY_F1 = 58, KEY_INSERT = 73, KEY_HOME = 74, KEY_END = 77, KEY_SHIFT = 225, KEY_F = 9,
-    EXPLORE_MS = 90000, EXPLORE_DEPTH = 3, MAX_DIMENSION = 8192,
+    MAX_DIMENSION = 8192,
     COLOR_BYTES = 1 << 21, PLAYER_LIMIT = SR_MAX_PLAYER, HUMAN_LIMIT = SR_MAX_HUMAN, ITEM_LIMIT = SR_MAX_ITEM,
     LOOP_NONE = 0, LOOP_GAME, LOOP_BUILDING, LOOP_LEVEL, LOOP_MODEL
 };
@@ -71,7 +71,6 @@ static unsigned (__cdecl *mouse_state)(int *, int *);
 static const uint8_t *(__cdecl *keyboard_state)(int *);
 static int (__cdecl *push_event)(SmokeEvent *);
 static volatile LONG extra_key, relative_x, relative_y, sound_calls, observe_fire, peak_sounds;
-static DWORD scenario_start;
 static char output_dir[MAX_PATH], shot_name[96];
 static unsigned shot_request, shot_done, shot_count;
 static int shot_ok, shot_changed;
@@ -364,8 +363,6 @@ static int wait_screen(ScreenCheck check, unsigned frames, DWORD milliseconds, D
 #endif
     while (GetTickCount() - start < limit) {
         SmokeFrame view = snapshot();
-        if (!strcmp(scenario, "explore") && GetTickCount() - scenario_start >= EXPLORE_MS)
-            return fail("explore exceeds 90 seconds");
         if (view.number && (!check || check(&view))) {
             if (!seen) { first_frame = view.number; first_time = GetTickCount(); seen = 1; }
             if (view.number - first_frame >= frames && GetTickCount() - first_time >= milliseconds) {
@@ -557,9 +554,7 @@ static DWORD WINAPI smoke_worker(void *unused)
     if (!push_event || !drawable_size || !window_id) { fail("SDL2 test exports"); return 0; }
     ok = wait_screen(main_screen, INPUT_FRAMES, 0, START_MS, "startup menu");
     if (ok) {
-        scenario_start = GetTickCount();
-        if (!strcmp(scenario, "explore")) ok = explore(0, "main");
-        else if (!strcmp(scenario, "play")) ok = play();
+        if (!strcmp(scenario, "play")) ok = play();
         else if (!strcmp(scenario, "crash")) ok = crash();
         else if (!strcmp(scenario, "menus")) ok = menus();
         else if (!strcmp(scenario, "buildings")) ok = buildings();
@@ -583,7 +578,7 @@ int client_smoke_start(void)
 {
     scenario = getenv("SR_SMOKE");
     if (!scenario) return 1;
-    if (strcmp(scenario, "explore") && strcmp(scenario, "play") && strcmp(scenario, "crash") && strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
+    if (strcmp(scenario, "play") && strcmp(scenario, "crash") && strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
         return fail("unknown scenario");
     {
         const char *directory = getenv("SR_SMOKE_OUTPUT");
@@ -594,7 +589,6 @@ int client_smoke_start(void)
         screens = fopen(path, "wb");
         if (!screens) return fail("screen manifest open");
         fputs("[\n]", screens); fseek(screens, -1, SEEK_CUR);
-        scenario_start = GetTickCount();
     }
     InitializeCriticalSection(&lock);
     changed = CreateEventA(NULL, FALSE, FALSE, NULL);

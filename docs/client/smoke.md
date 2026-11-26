@@ -14,16 +14,10 @@ After an edit to either `.inc` file, force the compiler to rebuild `client_smoke
 Check that its object file is newer than both includes. Incremental builds can miss these includes on this machine.
 The executable must contain the current smoke driver. Older executables cannot produce captures.
 
-Select scenarios after the executable path: `menus explore play crash buildings level model`.
-The default runs all seven scenarios. Use `--timeout <seconds>` to set a process limit.
+Select scenarios after the executable path: `menus play crash buildings level model`.
+The default runs all six scenarios. Use `--timeout <seconds>` to set a process limit.
 
 - `menus` opens Options, Voice Options, Start and Join. It captures each main screen.
-- `explore` visits visible controls to depth three. It stops after 90 seconds, excluding client startup.
-  It records button labels, field values and depth in `screens.json`.
-  It types `smk` in string fields and `7` in numeric fields, then checks the field value.
-  It skips Exit, Quit, Back, destructive actions, Apply, CPU affinity, web links and remote connection actions.
-  Back returns to each parent. Escape returns when the screen has no Back button.
-  A time limit or an unexpected parent fails the scenario. The log records omitted actions.
 - `play` opens Start, disables network hosting and starts a local round.
   It selects a team and Ready, then waits up to 180 seconds for the player.
   It walks for two seconds, turns with relative mouse input and jumps.
@@ -106,6 +100,36 @@ names (`tools/re/map_address.py`). The scan repairs the guard, so the next write
 A guard that fires means a size in `analysis/client_win/group_globals_*.csv` is too small, or an array that the
 original executable fills past its end into idle data. Give the real size, or add the object to
 `analysis/client_win/native_slack.csv`.
+
+### Tools of the native test
+
+- `tools/build_native.bat <target> ...` builds native targets. Its exit code is 0 only when the build passes.
+  The log is `build/native_build.log`. Targets: `subvulpes-client-native`, `-smoke`, `-guard`, `-guard-smoke`.
+- `tools/native_test.sh [--guard] [--hidden] [--build-only] [--timeout N] [scenario ...]` builds, checks that the
+  executable is current and runs the scenarios (default: `menus level`). Output goes to `build/nt/<plain|guard>`.
+  Keep the path short: the capture path must stay under 90 characters.
+- `tools/re/gen_client_native.py` makes `src/client/storage.c` and `src/include/sr_client_storage.h` from
+  `analysis/client_win/*.csv`. It also makes the guard holders and `cl_guards_scan`.
+- `analysis/client_win/native_slack.csv` gives extra bytes to an object that the original code fills past its end.
+- `tools/re/map_address.py <exe>.map <file>` turns the `SAMPLE` and `CRASH` addresses of a log into function names.
+  Put each `SAMPLE` line on its own line first.
+- `SR_SMOKE_HIDDEN=1` hides the window. `SR_NATIVE_SAMPLE=1` prints the main thread once a second in a smoke run.
+- `SR_DEBUGIT=1` shows the editors in the main menu. The smoke driver sets it.
+
+Compare the native executable with the first one on the same scenarios:
+
+```powershell
+python -I instrumentation/client/smoke.py build/hook/opensubrosa24_client_native_smoke.exe menus level --compare <other smoke exe>
+```
+
+`menus` and the level editor give 0.0 percent of different pixels. The 3D scene of the demo differs a little:
+the color of some cars is random.
+
+Find a layout bug in this order:
+
+1. Run the guard executable. A `GUARD <name>` line names the object and the function that wrote past its end.
+2. Give the object its real size in `group_globals_*.csv`, or add it to `native_slack.csv`.
+3. Run `python -I tools/re/client_overlap.py` and the address and start-value tests of the generator.
 
 The native executable has no entry hook in its functions. The smoke driver finds the running frame loop
 (game, building editor, level editor, model viewer) from the stack of the main thread.

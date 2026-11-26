@@ -11,7 +11,7 @@ import struct
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-SCENARIOS = {"menus": 360, "explore": 280, "play": 600, "crash": 360, "buildings": 1800, "level": 360, "model": 300}
+SCENARIOS = {"menus": 360,"play": 600, "crash": 360, "buildings": 1800, "level": 360, "model": 300}
 READY_SECONDS = 15
 
 

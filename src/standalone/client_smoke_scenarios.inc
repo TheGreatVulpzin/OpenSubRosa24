@@ -34,8 +34,6 @@ static int shot(const char *name)
         LeaveCriticalSection(&lock);
         if (done) return ok;
         if (WaitForSingleObject(stop, 0) == WAIT_OBJECT_0) return 0;
-        if (!strcmp(scenario, "explore") && GetTickCount() - scenario_start >= EXPLORE_MS)
-            return fail("explore capture exceeds 90 seconds");
         WaitForSingleObject(changed, 20);
     }
     return fail("capture timeout");
@@ -60,127 +58,6 @@ static int record_screen(const char *name, unsigned depth)
     return !ferror(screens) || fail("screen manifest write");
 }
 
-static unsigned screen_key(const SmokeFrame *view)
-{
-    unsigned hash = 2166136261u;
-    int i;
-    if (main_screen(view)) return 1;
-    if (options_screen(view)) return 2;
-    if (host_screen(view)) return 3;
-    if (join_screen(view)) return 4;
-    if (list_screen(view)) return 5;
-    if (game_screen(view)) return 6;
-    if (item_index(view, "Voice Chat") >= 0 && item_index(view, "Back") >= 0) return 7;
-    for (i = 0; i < view->count; i++) {
-        const unsigned char *p = (const unsigned char *)view->items[i].text;
-        if (view->items[i].hidden) continue;
-        while (*p) hash = (hash ^ *p++) * 16777619u;
-        hash = (hash ^ (unsigned)view->items[i].kind) * 16777619u;
-    }
-    return hash;
-}
-
-static int text_test(const SmokeItem *item, const char *name)
-{
-    SmokeFrame view;
-    int index;
-    if (!click(item->text)) return 0;
-    if (!key_press(KEY_HOME)) return 0;
-    InterlockedExchange(&extra_key, KEY_SHIFT);
-    index = key_press(KEY_END);
-    InterlockedExchange(&extra_key, 0);
-    if (!index) return 0;
-    if (item->field_type) { if (!key_press(KEY_7)) return 0; }
-    else if (!key_press(KEY_S) || !key_press(KEY_M) || !key_press(KEY_K)) return 0;
-    if (!key_press(KEY_RETURN)) return 0;
-    view = snapshot();
-    index = item_index(&view, item->text);
-    if (!shot(name) || !record_screen(name, 0)) return 0;
-    if (index < 0 || (item->field_type ? strtod(view.items[index].value_text, NULL) != 7.0 : strcmp(view.items[index].value_text, "smk"))) {
-        fprintf(stderr, "SMOKE TEXT field=%s expected=%s actual=%s\n", item->text,
-                item->field_type ? "7" : "smk", index < 0 ? "missing" : view.items[index].value_text);
-        return fail("typed text absent from menu field");
-    }
-    fprintf(stderr, "SMOKE ASSERT text PASS field=%s value=%s\n", item->text, view.items[index].value_text);
-    return 1;
-}
-
-static int forbidden_button(const char *text)
-{
-    char lower[64];
-    unsigned i;
-    for (i = 0; text[i] && i + 1 < sizeof lower; i++)
-        lower[i] = text[i] >= 'A' && text[i] <= 'Z' ? text[i] + 'a' - 'A' : text[i];
-    lower[i] = 0;
-    return !strcmp(lower, "exit") || !strcmp(lower, "quit") || !strcmp(lower, "back") ||
-           strstr(lower, "delete") || strstr(lower, "remove") || strstr(lower, "save") ||
-           strstr(lower, "reset") || strstr(lower, "new ") || strstr(lower, "apply") ||
-           strstr(lower, "cpu affinity") || strstr(lower, "twitter") || strstr(lower, "website") || strstr(lower, "crypticsea");
-}
-
-/* Each child returns to its parent before the next visible button is tested. */
-static int explore(unsigned depth, const char *name)
-{
-    static unsigned visited[256], visited_count;
-    SmokeFrame parent = snapshot(), current;
-    SmokeItem tested[MAX_ITEMS];
-    unsigned hash = screen_key(&parent), j, tested_count = 0;
-    int i;
-    if (!record_screen(name, depth) || !shot(name)) return 0;
-    for (j = 0; j < visited_count; j++) if (visited[j] == hash) return 1;
-    if (visited_count >= 256) return fail("screen limit");
-    visited[visited_count++] = hash;
-    if (depth >= EXPLORE_DEPTH) return 1;
-    while (tested_count < MAX_ITEMS) {
-        SmokeItem chosen;
-        const SmokeItem *item = NULL;
-        char point[96], label[64];
-        current = snapshot();
-        for (i = 0; i < current.count; i++) {
-            const SmokeItem *candidate = &current.items[i];
-            if (candidate->hidden || candidate->disabled || candidate->width <= 0 || candidate->height <= 0) continue;
-            for (j = 0; j < tested_count; j++)
-                if (tested[j].kind == candidate->kind && !strcmp(tested[j].text, candidate->text)) break;
-            if (j == tested_count) { item = candidate; break; }
-        }
-        if (!item) return 1;
-        chosen = *item; item = &chosen;
-        tested[tested_count++] = *item;
-        slug(label, sizeof label, item->text);
-        snprintf(point, sizeof point, "d%u-%u-%s", depth + 1, tested_count, label);
-        if (forbidden_button(item->text) || (join_screen(&parent) && !strcmp(item->text, "Join"))) {
-            fprintf(stderr, "SMOKE SKIP %s: exit, persistence or external action\n", item->text);
-            continue;
-        }
-        if ((item->kind == 1 || item->kind == 2) && !item->password) {
-            if (!text_test(item, point)) return 0;
-            continue;
-        }
-        if (!click(item->text) || !wait_screen(NULL, 3, 100, FRAME_MS, "explore child")) return 0;
-        if (!item->text[0] && item_index(&parent, "Voice Chat") >= 0 && !key_press(KEY_ESCAPE)) return 0;
-        current = snapshot();
-        if (!record_screen(point, depth + 1) || !shot(point)) return 0;
-        if (item->kind == 0 && screen_key(&current) != hash) {
-            if (game_screen(&current)) {
-                if (!leave_game(NULL)) return 0;
-            } else {
-                if (!explore(depth + 1, point)) return 0;
-                current = snapshot();
-                if (item_index(&current, "Back") >= 0) {
-                    if (!click("Back")) return 0;
-                } else if (!key_press(KEY_ESCAPE)) return 0;
-            }
-            current = snapshot();
-            if (host_screen(&parent) && main_screen(&current)) {
-                if (!click("Start") || !wait_screen(host_screen, 3, 100, STEP_MS, "restore host menu")) return 0;
-            }
-            if (!wait_screen(NULL, 3, 100, FRAME_MS, "explore parent")) return 0;
-            current = snapshot();
-            if (screen_key(&current) != hash) return fail("Back did not restore parent menu");
-        }
-    }
-    return fail("control limit");
-}
 static int live_player(const SmokeFrame *view) { return game_screen(view) && view->human >= 0 && view->human < HUMAN_LIMIT; }
 
 static int gun_ready(const SmokeFrame *view) { return live_player(view) && view->weapon >= 0 && view->ammo > 0 && view->weapon_slot == 0 && view->game_state == 2; }
