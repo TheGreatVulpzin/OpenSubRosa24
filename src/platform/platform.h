@@ -7,8 +7,9 @@
  *                 file writes in a sandbox and no network. Both versions of a function
  *                 (lifted and original) see the same environment, and the harness compares
  *                 what they do with it.
- *   plat_imports.c  the standalone server on Windows: the static CRT, KERNEL32 and WSOCK32,
- *                 linked at build time (no MSVCR100.dll).
+ *   plat_imports.c  the recording build of the server on Windows: the static CRT, KERNEL32 and
+ *                 WSOCK32, linked at build time (no MSVCR100.dll). The normal server calls the
+ *                 system direct (os_calls_server.inc).
  *   (later)       Linux and the browser.
  *
  * An implementation keeps the ABI of the import (the same prototype and calling convention),

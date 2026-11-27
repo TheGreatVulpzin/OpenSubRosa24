@@ -5,10 +5,9 @@
 #include <string.h>
 
 #include "random.h"
+#include "sr_os.h"
 #include "sr_runtime.h"
 #include "sr_server.h"
-
-void *sr_import(const char *dll, const char *name);
 
 typedef size_t(__cdecl *fread_fn)(void *, size_t, size_t, void *);
 
@@ -25,20 +24,13 @@ typedef size_t(__cdecl *fread_fn)(void *, size_t, size_t, void *);
  * Version 1 rolls each look. Version 2 rolls a look again when all three values are zero. */
 void __cdecl sr_loadaccountsserver(void)
 {
-    void *(__cdecl *fopen_)(const char *, const char *);
-    int(__cdecl *fclose_)(void *);
-    int(__cdecl *rand_)(void);
     int version = 0, i, count;
     uint32_t key;
     Account *pending = NULL;
 
-    *(void **)&fopen_ = sr_import("MSVCR100.dll", "fopen");
-    *(void **)&fclose_ = sr_import("MSVCR100.dll", "fclose");
-    *(void **)&rand_ = sr_import("MSVCR100.dll", "rand");
-
     account_key = genrand_int32();
     numofaccounts = 0;
-    account_file = fopen_("user/server.srk", "rb");
+    account_file = os_fopen("user/server.srk", "rb");
     if (!account_file)
         return;
     if (game_fread(&version, 4, 1, account_file) != 1)
@@ -72,9 +64,9 @@ void __cdecl sr_loadaccountsserver(void)
             Account *a = &pending[i];
             if (version < 2 ||
                 (version == 2 && a->look_a == 0 && a->look_b == 0 && a->look_c == 0)) {
-                a->look_a = rand_() % 3;
-                a->look_b = rand_() & 7;
-                a->look_c = rand_() & 3;
+                a->look_a = os_rand() % 3;
+                a->look_b = os_rand() & 7;
+                a->look_c = os_rand() & 3;
             }
         }
         if (count != 0)
@@ -84,5 +76,5 @@ void __cdecl sr_loadaccountsserver(void)
     }
 close:
     free(pending);
-    fclose_(account_file);
+    os_fclose(account_file);
 }

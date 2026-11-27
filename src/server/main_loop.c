@@ -38,9 +38,6 @@
 #include "loop_calls.h"
 #endif
 
-void *sr_import(const char *dll, const char *name);
-void *sr_import_ordinal(const char *dll, unsigned ordinal);
-
 #ifdef SR_STANDALONE
 int sv_stop_requested(void);
 #endif
@@ -58,24 +55,6 @@ int sv_stop_requested(void);
 #define game_fwrite_ptr (*((void * *)&sr_data_file_write))
 /* The WSADATA record that WSAStartup fills. */
 #define wsadata ((void *)(uintptr_t)sr_data_wsadata)
-
-/* ------------------------------------------------------------ CRT and WinSock of the game */
-
-/* The game CRT (MSVCR100.dll): its stdout, its current folder and its seek. */
-static int(__cdecl *g_printf)(const char *, ...);
-static int(__cdecl *g_fseek)(void *, long, int);
-static char *(__cdecl *g_getcwd)(char *, int);
-static int(WINAPI *g_wsastartup)(WORD, void *);
-
-static void load_imports(void)
-{
-#define IMP(var, name) *(void **)&var = sr_import("MSVCR100.dll", name)
-    IMP(g_printf, "printf");
-    IMP(g_fseek, "fseek");
-    IMP(g_getcwd, "_getcwd");
-#undef IMP
-    *(void **)&g_wsastartup = sr_import_ordinal("WSOCK32.dll", 115);
-}
 
 /* ------------------------------------------------------------ main loop */
 
@@ -124,7 +103,7 @@ static void tick(void)
         if (g_debugit != 0) {
             g_debug.log_file = os_fopen(g_debug.log_path, "rb+");
             if (g_debug.log_file) {
-                g_fseek(g_debug.log_file, 0, 2);
+                os_fseek(g_debug.log_file, 0, 2);
                 os_fprintf(g_debug.log_file, "%s\r\n", g_debug.log_text);
                 os_fclose(g_debug.log_file);
             }
@@ -147,7 +126,7 @@ void __cdecl sr_dedicatedserverloop(void)
     uint32_t next, now, status_ms;
     int i, hours, catchup, status_ticks;
 
-    g_printf(getmasterserverip() ? "connection successful\n" : "connection failed\n");
+    os_printf(getmasterserverip() ? "connection successful\n" : "connection failed\n");
 
     if (sr_option.roundtime < 1)
         sr_option.roundtime = 1;
@@ -168,8 +147,8 @@ void __cdecl sr_dedicatedserverloop(void)
     disablesocket(0);
     sr_serverinfo.active = 1;
     sr_serverinfo.unused_08 = 1;
-    g_printf("port:%d\n", (unsigned)(uint16_t)sr_bsdsocket.port);
-    g_printf("socketenabled:%d\n", sr_bsdsocket.enabled[0]);
+    os_printf("port:%d\n", (unsigned)(uint16_t)sr_bsdsocket.port);
+    os_printf("socketenabled:%d\n", sr_bsdsocket.enabled[0]);
     init_genrand((int)os_time64(NULL));
     sr_loadaccountsserver();
     leveleditor_load();
@@ -229,18 +208,17 @@ void __cdecl sr_dedicatedserverloop(void)
 /* The main function: folders, timers and settings, then the loop. */
 void __cdecl sr_getpaths(void)
 {
-    load_imports();
     debug_resetlogfile();
     getcpufrequency();
     setuptimers();
     sr_data_startup_counter = 0; /* a game counter that starts at 0 */
     /* The game reads files through these two pointers (loadblock and others). */
-    game_fread_ptr = sr_import("MSVCR100.dll", "fread");
-    game_fwrite_ptr = sr_import("MSVCR100.dll", "fwrite");
-    g_getcwd(g_sysinfo.start_dir, 0x200);
-    g_getcwd(g_sysinfo.config_dir, 0x200);
+    game_fread_ptr = (void *)os_fread;
+    game_fwrite_ptr = (void *)os_fwrite;
+    os_getcwd(g_sysinfo.start_dir, 0x200);
+    os_getcwd(g_sysinfo.config_dir, 0x200);
     loadsaveoptions(0);
-    g_wsastartup(0x101, wsadata);
+    os_wsastartup(0x101, wsadata);
     sr_dedicatedserverloop();
 }
 
@@ -262,7 +240,6 @@ int sv_main_loop_install(void)
 {
     if (!sv_config_int("own_main", 0))
         return 0;
-    load_imports();
     return sv_install_hooks(g_main_hooks, 2);
 }
 #endif /* SR_STANDALONE */

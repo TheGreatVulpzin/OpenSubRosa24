@@ -13,7 +13,8 @@ option(SV_BUILD_INSTRUMENTATION "Build differential verification and recording t
 # The normal server and verification targets share the game C sources.
 # Verification targets select their memory adapter through a target definition.
 file(GLOB SV_CLEAN_SOURCES CONFIGURE_DEPENDS src/common/*.c src/net/*.c src/game/*.c)
-# The operating system calls of the clean code, through the imports of the game.
+# The operating system calls of the clean code. The normal server (SR_OS_DIRECT) calls the system
+# directly. The verification targets go through the imports of the game.
 list(APPEND SV_CLEAN_SOURCES src/platform/os_calls.c)
 set(SV_GAME_SOURCES)
 foreach(f ai_car)
@@ -136,11 +137,11 @@ set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "
 
 # The normal executable has its own storage and no verification sources or include paths.
 add_executable(subvulpes-server src/standalone/main.c ${SV_STORAGE_SOURCES} src/platform/x87_math.c ${SV_REWRITTEN_SOURCES}
-    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c
-    src/platform/plat_imports.c)
+    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c)
 target_include_directories(subvulpes-server PRIVATE src/include src/standalone src/platform ${SV_REWRITTEN_INCLUDES})
 target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8 /arch:IA32)
-target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
+target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE SR_OS_DIRECT)
+target_link_libraries(subvulpes-server PRIVATE ws2_32)
 target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
 set_target_properties(subvulpes-server PROPERTIES OUTPUT_NAME opensubrosa24_server)
 set_property(TARGET subvulpes-server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

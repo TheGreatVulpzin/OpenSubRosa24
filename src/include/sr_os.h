@@ -1,9 +1,9 @@
 /* The operating system calls of the game: sockets, files, time and the CRT random numbers.
  *
- * The native client calls the system directly (os_calls_native.inc). The other builds send each
- * call to the import of the game (sr_import). Each of them gives its own import: the test
- * environment in the harness, the recorder in the recording build, the system in the server.
- * So a test or a recording sees each call.
+ * The native client and the normal server call the system directly (os_calls_native.inc and
+ * os_calls_server.inc). The verification builds send each call to the import of the game
+ * (sr_import). Each of them gives its own import: the test environment in the harness, the
+ * recorder in the recording build. So a test or a recording sees each call.
  */
 #ifndef SR_OS_H
 #define SR_OS_H
@@ -57,12 +57,19 @@ int os_chdir(const char *path);
 typedef int(__cdecl *os_fprintf_fn)(void *file, const char *format, ...);
 typedef int(__cdecl *os_sprintf_fn)(char *text, const char *format, ...);
 typedef int(__cdecl *os_sscanf_fn)(const char *text, const char *format, ...);
+typedef int(__cdecl *os_printf_fn)(const char *format, ...);
 os_fprintf_fn os_fprintf_import(void);
 os_sprintf_fn os_sprintf_import(void);
 os_sscanf_fn os_sscanf_import(void);
+os_printf_fn os_printf_import(void);
 #define os_fprintf (os_fprintf_import())
 #define os_sprintf (os_sprintf_import())
 #define os_sscanf (os_sscanf_import())
+#define os_printf (os_printf_import())
+
+/* The current folder and the start of WinSock (version 0x101 and a WSADATA record). */
+char *os_getcwd(char *buffer, int size);
+int os_wsastartup(unsigned short version, void *data);
 
 /* File search of the CRT. data is a _finddata64i32_t. */
 intptr_t os_findfirst64i32(const char *pattern, void *data);

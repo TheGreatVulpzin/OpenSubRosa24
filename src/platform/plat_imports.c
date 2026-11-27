@@ -1,4 +1,5 @@
-/* The imports of the game for the standalone server, linked at build time (Phase 5.2).
+/* The imports of the game for the recording build and the storage tests, linked at build time.
+ * The normal server does not use this file.
  *
  * The 024d takes its CRT from MSVCR100.dll and its sockets from WSOCK32.dll. The lifted C
  * asks for each import by name (sr_import) or by ordinal (sr_import_ordinal). Here each one

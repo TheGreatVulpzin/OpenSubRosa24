@@ -94,7 +94,7 @@ static int __cdecl sv_vprintf(const char *fmt, va_list ap)
     return n;
 }
 
-static int __cdecl sv_printf(const char *fmt, ...)
+int __cdecl sv_printf(const char *fmt, ...)
 {
     int n;
     va_list ap;
@@ -118,8 +118,10 @@ static void open_log(void)
 
 static FILE *g_packets;
 static DWORD g_packets_start, g_packets_flush;
+#ifndef SR_OS_DIRECT
 static int(WINAPI *g_recvfrom)(UINT_PTR, char *, int, int, void *, int *);
 static int(WINAPI *g_sendto)(UINT_PTR, const char *, int, int, const void *, int);
+#endif
 
 static void capture(uint8_t dir, const void *data, int len, const void *addr)
 {
@@ -147,6 +149,14 @@ static void capture(uint8_t dir, const void *data, int len, const void *addr)
     }
 }
 
+#ifdef SR_OS_DIRECT
+/* os_recvfrom and os_sendto (src/platform/os_calls_server.inc) call this for each datagram. */
+void sv_capture_packet(int outgoing, const void *data, int len, const void *addr)
+{
+    if (g_packets)
+        capture((uint8_t)outgoing, data, len, addr);
+}
+#else
 static int WINAPI capture_recvfrom(UINT_PTR s, char *buf, int len, int flags, void *from, int *fromlen)
 {
     int n = g_recvfrom(s, buf, len, flags, from, fromlen);
@@ -162,6 +172,7 @@ static int WINAPI capture_sendto(UINT_PTR s, const char *buf, int len, int flags
         capture(1, buf, n, to);
     return n;
 }
+#endif
 
 static void open_packets(void)
 {
@@ -183,9 +194,11 @@ static void open_packets(void)
     sv_log("packet capture: %s", path);
 }
 
+#ifndef SR_OS_DIRECT
 /* ------------------------------------------------------------ imports */
 
-/* Each import of the game is a function of src/platform/plat_imports.c (Phase 5.2). */
+/* The verification builds ask for each import here. Each one is a function of
+ * src/platform/plat_imports.c. */
 void *sr_import(const char *dll, const char *name)
 {
     void *p;
@@ -224,6 +237,7 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
 #endif
     return p;
 }
+#endif /* SR_OS_DIRECT */
 
 /* SV_TIMERS prints each timer's cycles from the last tick. */
 void sv_profile_report(void)

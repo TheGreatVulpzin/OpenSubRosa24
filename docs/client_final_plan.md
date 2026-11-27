@@ -21,7 +21,7 @@ no hook macro, no call by address, no storage adapter, no generated offset.
 Phases B to F are done in the code of the client:
 
 - B: every call goes by name (no `CL_FN_NAMED`). The aliases of the storage are fields of the records (one name, `sr_data_view`, stays a macro for a field). `src/include/sr_variant.h` is the one place where the client and the server differ. The image executable targets still exist in `instrumentation/`, but they do not build all: `cl_wsock32` and `harness_client` need a new hook table.
-- C: SDL2, OpenAL, Speex, OpenGL, the C runtime, winsock and the shell are normal calls. `sr_import` is gone from `src/client`, `src/game`, `src/common` and `src/net`. `src/platform` and `src/server` still use it for the operating system calls.
+- C: SDL2, OpenAL, Speex, OpenGL, the C runtime, winsock and the shell are normal calls. `sr_import` is gone from `src/client`, `src/game`, `src/common` and `src/net`. The normal server has none either (2026-11-27): `src/platform/os_calls_server.inc` and the direct branch of `x87_math.c` call the static C runtime, winsock and KERNEL32. Only the verification targets keep `sr_import`, so that the harness and the recorder see each call.
 - D: no `unk_` name is left. `docs/README.md` maps each system to its folder and page.
 - E: `CONTRIBUTING.md` and `docs/changes.md` say what a change may do.
 - F: a sampler and `tools/re/profile_samples.py` show where the client spends time (`docs/client/performance.md`). The client has its own `rand`. The frame time was not compared with the first executable.
@@ -35,7 +35,7 @@ Later on 2026-11-26:
 - The image targets `cl_wsock32` (the recording proxy) and `harness_client` build and work again. `gen_system_thunks.py` gives them the system library calls (OpenGL, SDL2, OpenAL, Speex, winsock). The lifter leaves a rewritten function without a hook when its first bytes hold a relative call (`setupobjecttypes` crashed the recorded client). The harness sees a call only when it goes through `src/include/sr_os.h`: `os_fread`, `os_fseek`, `os_realloc` and the other file and memory calls. The image loader called `realloc` directly, and its buffer was freed by another allocator.
 - Check on a new recording of the original client at its menu with nobody playing (`build/recordings/client-menu-*`, 20 s snapshot), through the client gate: 160 functions tested, 367 calls the same as the original, 0 crashed. The two differences are the harness copy of the third party GLee and `steam_init` (known: no Steam in the client). 57 calls are skipped by the harness. Only the menu is covered. The test environment (`plat_test.c`) has a `fprintf` stub (the snapshot holds file handles of the recorded process), and `gen_system_thunks.py` also defines the shell calls and `_chdir`, `_getcwd` and `_mkdir` for the image targets. The client gate (`client_win.json`) lists the new recording and still lists the three lost ones.
 
-Not done: `sr_import` in `src/server` and in the `src/platform` files that only the server and the image targets use (`x87_math.c` needs the `_CI` math forms, and the test environment replaces the other calls). The client gate has no baseline: record a play session with the launcher and run `gate.py --target client_win --update` (ask first). The frame time against the first executable.
+Not done: the client gate has no baseline: record a play session with the launcher and run `gate.py --target client_win --update` (ask first). The frame time against the first executable.
 
 ## State on 2026-11-25
 

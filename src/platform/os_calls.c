@@ -1,10 +1,12 @@
-/* The operating system calls of the game (see sr_os.h). The native client calls the system
- * directly. The other builds go through the imports of the game: each function finds its import
- * at the first call. */
+/* The operating system calls of the game (see sr_os.h). The native client and the normal server
+ * call the system directly. The verification builds go through the imports of the game: each
+ * function finds its import at the first call. */
 #include "sr_os.h"
 
 #ifdef SR_CLIENT_NATIVE
 #include "os_calls_native.inc"
+#elif defined(SR_OS_DIRECT)
+#include "os_calls_server.inc"
 #else
 
 void *sr_import(const char *dll, const char *name);
@@ -285,6 +287,30 @@ os_sscanf_fn os_sscanf_import(void)
     if (!call)
         *(void **)&call = sr_import("MSVCR100.DLL", "sscanf");
     return call;
+}
+
+os_printf_fn os_printf_import(void)
+{
+    static os_printf_fn call;
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "printf");
+    return call;
+}
+
+char *os_getcwd(char *buffer, int size)
+{
+    static char *(__cdecl * call)(char *, int);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_getcwd");
+    return call(buffer, size);
+}
+
+int os_wsastartup(unsigned short version, void *data)
+{
+    static int(__stdcall * call)(unsigned short, void *);
+    if (!call)
+        *(void **)&call = sr_import_ordinal("WSOCK32.dll", 115);
+    return call(version, data);
 }
 
 int os_chdir(const char *path)

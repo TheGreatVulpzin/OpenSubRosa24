@@ -193,6 +193,21 @@ os_sscanf_fn os_sscanf_import(void)
     return (os_sscanf_fn)sscanf;
 }
 
+os_printf_fn os_printf_import(void)
+{
+    return (os_printf_fn)printf;
+}
+
+char *os_getcwd(char *buffer, int size)
+{
+    return _getcwd(buffer, size);
+}
+
+int os_wsastartup(unsigned short version, void *data)
+{
+    return WSAStartup(version, (LPWSADATA)data);
+}
+
 intptr_t os_findfirst64i32(const char *pattern, void *data)
 {
     return _findfirst64i32(pattern, (struct _finddata64i32_t *)data);
