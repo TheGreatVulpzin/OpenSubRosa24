@@ -22,11 +22,12 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/re'))
 import record_tables  # noqa: E402
 
-BASE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'uint8_t': 1, 'int16_t': 2, 'double': 8}
+BASE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'uint8_t': 1, 'int16_t': 2, 'uint16_t': 2, 'double': 8}
 
 # "typedef struct vec3 {...} vec3;" or "typedef union Human { struct {...}; uint8_t lf_raw[N]; } Human;"
-STRUCT_RE = re.compile(r'typedef (?:struct (\w+) \{(.*?)\}|union (\w+) \{ struct \{(.*?)\}; uint8_t lf_raw\[[^\]]+\]; \}) (\w+);', re.S)
-FIELD_RE = re.compile(r'^\s*(\w+)\s+([\w,\s]+?)(?:\[([^\]]+)\])?\s*;')
+STRUCT_RE = re.compile(r'typedef (?:struct (\w+) \{(.*?)\}|union (\w+) \{ struct \{(.*?)\}; uint8_t (?:lf_)?raw\[[^\]]+\]; \}) (\w+);', re.S)
+FIELD_RE = re.compile(r'^\s*(\w+)\s+([^;]+);')
+NAME_RE = re.compile(r'\s*(\w+)((?:\[[^\]]+\])*)\s*$')
 
 
 def array_count(text):
@@ -55,14 +56,33 @@ def parse_structs(text):
                 if part.strip():
                     decls.append((part + ';', c.group(1) if c else None))
         for decl, off in decls:
+            if '*' in decl:
+                # A pointer is 4 bytes with pack(1) in the 32-bit layout. "int (*p)[3]" is one pointer.
+                # Ghidra keeps the bytes without a field, like the unknown bytes below.
+                number = 1
+                if '(*' not in decl:
+                    for dim in re.findall(r'\[([^\]]+)\]', decl):
+                        number *= array_count(dim)
+                if off is not None and int(off, 16) != pos:
+                    raise SystemExit(f'ERROR: {name}: a pointer field says +0x{off}, pack(1) gives 0x{pos:x}')
+                pos += 4 * number
+                continue
             f = FIELD_RE.match(decl)
             if not f:
                 continue
-            typ, names, count = f.group(1), f.group(2), f.group(3)
-            count = array_count(count) if count else 0
-            for fname in (n.strip() for n in names.split(',')):
+            typ = f.group(1)
+            for index, part in enumerate(f.group(2).split(',')):
+                piece = NAME_RE.match(part)
+                if not piece:
+                    continue
+                fname = piece.group(1)
+                # One or more dimensions: "[48][3]" counts 144 elements. Each name has its own.
+                dims = re.findall(r'\[([^\]]+)\]', piece.group(2))
+                count = 1 if dims else 0
+                for dim in dims:
+                    count *= array_count(dim)
                 size = BASE_SIZE[typ] if typ in BASE_SIZE else structs[typ]['size']
-                if off is not None and int(off, 16) != pos:
+                if off is not None and index == 0 and int(off, 16) != pos:
                     raise SystemExit(f'ERROR: {name}.{fname}: comment says +0x{off}, pack(1) gives 0x{pos:x}')
                 # Byte arrays are unknown bytes (pad_, unk_): Ghidra keeps them without a field.
                 if typ != 'uint8_t':
