@@ -101,12 +101,15 @@ def show(path, name=None):
             continue
         i = 2
         when = ('at tick %s' if w[0] == 'at' else 'every %s ticks') % w[1]
+        if w[i] == 'from':
+            when += ' from tick %s' % w[i + 1]
+            i += 2
         cond = ''
-        if w[i] == 'if':
+        while w[i] == 'if':
             rva = int(w[i + 1], 0)
             name = field_name(rva)
             bad += name is None
-            cond = ' if %s == %s' % (name or hex(rva), w[i + 3])
+            cond += ' %s %s == %s' % ('if' if not cond else 'and', name or hex(rva), w[i + 3])
             i += 4
         rva = int(w[i + 1], 0)
         name = field_name(rva)

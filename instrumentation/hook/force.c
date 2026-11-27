@@ -8,12 +8,15 @@
  * One rule on each line. Text after # is a comment.
  *
  *   ticks <rva>                                  the RVA of the 4 byte tick counter of the game
- *   at <tick> [if <rva> <size> <value>] set <rva> <size> <value>
- *   every <ticks> [if <rva> <size> <value>] set <rva> <size> <value>
+ *   at <tick> [if <rva> <size> <value>]... set <rva> <size> <value>
+ *   every <ticks> [from <tick>] [if <rva> <size> <value>]... set <rva> <size> <value>
  *
- * "at" fires one time, when the tick counter reaches <tick>. "every" fires again after each period.
- * A rule with "if" waits until the condition holds. The size is 1, 2 or 4 bytes. Numbers are decimal
- * or 0x hex. A float goes in as its bit pattern (tools: instrumentation/recording/force.py).
+ * "at" fires one time, when the tick counter reaches <tick>. "every" fires as soon as its conditions
+ * hold, then again after each period. "from" delays the first fire of each round: the game sets the
+ * counter back to 0 at each new round, and some events happen in its first ticks. A rule can have up to
+ * two "if" conditions: it waits until all hold. The game thread checks the rules only when a hooked
+ * function runs, so a condition on a value that holds for one tick can be missed: use a state. The size is 1, 2 or 4 bytes. Numbers are decimal or 0x hex. A float goes in as its bit
+ * pattern (tools: instrumentation/recording/force.py).
  *
  * A write after the snapshot is not part of the snapshot. The harness compares the original code with
  * the clean code on the same state, so this does not cause a false difference.
@@ -30,14 +33,20 @@
 extern uintptr_t sr_base;
 
 #define RULE_MAX 64
+#define COND_MAX 2
+
+typedef struct ForceCond {
+    uint32_t rva, value;
+    int size;
+} ForceCond;
 
 typedef struct ForceRule {
     int every;          /* 0: "at", 1: "every" */
     uint32_t tick;      /* "at": the tick. "every": the period */
+    uint32_t from;      /* "every": the first tick of each round that can fire */
     uint32_t next;      /* the tick of the next fire */
-    int has_if;
-    uint32_t if_rva, if_value;
-    int if_size;
+    int num_conds;
+    ForceCond conds[COND_MAX];
     uint32_t rva, value;
     int size;
     int done;
@@ -118,11 +127,24 @@ static int parse_line(char *line, int line_no)
     r->every = strcmp(w[0], "every") == 0;
     r->tick = number(w[1]);
     i = 2;
-    if (i + 3 < n && strcmp(w[i], "if") == 0) {
-        r->has_if = 1;
-        r->if_rva = number(w[i + 1]);
-        r->if_size = (int)number(w[i + 2]);
-        r->if_value = number(w[i + 3]);
+    if (r->every && i + 1 < n && strcmp(w[i], "from") == 0) {
+        r->from = number(w[i + 1]);
+        i += 2;
+    }
+    while (i + 3 < n && strcmp(w[i], "if") == 0) {
+        ForceCond *c;
+        if (r->num_conds >= COND_MAX) {
+            sv_log("ERROR force: line %d has too many conditions", line_no);
+            return 0;
+        }
+        c = &r->conds[r->num_conds++];
+        c->rva = number(w[i + 1]);
+        c->size = (int)number(w[i + 2]);
+        c->value = number(w[i + 3]);
+        if (!valid_size(c->size)) {
+            sv_log("ERROR force: line %d has a wrong size in a condition", line_no);
+            return 0;
+        }
         i += 4;
     }
     if (i + 3 >= n || strcmp(w[i], "set") != 0) {
@@ -132,12 +154,13 @@ static int parse_line(char *line, int line_no)
     r->rva = number(w[i + 1]);
     r->size = (int)number(w[i + 2]);
     r->value = number(w[i + 3]);
-    if (!valid_size(r->size) || (r->has_if && !valid_size(r->if_size)) || (r->every && r->tick == 0)) {
+    if (!valid_size(r->size) || (r->every && r->tick == 0)) {
         sv_log("ERROR force: line %d has a wrong size or period", line_no);
         return 0;
     }
-    /* A repeating rule fires as soon as its condition holds. The period only spaces the repeats. */
-    r->next = r->every ? 0 : r->tick;
+    /* A repeating rule fires as soon as its conditions hold, after its "from" tick. The period only
+     * spaces the repeats. */
+    r->next = r->every ? r->from : r->tick;
     g_count++;
     return 1;
 }
@@ -169,6 +192,17 @@ static void load_rules(void)
     sv_console_event(0, "scenario forcer: %d rules", g_count);
 }
 
+static int conditions_hold(const ForceRule *r)
+{
+    int k;
+    for (k = 0; k < r->num_conds; k++) {
+        uint32_t current;
+        if (!read_value(r->conds[k].rva, r->conds[k].size, &current) || current != r->conds[k].value)
+            return 0;
+    }
+    return 1;
+}
+
 static void force_rules(void);
 
 /* Called by the recorder before each outer call of the game, on the game thread. A second thread
@@ -198,7 +232,7 @@ static void force_rules(void)
          * waits for its condition again from the start. */
         for (i = 0; i < g_count; i++)
             if (g_rules[i].every)
-                g_rules[i].next = 0;
+                g_rules[i].next = g_rules[i].from;
         g_next_check = 0;
     }
     g_last_ticks = ticks;
@@ -207,12 +241,11 @@ static void force_rules(void)
     g_next_check = 0xffffffffu;
     for (i = 0; i < g_count; i++) {
         ForceRule *r = &g_rules[i];
-        uint32_t current;
         if (r->done)
             continue;
         if (ticks >= r->next) {
-            if (r->has_if && (!read_value(r->if_rva, r->if_size, &current) || current != r->if_value)) {
-                /* The condition may hold in the next tick. */
+            if (!conditions_hold(r)) {
+                /* A condition may hold in the next tick. */
                 if (ticks + 1 < g_next_check)
                     g_next_check = ticks + 1;
                 continue;

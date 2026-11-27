@@ -2,30 +2,32 @@
 # The launcher shows each [name] in the Recording tab. The chosen scenario goes to the server folder as
 # subvulpes_force.txt. Rules: see the header of force.c. Read a scenario with names:
 #   python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt <name>
-# The tick counter of the game goes back to 0 at each resetgame.
+# The server runs 62.5 ticks each second. The tick counter goes back to 0 at each resetgame.
 
 [fast-rounds]
-# Round mode. Each round ends in about 4 minutes instead of the length of config.txt. The server runs
-# many round changes in one recording: states 1, 2 and 3, and the reset of the game.
+# Round mode. A round lasts about 95 seconds instead of the length of config.txt. The server goes through
+# states 1, 2 and 3 and resetgame again and again.
 ticks 0x90dc578
-# State 1 (teams and equipment): at 1801 ticks left the game makes missions, traffic and cars.
-every 2000 if 0x90dc560 4 1 set 0x90dc564 4 1801
-# State 2 (the round runs): 300 ticks left.
-every 600 if 0x90dc560 4 2 set 0x90dc564 4 300
-# State 3 (the end of the round): 60 ticks left, then resetgame.
-every 600 if 0x90dc560 4 3 set 0x90dc564 4 60
+# State 1 (teams and equipment): after 120 ticks (the doors close in the first tick) the timer goes to
+# 1801. One tick later it is 1800, and the game makes missions, traffic, cars and phones. The wait is 29 s.
+every 2000 from 120 if 0x90dc560 4 1 set 0x90dc564 4 1801
+# State 2 (the round runs): 3600 ticks, 58 s.
+every 4000 if 0x90dc560 4 2 set 0x90dc564 4 3600
+# State 3 (the end of the round): 300 ticks, 5 s, then resetgame.
+every 600 if 0x90dc560 4 3 set 0x90dc564 4 300
 
 [missions-now]
-# Round mode. The missions appear at the start of each round, without the wait of one minute. The round
+# Round mode. The missions appear 2 seconds into each round, without the wait of one minute. The round
 # keeps its normal length. The game makes the missions at 1800 ticks left in state 1.
 ticks 0x90dc578
-every 2000 if 0x90dc560 4 1 set 0x90dc564 4 1801
+every 2000 from 120 if 0x90dc560 4 1 set 0x90dc564 4 1801
 
 [world-clock]
 # World mode. The clock adds 10 each tick. Every 18000 units the game updates the shops and saves the
 # accounts. Every 36000 units it reduces the bans. Every 54000 units it resets the purchase limits and
 # makes missions. At 3888000 it values the assets, saves and resets. Each rule puts the clock 300 units
-# before a period, so the period comes 30 ticks later.
+# before a period, so the period comes 30 ticks later. A jump forward also ends the active missions at
+# once, because they expire against the clock.
 ticks 0x90dc578
 at 600 set 0x2561d740 4 1997700
 at 900 set 0x2561d740 4 2051700

@@ -82,6 +82,7 @@ int main(void)
     fprintf(f, "at 100 set 0x30 1 7   # one byte\n");
     fprintf(f, "every 600 if 0x20 4 2 set 0x24 4 300\n");
     fprintf(f, "every 600 if 0x20 4 3 set 0x24 4 60\n");
+    fprintf(f, "every 100 from 50 if 0x20 4 5 if 0x34 4 9 set 0x38 4 77\n");
     fprintf(f, "at 5 set 0x50 3 1\n");        /* bad size: ignored */
     fprintf(f, "nonsense line here\n");       /* bad rule: ignored */
     fclose(f);
@@ -124,6 +125,18 @@ int main(void)
     put(RVA_TIMER, 9000);
     tick_to(1);
     check(get(RVA_TIMER) == 300, "after the counter goes back an every rule fires again");
+
+    /* A rule with "from" and two conditions. */
+    put(RVA_STATE, 5);
+    put(0x34, 8);
+    put(0x38, 0);
+    tick_to(10);
+    check(get(0x38) == 0, "a rule with from waits for its tick");
+    tick_to(60);
+    check(get(0x38) == 0, "a rule with two conditions waits until both hold");
+    put(0x34, 9);
+    tick_to(61);
+    check(get(0x38) == 77, "a rule with two conditions fires when both hold");
 
     remove(path);
     printf(failures ? "FAILED: %d\n" : "all passed\n", failures);
