@@ -35,7 +35,9 @@ def main():
             continue
         base = int(m.group(1), 16)
         names = [function_of(int(m.group(2), 16), base, preferred, symbols)]
-        names += [function_of(int(a, 16), base, preferred, symbols) for a in m.group(3).split()]
+        # Another writer can cut a line (a smoke message follows the last address): keep whole addresses only.
+        names += [function_of(int(a, 16), base, preferred, symbols)
+                  for a in m.group(3).split() if re.fullmatch(r"[0-9A-Fa-f]{8}", a)]
         total += 1
         own[names[0]] += 1
         for fn in set(names):
