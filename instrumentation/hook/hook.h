@@ -39,6 +39,9 @@ void sv_console_event(int error, const char *fmt, ...);
 /* Recording size so far (record.c): calls written to sv_args.txt and its size in bytes. */
 void sv_record_stats(int *calls, long long *bytes);
 
+/* Scenario forcer (force.c): game thread, before an outer call of the game. */
+void sv_force_check(void);
+
 /* Read subvulpes.ini. Returns the value of the key, or def if the key does not exist. */
 int sv_config_int(const char *key, int def);
 

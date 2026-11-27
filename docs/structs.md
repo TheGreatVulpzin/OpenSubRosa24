@@ -1,16 +1,16 @@
 # Structs (Phase 1)
 
-Generated headers:
+Headers (plain source):
 
 - [`src/include/sr_types.h`](../src/include/sr_types.h): `Player`, `Human`, `Item`, `Object`, `Connection`, `Account`, `vec3`, `Bone`, `InventorySlot`.
 - [`src/include/sr_globals_024d.h`](../src/include/sr_globals_024d.h): RVAs of the global variables in the 024d.
 
-Do not edit the headers by hand. The flow is:
+Edit the headers directly. The flow for a new struct is:
 
 1. Decompile the whole i386 Mach-O: `instrumentation/ghidra/decompile.sh subrosa build/decomp/mac_i386_all.c`.
 2. Collect the accessed offsets: `python -I tools/re/struct_fields.py build/decomp/mac_i386_all.c --out analysis/structs/mac --struct player=0x2408 ...`.
 3. Name the fields in [`analysis/structs/names.csv`](../analysis/structs/names.csv). Each name needs evidence.
-4. Generate the headers: `python -I tools/re/gen_types.py`.
+4. Write the struct into `src/include/sr_types.h`, with a `static_assert` for each named field. `python -I tools/re/check_types.py` checks the sizes. `tools/re/gen_address_headers.py` writes `sr_globals_024d.h`.
 5. Compile `instrumentation/tests/check_types.c` with MSVC x86. The `static_assert`s check every size and every named offset.
 
 ## Why the Mach-O i386

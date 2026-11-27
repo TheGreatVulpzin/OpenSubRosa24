@@ -18,6 +18,27 @@ The launcher (`build\launcher\opensubrosa24_launcher.exe`, build it with `tools\
 
 The server snapshot needs 600 seconds of play, the client snapshot 240 seconds (`snapshot_after` in `launcher.ini` sets the server value).
 
+## Server scenarios (the forcer)
+
+A short test does not reach every state of the game. The forcer writes chosen values into the game memory at chosen ticks, on the game thread, between two calls (`instrumentation/hook/force.c`). The original server records the result like any other play.
+
+The launcher lists the scenarios in the tab Recording ("Server scenario"). The choice goes to the server folder as `subvulpes_force.txt` when the original server starts, and the file moves to `logs\<test>` with the recording. With "None" there is no file and the game is not changed.
+
+| Scenario | Mode | Effect |
+| --- | --- | --- |
+| `fast-rounds` | Round | A round ends in about 4 minutes. The server goes through states 1, 2 and 3 and `resetgame` many times. |
+| `missions-now` | Round | The missions, traffic and team cars appear as soon as state 1 starts. The round keeps its length. |
+| `world-clock` | World | The world clock jumps 30 ticks before each period of 54000 units (shops, bans, missions) and before the end of the world. |
+
+Read a scenario with the field names: `python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt fast-rounds`. `force.py find game.timer` gives the RVA and the size for a new rule. A new scenario is a new `[name]` section in `instrumentation/recording/scenarios.txt`. The rules are numbers, so the recorder needs no table of names. The format is at the top of `force.c`, and `instrumentation/tests/test_force.c` tests it.
+
+Limits:
+
+- The forcer writes memory. It cannot call a function, so it cannot choose the kind of a mission. A player can use the admin chat commands (`/resetgame`, `/cash`, `/arm`, `/give`) for more.
+- A write after the snapshot is not in the snapshot. The harness compares the original code with the clean code on the same state, so this gives no false difference. A state that only a late write creates may not replay as it ran. Put the writes that must be in the snapshot before `snapshot_after`.
+- The game sets the tick counter back to 0 at each `resetgame`. A rule with `every` starts again from the first tick of the new round. A rule with `at` fires one time.
+- The forcer was tested only on a fake image (`test_force.exe`). The first run on the original server is the real test: check `subvulpes.log` for the lines `force: tick ... wrote`.
+
 The sections below say what the old recordings held and what the player does.
 
 ## Server (024d)

@@ -26,5 +26,9 @@ them first, before it starts the server.
 
 Each `record_*.bat` file writes `subvulpes.ini` for its mode, so do not edit that file.
 
+To force a state of the game (a short round, missions at once), put the rules of one section of
+`scenarios.txt` into `subvulpes_force.txt` in the server folder. The launcher does this when you choose
+a server scenario. See `docs/rerecord.md`.
+
 The recording has player names, chat and the server `config.txt`. Keep it in `build/`.
 Never commit it and never post it in public.

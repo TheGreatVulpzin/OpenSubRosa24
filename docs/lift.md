@@ -129,7 +129,7 @@ The Ghidra symbol map often keeps the listing type of a global (`undefined4`). T
 
 The lifter reads the types that the Ghidra project has. Better types give better pseudo-C for all functions, so the project holds them and `lift.py` has no text rule for them.
 
-1. `tools/re/gen_types.py` makes `src/include/sr_types.h` from `analysis/structs/names.csv`. Add a known field to the CSV, never to the header.
+1. `src/include/sr_types.h` is plain source. Add a known field there and to `analysis/structs/names.csv`. `tools/re/check_types.py` checks the sizes against the frozen header.
 2. `instrumentation/ghidra/types_json.py` reads the header and writes a JSON file. `instrumentation/ghidra/ApplyTypes.java` puts the structs and the global arrays (`g_human`, `g_object`, `g_objecttype`... with the `g_` prefix) into the project. Run both after each change to the structs or the globals.
 3. In `sr_types.h` each struct is a union with `lf_raw[size]`. A byte array that has no field in Ghidra prints as `field_0x5350`. `LiftExport.java` prints it as `lf_raw[0x5350]`, so the C compiles with the same layout.
 

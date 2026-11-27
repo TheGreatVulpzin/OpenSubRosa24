@@ -15,7 +15,7 @@ import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TYPES = runpy.run_path(str(ROOT / 'tools/re/gen_types.py'))
+TYPES = runpy.run_path(str(ROOT / 'tools/re/record_tables.py'))
 
 
 def schema():

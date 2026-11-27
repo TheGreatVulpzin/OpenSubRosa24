@@ -36,7 +36,7 @@ build/package/OpenSubRosa24-server-v0.0.2-test.zip
 build/package/OpenSubRosa24-server-v0.0.2-test.zip.sha256
 ```
 
-The package contains three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt`, `recording_functions.csv`, `readme.txt` and `data/`. It has no `config.txt`.
+The package contains three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt`, `recording_functions.csv`, `recording_scenarios.txt`, `readme.txt` and `data/`. It has no `config.txt`.
 `version.txt` contains the version tag, short commit hash and UTC package date.
 The script checks paths, executable formats, game binary hashes, public defaults and the final zip entries.
 It rejects private configuration and unexpected files left by an earlier run.
@@ -51,7 +51,7 @@ Screenshots go to `build/launcher-screens/`. Test network errors and checksum fa
 The launcher test uses the real package version for its screenshots.
 A full automatic update needs a newer published release with its server zip and `.zip.sha256` asset.
 
-The launcher updates only the three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt` and `recording_functions.csv`.
+The launcher updates only the three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt`, `recording_functions.csv` and `recording_scenarios.txt`.
 It saves old files under `backup/`. It keeps `config.txt`, `data/`, `readme.txt` and `user/`.
 For a first installation, extract the complete package into a new directory.
 Older launchers do not install the renamed server executable.

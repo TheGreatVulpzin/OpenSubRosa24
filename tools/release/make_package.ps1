@@ -39,6 +39,7 @@ $sources = [ordered]@{
     'LEIA-ME.txt' = 'tools\release\LEIA-ME.txt'
     'record_focus.txt' = 'instrumentation\recording\record_focus.txt'
     'recording_functions.csv' = 'instrumentation\recording\functions.csv'
+    'recording_scenarios.txt' = 'instrumentation\recording\scenarios.txt'
     'readme.txt' = 'tools\release\newspaper.txt'
 }
 $allowed = @($sources.Keys) + @('version.txt')

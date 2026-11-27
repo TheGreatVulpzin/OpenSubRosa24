@@ -19,7 +19,7 @@ Only the separate recording target uses `instrumentation/standalone/record_shim.
 Write clean C for one step of a group plan. User gives plan file (`plans/group<N>.md` in the package) and step number. Each plan step lists functions, names to add, rounding points, NaN compare forms, dead code, quirks to keep.
 
 1. Read Names section and section of your step. Read `plans/names-8.md` for groups 8A, 8B, 8C. Never give a second name to an offset that `analysis/structs/names.csv` already names.
-2. Add names to `analysis/structs/names.csv` (or `tools/re/gen_types.py` for custom type), then run `python -I tools/re/gen_types.py`.
+2. Add names to `src/include/sr_types.h` and `analysis/structs/names.csv`, then run `python -I tools/re/check_types.py`.
 3. Write clean C in `src/game`, `src/common` or `src/net`, as plan says. Remove the `lf_XXXXX` alias of each function from its callers. Follow comment rules of `CLAUDE.md` (step 3 of workflow).
 4. If you have clang, check syntax: `clang -m32 -fsyntax-only -Isrc/include -Isrc/common -Isrc/game -Isrc/net <file>`. This check proves nothing about the result.
 5. Make one commit per step, in English. Do not push. Message names group and step. Report lists functions, new names, each place where you were unsure of a rounding point.

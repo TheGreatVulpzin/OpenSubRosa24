@@ -434,7 +434,7 @@ The client keeps the game record (`game`, RVA 0x9065300) in the type `GameClient
 - From +0x257d8 to +0x257e3 (the spectator, the death camera and a debug switch) the offsets are the same. The client has 4 more bytes between +0x22fd8 and +0x257d8.
 - From +0x257e4 on (the count of checkpoints, the checkpoints and the count of newspapers) each field sits 4 bytes before the server field. The record has 0x25d60 bytes. The server record has 0x25d64.
 - Shared code that needs `end_time` reads `sr_game_end_time`. In the server it is the field. In the client it is a private variable, because the client never reads it.
-- `tools/re/gen_types.py` makes `GameClient` from the names of `Game` (`game_client_offset`). A new field of `Game` gets its client offset from that function.
+- `GameClient` in `src/include/sr_types.h` is written by hand. A new field of `Game` needs its own place in `GameClient`, at the client offset.
 - Test: `deleteplayer` wrote the team manager 4 bytes away with `Game`. With `GameClient` it gives the same result on 60 calls. `playerteamkilltax` went from 31 to 1 different call of 60 for the same reason.
 - `generatetrinormal` of the client rounds the two edges of the triangle to floats before the cross product. The server code keeps some edge terms in x87 precision. On a curved model the normals differ in the last bit. The client follows the server code. The harness lists `setupmodel`, `createtypemodel`, `createbulletmodel`, `createcashmodel`, `createheadmodel2`, `createheadmodel3` and `createkeymodel` as known differences: their models go to the heap, and the heap test is exact. With the rounding of the client, all 21 recorded calls of the seven model builders are the same.
 - `playerteamkilltax` takes a larger share of the money in the server code. The client does not write the team kill rate. The server never sends this result to a player, so the client follows the server code. The harness lists it as a known difference.
@@ -457,7 +457,7 @@ The client keeps the game record (`game`, RVA 0x9065300) in the type `GameClient
 
 `src/client/image/` contains PNG, zlib, baseline JPEG, BMP, PSD and HDR decoders, bitmap fonts and byte operations. Each topic has a source file and a public header. The [image documentation](client/README.md) describes the records, supported formats, row filters, channel conversion and font metrics.
 
-All 48 functions are active in `analysis/client_win/adopted_C1.txt`. The pending list has no functions. The fields of nine image and font records are in `analysis/structs/names.csv`. `tools/re/gen_types.py` supplies `sr_image_types.h`. Client data addresses are in `analysis/client_win/group_globals_C1.csv`.
+All 48 functions are active in `analysis/client_win/adopted_C1.txt`. The pending list has no functions. The fields of nine image and font records are in `analysis/structs/names.csv`. `src/include/sr_image_types.h` holds them. Client data addresses are in `analysis/client_win/group_globals_C1.csv`.
 
 The loaders run on demand. PNG accepts eight-bit samples, five row filters, palette transparency and Adam7. JPEG accepts baseline frames. PSD accepts raw and PackBits planes. HDR supplies float samples. Font atlases retain their glyph widths and float coordinate stores.
 

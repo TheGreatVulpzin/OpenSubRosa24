@@ -8,7 +8,7 @@ add_library(sv_wsock32 SHARED
     instrumentation/hook/console.c
     instrumentation/hook/hooks_024d.c
     instrumentation/hook/verify.c
-    instrumentation/hook/record.c
+    instrumentation/hook/record.c instrumentation/hook/force.c
     instrumentation/hook/capture.c
     instrumentation/hook/imports.c
     instrumentation/hook/hooks_lifted.c
@@ -75,7 +75,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
    AND EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/hooks_record.c)
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
         src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
-        instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
+        instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/force.c instrumentation/hook/record_imports.c
         instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
@@ -89,7 +89,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
 
     # Offline harness for the client: the same program as the server harness, with the client sources.
     add_executable(harness_client instrumentation/tests/harness.c instrumentation/client/check_image_io.c instrumentation/hook/verify.c instrumentation/hook/hook.c
-        instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
+        instrumentation/hook/record.c instrumentation/hook/force.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
         instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
         src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform src/client instrumentation/platform
@@ -135,14 +135,20 @@ add_executable(check_types instrumentation/tests/check_types.c)
 target_include_directories(check_types PRIVATE src/include)
 target_compile_options(check_types PRIVATE /W4 /WX /utf-8)
 
-add_executable(test_verify instrumentation/tests/test_verify.c instrumentation/hook/verify.c instrumentation/hook/hook.c instrumentation/hook/console.c instrumentation/hook/record.c)
+add_executable(test_verify instrumentation/tests/test_verify.c instrumentation/hook/verify.c instrumentation/hook/hook.c instrumentation/hook/console.c instrumentation/hook/record.c instrumentation/hook/force.c)
 target_include_directories(test_verify PRIVATE src/include instrumentation/hook instrumentation/runtime)
 target_compile_options(test_verify PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(test_verify PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
 
+# Test of the scenario forcer on a fake game image.
+add_executable(test_force instrumentation/tests/test_force.c instrumentation/hook/force.c)
+target_include_directories(test_force PRIVATE src/include instrumentation/hook)
+target_compile_options(test_force PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(test_force PRIVATE _CRT_SECURE_NO_WARNINGS)
+
 # Offline differential test: loads the 024d as a library, fills .data from a snapshot and
 # compares each lifted function with the original on recorded calls (instrumentation/tests/harness.c).
-add_executable(harness instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c instrumentation/hook/console.c instrumentation/hook/record.c instrumentation/hook/imports.c
+add_executable(harness instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c instrumentation/hook/console.c instrumentation/hook/record.c instrumentation/hook/force.c instrumentation/hook/imports.c
     instrumentation/tests/harness_ui.c instrumentation/platform/plat_test.c src/server/accounts.c src/server/events.c src/server/players.c src/lifted/lifted_024d.c src/lifted/lifted_table.c src/platform/x87_math.c ${SV_REWRITTEN_SOURCES})
 target_include_directories(harness PRIVATE src/include src/lifted src/platform instrumentation/platform instrumentation/hook instrumentation/runtime ${SV_REWRITTEN_INCLUDES})
 target_compile_options(harness PRIVATE /W4 /WX /utf-8)
@@ -171,7 +177,7 @@ set_property(TARGET game_record PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<
 add_executable(subvulpes-server-record src/standalone/main.c instrumentation/standalone/memory.c instrumentation/standalone/image_024d.c instrumentation/standalone/fn_table.c
     $<TARGET_OBJECTS:game_record> src/lifted/lifted_table.c src/platform/x87_math.c
     src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c
-    src/platform/plat_imports.c instrumentation/standalone/record_shim.c instrumentation/hook/record.c instrumentation/hook/record_imports.c)
+    src/platform/plat_imports.c instrumentation/standalone/record_shim.c instrumentation/hook/record.c instrumentation/hook/force.c instrumentation/hook/record_imports.c)
 target_include_directories(subvulpes-server-record PRIVATE src/include src/lifted src/standalone src/platform instrumentation/standalone instrumentation/hook instrumentation/runtime ${SV_REWRITTEN_INCLUDES})
 target_compile_options(subvulpes-server-record PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server-record PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE SR_RECORD SR_TEST_MEMORY)

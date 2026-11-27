@@ -14,7 +14,7 @@ The client keeps the game record at RVA 0x9065300. It has 0x25d60 bytes. The ser
 | +0x257e4 to the end (checkpoints, count of newspapers) | 4 bytes before the server field |
 
 - The client has no `end_time`. A team record has 0x117c bytes in both records.
-- `tools/re/gen_types.py` builds `GameClient` from the names of `Game` (`game_client_offset`). A new field of `Game` gets its client offset from that function.
+- `GameClient` in `src/include/sr_types.h` is written by hand. A new field of `Game` needs its own place in `GameClient`, at the client offset.
 - The game tick sits in `Game+0x34` in the client. The shared code reads `sr_game_ticks`. In the server it is `Game.ticks`.
 - `client_account_key` (client `Game+0x25d48`): the host menu copies the key of the account store here. The join menu copies the key of the chosen server.
 
@@ -25,7 +25,7 @@ The client keeps the option record at RVA 0x90630e0. It has 0x150 bytes.
 - The client has no `gametype` (server +0x118). Every field after it sits 4 bytes before the server field.
 - `roundtime` +0x118, `setcpuaffinity` +0x11c, `occlusion` +0x120, `voicemin` +0x124. `help` +0x138, `voiceboost` +0x140, `voiceboost_scale` +0x144. `maxnumofplayers` (+0x114) is the same.
 - Shared code reads the game type through `sr_option_gametype(record)`. In the client it is a private variable.
-- `tools/re/gen_types.py` builds `OptionClient` (`option_client_offset`).
+- `OptionClient` in `src/include/sr_types.h` is written by hand, at the client offsets.
 
 ## Macros of the adapter
 

@@ -59,7 +59,7 @@ To open the project in the GUI, run `E:\tools\ghidra_12.1.4_PUBLIC\ghidraRun.bat
 After the analysis, put the structs and the global arrays into the project (run again after each change to `analysis/structs/names.csv` or the globals CSVs):
 
 ```bash
-python -I tools/re/gen_types.py
+python -I tools/re/check_types.py
 python -I instrumentation/ghidra/types_json.py
 source instrumentation/ghidra/env.sh
 "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis \

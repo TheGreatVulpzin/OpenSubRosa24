@@ -326,6 +326,13 @@ namespace SubVulpes
             Check(untestedLines == handLines, "Focus list: only the hand list is untested (" + untestedLines + " of " + handLines + ")");
             Call(form, "WriteFocus", "server", focusFile);
             Check(File.ReadAllLines(focusFile).Length == focusLines.Length, "Focus list: a second run does not grow the file");
+            // The scenarios of the forcer: one file, one [name] section for each.
+            File.Copy(Path.Combine(repo, @"instrumentation\recording\scenarios.txt"), Path.Combine(root, "recording_scenarios.txt"), true);
+            var scenarios = (Dictionary<string, string>)Call(form, "ReadScenarios");
+            Check(scenarios.ContainsKey("fast-rounds") && scenarios.ContainsKey("missions-now") && scenarios.ContainsKey("world-clock"),
+                  "Scenarios: the file lists fast-rounds, missions-now and world-clock");
+            Check(scenarios["fast-rounds"].Contains("every 2000") && !scenarios["fast-rounds"].Contains("["),
+                  "Scenarios: a scenario holds only its own rules");
             Field<CheckBox>(form, "debugModeBox").Checked = true;
             mainTabs.SelectedTab = pages["Debug"];
             await Capture(form, "07-debug-test", "Debug");
@@ -396,6 +403,12 @@ namespace SubVulpes
         // stays open for a few seconds, closes, and the launcher saves its recording. No server runs.
         static async Task ClientSmoke(LauncherForm form)
         {
+            // The scenario list of the server. It needs no server to be read.
+            string scenarioFile = Path.Combine(root, "recording_scenarios.txt");
+            File.Copy(Path.GetFullPath(Path.Combine(root, @"..\..\..\instrumentation\recording\scenarios.txt")), scenarioFile, true);
+            var listed = (Dictionary<string, string>)Call(form, "ReadScenarios");
+            Check(listed.ContainsKey("fast-rounds") && listed["fast-rounds"].Contains("every 2000") && !listed["fast-rounds"].Contains("["),
+                  "Scenarios: the file lists fast-rounds with its own rules");
             Field<CheckBox>(form, "debugModeBox").Checked = true;
             Click(form, "recStartClient");
             await Wait(() => Field<Process>(form, "client") != null || Field<Label>(form, "message").Text.Length > 0, 30000, "the launcher answers to Start the client");

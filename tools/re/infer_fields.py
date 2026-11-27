@@ -13,7 +13,7 @@ An offset with two access sizes, or with float and signed/unsigned/fint votes, i
 "mixed" and gets no field: it shows in the report for a person to check.
 
 Output: analysis/structs/024d/<global>.csv (offset, type, uses, n_funcs, funcs) for
-tools/re/gen_types.py, which makes unk_XXXX fields from it. --test compares the result with
+the people who write the headers. --test compares the result with
 the fields of analysis/structs/names.csv and prints each disagreement.
 
 Usage:

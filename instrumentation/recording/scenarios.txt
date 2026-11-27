@@ -1,0 +1,35 @@
+# Scenarios of the forcer (instrumentation/hook/force.c).
+# The launcher shows each [name] in the Recording tab. The chosen scenario goes to the server folder as
+# subvulpes_force.txt. Rules: see the header of force.c. Read a scenario with names:
+#   python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt <name>
+# The tick counter of the game goes back to 0 at each resetgame.
+
+[fast-rounds]
+# Round mode. Each round ends in about 4 minutes instead of the length of config.txt. The server runs
+# many round changes in one recording: states 1, 2 and 3, and the reset of the game.
+ticks 0x90dc578
+# State 1 (teams and equipment): at 1801 ticks left the game makes missions, traffic and cars.
+every 2000 if 0x90dc560 4 1 set 0x90dc564 4 1801
+# State 2 (the round runs): 300 ticks left.
+every 600 if 0x90dc560 4 2 set 0x90dc564 4 300
+# State 3 (the end of the round): 60 ticks left, then resetgame.
+every 600 if 0x90dc560 4 3 set 0x90dc564 4 60
+
+[missions-now]
+# Round mode. The missions appear at the start of each round, without the wait of one minute. The round
+# keeps its normal length. The game makes the missions at 1800 ticks left in state 1.
+ticks 0x90dc578
+every 2000 if 0x90dc560 4 1 set 0x90dc564 4 1801
+
+[world-clock]
+# World mode. The clock adds 10 each tick. Every 18000 units the game updates the shops and saves the
+# accounts. Every 36000 units it reduces the bans. Every 54000 units it resets the purchase limits and
+# makes missions. At 3888000 it values the assets, saves and resets. Each rule puts the clock 300 units
+# before a period, so the period comes 30 ticks later.
+ticks 0x90dc578
+at 600 set 0x2561d740 4 1997700
+at 900 set 0x2561d740 4 2051700
+at 1200 set 0x2561d740 4 2105700
+at 1500 set 0x2561d740 4 2159700
+at 1800 set 0x2561d740 4 2213700
+at 2100 set 0x2561d740 4 3887700

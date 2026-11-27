@@ -1,7 +1,7 @@
 /* The record types of the lifted C (src/lifted/lifted_024d.c and the lifted-style files of
  * src/game), frozen on 2026-10-19 as a copy of src/include/sr_types.h. Do not edit it and do
  * not regenerate it: the lifted C uses these names. New names go only into sr_types.h (the
- * clean code). tools/re/gen_types.py checks that each record has the same size in both.
+ * clean code). tools/re/check_types.py checks that each record has the same size in both.
  *
  * 32-bit layout of Sub Rosa 0.24 (equal in the i386 Mach-O and in the 024d PE).
  */

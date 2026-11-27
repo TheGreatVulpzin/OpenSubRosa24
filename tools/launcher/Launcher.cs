@@ -298,7 +298,7 @@ namespace SubVulpes
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
             "opensubrosa24_server.exe", "opensubrosa24_server_record.exe", "opensubrosa24_launcher.exe", "LEIA-ME.txt", "version.txt",
-            "record_focus.txt", "recording_functions.csv"
+            "record_focus.txt", "recording_functions.csv", "recording_scenarios.txt"
         };
 
         static readonly Preset[] Presets = {

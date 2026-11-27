@@ -14,7 +14,7 @@ The client table (`src/lifted/client/lifted_table.c`) holds one C function for e
 | `analysis/client_win/adopted_C<n>.txt` | The functions of group C<n> that use clean code. One line each: `name path`. `lift.py` reads every `adopted*.txt`. The file `adopted.txt` is group C0. |
 | `analysis/client_win/adopted_C<n>_pending.txt` | Functions that are written but that no test reaches yet. They stay lifted. |
 | `analysis/client_win/group_globals_C<n>.csv` | Globals that only the client has: `name,type,count,client_rva,evidence`. The clean code reads them as `cl_data_<name>`. |
-| `analysis/structs/names.csv`, `tools/re/gen_types.py` | Names of fields and types. Run `gen_types.py` after a change. |
+| `analysis/structs/names.csv`, `src/include/sr_types.h` | Names of fields and types. Change both, then run `tools/re/check_types.py`. |
 | `analysis/client_win/manual_names.csv` | Names of functions (`rva,name,evidence`). |
 | `src/client/client.h` | `CL_FN(va, type)` calls a function that is still lifted. |
 | `src/client/<system>/*.c` | Clean code that only the client has, in one folder for each system (see "Folders"). One file for each topic (`image/png.c`, `image/jpeg.c`, `image/fonts.c`). |
@@ -57,7 +57,7 @@ The clean client code must be as tidy as the clean server code. Models: `src/gam
 
 - One `.c` and one `.h` for each topic, in the folder of its system. The header has a one line comment, the include guard and only the functions that other files use, grouped by source file. What only the `.c` uses is `static`.
 - The `.c` starts with a comment of 3 to 8 lines about the system (what it does, the format, who calls it). Each function has a short comment: what it does and when it fails.
-- No `unk_`, `local_`, `iVar`, `param_` names and no loose magic numbers. Structs have named fields (`analysis/structs/names.csv`, `tools/re/gen_types.py`). Constants have names.
+- No `unk_`, `local_`, `iVar`, `param_` names and no loose magic numbers. Structs have named fields (`src/include/sr_types.h`, `analysis/structs/names.csv`). Constants have names.
 - A function keeps the name it has in the Linux client (`original/client/subrosa.x64`). New helpers get short, clear English names.
 - A big function may split into small `static` helpers. The function of the table keeps its name, arguments and result.
 - No dead code, no commented code, no repeated blocks. Exception: keep a line that looks dead when it changes memory that the game reads later or decides a result. Say in plain words what it does. The technical reason goes to the page in `docs/client/`.

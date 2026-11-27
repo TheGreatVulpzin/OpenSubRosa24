@@ -10,7 +10,7 @@
 //   unsigned CMP followed by JB/JA/JBE/JAE/SETB..., or MOVZX
 //   int     any other access (MOV, ADD...): an integer or raw bytes
 // Output (TSV): global, offset, size, kind, function. tools/re/infer_fields.py turns it into
-// analysis/structs/024d/<global>.csv for tools/re/gen_types.py.
+// analysis/structs/024d/<global>.csv for the people who name the fields.
 //
 // Headless: -postScript InferFields.java <types.json> <output.tsv>
 // @category SubVulpes

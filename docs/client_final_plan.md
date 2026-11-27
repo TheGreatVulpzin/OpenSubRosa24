@@ -8,6 +8,14 @@ The end state is a source tree that reads like the original source of the game. 
 opens a file, reads it, and changes it. No custom layer stands between the code and the compiler:
 no hook macro, no call by address, no storage adapter, no generated offset.
 
+## State on 2026-11-27
+
+- The native client with guard bytes (`bash tools/native_test.sh --guard --hidden menus play crash buildings level model`): all six scenarios pass and no guard fires.
+- Frame time at the main menu, measured as the CPU time of the process in 30 seconds (same folder and options, 5 runs of 30 seconds each, script not versioned). The original client used 18.5 to 30.6 percent of one core (mean 24.6). The native client used 16.0 to 29.0 percent (mean 20.6). The runs vary a lot, and some ran while a build was running. The native client is not slower at the menu. A scene with play (city, fight) is not compared yet.
+- The type headers are plain source. `tools/re/gen_types.py` is gone. `tools/re/record_tables.py` holds the record sizes and the array capacities, `tools/re/check_types.py` compares the headers with each other, and `tools/re/gen_address_headers.py` writes only the two address headers of the verification targets. A new field goes into `src/include/sr_types.h` and `analysis/structs/names.csv`. `GameClient` and `OptionClient` are written by hand now.
+- `instrumentation/recording/force.py` and `instrumentation/hook/force.c` make the scenario forcer for recordings (`docs/rerecord.md`).
+- Not done: `instrumentation/ghidra/types_json.py` does not parse the current header (`ClientTeamArea`, `TrackPiece`). It was already stale before the cut. Fix it before the next `ApplyTypes` run.
+
 ## State on 2026-11-26
 
 Phases B to F are done in the code of the client:

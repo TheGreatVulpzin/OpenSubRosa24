@@ -33,7 +33,7 @@ try {
     $launcher = [IO.File]::ReadAllText((Join-Path $repo 'tools\launcher\Launcher.cs'))
     $list = [regex]::Match($launcher, '(?s)string\[\] UpdateFiles\s*=\s*\{(.*?)\}').Groups[1].Value
     $names = @([regex]::Matches($list, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
-    Assert ($archive.Entries.Count -eq 13) 'Expected eight root files and five data files.'
+    Assert ($archive.Entries.Count -eq 14) 'Expected nine root files and five data files.'
     Assert ($null -eq $archive.GetEntry("OpenSubRosa24-server-$version/config.txt")) 'The package must not include config.txt.'
     $executables = @($archive.Entries | Where-Object { $_.Name.EndsWith('.exe') } | ForEach-Object Name | Sort-Object)
     $expectedExecutables = @('opensubrosa24_server.exe', 'opensubrosa24_server_record.exe', 'opensubrosa24_launcher.exe') | Sort-Object

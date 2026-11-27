@@ -450,6 +450,8 @@ void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
         if (g_rec_every < 1)
             g_rec_every = 1;
     }
+    if (d == 0)
+        sv_force_check();
     if (g_rec_trace)
         sv_log("rec begin %x depth %d", rva, t_depth);
     if (d < RET_MAX)

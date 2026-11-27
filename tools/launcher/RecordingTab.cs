@@ -29,7 +29,7 @@ namespace SubVulpes
         const int FocusMax = 150;
 
         List<RecFunction> recFunctions;
-        ComboBox recSide;
+        ComboBox recSide, recScenario;
         CheckBox recMissingOnly, recWithServer;
         ListView recList;
         Label recSummary;
@@ -79,7 +79,14 @@ namespace SubVulpes
             var refresh = new Button { Text = "Refresh", AutoSize = true };
             refresh.Click += delegate { RefreshChecklist(); };
             recSummary = new Label { AutoSize = true, Margin = new Padding(12, 7, 3, 3) };
-            bar.Controls.AddRange(new Control[] { recSide, recMissingOnly, refresh, recSummary });
+            recScenario = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 140 };
+            recScenario.Items.Add(NoScenario);
+            foreach (string name in ReadScenarios().Keys) recScenario.Items.Add(name);
+            int chosen = recScenario.Items.IndexOf(settings.Get("scenario", NoScenario));
+            recScenario.SelectedIndex = chosen < 0 ? 0 : chosen;
+            recScenario.SelectedIndexChanged += delegate { settings.Set("scenario", recScenario.Text); settings.Save(); };
+            bar.Controls.AddRange(new Control[] { recSide, recMissingOnly, refresh,
+                new Label { Text = "Server scenario", AutoSize = true, Margin = new Padding(12, 7, 3, 3) }, recScenario, recSummary });
             page.Controls.Add(bar, 0, 1);
 
             recList = new ListView { Dock = DockStyle.Fill, View = View.Details, CheckBoxes = true, FullRowSelect = true, ShowGroups = true };
@@ -294,7 +301,41 @@ namespace SubVulpes
 
         // ------------------------------------------------------------ the original server
 
-        static readonly string[] RecordFiles = { "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin", "subvulpes.log", "subvulpes.ini" };
+        static readonly string[] RecordFiles = { "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin", "subvulpes.log", "subvulpes.ini", "subvulpes_force.txt" };
+
+        const string NoScenario = "None";
+
+        string ScenarioFile()
+        {
+            foreach (string path in new[] {
+                Path.Combine(launcherFolder, "recording_scenarios.txt"),
+                Path.GetFullPath(Path.Combine(launcherFolder, @"..\..\instrumentation\recording\scenarios.txt")) }) {
+                if (File.Exists(path)) return path;
+            }
+            return null;
+        }
+
+        // The scenarios of the forcer (instrumentation/hook/force.c): "[name]" starts one, its rules follow.
+        // The name maps to the text of the rules.
+        Dictionary<string, string> ReadScenarios()
+        {
+            var scenarios = new Dictionary<string, string>();
+            string path = ScenarioFile();
+            if (path == null) return scenarios;
+            string name = null;
+            var text = new StringBuilder();
+            foreach (string line in File.ReadAllLines(path)) {
+                if (line.StartsWith("[")) {
+                    if (name != null) scenarios[name] = text.ToString();
+                    name = line.Trim().Trim('[', ']');
+                    text.Clear();
+                } else if (name != null) {
+                    text.Append(line).Append("\r\n");
+                }
+            }
+            if (name != null) scenarios[name] = text.ToString();
+            return scenarios;
+        }
 
         // The image base of a 32-bit exe. The recording needs the copy with the fixed base address (tools/re/fixed_base.py).
         static uint ImageBase(string exe)
@@ -347,6 +388,13 @@ namespace SubVulpes
                 "[hooks]\r\nenabled=1\r\nverify=0\r\noriginal_only=1\r\nown_main=0\r\nlog_calls=0\r\nlifted=1\r\n" +
                 "record_args=1\r\nrecord_imports=1\r\nsnapshot_after=" + settings.Get("snapshot_after", "600") + "\r\n" +
                 "capture_packets=0\r\nnet_guard=1\r\nrecord_total_mb=" + settings.Get("record_total_mb", "100") + "\r\n", Encoding.ASCII);
+            // The forcer reads this file when the server starts. No file, no change of the game.
+            string scenario = recScenario.Text;
+            string rules;
+            if (scenario != NoScenario && ReadScenarios().TryGetValue(scenario, out rules)) {
+                File.WriteAllText(Path.Combine(folder, "subvulpes_force.txt"), rules, Encoding.ASCII);
+                AddLine("[launcher] Scenario " + scenario + ": the server forces game values (see subvulpes_force.txt).");
+            }
         }
 
         // When the original server closes, its files go to the folder of the test.
