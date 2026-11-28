@@ -44,7 +44,7 @@ A bot is a player without a person (`instrumentation/recording/bot.py`). It send
 - Round mode: the bot picks a team in menu 2 and marks itself ready. Each round loads and saves its inventory.
 - `--snapshot S` makes the recorder write `sv_snapshot.bin` while the bot is in the game, so the harness has a state with a player.
 - The bot works only with the original server of the recorder (fixed image base). Never run it on a server with real players.
-- `python -I instrumentation/recording/bot.py --viz ...` draws the world in the terminal with ANSI colors and 3D wireframes (`tools/net/viz.py`).
+- `python -I instrumentation/recording/bot.py --viz ...` draws the world in the terminal with ANSI colors and 3D wireframes (`tools/net/viz.py`). `--console` shows the same view inside an operator console with green phosphor panels (players, teams, event log, the call counters of the recorder), `tools/net/mainframe.py`. Use a terminal of at least 100 columns and 30 lines, and run Python with `-X utf8` on Windows.
 
 Read a scenario with the field names: `python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt fast-rounds`. `force.py find game.timer` gives the RVA and the size for a new rule. A new scenario is a new `[name]` section in `instrumentation/recording/scenarios.txt`. The rules are numbers, so the recorder needs no table of names. The format is at the top of `force.c`, and `instrumentation/tests/test_force.c` tests it.
 

@@ -20,6 +20,7 @@ Arguments:
   --leave            send the disconnect at the end. Without it the server drops the bot after 20 s
   --rejoin S         join again with the same account after S seconds (inventory load and save)
   --viz              draw the world in the terminal (tools/net/viz.py)
+  --console          mainframe style console with panels (tools/net/mainframe.py), --no-boot skips the boot text
 
 Only the original server (fixed image base 0x20000000) is supported. Run it on the test server of
 the recorder, never on a server with real players.
@@ -67,6 +68,17 @@ SHOP = ([(3, 1)] + [(4, v) for v in (1, 2, 3, 4, 16)] +
         [(3, 3), (7, 1), (7, 2), (7, 16)] +
         [(3, 5)] + [(8, v) for v in (1, 3, 5, 2, 4, 16)] +
         [(3, 4)] + [(11, v) for v in (1, 2, 7, 16)])
+
+LOG = None          # list of lines while the console screen is on, else messages go to stdout
+
+
+def say(text):
+    if LOG is None:
+        print(text)
+    else:
+        LOG.append(str(text))
+        del LOG[:-40]
+
 
 k32 = ctypes.WinDLL('kernel32', use_last_error=True)
 k32.OpenProcess.restype = wintypes.HANDLE
@@ -161,6 +173,14 @@ class Bot:
         self.boxes = []
         self.last_draw = 0.0
         self.team_picked = False
+        self.console = None         # tools/net/mainframe.py, set by --console
+        self.mem = None
+        self.calls = {}
+        self.calls_pos = 0
+        self.calls_path = None
+        self.names = None
+        self.tick_mark = (time.time(), 0)
+        self.tps = 0.0
         self.snapshot_at = None
 
     def send(self, packet):
@@ -205,7 +225,7 @@ class Bot:
             # The recorder of the server takes the snapshot when this file appears.
             open(os.path.join(self.args.folder, 'snapshot_now.txt'), 'w').close()
             self.snapshot_at = None
-            print('snapshot requested')
+            say('snapshot requested')
 
     def draw(self):
         now = time.time()
@@ -213,8 +233,46 @@ class Bot:
             return
         self.last_draw = now
         me = self.state.human if self.state.human != -1 else None
-        sys.stdout.write('\x1b[H' + self.viewer.render(self.state, self.boxes, me=me))
+        if self.console is not None:
+            frame = self.console.render(self.state, self.boxes, me=me, extra=self.extra())
+        else:
+            frame = self.viewer.render(self.state, self.boxes, me=me)
+        sys.stdout.write('\x1b[H' + frame)
         sys.stdout.flush()
+
+    def count_calls(self):
+        """Count the calls that the recorder of the server has written since the last look."""
+        if self.calls_path is None or not os.path.exists(self.calls_path):
+            return
+        if self.names is None:
+            import csv
+            table = Path(__file__).resolve().parents[2] / 'analysis' / '024d' / 'functions.csv'
+            with open(table, encoding='utf-8') as handle:
+                self.names = {int(r['rva'], 16): r['name'] for r in csv.DictReader(handle)}
+        with open(self.calls_path, 'rb') as handle:
+            handle.seek(self.calls_pos)
+            data = handle.read(2 << 20)
+        end = data.rfind(b'\n') + 1
+        self.calls_pos += end
+        for line in data[:end].decode('ascii', 'replace').splitlines():
+            if line.startswith('R '):
+                name = self.names.get(int(line.split()[1], 16))
+                if name:
+                    self.calls[name] = self.calls.get(name, 0) + 1
+
+    def extra(self):
+        st = self.state
+        now = time.time()
+        if now - self.tick_mark[0] >= 1.0:
+            self.tps = (st.tick - self.tick_mark[1]) / (now - self.tick_mark[0])
+            self.tick_mark = (now, st.tick)
+            self.count_calls()
+        data = {'tps': self.tps, 'clock': st.world, 'log': list(LOG or ())[-8:], 'calls': self.calls,
+                'recorder': self.calls_path is not None, 'bot': self.args.name}
+        if self.mem is not None:
+            data['teams'] = [{'manager': self.mem.int(GAME + t * GAME_TEAM_STRIDE + GAME_MANAGER),
+                              'members': 0, 'missions': 0} for t in range(5)]
+        return data
 
     def menu(self, value):
         self.actions.append(srpacket.Action(srpacket.ACTION_MENU, self.state.menu, value))
@@ -272,7 +330,7 @@ def tour(bot, mem, human, home, per_type=3):
         else:
             rows = min(mem.int(CITY + CITY_SHOP_COUNT + b * BUILDING_STRIDE), 4)
             bot.script([(9, 1)] + [(10, v) for v in range(1, rows + 1)])
-        print('building %d, type %d' % (b, kind))
+        say('building %d, type %d' % (b, kind))
 
 
 def player_team(mem, slot):
@@ -301,10 +359,22 @@ def wait_for_body(bot, mem, human):
 
 def session(args, mem):
     bot = Bot(args)
-    if args.viz:
-        import viz
+    bot.mem = mem
+    if args.console:
+        import mainframe
+        global LOG
+        LOG = []
         sys.stdout.reconfigure(encoding='utf-8')
-        bot.viewer = viz.Viewer()
+        bot.console = mainframe.Mainframe()
+        bot.viewer = bot.console.viewer
+        bot.calls_path = os.path.join(args.folder, 'sv_args.txt') if args.folder else None
+        if not args.no_boot:
+            bot.console.boot(sys.stdout)
+    if args.viz or args.console:
+        if bot.viewer is None:
+            import viz
+            sys.stdout.reconfigure(encoding='utf-8')
+            bot.viewer = viz.Viewer()
         if mem is not None:
             for team in range(5):
                 lo, hi = team_box(mem, team)
@@ -313,9 +383,9 @@ def session(args, mem):
     bot.join()
     if args.snapshot is not None:
         bot.snapshot_at = time.time() + args.snapshot
-    print('joined: game id %d, game type %d' % (bot.game_id, bot.gametype))
+    say('joined: game id %d, game type %d' % (bot.game_id, bot.gametype))
     slot, human = wait_for_human(bot)
-    print('player %d, human %d' % (slot, human))
+    say('player %d, human %d' % (slot, human))
 
     if args.company is not None:
         team = args.company
@@ -327,7 +397,7 @@ def session(args, mem):
             bot.run_for(0.1)
             if player_team(mem, slot) == team:
                 break
-        print('team of the bot: %d, manager of that team: %d' % (
+        say('team of the bot: %d, manager of that team: %d' % (
             player_team(mem, slot), mem.int(GAME + team * GAME_TEAM_STRIDE + GAME_MANAGER)))
         if args.shop:
             bot.script(SHOP)
@@ -338,15 +408,15 @@ def session(args, mem):
             # The button makes the server count the ticks outside the base (180 ticks, 3 s).
             move_human(mem, human, home)
             bot.run_for(5, BUTTON_LEAVE_BASE)
-            print('team after leaving the base: %d' % player_team(mem, slot))
+            say('team after leaving the base: %d' % player_team(mem, slot))
     else:
         bot.run_for(args.stay)
 
     if args.leave:
         bot.send(srpacket.Disconnect())
-        if args.viz:
+        if args.viz or args.console:
             sys.stdout.write('\x1b[?25h\n')
-        print('disconnect sent')
+        say('disconnect sent')
         time.sleep(0.5)
 
 
@@ -362,15 +432,17 @@ def main():
     ap.add_argument('--shop', action='store_true', help='with --company: buy in the menus of the base')
     ap.add_argument('--exit-company', action='store_true', help='after the stay, leave the base and the team')
     ap.add_argument('--leave', action='store_true', help='send a disconnect at the end (else only stop)')
+    ap.add_argument('--console', action='store_true', help='the world and the server in a mainframe style console')
+    ap.add_argument('--no-boot', action='store_true', help='with --console: skip the boot text')
     ap.add_argument('--viz', action='store_true', help='draw the world in the terminal (ANSI, 3D wireframe)')
     ap.add_argument('--snapshot', type=float, help='seconds after the join: ask the recorder for the snapshot')
     ap.add_argument('--team', type=int, default=1, help='round mode: menu choice of the team (1 to 3)')
     ap.add_argument('--rejoin', type=float, help='join again with the same account after this many seconds')
     args = ap.parse_args()
 
-    pid = args.pid or (find_pid() if args.company is not None or args.snapshot is not None else None)
-    mem = Memory(pid) if args.company is not None else None
-    args.folder = process_folder(pid) if args.snapshot is not None else None
+    pid = args.pid or (find_pid() if args.company is not None or args.snapshot is not None or args.console else None)
+    mem = Memory(pid) if args.company is not None or args.console else None
+    args.folder = process_folder(pid) if args.snapshot is not None or args.console else None
     session(args, mem)
     if args.rejoin is not None:
         time.sleep(args.rejoin)
