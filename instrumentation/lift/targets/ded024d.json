@@ -79,7 +79,8 @@
       "name": "20261128-bot-company-missions"
     },
     {
-      "name": "20261128-bot-fast-rounds"
+      "name": "20261128-bot-fast-rounds",
+      "synth": true
     }
   ],
   "synth": "instrumentation/recording/synth_calls.txt",
