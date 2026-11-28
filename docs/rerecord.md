@@ -16,7 +16,9 @@ The launcher (`build\launcher\opensubrosa24_launcher.exe`, build it with `tools\
 
 `python -I instrumentation/recording/coverage.py --side server|client` makes the same checklist as a file (`build\recordings\CHECKLIST-<side>.md`) from the recordings in `build\recordings`. After a change of the functions or the hints run `python -I instrumentation/recording/coverage.py --export instrumentation/recording/functions.csv`: the launcher reads that list (the package has it as `recording_functions.csv`).
 
-The server snapshot needs 600 seconds of play, the client snapshot 240 seconds (`snapshot_after` in `launcher.ini` sets the server value).
+The server snapshot needs 600 seconds of play, the client snapshot 240 seconds (`snapshot_after` in `launcher.ini` sets the server value). The button "Snapshot now" in the tab Recording takes the server snapshot at once: it writes `snapshot_now.txt` into the server folder, and the recorder deletes the file and writes `sv_snapshot.bin`. With `snapshot_after=0` only the button takes it.
+
+A hook that is called very often is removed after `record_hit_max` calls (default 20000), even when its calls have the same arguments. Without this limit the always-hooked functions of the checklist slowed the server to about 8 ticks per second in a round with traffic.
 
 ## Server scenarios (the forcer)
 

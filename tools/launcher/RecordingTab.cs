@@ -85,8 +85,10 @@ namespace SubVulpes
             int chosen = recScenario.Items.IndexOf(settings.Get("scenario", NoScenario));
             recScenario.SelectedIndex = chosen < 0 ? 0 : chosen;
             recScenario.SelectedIndexChanged += delegate { settings.Set("scenario", recScenario.Text); settings.Save(); };
+            var snapshotNow = new Button { Text = "Snapshot now", AutoSize = true };
+            snapshotNow.Click += delegate { RequestServerSnapshot(); };
             bar.Controls.AddRange(new Control[] { recSide, recMissingOnly, refresh,
-                new Label { Text = "Server scenario", AutoSize = true, Margin = new Padding(12, 7, 3, 3) }, recScenario, recSummary });
+                new Label { Text = "Server scenario", AutoSize = true, Margin = new Padding(12, 7, 3, 3) }, recScenario, snapshotNow, recSummary });
             page.Controls.Add(bar, 0, 1);
 
             recList = new ListView { Dock = DockStyle.Fill, View = View.Details, CheckBoxes = true, FullRowSelect = true, ShowGroups = true };
@@ -383,6 +385,8 @@ namespace SubVulpes
             if (proxy == null)
                 throw new InvalidOperationException("server_wsock32.dll is not next to the launcher (build the sv_wsock32 target).");
             MoveOldRecording(folder);
+            // An old request would take the snapshot at the first second.
+            File.Delete(Path.Combine(folder, "snapshot_now.txt"));
             File.Copy(proxy, Path.Combine(folder, "wsock32.dll"), true);
             File.WriteAllText(Path.Combine(folder, "subvulpes.ini"),
                 "[hooks]\r\nenabled=1\r\nverify=0\r\noriginal_only=1\r\nown_main=0\r\nlog_calls=0\r\nlifted=1\r\n" +
@@ -394,6 +398,17 @@ namespace SubVulpes
             if (scenario != NoScenario && ReadScenarios().TryGetValue(scenario, out rules)) {
                 File.WriteAllText(Path.Combine(folder, "subvulpes_force.txt"), rules, Encoding.ASCII);
                 AddLine("[launcher] Scenario " + scenario + ": the server forces game values (see subvulpes_force.txt).");
+            }
+        }
+
+        // The recorder looks for snapshot_now.txt once each second, takes the snapshot and deletes the file.
+        void RequestServerSnapshot()
+        {
+            try {
+                File.WriteAllText(Path.Combine(folder, "snapshot_now.txt"), "", Encoding.ASCII);
+                AddLine("[launcher] The server takes the snapshot in about 1 second (the log says when it is written).");
+            } catch (Exception ex) {
+                AddLine("[launcher] Cannot ask for the snapshot: " + ex.Message);
             }
         }
 

@@ -3,6 +3,8 @@
  * subvulpes.ini:
  *   record_args=1          the thunks of the lifted hooks call sv_record_args
  *   snapshot_after=60      seconds after start: write the .data section to sv_snapshot.bin
+ *                          (0 = no timer). A file snapshot_now.txt next to the exe asks for it at once.
+ *   record_hit_max=20000   calls of one function after which its hook goes (speed)
  *   record_imports=1       record the side-effect functions with their import calls (below)
  *
  * sv_args.txt, one line per recorded call (up to RECORD_MAX different calls per function):
@@ -129,6 +131,11 @@ typedef struct Focus {
 static Focus *g_focus;
 static int g_nfocus, g_focus_loaded;
 static int g_diff_max = 32, g_rot_sec = 180, g_rot_count = 15, g_rot_window = 3, g_rot_extra = 8;
+/* A function that runs very often with the same arguments (a vector helper that always gets the
+ * same two pointers) never reaches its limit of different calls. Its hook then stays and slows
+ * the server. After g_hit_max calls of any kind the hook goes, as for a tested function. */
+static int g_hit_max = 20000;
+static int g_hits[RECORD_FUNCS];       /* calls that reached the recorder, per function */
 static long long g_total_max = 200ll << 20;
 static int g_extra[RECORD_FUNCS];       /* rotation calls recorded per function */
 static uint32_t g_tested[RECORD_FUNCS];  /* tested functions seen (rotation list) */
@@ -153,6 +160,7 @@ static void load_focus(void)
     g_rot_count = sv_config_int("record_rotate_count", 15);
     g_rot_window = sv_config_int("record_rotate_window", 3);
     g_rot_extra = sv_config_int("record_rotate_extra", 8);
+    g_hit_max = sv_config_int("record_hit_max", 20000);
     g_total_max = (long long)sv_config_int("record_total_mb", 200) << 20;
     if (g_rot_count > 64)
         g_rot_count = 64;
@@ -248,15 +256,15 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
      * removal (the verifier needs the hooks). */
     if (!sv_original_only())
         limit = RECORD_MAX;
-    else if (cls == CLS_UNTESTED)
+    else if (cls == CLS_UNTESTED && ++g_hits[index] <= g_hit_max)
         limit = 1 << 30;
-    else if (cls == CLS_DIFF && g_count[index] < g_diff_max)
+    else if (cls == CLS_DIFF && g_count[index] < g_diff_max && ++g_hits[index] <= g_hit_max)
         limit = g_diff_max;
     else if (in_rotation(rva) && g_extra[index] < g_rot_extra)
         limit = g_count[index] + 1;
     else
         limit = 0;
-    if (sv_original_only() && cls != CLS_UNTESTED && limit == 0) {
+    if (sv_original_only() && limit == 0) {
         /* A tested function (or a diff function with its calls): no hook outside the
          * rotation. Remember it for the rotation. */
         for (k = 0; k < g_ntested && g_tested[k] != rva; k++)
@@ -666,6 +674,20 @@ static DWORD WINAPI snapshot_writer(LPVOID arg)
     return 0;
 }
 
+/* The file snapshot_now.txt next to the exe asks for the snapshot at once. The check runs once
+ * each second and deletes the file, so one file gives one snapshot. */
+static int snapshot_requested(void)
+{
+    static DWORD last;
+    DWORD now = GetTickCount();
+    char path[MAX_PATH];
+    if (now - last < 1000u)
+        return 0;
+    last = now;
+    exe_path(path, sizeof path, "snapshot_now.txt");
+    return DeleteFileA(path) != 0;
+}
+
 void sv_snapshot_check(void)
 {
     static int after = -1, done;
@@ -689,13 +711,16 @@ void sv_snapshot_check(void)
     if (after < 0) {
         after = sv_config_int("snapshot_after", 0);
         start = GetTickCount();
-        if (after <= 0) {
-            done = g_snap_done = 1;
-            return;
-        }
+        /* No timer: the hooks need no wait for the snapshot, and only the file can ask for it. */
+        if (after <= 0)
+            g_snap_done = 1;
     }
-    if (GetTickCount() - start < (DWORD)after * 1000u || sv_verify_busy())
+    if (sv_verify_busy())
         return;
+    if (after <= 0 || GetTickCount() - start < (DWORD)after * 1000u) {
+        if (!snapshot_requested())
+            return;
+    }
     done = g_snap_done = 1;
     if (!sv_verify_data(&data, &size))
         return;
