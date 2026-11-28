@@ -27,7 +27,8 @@ RE/decompilation project for Sub Rosa (2015).
 - The root `CMakeLists.txt` has only the server and the native client. Every verification target is in `instrumentation/targets.cmake`, included when `SV_BUILD_INSTRUMENTATION` is ON. Add a new verification target there.
 - `tools/build_hook.bat` still builds all targets into `build/hook/`. `tools/lift/pipeline.sh` forwards to `instrumentation/lift/pipeline.sh`.
 
-- Never version anything in `original/` except `README.md` and `MANIFEST.sha256`. Binaries and assets proprietary.
+- Never version the original executables (`subrosa*.exe`, `subrosadedicated*.exe`, the ELF and Mach-O binaries). The folder `original/` stays out of git except `README.md` and `MANIFEST.sha256`: it holds those executables.
+- Game data (maps, models, textures, sounds, data files) may be versioned, in this repository too, because the server and the client will be published with it. Copy it out of `original/` into its own folder (for example `data/`) and record where each file came from. The data never carries player names, IP addresses or `config.txt`.
 - C tables generated from 024d `.rdata` and initial `.data` (strings, constants, default values) may be versioned in `src/` (Phase 5.1). User checked them.
 - `original/` read-only. Tools read from it, write to `analysis/`, `build/` or scratchpad.
 - Run Python with `-I` when reading files from `original/` or `third_party/`.
