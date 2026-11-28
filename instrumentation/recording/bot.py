@@ -21,6 +21,19 @@ Arguments:
   --rejoin S         join again with the same account after S seconds (inventory load and save)
   --viz              draw the world in the terminal (tools/net/viz.py)
   --console          mainframe style console with panels (tools/net/mainframe.py), --no-boot skips the boot text
+  --sixel            with --viz or --console: draw the view as a sixel image (Windows Terminal 1.22 and later)
+  --cell WxH         pixel size of one terminal cell for --sixel (default 10x20)
+  --braille          draw the view with braille dots, even when numpy is there
+  --amber            with --viz: amber instead of green cyan (the console is always green)
+  --solid, --no-grid, --no-glow, --no-trails   start values of the view toggles
+
+The views need no input from the keyboard, but when the terminal is a console the keys steer the camera
+and switch the view (the same keys as the PF keys of the console, see viz.LETTER_KEYS):
+arrows or A and D turn, W and S tilt, plus and minus zoom, M map, F follow, V orbit, G free camera (arrows move,
+a capital letter moves faster), H hollow or solid, L labels, R grid, B buildings, T trails, O glow, C compass,
+P snapshot, Q ends the run.
+The vector view (tools/net/vector.py) needs numpy, so run without -I to get it. With -I the bot
+draws braille dots.
 
 Only the original server (fixed image base 0x20000000) is supported. Run it on the test server of
 the recorder, never on a server with real players.
@@ -72,11 +85,19 @@ SHOP = ([(3, 1)] + [(4, v) for v in (1, 2, 3, 4, 16)] +
 LOG = None          # list of lines while the console screen is on, else messages go to stdout
 
 
+START = time.time()
+# Building types the tour visits (the menu code of logic.c: 2 car dealer, 4 suits, 5 bank, 7 gun store).
+BUILDING_NAMES = {2: 'CAR DEALER', 4: 'CLOTHING SHOP', 5: 'BANK', 7: 'GUN STORE'}
+
+
 def say(text):
+    """A console log entry: a clock stamp (hours, minutes, seconds since the start) and upper case words."""
+    seconds = int(time.time() - START)
+    line = '%02d:%02d:%02d %s' % (seconds // 3600, seconds // 60 % 60, seconds % 60, text)
     if LOG is None:
-        print(text)
+        print(line)
     else:
-        LOG.append(str(text))
+        LOG.append(line)
         del LOG[:-40]
 
 
@@ -138,6 +159,83 @@ def team_box(mem, team):
     return mem.vec3(base + GAME_SAFE_MIN), mem.vec3(base + GAME_SAFE_MAX)
 
 
+# Building files that are shops, banks or medical places. Other names are towers or offices.
+SHOP_FILES = ('gunshop', 'dealership', 'conveniencestore', 'bar')
+BLOCK_UNITS = 4.0            # one block of the level file is four world units
+
+
+def building_kind(name):
+    """The color kind of a building file name and the label to draw on it."""
+    lower = name.lower()
+    if lower.startswith('base'):
+        return 'base', 'BASE ' + lower[4:]
+    if any(lower.startswith(n) for n in SHOP_FILES):
+        return 'shop', {'gunshop': 'GUN SHOP', 'dealership': 'CAR DEALER', 'conveniencestore': 'STORE',
+                        'bar': 'BAR'}.get(lower.rstrip('0123456789'), lower.upper())
+    if lower.startswith('bank'):
+        return 'bank', 'BANK'
+    if lower.startswith('hospital'):
+        return 'medical', 'HOSPITAL'
+    return 'tower', lower.upper()
+
+
+def load_map(folder):
+    """Boxes of the buildings and roads of the level file data/city.sbc of a server folder.
+
+    Returns (boxes, roads). A box is (lo, hi, label, rgb, floor_height). A road is (start, end, half_width).
+    The memory of the server keeps only the shop records, so the file is the source of the whole map."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools' / 'formats'))
+    import subrosa_formats
+    import viz
+    path = Path(folder) / 'data' / 'city.sbc'
+    city = subrosa_formats.read_sbc(path.read_bytes())
+    sizes = {}
+    boxes = []
+    ground = None
+    for entry in city.buildings:
+        name = entry['name']
+        if name not in sizes:
+            with open(Path(folder) / 'data' / 'building' / (name + '.sbb'), 'rb') as handle:
+                sizes[name] = struct.unpack_from('<3i', handle.read(80), 68)
+        size_x, size_z, floors = sizes[name]
+        x, y, z, turns = entry['ints']
+        if turns & 1:
+            size_x, size_z = size_z, size_x
+        lo = (x * BLOCK_UNITS, y * BLOCK_UNITS, z * BLOCK_UNITS)
+        hi = ((x + size_x) * BLOCK_UNITS, (y + floors) * BLOCK_UNITS, (z + size_z) * BLOCK_UNITS)
+        kind, label = building_kind(name)
+        boxes.append((lo, hi, label, viz.KIND_COLORS[kind], BLOCK_UNITS))
+        ground = lo[1] if ground is None else min(ground, lo[1])
+    ground = 24.0 if ground is None else ground
+    roads = []
+    for ends0, ends1, _kind, width0, _width1 in (s['ints'] for s in city.streets):
+        a, b = city.intersections[ends0], city.intersections[ends1]
+        roads.append(((a[0] * BLOCK_UNITS, ground, a[2] * BLOCK_UNITS), (b[0] * BLOCK_UNITS, ground, b[2] * BLOCK_UNITS),
+                      width0 * BLOCK_UNITS))
+    return boxes, roads
+
+
+def poll_keys():
+    """Names of the keys pressed since the last call (Windows console only). The names are those of
+    viz.Viewer.key, plus snap (ask for a snapshot) and quit. See viz.LETTER_KEYS and viz.CODE_KEYS."""
+    import msvcrt
+    import viz
+    names = []
+    while msvcrt.kbhit():
+        ch = msvcrt.getwch()
+        if ch in (chr(0), chr(224)):                 # a function key or an arrow: a second character follows
+            name = viz.key_name(ch, msvcrt.getwch())
+        else:
+            name = viz.key_name(ch)
+        if name:
+            names.append(name)
+    return names
+
+
+class Quit(Exception):
+    """The user pressed Q."""
+
+
 def move_human(mem, human, target):
     """Shift the position, the old position and every bone by the same distance.
     The bones move by Verlet steps (position minus old position), so both must shift."""
@@ -182,6 +280,9 @@ class Bot:
         self.tick_mark = (time.time(), 0)
         self.tps = 0.0
         self.snapshot_at = None
+        self.keys = False           # read keys in draw (a console, not a pipe)
+        self.slot = None            # the slot and the human of the bot, once it has them
+        self.human_id = None
 
     def send(self, packet):
         self.sock.sendto(srpacket.build_packet(packet), self.addr)
@@ -211,7 +312,7 @@ class Bot:
             time.sleep(0.1)
             self.receive()
         if self.game_id is None:
-            raise SystemExit('the server did not answer the join')
+            raise SystemExit('SRC900E LINK FAILED  NO ANSWER TO JOIN')
 
     def tick(self, buttons=0):
         pending = self.actions[self.acked:self.acked + 15]
@@ -225,19 +326,30 @@ class Bot:
             # The recorder of the server takes the snapshot when this file appears.
             open(os.path.join(self.args.folder, 'snapshot_now.txt'), 'w').close()
             self.snapshot_at = None
-            say('snapshot requested')
+            say('SRC007I SNAPSHOT REQUESTED')
 
     def draw(self):
         now = time.time()
         if self.viewer is None or self.state is None or now - self.last_draw < 0.05:
             return
         self.last_draw = now
+        if self.keys:
+            for name in poll_keys():
+                if name == 'quit':
+                    raise Quit()
+                if name == 'snap':
+                    self.snapshot_at = time.time()
+                    continue
+                self.viewer.key(name)
         me = self.state.human if self.state.human != -1 else None
         if self.console is not None:
             frame = self.console.render(self.state, self.boxes, me=me, extra=self.extra())
         else:
             frame = self.viewer.render(self.state, self.boxes, me=me)
         sys.stdout.write('\x1b[H' + frame)
+        sixel = getattr(self.viewer, 'sixel_data', None)
+        if sixel:
+            sys.stdout.write(sixel)
         sys.stdout.flush()
 
     def count_calls(self):
@@ -269,6 +381,8 @@ class Bot:
             self.count_calls()
         data = {'tps': self.tps, 'clock': st.world, 'log': list(LOG or ())[-8:], 'calls': self.calls,
                 'recorder': self.calls_path is not None, 'bot': self.args.name}
+        if self.mem is not None and self.slot is not None:
+            data['teams_of'] = {self.human_id: player_team(self.mem, self.slot)}
         if self.mem is not None:
             data['teams'] = [{'manager': self.mem.int(GAME + t * GAME_TEAM_STRIDE + GAME_MANAGER),
                               'members': 0, 'missions': 0} for t in range(5)]
@@ -330,7 +444,7 @@ def tour(bot, mem, human, home, per_type=3):
         else:
             rows = min(mem.int(CITY + CITY_SHOP_COUNT + b * BUILDING_STRIDE), 4)
             bot.script([(9, 1)] + [(10, v) for v in range(1, rows + 1)])
-        say('building %d, type %d' % (b, kind))
+        say('SRC005I VISIT %s  BUILDING %04d' % (BUILDING_NAMES[kind], b))
 
 
 def player_team(mem, slot):
@@ -357,6 +471,32 @@ def wait_for_body(bot, mem, human):
     return hpos
 
 
+SAFE_COLOR = (255, 190, 190)         # the safe zone of the team of the bot
+SAFE_DIM_COLOR = (150, 90, 90)       # the safe zones of the other teams
+
+
+def view_options(args):
+    """Keyword arguments of the viewers (viz.Viewer, vector.VectorViewer, mainframe.Mainframe)."""
+    cell = tuple(int(n) for n in args.cell.lower().split('x'))
+    return {'vector': False if args.braille else None, 'sixel': args.sixel, 'cell': cell}
+
+
+def make_viewer(args):
+    """The vector viewer when numpy is there, else the braille viewer."""
+    opt = view_options(args)
+    if opt['vector'] is not False:
+        try:
+            import vector
+            return vector.VectorViewer(backend='sixel' if args.sixel else 'halfblock', cell=opt['cell'],
+                                       theme='amber' if args.amber else 'tube')
+        except ImportError:
+            say('SRC009W NUMPY MISSING  BRAILLE VIEW')
+    import viz
+    viewer = viz.Viewer()
+    viewer.theme = viz.THEMES['amber' if args.amber else 'tube']
+    return viewer
+
+
 def session(args, mem):
     bot = Bot(args)
     bot.mem = mem
@@ -365,58 +505,75 @@ def session(args, mem):
         global LOG
         LOG = []
         sys.stdout.reconfigure(encoding='utf-8')
-        bot.console = mainframe.Mainframe()
+        bot.console = mainframe.Mainframe(**view_options(args))
         bot.viewer = bot.console.viewer
         bot.calls_path = os.path.join(args.folder, 'sv_args.txt') if args.folder else None
         if not args.no_boot:
             bot.console.boot(sys.stdout)
     if args.viz or args.console:
         if bot.viewer is None:
-            import viz
             sys.stdout.reconfigure(encoding='utf-8')
-            bot.viewer = viz.Viewer()
+            bot.viewer = make_viewer(args)
+        bot.keys = sys.stdin.isatty() and os.name == 'nt'
+        bot.viewer.hollow = not args.solid           # the start values of the toggles (keys change them while it runs)
+        bot.viewer.grid = not args.no_grid
+        bot.viewer.glow = not args.no_glow
+        bot.viewer.trails = not args.no_trails
+        if args.folder:
+            try:
+                bot.boxes, bot.viewer.roads = load_map(args.folder)
+            except (OSError, ValueError) as err:
+                say('SRC010W MAP NOT LOADED  %s' % str(err).upper())
         if mem is not None:
             for team in range(5):
                 lo, hi = team_box(mem, team)
-                bot.boxes.append((lo, hi, 'base %d' % team, 208 if team == args.company else 244))
+                if lo != hi:
+                    bot.boxes.append((lo, hi, '', SAFE_COLOR if team == args.company else SAFE_DIM_COLOR, 2.0))
         sys.stdout.write('\x1b[2J\x1b[?25l')
     bot.join()
     if args.snapshot is not None:
         bot.snapshot_at = time.time() + args.snapshot
-    say('joined: game id %d, game type %d' % (bot.game_id, bot.gametype))
-    slot, human = wait_for_human(bot)
-    say('player %d, human %d' % (slot, human))
+    say('SRC001I LINK ESTABLISHED  GAME %04d  MODE %s' % (bot.game_id, 'WORLD' if bot.gametype == 4 else 'ROUND'))
+    try:
+        slot, human = wait_for_human(bot)
+        bot.slot, bot.human_id = slot, human
+        say('SRC002I PLAYER SLOT %03d  BODY %03d' % (slot, human))
 
-    if args.company is not None:
-        team = args.company
-        lo, hi = team_box(mem, team)
-        hpos = wait_for_body(bot, mem, human)
-        home = mem.vec3(hpos)
-        move_human(mem, human, tuple((a + b) / 2 for a, b in zip(lo, hi)))
-        for _ in range(20):
-            bot.run_for(0.1)
+        if args.company is not None:
+            team = args.company
+            lo, hi = team_box(mem, team)
+            hpos = wait_for_body(bot, mem, human)
+            home = mem.vec3(hpos)
+            move_human(mem, human, tuple((a + b) / 2 for a, b in zip(lo, hi)))
+            for _ in range(20):
+                bot.run_for(0.1)
+                if player_team(mem, slot) == team:
+                    break
+            manager = mem.int(GAME + team * GAME_TEAM_STRIDE + GAME_MANAGER)
             if player_team(mem, slot) == team:
-                break
-        say('team of the bot: %d, manager of that team: %d' % (
-            player_team(mem, slot), mem.int(GAME + team * GAME_TEAM_STRIDE + GAME_MANAGER)))
-        if args.shop:
-            bot.script(SHOP)
-            tour(bot, mem, human, home)
-            move_human(mem, human, tuple((a + c) / 2 for a, c in zip(lo, hi)))
-        bot.run_for(args.stay)
-        if args.exit_company:
-            # The button makes the server count the ticks outside the base (180 ticks, 3 s).
-            move_human(mem, human, home)
-            bot.run_for(5, BUTTON_LEAVE_BASE)
-            say('team after leaving the base: %d' % player_team(mem, slot))
-    else:
-        bot.run_for(args.stay)
+                say('SRC003I TEAM %d JOINED  MANAGER SLOT %s' % (team, '%03d' % manager if manager >= 0 else 'NONE'))
+            else:
+                say('SRC004W TEAM %d NOT JOINED  PLAYER TEAM %d' % (team, player_team(mem, slot)))
+            if args.shop:
+                bot.script(SHOP)
+                tour(bot, mem, human, home)
+                move_human(mem, human, tuple((a + c) / 2 for a, c in zip(lo, hi)))
+            bot.run_for(args.stay)
+            if args.exit_company:
+                # The button makes the server count the ticks outside the base (180 ticks, 3 s).
+                move_human(mem, human, home)
+                bot.run_for(5, BUTTON_LEAVE_BASE)
+                say('SRC006I BASE LEFT  PLAYER TEAM %d' % player_team(mem, slot))
+        else:
+            bot.run_for(args.stay)
+    except Quit:
+        args.leave = True           # the user pressed Q: end the run and tell the server
 
     if args.leave:
         bot.send(srpacket.Disconnect())
         if args.viz or args.console:
             sys.stdout.write('\x1b[?25h\n')
-        say('disconnect sent')
+        say('SRC008I LINK TERMINATED')
         time.sleep(0.5)
 
 
@@ -435,6 +592,14 @@ def main():
     ap.add_argument('--console', action='store_true', help='the world and the server in a mainframe style console')
     ap.add_argument('--no-boot', action='store_true', help='with --console: skip the boot text')
     ap.add_argument('--viz', action='store_true', help='draw the world in the terminal (ANSI, 3D wireframe)')
+    ap.add_argument('--sixel', action='store_true', help='with --viz or --console: draw the view as a sixel image')
+    ap.add_argument('--cell', default='10x20', help='pixel size of one terminal cell, for --sixel')
+    ap.add_argument('--amber', action='store_true', help='with --viz: amber instead of green cyan')
+    ap.add_argument('--solid', action='store_true', help='start with hidden lines removed and light faces (key H toggles)')
+    ap.add_argument('--no-grid', action='store_true', help='start without the ground grid (key R)')
+    ap.add_argument('--no-glow', action='store_true', help='start without the bloom of the vector view (key O)')
+    ap.add_argument('--no-trails', action='store_true', help='start without the trails of the vector view (key T)')
+    ap.add_argument('--braille', action='store_true', help='draw the view with braille dots (no numpy needed)')
     ap.add_argument('--snapshot', type=float, help='seconds after the join: ask the recorder for the snapshot')
     ap.add_argument('--team', type=int, default=1, help='round mode: menu choice of the team (1 to 3)')
     ap.add_argument('--rejoin', type=float, help='join again with the same account after this many seconds')
@@ -442,7 +607,7 @@ def main():
 
     pid = args.pid or (find_pid() if args.company is not None or args.snapshot is not None or args.console else None)
     mem = Memory(pid) if args.company is not None or args.console else None
-    args.folder = process_folder(pid) if args.snapshot is not None or args.console else None
+    args.folder = process_folder(pid) if pid and (args.snapshot is not None or args.console or args.viz) else None
     session(args, mem)
     if args.rejoin is not None:
         time.sleep(args.rejoin)

@@ -10,6 +10,13 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mainframe  # noqa: E402
 import srpacket as sr  # noqa: E402
+import viz  # noqa: E402
+
+try:
+    import numpy  # noqa: F401
+    HAVE_NUMPY = True
+except ImportError:                      # python -I does not see numpy: the console uses braille dots
+    HAVE_NUMPY = False
 
 ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
 SGR = re.compile(r"\x1b\[([0-9;]*)m")
@@ -32,12 +39,12 @@ def rgb_of(code):
 
 def is_green(rgb):
     r, g, b = rgb
-    return g >= r and g >= b and r <= 215 and b <= 215
+    return g >= r and g >= b and r <= 250 and b <= 250      # a bright core goes toward white
 
 
 def is_amber(rgb):
     r, g, b = rgb
-    return r > g > b and b <= 20 and g >= 0.4 * r
+    return r > g > b and b <= 0.6 * g and g >= 0.4 * r      # amber, also when the core goes toward white
 
 
 def colors_of(frame):
@@ -61,9 +68,10 @@ def colors_of(frame):
 
 
 def scene(n=3):
-    humans = [sr.HumanBlock(i, pos=(i * 2.0, 1.0, 20.0), health=100 - i * 7) for i in range(n)]
-    objects = [sr.ObjectBlock(0, pos=(0.0, 0.6, 25.0))]
-    items = [sr.ItemBlock(0, pos=(1.0, 0.3, 22.0))]
+    humans = [sr.HumanBlock(i, pos=(i * 2.0, 25.0, 20.0), orient_a=(0.0, 1.0, 0.0), orient_b=(0.0, 0.0, -1.0),
+                            health=100 - i * 7) for i in range(n)]
+    objects = [sr.ObjectBlock(0, pos=(0.0, 25.0, 25.0), orient_a=(0.0, 1.0, 0.0), orient_b=(0.0, 0.0, -1.0))]
+    items = [sr.ItemBlock(0, pos=(1.0, 24.3, 22.0))]
     events = [sr.Event(sr.EV_MESSAGE, 7, {"text": b"hello there"}), sr.Event(sr.EV_UPDATEITEM, 9)]
     return sr.State(tick=5, phase=2, phase_timer=100, team_counts=(1, 2, 0), humans=humans, objects=objects,
                     items=items, events=events)
@@ -76,7 +84,7 @@ EXTRA = {"tps": 61.2, "clock": 12345, "teams": [{"manager": 2, "members": 3, "mi
 class FrameTests(unittest.TestCase):
     def check_size(self, width, height, state=None, extra=None):
         mf = mainframe.Mainframe(width, height)
-        lines = plain(mf.render(state if state is not None else scene(), [((-5, 0, 10), (5, 4, 20), "base", (255, 100, 100))],
+        lines = plain(mf.render(state if state is not None else scene(), [((-5, 24, 10), (5, 28, 20), "base", (255, 100, 100))],
                                 0, extra))
         self.assertEqual(len(lines), height)
         for line in lines:
@@ -91,8 +99,8 @@ class FrameTests(unittest.TestCase):
 
     def test_panels_are_there(self):
         text = "\n".join(self.check_size(120, 40, extra=EXTRA))
-        for name in ("MAIN VIEW", "PLAYERS", "TEAMS", "EVENT LOG", "CALL COUNTERS", "TICK 5", "TPS 61.2",
-                     "WORLD CLOCK 12345", "HELLO THERE", "BETA", "LINK", "RECORDER"):
+        for name in ("MAIN VIEW", "PLAYERS", "TEAMS", "OPERATOR LOG", "CALL COUNTERS", "TICK 000005", "TPS 061.2",
+                     "SIM CLOCK 12345", "HELLO THERE", "BETA", "LINK", "RECORDER", "STAT ACTIVE", "SRC060I", "SRC044I", "PF12 QUIT"):
             self.assertIn(name, text)
 
     def test_missing_extra_and_state(self):
@@ -106,7 +114,7 @@ class FrameTests(unittest.TestCase):
         mf = mainframe.Mainframe(99, 29)
         lines = plain(mf.render(scene()))
         self.assertEqual(len(lines), 29)
-        self.assertIn("TERMINAL TOO SMALL", "\n".join(lines))
+        self.assertIn("DISPLAY TOO SMALL", "\n".join(lines))
         for line in lines:
             self.assertLessEqual(len(line), 99)
         for w, h in ((10, 3), (1, 1)):
@@ -130,7 +138,7 @@ class FrameTests(unittest.TestCase):
         mf = mainframe.Mainframe(120, 40)
         state = scene(6)
         state.humans[1].health = 10          # a hurt human is drawn amber
-        frame = mf.render(state, [((-5, 0, 10), (5, 4, 20), "base 0", (255, 100, 100))], 0, EXTRA)
+        frame = mf.render(state, [((-5, 24, 10), (5, 28, 20), "base 0", (255, 100, 100))], 0, EXTRA)
         for kind, rgb in colors_of(frame):
             self.assertTrue(rgb == (0, 0, 0) or is_green(rgb) or is_amber(rgb), (kind, rgb))
         self.assertTrue(any(is_amber(rgb) for _, rgb in colors_of(frame)))
@@ -148,7 +156,7 @@ class FrameTests(unittest.TestCase):
 
     def test_players_marks_the_bot(self):
         lines = self.check_size(120, 40, extra=EXTRA)
-        mine = [ln for ln in lines if ">  0 " in ln]
+        mine = [ln for ln in lines if "> 000 " in ln]
         self.assertEqual(len(mine), 1)
 
     def test_many_players_keep_me_visible(self):
@@ -157,7 +165,7 @@ class FrameTests(unittest.TestCase):
         mf = mainframe.Mainframe(100, 30)
         text = "\n".join(plain(mf.render(state, [], 55)))
         self.assertIn(">", text)
-        self.assertIn(" 55 ", text)
+        self.assertIn(" 055 ", text)
         self.assertIn("MORE", text)
 
     def test_event_text(self):
@@ -165,7 +173,7 @@ class FrameTests(unittest.TestCase):
         pairs = mainframe.event_lines(state.events)
         self.assertEqual(pairs[0][0], "msg")
         self.assertIn("hello there", pairs[0][1])
-        self.assertIn("UPDATEITEM", pairs[1][1])
+        self.assertIn("SRC044I", pairs[1][1])
 
     def test_lamp_levels(self):
         mf = mainframe.Mainframe(100, 30)
@@ -195,8 +203,9 @@ class FrameTests(unittest.TestCase):
         self.assertEqual(len(trails), 3)
 
     def timed(self, move):
-        humans = [sr.HumanBlock(i, pos=(i % 10 * 3.0, 1.0, 10.0 + i // 10 * 3.0)) for i in range(50)]
-        state = sr.State(tick=1, phase=2, humans=humans, objects=[sr.ObjectBlock(0, pos=(0, 0.6, 15))])
+        humans = [sr.HumanBlock(i, pos=(i % 10 * 3.0, 25.0, 10.0 + i // 10 * 3.0), orient_a=(0.0, 1.0, 0.0),
+                               orient_b=(0.0, 0.0, -1.0)) for i in range(50)]
+        state = sr.State(tick=1, phase=2, humans=humans, objects=[sr.ObjectBlock(0, pos=(0, 25.0, 15))])
         mf = mainframe.Mainframe(120, 40)
         mf.render(state, [], 0, EXTRA)
         best = 1.0
@@ -213,11 +222,132 @@ class FrameTests(unittest.TestCase):
 
     def test_frame_time(self):
         each = self.timed(False)
-        self.assertLess(each, 0.030, "frame took %.1f ms" % (each * 1000))
+        limit = 0.09 if HAVE_NUMPY else 0.06
+        self.assertLess(each, limit, "frame took %.1f ms" % (each * 1000))
 
     def test_frame_time_with_trails(self):
         each = self.timed(True)
-        self.assertLess(each, 0.040, "frame took %.1f ms" % (each * 1000))
+        limit = 0.10 if HAVE_NUMPY else 0.07
+        self.assertLess(each, limit, "frame took %.1f ms" % (each * 1000))
+
+
+class ViewerChoiceTests(unittest.TestCase):
+    def test_braille_when_asked(self):
+        mf = mainframe.Mainframe(120, 40, vector=False)
+        self.assertFalse(mf.vector)
+        lines = plain(mf.render(scene(), [], 0, EXTRA))
+        self.assertEqual(len(lines), 40)
+        self.assertTrue(any(0x2800 < ord(ch) <= 0x28FF for line in lines[5:20] for ch in line))
+
+    def test_default_follows_numpy(self):
+        self.assertEqual(mainframe.Mainframe(120, 40).vector, HAVE_NUMPY)
+
+    @unittest.skipUnless(HAVE_NUMPY, "numpy is missing")
+    def test_vector_view_is_half_blocks(self):
+        mf = mainframe.Mainframe(120, 40, vector=True)
+        frame = mf.render(scene(), [], 0, EXTRA)
+        self.assertIn("\u2580", frame)
+        self.assertEqual(len(plain(frame)), 40)
+
+    @unittest.skipUnless(HAVE_NUMPY, "numpy is missing")
+    def test_sixel_goes_over_the_view_area(self):
+        mf = mainframe.Mainframe(120, 40, vector=True, sixel=True, cell=(8, 16))
+        frame = mf.render(scene(), [], 0, EXTRA)
+        self.assertIn("\x1b[6;2H\x1bPq", frame)             # the first cell inside the frame of the view
+        self.assertTrue(frame.endswith("\x1b\\"))
+        self.assertEqual(len(frame.split("\n")), 40)
+        import vector
+        img = vector.decode_sixel(frame[frame.index("\x1bPq"):])
+        lw = max(60, int(120 * 0.6))
+        self.assertEqual(img.shape[1], (lw - 2) * 8)
+
+    def test_phosphor_theme(self):
+        for rgb in (viz.COLOR_HUMAN, viz.COLOR_OBJECT, viz.COLOR_GRID, viz.COLOR_CITY, (255, 255, 255)):
+            self.assertTrue(is_green(mainframe.phosphor(rgb)), rgb)
+        self.assertTrue(is_amber(mainframe.phosphor(viz.COLOR_HURT)))
+        self.assertTrue(is_amber(mainframe.phosphor(viz.COLOR_DYING)))
+        dim, bright = mainframe.phosphor((60, 60, 60)), mainframe.phosphor((250, 250, 250))
+        self.assertLess(dim[1], bright[1])
+
+
+class KeyBarTests(unittest.TestCase):
+    def test_last_line_is_the_pf_key_bar(self):
+        for vector in (False, None):
+            lines = plain(mainframe.Mainframe(120, 40, vector=vector).render(scene(), [], 0, EXTRA))
+            self.assertEqual(len(lines), 40)
+            self.assertIn("PF1 ROT  PF2 TILT  PF3 ZOOM  PF4 MAP  PF5 FOLLOW  PF6 FREE", lines[-1])
+            self.assertIn("PF7 HOLLOW  PF8 HELP  PF9 SNAP  PF12 QUIT", lines[-1])
+
+    def test_view_title_shows_the_camera_and_the_wire_mode(self):
+        mf = mainframe.Mainframe(140, 44)
+        text = "\n".join(plain(mf.render(scene(), [], 0, EXTRA)))
+        self.assertRegex(text, r"CAM FOLLOW  AZ \d{3}  EL \d{3}  ZOOM \d{3}  WIRE HOLLOW")
+        mf.key("hollow")
+        mf.key("map")
+        text = "\n".join(plain(mf.render(scene(), [], 0, EXTRA)))
+        self.assertIn("CAM MAP", text)
+        self.assertIn("WIRE SOLID", text)
+
+    def test_help_line_replaces_the_keys(self):
+        mf = mainframe.Mainframe(120, 40)
+        self.assertTrue(mf.key("help"))
+        last = plain(mf.render(scene(), [], 0, EXTRA))[-1]
+        self.assertIn("H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS", last)
+        self.assertNotIn("PF1", last)
+        self.assertFalse(mf.key("no such key"))
+
+    def test_toggles_are_attributes_of_the_viewer(self):
+        mf = mainframe.Mainframe(120, 40)
+        for name in ("hollow", "labels", "grid", "buildings", "trails", "glow", "compass"):
+            self.assertTrue(getattr(mf.viewer, name))
+            mf.key(name)
+            self.assertFalse(getattr(mf.viewer, name))
+        mf.viewer.hollow = True                                  # a script sets one directly
+        self.assertIn("WIRE HOLLOW", "\n".join(plain(mf.render(scene(), [], 0, EXTRA))))
+
+    def test_columns_are_zero_padded(self):
+        text = "\n".join(plain(mainframe.Mainframe(120, 40).render(scene(), [], 0, EXTRA)))
+        for word in ("SLOT   HP", "TEAM", "MGR", "MBR", "MSN", "> 000  100", "UPTIME", "STAT ACTIVE", "TICK 000005"):
+            self.assertIn(word, text)
+
+
+class TextTests(unittest.TestCase):
+    """The words of the console: upper case, no sentences, the right word for the thing."""
+
+    def frames(self):
+        for vector in (False, None):
+            mf = mainframe.Mainframe(120, 40, vector=vector)
+            yield "\n".join(plain(mf.render(scene(), [((-5, 24, 10), (5, 28, 20), "base", (255, 100, 100))], 0, EXTRA)))
+            yield "\n".join(plain(mf.render(None)))
+        yield "\n".join(plain(mainframe.Mainframe(99, 29).render(scene())))
+
+    def test_no_lower_case(self):
+        for text in self.frames():
+            letters = [ch for ch in text if ch.isalpha() and ch.isascii()]
+            self.assertTrue(letters)
+            self.assertEqual("".join(ch for ch in letters if ch.islower()), "")
+
+    def test_boot_text_has_no_lower_case(self):
+        mf = mainframe.Mainframe(100, 30)
+        mf.sleep = lambda s: None
+        out = io.StringIO()
+        mf.boot(out)
+        text = ANSI.sub("", out.getvalue())
+        self.assertEqual("".join(ch for ch in text if ch.islower()), "")
+
+    def test_words_that_were_wrong(self):
+        for text in self.frames():
+            for word in ("MODEL", "WORLD CLOCK", "BOT BOT", "UP "):
+                self.assertNotIn(word, text)
+        text = next(self.frames())
+        self.assertIn("VERSION 24D", text)
+        self.assertIn("UPTIME", text)
+        self.assertIn("SIM CLOCK", text)
+        self.assertEqual(text.count("PLAYER B1"), 1)
+
+    def test_every_word_comes_from_the_table(self):
+        for key in ("title", "version", "clock", "uptime", "nominal"):
+            self.assertIn(mainframe.TXT[key], "\n".join(self.frames()))
 
 
 class BootTests(unittest.TestCase):

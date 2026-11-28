@@ -14,9 +14,12 @@ line, so the caller prints the frame after a cursor home (`\\x1b[H`) and nothing
     tps (float), clock (int), teams (list of {'manager', 'members', 'missions'}),
     calls (dict name -> count), log (list of str), recorder (bool), bot (str)
 
-    python -I tools/net/mainframe.py --demo     animated fake data, Ctrl+C to stop (--no-boot skips the boot)
-    python -I tools/net/mainframe.py --frame    one frame of the demo
-    python -I tools/net/mainframe.py --boot     only the boot sequence
+    python tools/net/mainframe.py --demo        animated fake data, Ctrl+C to stop (--no-boot skips the boot)
+                                                The main view uses numpy (tools/net/vector.py) when it is there, and
+                                                braille dots when it is not (python -I never finds numpy).
+                                                --braille forces the dots, --sixel draws the view as a sixel image.
+    python tools/net/mainframe.py --frame       one frame of the demo
+    python tools/net/mainframe.py --boot        only the boot sequence
 """
 # References for the look. Only the ideas are used. No text or art is copied.
 #   IBM 3270 operator information area (status line at the bottom, input inhibited lamp)
@@ -39,7 +42,8 @@ line, so the caller prints the frame after a cursor home (`\\x1b[H`) and nothing
 #      A blinking amber "X INPUT INHIBITED" lamp shows when the link is not live.
 #   2. Upper case labels in fixed columns, as on a 80 column terminal.
 #   3. Dotted leaders between a name and its value in the call counters.
-#   4. Phosphor persistence: old positions of moving humans stay as dim marks for a few frames.
+#   4. Phosphor persistence: moving things leave a trail (the vector view keeps the last picture,
+#      the braille view draws old positions of humans as dim marks).
 #   5. Depth shading: far lines get a darker green, near lines a brighter green.
 #   6. Meters change shade by value (bright when high), and every other row is dimmer (scanlines).
 from __future__ import annotations
@@ -54,6 +58,56 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import viz  # noqa: E402
 
+# Every word the console prints is in this table. Upper case, short noun phrases, no sentences.
+TXT = {
+    "title": "SUB ROSA OPERATIONS CONSOLE",
+    "version": "VERSION 24D",
+    "node": "NODE 01",
+    "uptime": "UPTIME",
+    "lamps": {"LINK": "LINK", "WORLD": "SIM", "ROUND": "ROUND", "RECORDER": "RECORDER"},     # the BOT lamp has no label: not shown
+    "player": "PLAYER",
+    "no_link": "ERR 04 NO LINK",
+    "stalled": "STAT HOLD",
+    "no_round": "STAT READY",
+    "nominal": "STAT ACTIVE",
+    "stat_ready": "STAT READY",
+    "view": "MAIN VIEW",
+    "players": "PLAYERS",
+    "players_head": ("SLOT", "HP", "X", "Z", "TM"),
+    "more": "MORE",
+    "teams": "TEAMS",
+    "teams_head": ("TEAM", "MGR", "MBR", "MSN"),
+    "log": "OPERATOR LOG",
+    "message": "SRC060I",         # message id of a chat line in the log
+    "event_unknown": "SRC099I EVENT TYPE",
+    "calls": "CALL COUNTERS",
+    "no_recording": "REC INACTIVE",
+    "clock": "SIM CLOCK",
+    "tick": "TICK",
+    "tps": "TPS",
+    "phase": "PHASE",
+    "timer": "TIMER",
+    "phases": {1: "WAITING", 2: "ROUND", 3: "ROUND OVER"},
+    "wire": ("HOLLOW", "SOLID"),
+    "keys": "PF1 ROT  PF2 TILT  PF3 ZOOM  PF4 MAP  PF5 FOLLOW  PF6 FREE  PF7 HOLLOW  PF8 HELP  PF9 SNAP  PF12 QUIT",
+    "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  V ORBIT  G FREE  F FOLLOW  M MAP  P SNAP  Q QUIT",
+    "unknown": "UNKNOWN",
+    "no_data": "NO DATA",
+    "ready": "READY",
+    "inhibited": "X INPUT INHIBITED",
+    "too_small": "ERR 01 DISPLAY TOO SMALL",
+    "need": "NEED",
+    "have": "HAVE",
+    "bios": "BIOS VERSION 24D",
+    "boot_sub": "SERVER OPERATOR CONSOLE",
+    "memtest": "MEMORY TEST",
+    "device": "DEVICE",
+    "devices": ("I/O 00  PACKET INTERFACE", "I/O 01  RECORDER UNIT", "I/O 02  WIREFRAME DISPLAY",
+                "CPU 00  X87 COPROCESSOR"),
+    "loading": "LOADING SUBROSA24D.EXE",
+    "init": "INITIALIZING SIMULATION",
+    "system_ready": "SYSTEM READY",
+}
 MIN_COLS, MIN_ROWS = 100, 30
 # Phosphor trail: marks kept per human, seconds between marks, marks drawn at most, and two gray codes that map to
 # the darkest and the next green shade.
@@ -153,42 +207,48 @@ def green_row(row):
     return _FG_CODE.sub(lambda m: _VIEW_SEQ.get(m.group(1), m.group(0)), row)
 
 
-# --------------------------------------------------------------------------- faster viewer
+# --------------------------------------------------------------------------- phosphor theme
+
+AMBER_RGB = (255, 176, 20)
+ME_RGB = (170, 255, 200)
+_AMBER_SOURCES = {viz.COLOR_HURT, viz.COLOR_DYING}
+
+
+def phosphor(rgb):
+    """A scene color in the green phosphor theme: brightness stays, hue becomes green.
+    Hurt humans are amber. The human of the bot is a white green."""
+    if rgb in _AMBER_SOURCES:
+        return AMBER_RGB
+    if rgb == viz.COLOR_ME:
+        return ME_RGB
+    g = 255.0 * min(1.0, _lum(rgb) * 1.25) ** 0.85
+    return (int(g * 0.10), int(g), int(g * 0.28))
+
 
 class FastViewer(viz.Viewer):
-    """The viewer with the two hot loops unrolled. The picture is the same."""
+    """The braille viewer in the phosphor theme. Colors go straight to the shades of the console."""
 
-    def _local(self, pos, axes, points):
-        (a0, a1, a2), (b0, b1, b2), (c0, c1, c2) = axes
-        x, y, z = pos
-        return [(x + a0 * p[0] + b0 * p[1] + c0 * p[2], y + a1 * p[0] + b1 * p[1] + c1 * p[2],
-                 z + a2 * p[0] + b2 * p[1] + c2 * p[2]) for p in points]
+    def tint(self, rgb):
+        return phosphor(rgb)
 
-    def _edges(self, cv, cam, pts, edges, rgb):
-        px, py, pz = cam.pos
-        r0, r1, r2 = cam.r
-        u0, u1, u2 = cam.u
-        f0, f1, f2 = cam.f
-        cp = []
-        for p in pts:
-            dx, dy, dz = p[0] - px, p[1] - py, p[2] - pz
-            cp.append((dx * r0 + dy * r1 + dz * r2, dx * u0 + dy * u1 + dz * u2, dx * f0 + dy * f1 + dz * f2))
-        cx, cy, focal = cam.cx, cam.cy, cam.focal
-        line, color = cv.line, self._color
-        near = viz.NEAR
-        for i, j in edges:
-            ax, ay, az = cp[i]
-            bx, by, bz = cp[j]
-            if az < near:
-                if bz < near:
-                    continue
-                t = (near - az) / (bz - az)
-                ax, ay, az = ax + (bx - ax) * t, ay + (by - ay) * t, near
-            elif bz < near:
-                t = (near - az) / (bz - az)
-                bx, by, bz = ax + (bx - ax) * t, ay + (by - ay) * t, near
-            line((cx + ax / az * focal, cy - ay / az * focal, az),
-                 (cx + bx / bz * focal, cy - by / bz * focal, bz), color(rgb, (az + bz) * 0.5))
+    def _color(self, rgb, inten):
+        if rgb == ME_RGB:
+            return WH if inten > 0.6 else BR
+        level = min(1.0, inten * 1.25)
+        if rgb[0] > rgb[1]:
+            return AMB if level >= 0.6 else AMB_DIM
+        return _shade(_lum(rgb) * level * 1.1)
+
+
+def make_viewer(vector, sixel, cell):
+    """The vector viewer when numpy is there (and vector is not False), else the braille viewer."""
+    if vector is not False:
+        try:
+            import vector as vector_mod
+            return vector_mod.VectorViewer(backend="sixel" if sixel else "halfblock", cell=cell, theme=phosphor)
+        except ImportError:
+            pass
+    return FastViewer()
 
 
 # --------------------------------------------------------------------------- text helpers
@@ -289,32 +349,76 @@ def _text_of(value):
     return "".join(ch if 32 <= ord(ch) < 127 else "?" for ch in str(value))
 
 
+def _stamp(seconds):
+    s = int(max(0, seconds))
+    return "%02d:%02d:%02d" % (s // 3600 % 100, s // 60 % 60, s % 60)
+
+
+# Known events: type -> (message id, text, fields). The text may hold %(name)s fields of the event.
+EVENT_TEXT = {
+    0: ("SRC040I", "BULLET FIRED  SLOT %(shooter)03d"),
+    1: ("SRC041W", "BULLET HIT  TARGET %(target)03d"),
+    3: ("SRC042I", "OBJECT %(object)04d CREATED  TYPE %(object_type)03d"),
+    4: ("SRC043I", "OBJECT %(object)04d UPDATED"),
+    5: ("SRC044I", "ITEM %(item_key)05d UPDATED"),
+    8: ("SRC045I", "FINANCE UPDATED  SLOT %(player)03d"),
+    9: ("SRC046I", "SOUND %(sound)03d"),
+    11: ("SRC047I", "SCENARIO UPDATED"),
+    12: ("SRC031I", "MISSION UPDATED"),
+    13: ("SRC032I", "STOCKS UPDATED"),
+    14: ("SRC033I", "CAR MARKET UPDATED"),
+    17: ("SRC014I", "HUMAN %(human)03d UPDATED"),
+}
+
+
+class _Fields(dict):
+    """Event fields for a format: a missing or odd value is 0."""
+
+    def __missing__(self, key):
+        return 0
+
+    def __getitem__(self, key):
+        v = dict.get(self, key, 0)
+        return v if isinstance(v, int) else 0
+
+
 def event_lines(events):
-    """Readable (kind, text) pairs for decoded events. kind is 'msg' for a chat message."""
+    """Operator log lines for decoded events: (kind, text). kind is 'msg' for a chat message.
+    The clock stamp counts the server ticks (62 each second)."""
     out = []
     for ev in events:
         tick = getattr(ev, "tick", 0)
-        if getattr(ev, "type", None) == 2:
-            text = _text_of(ev.fields.get("text", b""))
-            out.append(("msg", "%8d MSG %s" % (tick, text)))
+        stamp = _stamp(tick / 62.0)
+        kind = getattr(ev, "type", None)
+        fields = getattr(ev, "fields", None) or {}
+        if kind == 2:
+            out.append(("msg", "%s %s MSG %s" % (stamp, TXT["message"], _text_of(fields.get("text", b"")))))
+        elif kind == 10:
+            out.append(("evt", "%s SRC048I DOOR %03d %s" % (stamp, fields.get("door", 0), "OPEN" if fields.get("open") else "CLOSED")))
+        elif kind in EVENT_TEXT:
+            ident, text = EVENT_TEXT[kind]
+            text = text % _Fields(fields) if "%(" in text else text
+            out.append(("evt", "%s %s %s" % (stamp, ident, text)))
         else:
-            name = getattr(ev, "name", None) or "EVENT%s" % getattr(ev, "type", "?")
-            out.append(("evt", "%8d %s" % (tick, str(name).upper())))
+            out.append(("evt", "%s %s 0x%02X" % (stamp, TXT["event_unknown"], int(kind or 0))))
     return out
 
 
 # --------------------------------------------------------------------------- the console
 
 class Mainframe:
-    def __init__(self, width=None, height=None):
+    def __init__(self, width=None, height=None, vector=None, sixel=False, cell=(10, 20)):
         self.width, self.height = width, height
-        self.viewer = FastViewer()
+        self.viewer = make_viewer(vector, sixel, cell)
+        self.vector = hasattr(self.viewer, "picture")      # true for the numpy viewer
         self.sleep = time.sleep
         self.now = time.monotonic
         self._t0 = self.now()
         self._last_tick = None
         self._last_change = self._t0
         self._trail = {}
+        self.view_top = 4                                   # rows above the main view
+        self.sixel = None
 
     def size(self):
         if self.width and self.height:
@@ -378,22 +482,25 @@ class Mainframe:
         blink = int((now - self._t0) * 2) % 2 == 0
         up = _clock(now - self._t0)
         r0, r1 = reel(tick * 0.31), reel(tick * 0.23)
-        left1 = [(S_BR, " SUB ROSA OPERATIONS CONSOLE   MODEL 24D   NODE 01 "), (S_WH, FULL if blink else " ")]
-        right1 = [(S_LO, "UP "), (S_HI, up), (S_BASE, "  "), (S_BR, r0[0] + " " + r1[0]), (S_BASE, " ")]
+        left1 = [(S_BR, " %s      %s      %s " % (TXT["title"], TXT["version"], TXT["node"])), (S_WH, FULL if blink else " ")]
+        right1 = [(S_LO, TXT["uptime"] + " "), (S_HI, up), (S_BASE, "  "), (S_BR, r0[0] + " " + r1[0]), (S_BASE, " ")]
         left2 = [(S_BASE, " ")]
         for label, level in lamps:
+            if label not in TXT["lamps"]:
+                continue
             lamp, style = ("■", S_BR) if level == 2 else ("■", S_AMB) if level == 1 else ("□", S_DK)
-            left2 += [(S_LO, label + " "), (style, lamp), (S_BASE, "   ")]
+            left2 += [(S_LO, TXT["lamps"].get(label, label) + " "), (style, lamp), (S_BASE, "   ")]
         if state is None:
-            status = [(S_AMB, "WARNING NO LINK")]
+            status = [(S_AMB, TXT["no_link"])]
         elif lamps[0][1] == 1:
-            status = [(S_AMB, "WARNING LINK STALLED")]
+            status = [(S_AMB, TXT["stalled"])]
         elif lamps[2][1] == 1:
-            status = [(S_AMB, "ROUND NOT RUNNING")]
+            status = [(S_AMB, TXT["no_round"])]
         else:
-            status = [(S_LO, "ALL SYSTEMS NOMINAL")]
+            status = [(S_LO, TXT["nominal"])]
+        status = [(S_BASE, "   ")] + status
         if extra.get("bot"):
-            status = [(S_LO, "BOT "), (S_HI, _text_of(extra["bot"])[:12].upper() + "  ")] + status
+            status = [(S_LO, TXT["player"] + " "), (S_HI, _text_of(extra["bot"])[:12].upper() + "  ")] + status
         right2 = status + [(S_BASE, "  "), (S_BR, r0[1] + " " + r1[1]), (S_BASE, " ")]
         out = [S_MID + TL + H2 * inner + TR + RESET]
         for lf, rt in ((left1, right1), (left2, right2)):
@@ -405,12 +512,24 @@ class Mainframe:
         inner_w, inner_h = width - 2, height - 2
         v = self.viewer
         v.width, v.height = inner_w, inner_h + 1
+        if self.vector:
+            v.sixel_origin = (self.view_top + 2, 2)             # the first cell inside the frame, counted from 1
         rows = v.render(state, boxes, me, camera).split("\n")[:inner_h]
-        return _box("MAIN VIEW", "", [S_BASE + green_row(r) + RESET for r in rows], width, height)
+        if self.vector:
+            self.sixel = getattr(v, "sixel_data", None)
+            rows = [S_BASE + (r[:-len(_VIEW_END)] if r.endswith(_VIEW_END) else r) + RESET for r in rows]
+        else:
+            rows = [S_BASE + green_row(r) + RESET for r in rows]
+        info = "%s  WIRE %s" % (v.cam_text(), TXT["wire"][0 if v.hollow else 1])
+        room = inner_w - len(TXT["view"]) - 8
+        if len(info) > room:
+            info = v.cam_text()                              # the camera line has the first claim on the room
+        return _box(TXT["view"], info[:max(0, room)], rows, width, height)
 
-    def _players(self, state, me, width, height):
+    def _players(self, state, me, width, height, extra=None):
         inner = width - 2
         humans = sorted(getattr(state, "humans", None) or (), key=lambda h: h.id) if state is not None else []
+        teams_of = (extra or {}).get("teams_of") or {}
         cap = height - 3
         shown = humans[:cap]
         if len(humans) > cap:
@@ -418,31 +537,24 @@ class Mainframe:
             mine = [h for h in humans if me is not None and h.id == me]
             if mine and mine[0] not in shown:
                 shown.append(mine[0])
-        bw = min(20, max(4, inner - 29))
-        rows = [_line([(S_LO, " ID  %-*s %3s %6s %5s %6s" % (bw, "HEALTH", "HP", "X", "Y", "Z"))], inner)]
+        head = TXT["players_head"]
+        rows = [_line([(S_LO, "  %-4s  %3s  %5s  %5s  %3s" % head)], inner)]
         for h in shown:
             hp = int(getattr(h, "health", 0))
             mine = me is not None and h.id == me
-            x, y, z = (int(round(c)) for c in h.pos)
-            frac = max(0, min(100, hp)) / 100.0
-            lit = int(round(frac * bw))
+            x, _y, z = (int(round(c)) for c in h.pos)
+            team = teams_of.get(h.id)
+            text = "%s %03d  %03d  %05d  %05d  %3s" % (">" if mine else " ", h.id, max(0, min(999, hp)), x, z,
+                                                       "%02d" % team if team is not None and team < 7 else "--")
             if mine:
                 style = S_ME
-                tone = S_ME
             else:
-                style = S_HI
-                tone = S_BR if hp > 60 else S_HI if hp > 25 else S_AMB
-            segs = [(style, ">" if mine else " "), (style, "%3d " % h.id),
-                    (tone, FULL * lit), (S_ME if mine else S_DK, LIGHT * (bw - lit)),
-                    (style, " %3d %6d %5d %6d" % (hp, x, y, z))]
-            if mine:
-                segs = [(S_ME, ">%3d " % h.id), (S_ME, FULL * lit + LIGHT * (bw - lit)),
-                        (S_ME, " %3d %6d %5d %6d" % (hp, x, y, z))]
-            rows.append(_line(segs, inner))
+                style = S_BR if hp > 60 else S_HI if hp > 25 else S_AMB
+            rows.append(_line([(style, " " + text)], inner))
         hidden = len(humans) - len(shown)
         if hidden > 0 and len(rows) < height - 2:
-            rows.append(_line([(S_AMB_DIM, " +%d MORE" % hidden)], inner))
-        return _box("PLAYERS", "%d" % len(humans), rows, width, height)
+            rows.append(_line([(S_AMB_DIM, " +%03d %s" % (hidden, TXT["more"]))], inner))
+        return _box(TXT["players"], "%03d" % len(humans), rows, width, height)
 
     def _teams(self, state, extra, width, height):
         inner = width - 2
@@ -450,13 +562,13 @@ class Mainframe:
         if not teams:
             counts = getattr(state, "team_counts", ()) if state is not None else ()
             teams = [{"manager": -1, "members": c, "missions": 0} for c in counts]
-        fmt = " %-4s   %7s  %7s  %8s"
-        rows = [_line([(S_LO, fmt % ("TEAM", "MANAGER", "MEMBERS", "MISSIONS"))], inner)]
+        fmt = " %-4s   %5s  %5s  %5s"
+        rows = [_line([(S_LO, fmt % TXT["teams_head"])], inner)]
         for i, t in enumerate(teams[:height - 3]):
             mgr = t.get("manager", -1)
-            rows.append(_line([(S_HI, fmt % ("T%d" % (i + 1), "--" if mgr is None or mgr < 0 else mgr,
-                                              t.get("members", 0), t.get("missions", 0)))], inner))
-        return _box("TEAMS", "", rows, width, height)
+            rows.append(_line([(S_HI, fmt % ("%02d" % i, "---" if mgr is None or mgr < 0 else "%03d" % mgr,
+                                              "%03d" % t.get("members", 0), "%03d" % t.get("missions", 0)))], inner))
+        return _box(TXT["teams"], "", rows, width, height)
 
     def _log(self, state, extra, width, height):
         inner = width - 2
@@ -468,7 +580,7 @@ class Mainframe:
         style = {"msg": S_BR, "evt": S_LO, "log": S_HI}
         for kind, text in items[-keep:]:
             rows.append(_line([(S_MID, " "), (style[kind], text)], inner))
-        return _box("EVENT LOG", "%d" % len(items), rows, width, height)
+        return _box(TXT["log"], "%03d" % len(items), rows, width, height)
 
     def _calls(self, extra, width, height):
         inner = width - 2
@@ -481,34 +593,34 @@ class Mainframe:
         for name, count in top:
             frac = count / peak if peak else 0
             label = (str(name).upper()[:namew - 2] + " ").ljust(namew, ".")
-            rows.append(_line([(S_HI, " " + label + " "), (S_BR, "%7d " % count),
+            rows.append(_line([(S_HI, " " + label + " "), (S_BR, "%7s " % ("%03d" % count)),
                                (S_BR if frac >= 0.66 else S_HI if frac >= 0.33 else S_MID, _bar(frac, barw))], inner))
         if not top:
-            rows.append(_line([(S_AMB_DIM, " NO RECORDING")], inner))
-        return _box("CALL COUNTERS", "", rows, width, height)
+            rows.append(_line([(S_AMB_DIM, " " + TXT["no_recording"])], inner))
+        return _box(TXT["calls"], "", rows, width, height)
 
     def _clock_line(self, state, extra, lamps, width, now):
         if state is None:
-            text = " NO DATA"
+            text = " " + TXT["no_data"]
         else:
-            phase = {1: "WAITING", 2: "ROUND", 3: "ROUND OVER"}.get(getattr(state, "phase", 0), "?")
+            phase = TXT["phases"].get(getattr(state, "phase", 0), TXT["unknown"])
             tps = extra.get("tps")
-            text = " WORLD CLOCK %s   TICK %d   TPS %s   PHASE %s   TIMER %d" % (
-                "%d" % extra["clock"] if extra.get("clock") is not None else "--",
-                getattr(state, "tick", 0), "%.1f" % tps if tps is not None else "--", phase,
-                getattr(state, "phase_timer", 0))
+            text = " %s %s   %s %06d   %s %s   %s %s   %s %05d" % (
+                TXT["clock"], "%d" % extra["clock"] if extra.get("clock") is not None else "--",
+                TXT["tick"], getattr(state, "tick", 0), TXT["tps"], "%05.1f" % tps if tps is not None else "--",
+                TXT["phase"], phase, TXT["timer"], getattr(state, "phase_timer", 0))
         # Right end: the status area. A blinking amber lamp shows when the link is not live.
         if lamps[0][1] == 2:
-            right, style = "READY ", S_BAR
+            right, style = TXT["ready"] + " ", S_BAR
         elif int(now * 2) % 2 == 0:
-            right, style = "X INPUT INHIBITED ", S_BAR_AMB
+            right, style = TXT["inhibited"] + " ", S_BAR_AMB
         else:
             right, style = " " * 18, S_BAR
         return _line([(S_BAR, text.ljust(width - len(right))), (style, right)], width)
 
     # -- frames
     def _too_small(self, width, height):
-        msgs = ["TERMINAL TOO SMALL", "NEED %dX%d   HAVE %dX%d" % (MIN_COLS, MIN_ROWS, width, height)]
+        msgs = [TXT["too_small"], "%s %dX%d   %s %dX%d" % (TXT["need"], MIN_COLS, MIN_ROWS, TXT["have"], width, height)]
         w = max(len(m) for m in msgs) + 6
         lines = [S_MID + TL + H2 * (w - 2) + TR + RESET]
         for i, m in enumerate(msgs):
@@ -530,6 +642,15 @@ class Mainframe:
         frame = (frame + [blank] * height)[:height]
         return "\n".join("\x1b[48;5;%dm\x1b[K" % BLACK + r + RESET for r in frame)
 
+    def _key_bar(self, width):
+        """The last line: the PF keys in the style of a 3270 screen, or the help line of the toggles."""
+        text = TXT["help"] if self.viewer.help else TXT["keys"]
+        return _line([(S_WH if self.viewer.help else S_HI, " " + text)], width)
+
+    def key(self, name):
+        """A key of the user, as a name of viz.Viewer.key. Returns True when the name is known."""
+        return self.viewer.key(name)
+
     def render(self, state, boxes=(), me=None, extra=None, camera=None):
         extra = extra or {}
         width, height = self.size()
@@ -538,9 +659,9 @@ class Mainframe:
         now = self.now()
         tick = getattr(state, "tick", 0) if state is not None else int((now - self._t0) * 20)
         lamps = self._lamps(state, extra, now)
-        boxes = list(boxes) + self._trails(state, now)
+        boxes = list(boxes) if self.vector else list(boxes) + self._trails(state, now)
         rows = self._header(state, extra, lamps, width, now, tick)
-        body = height - 5
+        body = height - 6
         lw = max(60, int(width * 0.6))
         rw = width - lw
         log_h = min(14, max(5, body - 12))
@@ -548,16 +669,20 @@ class Mainframe:
         calls_h, teams_h = 10, 6
         players_h = body - calls_h - teams_h
         left = self._view(state, boxes, me, camera, lw, view_h) + self._log(state, extra, lw, log_h)
-        right = (self._players(state, me, rw, players_h) + self._teams(state, extra, rw, teams_h)
+        right = (self._players(state, me, rw, players_h, extra) + self._teams(state, extra, rw, teams_h)
                  + self._calls(extra, rw, calls_h))
         rows += [a + b for a, b in zip(left, right)]
         rows.append(self._clock_line(state, extra, lamps, width, now))
+        rows.append(self._key_bar(width))
         out = []
         for i, row in enumerate(rows):
             if i & 1:
                 row = _dim_row(row)
             out.append("\x1b[48;5;%dm\x1b[K" % BLACK + row)
-        return "\n".join(out)
+        frame = "\n".join(out)
+        if self.vector and self.sixel:
+            frame += self.sixel                              # the image goes over the empty view area
+        return frame
 
     # -- boot sequence
     def boot(self, out, skip=False):
@@ -570,30 +695,29 @@ class Mainframe:
             if hasattr(out, "flush"):
                 out.flush()
 
-        put("SUB ROSA OPERATIONS CONSOLE   BIOS V2.4D\r\n", S_BR)
-        put("(C) 1986 CRYPTIC SEA SYSTEMS DIVISION\r\n\r\n", S_LO)
+        put(TXT["title"] + "   " + TXT["bios"] + "\r\n", S_BR)
+        put(TXT["boot_sub"] + "\r\n\r\n", S_LO)
         self.sleep(0.2)
         steps = 16
         for i in range(steps + 1):
-            put("\rMEMORY TEST %05dK" % (640 * i // steps))
+            put("\r" + TXT["memtest"] + " %05dK" % (640 * i // steps))
             self.sleep(0.5 / steps)
         put("  OK\r\n", S_BR)
-        for dev in ("NET0   PACKET INTERFACE", "TAPE0  RECORDER UNIT", "VIEW0  WIREFRAME DISPLAY",
-                    "CPU0   X87 COPROCESSOR"):
+        for dev in TXT["devices"]:
             self.sleep(0.12)
-            put("DEVICE %-26s ... " % dev, S_LO)
+            put(TXT["device"] + " %-26s ... " % dev, S_LO)
             put("OK\r\n", S_BR)
         self.sleep(0.15)
-        put("\r\nLOADING SUBROSA24D.EXE ... ", S_HI)
+        put("\r\n" + TXT["loading"] + " ... ", S_HI)
         self.sleep(0.15)
         put("OK\r\n", S_BR)
-        put("INITIALIZING WORLD  [", S_HI)
+        put(TXT["init"] + "  [", S_HI)
         bar = 30
         for i in range(bar):
             put(FULL, S_BR)
             self.sleep(0.4 / bar)
         put("]\r\n\r\n", S_HI)
-        put("SYSTEM READY\r\n", S_WH)
+        put(TXT["system_ready"] + "\r\n", S_WH)
         self.sleep(0.15)
 
 
@@ -602,9 +726,9 @@ class Mainframe:
 _CALL_RATES = {"humansimulation": 62, "bondsimulation2": 31, "objectsimulation": 48, "serversend": 62,
                "unpackevent": 14, "packevent": 11, "itemsimulation": 40, "createevent_updateitem": 3,
                "physics_step": 120, "sendpacket": 22}
-_LOG_LINES = ("PLAYER 3 JOINED TEAM 2", "MISSION 4 STARTED", "BULLET HIT HUMAN 5", "ITEM 17 PICKED UP",
-              "VEHICLE 2 ENTERED BY 6", "DOOR 9 OPEN", "ROUND TIMER SYNC", "SNAPSHOT WRITTEN",
-              "PLAYER 8 LEFT", "STOCKS UPDATED")
+_LOG_LINES = ("SRC011I PLAYER 003 JOINED  TEAM 2", "SRC012I MISSION 004 STARTED", "SRC013W BULLET HIT  SLOT 005",
+              "SRC014I ITEM 0017 PICKUP", "SRC015I VEHICLE 002 ENTERED  SLOT 006", "SRC016I DOOR 0009 OPEN",
+              "SRC017I ROUND TIMER SYNC", "SRC018I SNAPSHOT WRITTEN", "SRC019I PLAYER 008 LEFT", "SRC020I STOCKS UPDATED")
 
 
 def demo_data(t):
@@ -646,7 +770,7 @@ def _main(argv):
         sys.stdout.reconfigure(encoding="utf-8")
     if (width is None or height is None) and not sys.stdout.isatty():
         width, height = width or 120, height or 40
-    mf = Mainframe(width, height)
+    mf = Mainframe(width, height, vector=False if "--braille" in argv else None, sixel="--sixel" in argv)
     if "--frame" in argv:
         state, boxes, me, extra = demo_data(1.0)
         sys.stdout.write(mf.render(state, boxes, me, extra) + "\n")
@@ -678,7 +802,7 @@ def _main(argv):
                 sys.stdout.write("\x1b[2J")
                 last = size
             state, boxes, me, extra = demo_data(t)
-            mf.viewer.yaw = 0.3 * t
+            mf.viewer.yaw_off = 0.3 * t
             sys.stdout.write("\x1b[H" + mf.render(state, boxes, me, extra))
             sys.stdout.flush()
             time.sleep(max(0.0, 1 / 15 - (time.time() - start - t)))
