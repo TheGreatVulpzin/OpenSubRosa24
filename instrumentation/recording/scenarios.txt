@@ -49,7 +49,7 @@ at 2100 set 0x2561d740 4 3887700
 # make a transaction or a three way mission. The last period is before the end of the world (3726000).
 # The first jump is at tick 1200 (19 s): the player must be in a company by then (bot.py --company does it).
 # The bot joins company 0, stays, leaves the base (team 7 again), leaves the game and joins again.
-#bot --company 0 --stay 105 --snapshot 70 --exit-company --leave --rejoin 3
+#bot --company 0 --shop --stay 105 --snapshot 70 --exit-company --leave --rejoin 3
 ticks 0x90dc578
 at 1200 set 0x2561d740 4 431700
 at 1800 set 0x2561d740 4 809700

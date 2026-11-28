@@ -12,6 +12,7 @@ Arguments:
   --pid N            process of the original server (needed for --company and --snapshot)
   --name, --account  player name, and the two numbers of the account id (a new pair makes a new account)
   --company T        World mode: put the human inside the base of team T (0 to 4)
+  --shop             with --company: use the menus of the base (items, weapons, stocks, bank)
   --exit-company     after the stay, move out of the base with the leave button down (team 7 again)
   --team N           Round mode: the team choice of menu 2 (1 to 3). The bot then marks itself ready
   --stay S           seconds to play
@@ -52,7 +53,20 @@ HUMAN_STRIDE = 0x2B64
 HUMAN_POS = 0x48
 HUMAN_BONES = 0xC8
 BONE_STRIDE = 0xE0
+CITY = 0xE299220
+CITY_NUM_BUILDINGS = 0x2F998
+CITY_BUILDING_TYPE = 0x2F9DC     # building records are 0x9dc bytes
+CITY_BUILDING_MIN = 0x2F9F8
+CITY_BUILDING_MAX = 0x2FA04
+CITY_SHOP_COUNT = 0x302A4
+BUILDING_STRIDE = 0x9DC
 BUTTON_LEAVE_BASE = 0x40000
+# (menu, value): the menu of the player must be the first number when the value goes out. 16 goes back to menu 3.
+SHOP = ([(3, 1)] + [(4, v) for v in (1, 2, 3, 4, 16)] +
+        [(3, 2)] + [(5, v) for v in (1, 2, 3, 4, 16)] +
+        [(3, 3), (7, 1), (7, 2), (7, 16)] +
+        [(3, 5)] + [(8, v) for v in (1, 3, 5, 2, 4, 16)] +
+        [(3, 4)] + [(11, v) for v in (1, 2, 7, 16)])
 
 k32 = ctypes.WinDLL('kernel32', use_last_error=True)
 k32.OpenProcess.restype = wintypes.HANDLE
@@ -219,12 +233,46 @@ class Bot:
             return
         self.last_menu_action = time.time()
 
+    def script(self, steps):
+        """Send menu choices: each (menu, value) waits for that menu of the player first."""
+        for menu, value in steps:
+            deadline = time.time() + 3
+            while time.time() < deadline and not (self.state and self.state.menu == menu):
+                self.run_for(0.05)
+            if self.state.menu != menu:
+                continue
+            self.menu(value)
+            self.run_for(0.4)
+
     def run_for(self, seconds, buttons=0):
         end = time.time() + seconds
         while time.time() < end:
             self.tick(buttons)
             self.spawn_if_needed()
             time.sleep(1 / 60)
+
+
+def tour(bot, mem, human, home, per_type=3):
+    """Visit shops (2 car dealer, 4 suits, 7 gun store) and banks (5): the human stands inside the building."""
+    seen = {}
+    for b in range(mem.int(CITY + CITY_NUM_BUILDINGS)):
+        kind = mem.int(CITY + CITY_BUILDING_TYPE + b * BUILDING_STRIDE)
+        if kind not in (2, 4, 5, 7) or seen.get(kind, 0) >= per_type:
+            continue
+        seen[kind] = seen.get(kind, 0) + 1
+        lo = mem.vec3(CITY + CITY_BUILDING_MIN + b * BUILDING_STRIDE)
+        hi = mem.vec3(CITY + CITY_BUILDING_MAX + b * BUILDING_STRIDE)
+        # A menu opens only when the menu of the player is 0, so the human leaves the base first.
+        move_human(mem, human, home)
+        bot.run_for(0.6)
+        move_human(mem, human, tuple((a + c) / 2 for a, c in zip(lo, hi)))
+        bot.run_for(1.0)
+        if kind == 5:
+            bot.script([(12, v) for v in (1, 2, 7, 16)])
+        else:
+            rows = min(mem.int(CITY + CITY_SHOP_COUNT + b * BUILDING_STRIDE), 4)
+            bot.script([(9, 1)] + [(10, v) for v in range(1, rows + 1)])
+        print('building %d, type %d' % (b, kind))
 
 
 def player_team(mem, slot):
@@ -281,6 +329,10 @@ def session(args, mem):
                 break
         print('team of the bot: %d, manager of that team: %d' % (
             player_team(mem, slot), mem.int(GAME + team * GAME_TEAM_STRIDE + GAME_MANAGER)))
+        if args.shop:
+            bot.script(SHOP)
+            tour(bot, mem, human, home)
+            move_human(mem, human, tuple((a + c) / 2 for a, c in zip(lo, hi)))
         bot.run_for(args.stay)
         if args.exit_company:
             # The button makes the server count the ticks outside the base (180 ticks, 3 s).
@@ -307,6 +359,7 @@ def main():
     ap.add_argument('--account', type=int, nargs=2, default=[int(time.time()) & 0x7FFFFFFF, 12345])
     ap.add_argument('--company', type=int, help='move the human into the base of this team (0 to 4)')
     ap.add_argument('--stay', type=float, default=10, help='seconds to stay after the move')
+    ap.add_argument('--shop', action='store_true', help='with --company: buy in the menus of the base')
     ap.add_argument('--exit-company', action='store_true', help='after the stay, leave the base and the team')
     ap.add_argument('--leave', action='store_true', help='send a disconnect at the end (else only stop)')
     ap.add_argument('--viz', action='store_true', help='draw the world in the terminal (ANSI, 3D wireframe)')
