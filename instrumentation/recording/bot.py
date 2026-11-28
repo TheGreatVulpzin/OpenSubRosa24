@@ -24,6 +24,7 @@ Arguments:
   --mode MODE        how the view is drawn: auto (sixel when the terminal has it, else braille), sixel (true
                      pixels, Windows Terminal 1.22 and later), braille (2 by 4 dots in each cell), half (half
                      blocks), dots (the old dots of viz.py, needs no numpy). --sixel and --braille are short for it
+  --color            with --console: names in the colors of the companies (the console starts with green only)
   --cell WxH         pixel size of one terminal cell for sixel (default: asked from the terminal, else 10x20)
   --amber            with --viz: amber instead of green cyan (the console is always green)
   --solid, --no-grid, --no-glow, --no-trails   start values of the view toggles
@@ -59,6 +60,8 @@ GAME_TEAM_STRIDE = 0x117C
 GAME_SAFE_MIN = 0x70        # team 0 safe box, vec3 min then vec3 max
 GAME_SAFE_MAX = 0x7C
 GAME_MANAGER = 0x9C
+GAME_MISSIONS = 0xD0        # 16 missions of 0x40 bytes for each team, the first field is active
+MISSION_SIZE = 0x40
 PLAYER = 0xEDEDD00
 PLAYER_STRIDE = 0x2408
 PLAYER_TEAM = 0x64
@@ -279,6 +282,10 @@ class Bot:
         self.calls_path = None
         self.names = None
         self.tick_mark = (time.time(), 0)
+        self._pinfo = ({}, {})       # names and ids of the players, read from the memory of the server
+        self._pinfo_t = 0.0
+        self._members = [0] * 5      # the players of each company
+        self._missions = [0] * 5     # the active missions of each company
         self.tps = 0.0
         self.snapshot_at = None
         self.keys = False           # read keys in draw (a console, not a pipe)
@@ -341,7 +348,7 @@ class Bot:
                 if name == 'snap':
                     self.snapshot_at = time.time()
                     continue
-                self.viewer.key(name)
+                (self.console or self.viewer).key(name)
             if getattr(self.viewer, 'needs_clear', False):
                 sys.stdout.write('\x1b[2J')
                 self.viewer.needs_clear = False
@@ -376,6 +383,43 @@ class Bot:
                 if name:
                     self.calls[name] = self.calls.get(name, 0) + 1
 
+    def players_info(self):
+        """For each human of the picture: the slot of its player (the game id), the name, and the index of the
+        account (the account id), read once each second. A human without a player (traffic) has no entry."""
+        now = time.time()
+        if now - self._pinfo_t < 1.0:
+            return self._pinfo
+        info, teams = {}, {}
+        for h in getattr(self.state, 'humans', None) or ():
+            try:
+                owner = self.mem.int(HUMAN + h.id * HUMAN_STRIDE + 8)
+                base = PLAYER + owner * PLAYER_STRIDE
+                if 0 <= owner < 256 and self.mem.int(base) == 1:
+                    name = self.mem.read(base + 4, 32).split(b'\0')[0].decode('ascii', 'replace')
+                    acct = self.mem.int(base + 0x34)
+                    info[h.id] = {'slot': owner, 'name': name, 'acct': acct if acct >= 0 else None}
+                    teams[h.id] = self.mem.int(base + PLAYER_TEAM)
+            except OSError:
+                pass
+        self._pinfo, self._pinfo_t = (info, teams), now
+        self._members = [0] * 5
+        for slot in range(256):
+            try:
+                base = PLAYER + slot * PLAYER_STRIDE
+                if self.mem.int(base) == 1 and self.mem.int(base + 0x1A38) == 0:        # active, not a bot
+                    team = self.mem.int(base + PLAYER_TEAM)
+                    if 0 <= team < 5:
+                        self._members[team] += 1
+            except OSError:
+                break
+        try:
+            for team in range(5):
+                first = GAME + team * GAME_TEAM_STRIDE + GAME_MISSIONS
+                self._missions[team] = sum(1 for k in range(16) if self.mem.int(first + k * MISSION_SIZE) == 1)
+        except OSError:
+            pass
+        return self._pinfo
+
     def extra(self):
         st = self.state
         now = time.time()
@@ -385,11 +429,12 @@ class Bot:
             self.count_calls()
         data = {'tps': self.tps, 'clock': st.world, 'log': list(LOG or ())[-8:], 'calls': self.calls,
                 'recorder': self.calls_path is not None, 'bot': self.args.name}
-        if self.mem is not None and self.slot is not None:
-            data['teams_of'] = {self.human_id: player_team(self.mem, self.slot)}
+        data['mode'] = 'WORLD' if self.gametype == 4 else 'ROUND'
+        if self.mem is not None:
+            data['players'], data['teams_of'] = self.players_info()
         if self.mem is not None:
             data['teams'] = [{'manager': self.mem.int(GAME + t * GAME_TEAM_STRIDE + GAME_MANAGER),
-                              'members': 0, 'missions': 0} for t in range(5)]
+                              'members': self._members[t], 'missions': self._missions[t]} for t in range(5)]
         return data
 
     def menu(self, value):
@@ -475,8 +520,14 @@ def wait_for_body(bot, mem, human):
     return hpos
 
 
-SAFE_COLOR = (255, 190, 190)         # the safe zone of the team of the bot
-SAFE_DIM_COLOR = (150, 90, 90)       # the safe zones of the other teams
+
+
+def team_name(team):
+    """The full name of a company, or CIVILIAN for a player without one."""
+    import viz
+    if 0 <= team < len(viz.TEAM_FULL):
+        return viz.TEAM_FULL[team]
+    return viz.CIVILIAN if team == 7 else 'TEAM %02d' % team
 
 
 def view_options(args):
@@ -511,6 +562,7 @@ def session(args, mem):
         global LOG
         LOG = []
         sys.stdout.reconfigure(encoding='utf-8')
+        mainframe.COLOR['full'] = args.color
         bot.console = mainframe.Mainframe(**view_options(args))
         bot.viewer = bot.console.viewer
         bot.calls_path = os.path.join(args.folder, 'sv_args.txt') if args.folder else None
@@ -531,10 +583,13 @@ def session(args, mem):
             except (OSError, ValueError) as err:
                 say('SRC010W MAP NOT LOADED  %s' % str(err).upper())
         if mem is not None:
+            import viz
+            # The base buildings of the map lose their 'BASE n' label: the safe zone of each company has its own.
+            bot.boxes = [(b[0], b[1], '' if str(b[2]).startswith('BASE ') else b[2]) + tuple(b[3:]) for b in bot.boxes]
             for team in range(5):
                 lo, hi = team_box(mem, team)
                 if lo != hi:
-                    bot.boxes.append((lo, hi, '', SAFE_COLOR if team == args.company else SAFE_DIM_COLOR, 2.0))
+                    bot.boxes.append((lo, hi, viz.TEAM_SHORT[team] + ' HQ', viz.TEAM_COLORS[team], 2.0))
         sys.stdout.write('\x1b[2J\x1b[?25l')
     bot.join()
     if args.snapshot is not None:
@@ -557,9 +612,9 @@ def session(args, mem):
                     break
             manager = mem.int(GAME + team * GAME_TEAM_STRIDE + GAME_MANAGER)
             if player_team(mem, slot) == team:
-                say('SRC003I TEAM %d JOINED  MANAGER SLOT %s' % (team, '%03d' % manager if manager >= 0 else 'NONE'))
+                say('SRC003I %s  MANAGER SLOT %s' % (team_name(team), '%03d' % manager if manager >= 0 else 'NONE'))
             else:
-                say('SRC004W TEAM %d NOT JOINED  PLAYER TEAM %d' % (team, player_team(mem, slot)))
+                say('SRC004W %s NOT JOINED  PLAYER %s' % (team_name(team), team_name(player_team(mem, slot))))
             if args.shop:
                 bot.script(SHOP)
                 tour(bot, mem, human, home)
@@ -569,7 +624,7 @@ def session(args, mem):
                 # The button makes the server count the ticks outside the base (180 ticks, 3 s).
                 move_human(mem, human, home)
                 bot.run_for(5, BUTTON_LEAVE_BASE)
-                say('SRC006I BASE LEFT  PLAYER TEAM %d' % player_team(mem, slot))
+                say('SRC006I BASE LEFT  PLAYER %s' % team_name(player_team(mem, slot)))
         else:
             bot.run_for(args.stay)
     except Quit:
@@ -608,6 +663,7 @@ def main():
     ap.add_argument('--no-glow', action='store_true', help='start without the bloom of the vector view (key O)')
     ap.add_argument('--no-trails', action='store_true', help='start without the trails of the vector view (key T)')
     ap.add_argument('--braille', action='store_true', help='short for --mode braille')
+    ap.add_argument('--color', action='store_true', help='with --console: the colors of the companies on names (key K or F5 switches)')
     ap.add_argument('--snapshot', type=float, help='seconds after the join: ask the recorder for the snapshot')
     ap.add_argument('--team', type=int, default=1, help='round mode: menu choice of the team (1 to 3)')
     ap.add_argument('--rejoin', type=float, help='join again with the same account after this many seconds')

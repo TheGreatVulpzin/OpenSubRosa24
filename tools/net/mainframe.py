@@ -65,16 +65,17 @@ TXT = {
     "version": "VERSION 24D",
     "node": "NODE 01",
     "uptime": "UPTIME",
-    "lamps": {"LINK": "LINK", "WORLD": "SIM", "ROUND": "ROUND", "RECORDER": "RECORDER"},     # the BOT lamp has no label: not shown
+    "lamps": {"LINK": "LINK", "WORLD": "SIM", "ROUND": "RUN", "RECORDER": "RECORDER"},     # the BOT lamp has no label: not shown
     "player": "PLAYER",
-    "no_link": "ERR 04 NO LINK",
-    "stalled": "STAT HOLD",
-    "no_round": "STAT READY",
-    "nominal": "STAT ACTIVE",
-    "stat_ready": "STAT READY",
+    "stat": "STAT",
+    "no_link": "NO LINK",
+    "stalled": "HOLD",
+    "no_round": "READY",
+    "nominal": "ACTIVE",
+    "stat_ready": "READY",
     "view": "MAIN VIEW",
     "players": "PLAYERS",
-    "players_head": ("SLOT", "HP", "X", "Z", "TM"),
+    "players_head": {"slot": "SLOT", "name": "NAME", "acct": "ACCT", "hp": "HP", "x": "X", "z": "Z", "team": "TEAM"},
     "more": "MORE",
     "teams": "TEAMS",
     "teams_head": ("TEAM", "MGR", "MBR", "MSN"),
@@ -83,15 +84,21 @@ TXT = {
     "event_unknown": "SRC099I EVENT TYPE",
     "calls": "CALL COUNTERS",
     "no_recording": "REC INACTIVE",
-    "clock": "SIM CLOCK",
+    "clock": "CLOCK",
     "tick": "TICK",
     "tps": "TPS",
-    "phase": "PHASE",
+    "gamemode": "GAME MODE",
+    "sim": "SIMULATION",
+    "state": "STATE",
     "timer": "TIMER",
-    "phases": {1: "WAITING", 2: "ROUND", 3: "ROUND OVER"},
-    "wire": ("HOLLOW", "SOLID"),
-    "keys": "F1 HELP  F2 CAMERA  F3 WIRE  F4 RENDER  F9 SNAP  F12 QUIT   ARROWS A D TURN  W S TILT  + - ZOOM  M MAP",
-    "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  V ORBIT  G FREE  F FOLLOW  M MAP  E RENDER  P SNAP  Q QUIT",
+    "states": dict(viz.STATE_WORDS),
+    "wire": "WIRE",
+    "render_names": {"halfblock": "HALF"},
+    "fkeys": (("F1", "HELP"), ("F2", "CAMERA"), ("F3", "WIRE"), ("F4", "RENDER"), ("F5", "COLOR"),
+              ("F6", "LABELS"), ("F7", "GRID"), ("F8", "MAP"), ("F9", "SNAP"), ("F10", "QUIT")),
+    "view_keys": "ARROWS A D TURN   W S TILT   + - ZOOM",
+    "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  K COLOR  V ORBIT  G FREE  F FOLLOW  M MAP  E RENDER  P SNAP  Q QUIT",
+    "npc": "NPC",
     "unknown": "UNKNOWN",
     "no_data": "NO DATA",
     "ready": "READY",
@@ -215,9 +222,30 @@ ME_RGB = (170, 255, 200)
 _AMBER_SOURCES = {viz.COLOR_HURT, viz.COLOR_DYING}
 
 
+COLOR = {"full": False}         # reduced: green and amber only. Full: the colors of the companies too
+
+
+def team_style(index):
+    """The style of a company name in full color mode, else None."""
+    if COLOR["full"] and index is not None and 0 <= index < len(viz.TEAM_COLORS):
+        r, g, b = viz.TEAM_COLORS[index]
+        return RESET + _BG + "\x1b[38;2;%d;%d;%dm" % (r, g, b)
+    return None
+
+
+def team_of_text(text):
+    """The index of the first company that the text names, or None."""
+    for index in sorted(range(len(viz.TEAM_FULL)), key=lambda i: -len(viz.TEAM_FULL[i])):
+        if viz.TEAM_FULL[index] in text or viz.TEAM_SHORT[index] in text:
+            return index
+    return None
+
+
 def phosphor(rgb):
     """A scene color in the green phosphor theme: brightness stays, hue becomes green.
     Hurt humans are amber. The human of the bot is a white green."""
+    if COLOR["full"] and rgb in viz.TEAM_COLORS:
+        return rgb
     if rgb in _AMBER_SOURCES:
         return AMBER_RGB
     if rgb == viz.COLOR_ME:
@@ -282,6 +310,31 @@ def _split_line(left, right, width):
     return _line(left + [(S_BASE, " " * gap)] + right, width)
 
 
+def _label_groups(text):
+    """'FOLLOW  AZ 269  EL 015' becomes [('', 'FOLLOW'), ('AZ', '269'), ('EL', '015')]."""
+    groups = []
+    for part in text.split("  "):
+        label, _, value = part.rpartition(" ")
+        groups.append((label, value) if label else ("", part))
+    return groups
+
+
+def _groups_len(groups):
+    return sum(len(a) + (1 if a else 0) + len(b) for a, b in groups) + 3 * (len(groups) - 1)
+
+
+def _group_pieces(groups):
+    """Styled pieces: the label dim, the value bright, a bar between the groups."""
+    out = []
+    for i, (label, value) in enumerate(groups):
+        if i:
+            out.append((S_MID, " \u2502 "))
+        if label:
+            out.append((S_LO, label + " "))
+        out.append((S_WH, value))
+    return out
+
+
 def _fit(text, width):
     return text if len(text) <= width else text[:width]
 
@@ -291,20 +344,25 @@ def _clock(seconds):
     return "%02d:%02d:%02d" % (s // 3600 % 100, s // 60 % 60, s % 60)
 
 
-def _box(title, info, rows, width, height):
-    """A double line frame. Content rows must be exactly width - 2 visible characters."""
+def _box(title, info, rows, width, height, footer=""):
+    """A double line frame. Content rows must be exactly width - 2 visible characters. The info on the top
+    border is a text or a list of (style, text) pieces. The footer is text on the bottom border."""
     inner = width - 2
     head = " %s " % title
-    tail = " %s " % info if info else ""
-    fill = max(0, inner - 1 - len(head) - len(tail) - (1 if tail else 0))
+    pieces = [(S_WH, info)] if isinstance(info, str) and info else list(info or [])
+    tail_len = sum(len(t) for _, t in pieces) + 2 if pieces else 0
+    fill = max(0, inner - 1 - len(head) - tail_len - (1 if pieces else 0))
     top = [S_MID + TL + H2, S_BAR + head, S_MID + H2 * fill]
-    if tail:
-        top += [S_WH + tail, S_MID + H2]
+    if pieces:
+        top += [S_WH + " "] + [st + t for st, t in pieces] + [S_WH + " ", S_MID + H2]
     out = ["".join(top) + S_MID + TR + RESET]
     for i in range(height - 2):
         body = rows[i] if i < len(rows) else " " * inner
         out.append(S_MID + V2 + body + S_MID + V2 + RESET)
-    out.append(S_MID + BL + H2 * inner + BRC + RESET)
+    if footer and len(footer) + 6 <= inner:
+        out.append(S_MID + BL + H2 + S_LO + " " + footer + " " + S_MID + H2 * (inner - len(footer) - 3) + BRC + RESET)
+    else:
+        out.append(S_MID + BL + H2 * inner + BRC + RESET)
     return out
 
 
@@ -485,25 +543,28 @@ class Mainframe:
         up = _clock(now - self._t0)
         r0, r1 = reel(tick * 0.31), reel(tick * 0.23)
         left1 = [(S_BR, " %s      %s      %s " % (TXT["title"], TXT["version"], TXT["node"])), (S_WH, FULL if blink else " ")]
-        right1 = [(S_LO, TXT["uptime"] + " "), (S_HI, up), (S_BASE, "  "), (S_BR, r0[0] + " " + r1[0]), (S_BASE, " ")]
+
+        def field(label, value, style):
+            return [(S_LO, label.ljust(7)), (style, value.ljust(8))]          # the values start in one column
+
+        right1 = field(TXT["uptime"], up, S_HI) + [(S_BASE, "  "), (S_BR, r0[0] + " " + r1[0]), (S_BASE, " ")]
         left2 = [(S_BASE, " ")]
         for label, level in lamps:
             if label not in TXT["lamps"]:
                 continue
-            lamp, style = ("■", S_BR) if level == 2 else ("■", S_AMB) if level == 1 else ("□", S_DK)
+            lamp, style = ("\u25a0", S_BR) if level == 2 else ("\u25a0", S_AMB) if level == 1 else ("\u25a1", S_DK)
             left2 += [(S_LO, TXT["lamps"].get(label, label) + " "), (style, lamp), (S_BASE, "   ")]
-        if state is None:
-            status = [(S_AMB, TXT["no_link"])]
-        elif lamps[0][1] == 1:
-            status = [(S_AMB, TXT["stalled"])]
-        elif lamps[2][1] == 1:
-            status = [(S_AMB, TXT["no_round"])]
-        else:
-            status = [(S_LO, TXT["nominal"])]
-        status = [(S_BASE, "   ")] + status
         if extra.get("bot"):
-            status = [(S_LO, TXT["player"] + " "), (S_HI, _text_of(extra["bot"])[:12].upper() + "  ")] + status
-        right2 = status + [(S_BASE, "  "), (S_BR, r0[1] + " " + r1[1]), (S_BASE, " ")]
+            left2 += [(S_BASE, "  "), (S_LO, TXT["player"] + " "), (S_HI, _text_of(extra["bot"])[:12].upper())]
+        if state is None:
+            value, vstyle = TXT["no_link"], S_AMB
+        elif lamps[0][1] == 1:
+            value, vstyle = TXT["stalled"], S_AMB
+        elif lamps[2][1] == 1:
+            value, vstyle = TXT["no_round"], S_AMB
+        else:
+            value, vstyle = TXT["nominal"], S_HI
+        right2 = field(TXT["stat"], value, vstyle) + [(S_BASE, "  "), (S_BR, r0[1] + " " + r1[1]), (S_BASE, " ")]
         out = [S_MID + TL + H2 * inner + TR + RESET]
         for lf, rt in ((left1, right1), (left2, right2)):
             out.append(S_MID + V2 + _split_line(lf, rt, inner) + S_MID + V2 + RESET)
@@ -522,16 +583,20 @@ class Mainframe:
             rows = [S_BASE + (r[:-len(_VIEW_END)] if r.endswith(_VIEW_END) else r) + RESET for r in rows]
         else:
             rows = [S_BASE + green_row(r) + RESET for r in rows]
-        info = "%s  WIRE %s" % (v.cam_text(), TXT["wire"][0 if v.hollow else 1])
+        backend = getattr(v, "backend", "dots")
+        render = TXT["render_names"].get(backend, backend.upper())
+        groups = _label_groups(v.cam_text(short=True)) + [(TXT["wire"], str(1 if v.hollow else 2)), ("", render)]
         room = inner_w - len(TXT["view"]) - 8
-        if len(info) > room:
-            info = v.cam_text()                              # the camera line has the first claim on the room
-        return _box(TXT["view"], info[:max(0, room)], rows, width, height)
+        while len(groups) > 1 and _groups_len(groups) > room:
+            groups.pop()                                     # the camera has the first claim on the room
+        return _box(TXT["view"], _group_pieces(groups), rows, width, height, TXT["view_keys"])
 
     def _players(self, state, me, width, height, extra=None):
         inner = width - 2
+        extra = extra or {}
+        info = extra.get("players") or {}                 # human id -> {"slot", "name", "acct"}
+        teams_of = extra.get("teams_of") or {}
         humans = sorted(getattr(state, "humans", None) or (), key=lambda h: h.id) if state is not None else []
-        teams_of = (extra or {}).get("teams_of") or {}
         cap = height - 3
         shown = humans[:cap]
         if len(humans) > cap:
@@ -539,20 +604,47 @@ class Mainframe:
             mine = [h for h in humans if me is not None and h.id == me]
             if mine and mine[0] not in shown:
                 shown.append(mine[0])
-        head = TXT["players_head"]
-        rows = [_line([(S_LO, "  %-4s  %3s  %5s  %5s  %3s" % head)], inner)]
+        # Columns: the game id (slot) and the account id are two different numbers.
+        cols = [("slot", 4), ("name", 0), ("acct", 5), ("hp", 3)]
+        if inner >= 58:
+            cols += [("x", 5), ("z", 5)]
+        if inner >= 44:
+            cols += [("team", 8)]
+        fixed = sum(w for _, w in cols) + (len(cols) - 1) + 3
+        name_w = max(4, min(16, inner - fixed))
+        cols = [(k, name_w if k == "name" else w) for k, w in cols]
+        names = TXT["players_head"]
+        head = "  " + " ".join(names[k].ljust(w) if k == "name" else names[k].rjust(w) for k, w in cols)
+        rows = [_line([(S_LO, head)], inner)]
         for h in shown:
             hp = int(getattr(h, "health", 0))
             mine = me is not None and h.id == me
+            rec = info.get(h.id) or {}
             x, _y, z = (int(round(c)) for c in h.pos)
             team = teams_of.get(h.id)
-            text = "%s %03d  %03d  %05d  %05d  %3s" % (">" if mine else " ", h.id, max(0, min(999, hp)), x, z,
-                                                       "%02d" % team if team is not None and team < 7 else "--")
+            if team is None:
+                team_text = "--"
+            elif team < len(viz.TEAM_SHORT):
+                team_text = viz.TEAM_SHORT[team]
+            else:
+                team_text = viz.CIVILIAN
+            slot = rec.get("slot")
+            acct = rec.get("acct")
+            name = rec.get("name") or (TXT["npc"] if info else "")
+            values = {"slot": "%03d" % slot if slot is not None else ("%03d" % h.id if not info else "---"),
+                      "name": str(name)[:name_w].ljust(name_w), "acct": "%04d" % acct if acct is not None else "----",
+                      "hp": "%03d" % max(0, min(999, hp)), "x": "%05d" % x, "z": "%05d" % z, "team": team_text.rjust(8)}
+            text = (">" if mine else " ") + " " + " ".join(values[k] for k, _ in cols)
             if mine:
                 style = S_ME
             else:
                 style = S_BR if hp > 60 else S_HI if hp > 25 else S_AMB
-            rows.append(_line([(style, " " + text)], inner))
+            segs = [(style, text)]
+            tstyle = team_style(team) if not mine else None
+            if tstyle and "team" in values:
+                body = text[:-8]
+                segs = [(style, body), (tstyle, text[-8:])]
+            rows.append(_line(segs, inner))
         hidden = len(humans) - len(shown)
         if hidden > 0 and len(rows) < height - 2:
             rows.append(_line([(S_AMB_DIM, " +%03d %s" % (hidden, TXT["more"]))], inner))
@@ -564,12 +656,14 @@ class Mainframe:
         if not teams:
             counts = getattr(state, "team_counts", ()) if state is not None else ()
             teams = [{"manager": -1, "members": c, "missions": 0} for c in counts]
-        fmt = " %-4s   %5s  %5s  %5s"
+        fmt = " %-10s %5s %5s %5s"
         rows = [_line([(S_LO, fmt % TXT["teams_head"])], inner)]
         for i, t in enumerate(teams[:height - 3]):
             mgr = t.get("manager", -1)
-            rows.append(_line([(S_HI, fmt % ("%02d" % i, "---" if mgr is None or mgr < 0 else "%03d" % mgr,
-                                              "%03d" % t.get("members", 0), "%03d" % t.get("missions", 0)))], inner))
+            name = viz.TEAM_SHORT[i] if i < len(viz.TEAM_SHORT) else "TEAM %02d" % i
+            text = fmt % (name, "---" if mgr is None or mgr < 0 else "%03d" % mgr,
+                          "%03d" % t.get("members", 0), "%03d" % t.get("missions", 0))
+            rows.append(_line([(team_style(i) or S_HI, text)], inner))
         return _box(TXT["teams"], "", rows, width, height)
 
     def _log(self, state, extra, width, height):
@@ -581,8 +675,29 @@ class Mainframe:
         rows = []
         style = {"msg": S_BR, "evt": S_LO, "log": S_HI}
         for kind, text in items[-keep:]:
-            rows.append(_line([(S_MID, " "), (style[kind], text)], inner))
+            tstyle = team_style(team_of_text(text))
+            rows.append(_line([(S_MID, " "), (tstyle or style[kind], text)], inner))
         return _box(TXT["log"], "%03d" % len(items), rows, width, height)
+
+    def _sim_rows(self, state, extra):
+        """The lines of the SIMULATION panel: (label, value). The round state and timer only in a round."""
+        if state is None:
+            return [(TXT["clock"], "--")]
+        tps = extra.get("tps")
+        mode = extra.get("mode") or "ROUND"
+        rows = [(TXT["clock"], "%d" % extra["clock"] if extra.get("clock") is not None else "--"),
+                (TXT["tick"], "%06d" % getattr(state, "tick", 0)),
+                (TXT["tps"], "%05.1f" % tps if tps is not None else "--"),
+                (TXT["gamemode"], mode)]
+        if mode == "ROUND":
+            rows += [(TXT["state"], TXT["states"].get(getattr(state, "phase", 0), TXT["unknown"])),
+                     (TXT["timer"], "%05d" % getattr(state, "phase_timer", 0))]
+        return rows
+
+    def _sim(self, state, extra, width, height):
+        inner = width - 2
+        rows = [_line([(S_LO, " " + label.ljust(11)), (S_HI, value)], inner) for label, value in self._sim_rows(state, extra)]
+        return _box(TXT["sim"], "", rows, width, height)
 
     def _calls(self, extra, width, height):
         inner = width - 2
@@ -600,25 +715,6 @@ class Mainframe:
         if not top:
             rows.append(_line([(S_AMB_DIM, " " + TXT["no_recording"])], inner))
         return _box(TXT["calls"], "", rows, width, height)
-
-    def _clock_line(self, state, extra, lamps, width, now):
-        if state is None:
-            text = " " + TXT["no_data"]
-        else:
-            phase = TXT["phases"].get(getattr(state, "phase", 0), TXT["unknown"])
-            tps = extra.get("tps")
-            text = " %s %s   %s %06d   %s %s   %s %s   %s %05d" % (
-                TXT["clock"], "%d" % extra["clock"] if extra.get("clock") is not None else "--",
-                TXT["tick"], getattr(state, "tick", 0), TXT["tps"], "%05.1f" % tps if tps is not None else "--",
-                TXT["phase"], phase, TXT["timer"], getattr(state, "phase_timer", 0))
-        # Right end: the status area. A blinking amber lamp shows when the link is not live.
-        if lamps[0][1] == 2:
-            right, style = TXT["ready"] + " ", S_BAR
-        elif int(now * 2) % 2 == 0:
-            right, style = TXT["inhibited"] + " ", S_BAR_AMB
-        else:
-            right, style = " " * 18, S_BAR
-        return _line([(S_BAR, text.ljust(width - len(right))), (style, right)], width)
 
     # -- frames
     def _too_small(self, width, height):
@@ -645,12 +741,25 @@ class Mainframe:
         return "\n".join("\x1b[48;5;%dm\x1b[K" % BLACK + r + RESET for r in frame)
 
     def _key_bar(self, width):
-        """The last line: the PF keys in the style of a 3270 screen, or the help line of the toggles."""
-        text = TXT["help"] if self.viewer.help else TXT["keys"]
-        return _line([(S_WH if self.viewer.help else S_HI, " " + text)], width)
+        """The last line, in the style of the DOS file managers: the key name, then its label on a block of
+        reverse video. The cells have equal width and fill the line, so nothing is left over."""
+        if self.viewer.help:
+            return _line([(S_WH, " " + TXT["help"])], width)
+        keys = TXT["fkeys"]
+        cell, extra = divmod(width, len(keys))
+        segs = []
+        for i, (key, label) in enumerate(keys):
+            w = cell + (1 if i < extra else 0)
+            segs += [(S_BR, key), (S_BAR, (" " + label).ljust(w - len(key))[:w - len(key)])]
+        return _line(segs, width)
 
     def key(self, name):
         """A key of the user, as a name of viz.Viewer.key. Returns True when the name is known."""
+        if name == "color":
+            COLOR["full"] = not COLOR["full"]
+            self.viewer._tint_memo.clear()
+            self.viewer._cache.clear()
+            return True
         return self.viewer.key(name)
 
     def render(self, state, boxes=(), me=None, extra=None, camera=None):
@@ -663,18 +772,20 @@ class Mainframe:
         lamps = self._lamps(state, extra, now)
         boxes = list(boxes) if self.vector else list(boxes) + self._trails(state, now)
         rows = self._header(state, extra, lamps, width, now, tick)
-        body = height - 6
+        body = height - 5
         lw = max(60, int(width * 0.6))
         rw = width - lw
         log_h = min(14, max(5, body - 12))
         view_h = body - log_h
-        calls_h, teams_h = 10, 6
-        players_h = body - calls_h - teams_h
+        sim_h = len(self._sim_rows(state, extra)) + 2
+        teams_h = 8
+        remaining = body - sim_h - teams_h
+        calls_h = min(10, max(4, remaining - 5))
+        players_h = max(5, remaining - calls_h)
         left = self._view(state, boxes, me, camera, lw, view_h) + self._log(state, extra, lw, log_h)
         right = (self._players(state, me, rw, players_h, extra) + self._teams(state, extra, rw, teams_h)
-                 + self._calls(extra, rw, calls_h))
+                 + self._sim(state, extra, rw, sim_h) + self._calls(extra, rw, calls_h))
         rows += [a + b for a, b in zip(left, right)]
-        rows.append(self._clock_line(state, extra, lamps, width, now))
         rows.append(self._key_bar(width))
         out = []
         for i, row in enumerate(rows):

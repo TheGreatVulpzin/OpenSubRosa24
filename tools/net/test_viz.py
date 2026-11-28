@@ -121,7 +121,7 @@ class GeometryTests(unittest.TestCase):
         ln = viz.Lines()
         viz.add_car(ln, (0.0, 25.0, 0.0), viz.frame_of(sr.ObjectBlock(0, orient_a=UP, orient_b=BACK)), (255, 160, 60), 1.0)
         self.assertEqual(len(ln.discs), 0)                     # outline only
-        self.assertEqual(len(ln.segs), 24 + 4 * 9 + 3)         # two boxes, four wheel circles, the arrow
+        self.assertEqual(len(ln.segs), 24 + 4 * 9 + 4 * 7 + 31 + 3)   # two boxes, four wheels with a hub, panel lines, the arrow
         # The arrow points along the heading: the car faces +z here.
         tip = max(ln.segs, key=lambda s: max(s[2], s[5]))
         self.assertGreater(max(tip[2], tip[5]), 3.0)
@@ -353,7 +353,7 @@ class ModeAndToggleTests(unittest.TestCase):
         state = self.state()
         v.scene(state, me=0)
         self.assertEqual(v.mode, "follow")
-        self.assertIn("CAM FOLLOW", v.cam_text())
+        self.assertIn("CAMERA FOLLOW", v.cam_text())
         v.key("orbit")
         face = sr.State(humans=[sr.HumanBlock(0, pos=(50.0, 25.0, 50.0), orient_a=UP, orient_b=(-1.0, 0.0, 0.0))])
         pose, _ = v.scene(face, me=0)
@@ -376,12 +376,12 @@ class ModeAndToggleTests(unittest.TestCase):
         v.key("rot_right")                                       # A and D move a free camera sideways
         self.assertEqual(v.free_yaw, v.scene(state, me=0)[0].yaw)
         text = v.cam_text()
-        self.assertRegex(text, r"^CAM FREE  AZ \d{3}  EL \d{3}  ZOOM \d{3}$")
+        self.assertRegex(text, r"^CAMERA FREE  AZ \d{3}  EL \d{3}  ZOOM \d{3}$")
 
     def test_cam_text_is_zero_padded(self):
         v = self.view()
         v.scene(self.state(), me=0)
-        self.assertRegex(v.cam_text(), r"^CAM FOLLOW  AZ 000  EL 0\d\d  ZOOM 040$")
+        self.assertRegex(v.cam_text(), r"^CAMERA FOLLOW  AZ 000  EL 0\d\d  ZOOM 040$")
 
 
 class SolidTests(unittest.TestCase):

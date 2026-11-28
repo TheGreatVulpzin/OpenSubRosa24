@@ -47,6 +47,14 @@ COLOR_NORTH = (255, 90, 90)
 # Building colors by kind: the kind comes from the name of the building file.
 KIND_COLORS = {"base": (255, 95, 95), "safe": (255, 170, 170), "shop": (255, 180, 60), "bank": (255, 230, 90),
                "medical": (90, 255, 170), "tower": (120, 165, 255), "other": (120, 140, 190)}
+# The companies of the game, one for each base, in the order of the teams (src/server/data/game.c).
+# The short name goes in tables, the full name in labels and logs. The colors are the team colors of the
+# game made brighter, so they read on a black screen. Team 7 has no company.
+TEAM_SHORT = ("GOLDMEN", "MONSOTA", "OXS", "NEXACO", "PENTACOM")
+TEAM_FULL = ("GOLDMEN INC", "MONSOTA", "OXS INTERNATIONAL", "NEXACO", "PENTACOM")
+TEAM_COLORS = ((215, 165, 55), (80, 150, 225), (170, 170, 170), (215, 80, 80), (240, 240, 240))
+CIVILIAN = "CIVILIAN"
+STATE_WORDS = {1: "SETUP", 2: "RUNNING", 3: "ENDED"}
 CHARS = [chr(0x2800 + m) for m in range(256)]
 COLORS = ["\x1b[38;5;%dm" % c for c in range(256)]
 HUD_KEYS = "ARROWS TURN  W S TILT  + - ZOOM  T MAP  Q QUIT"
@@ -166,6 +174,37 @@ def local_box(pos, frame, lo, hi):
             for i in range(8)]
 
 
+def face_grid(lines, p00, p10, p11, p01, nu, nv, rgb, **kw):
+    """A quad face cut into nu by nv cells: lines along both directions."""
+    for i in range(nu + 1):
+        t = i / nu
+        lines.add(tuple(p00[k] + (p10[k] - p00[k]) * t for k in range(3)),
+                  tuple(p01[k] + (p11[k] - p01[k]) * t for k in range(3)), rgb, **kw)
+    for j in range(nv + 1):
+        t = j / nv
+        lines.add(tuple(p00[k] + (p01[k] - p00[k]) * t for k in range(3)),
+                  tuple(p10[k] + (p11[k] - p10[k]) * t for k in range(3)), rgb, **kw)
+
+
+def prism(lines, a, b, ra, rb, rgb, rings=1, n=6, **kw):
+    """A tapered limb from a to b: n sided rings along the axis, joined by lines."""
+    ax = _unit((b[0] - a[0], b[1] - a[1], b[2] - a[2]), (0.0, 1.0, 0.0))
+    ref = (0.0, 0.0, 1.0) if abs(ax[2]) < 0.9 else (1.0, 0.0, 0.0)
+    u = _unit(_cross(ax, ref), (1.0, 0.0, 0.0))
+    v = _cross(ax, u)
+    rs = []
+    for k in range(rings + 1):
+        t = k / rings
+        c = tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
+        r = ra + (rb - ra) * t
+        ring_pts = [tuple(c[i] + (u[i] * math.cos(2 * math.pi * m / n) + v[i] * math.sin(2 * math.pi * m / n)) * r
+                          for i in range(3)) for m in range(n)]
+        lines.poly(ring_pts, rgb, closed=True, **kw)
+        rs.append(ring_pts)
+    for m in range(n):
+        lines.add(rs[0][m], rs[-1][m], rgb, **kw)
+
+
 def circle(pos, frame, r, u, f, radius, plane, n=10):
     """A circle around the point (r, u, f). plane is the pair of body axes it lies in, 0 right, 1 up, 2 forward."""
     pts = []
@@ -231,7 +270,36 @@ def add_figure(lines, pos, frame, rgb, phase, amp, scale, seated, bright):
         lines.add(P((f[0], f[1] + 0.05, f[2])), P((f[0], f[1] + 0.05, f[2] + 0.14)), rgb, i, w=w * 0.8)
 
 
-def add_car(lines, pos, frame, rgb, bright, solid_cam=None):
+def add_figure_detail(lines, pos, frame, rgb, phase, amp, scale, bright):
+    """A figure made of polygons: a torso of rings, a sphere head, tapered arms and legs, feet."""
+    def P(p):
+        return at(pos, frame, p[0] * scale, p[1] * scale, p[2] * scale)
+
+    i = bright
+    w = 0.05 * scale
+    j = walk_pose(phase, amp)
+    lean = 0.08 * amp
+    prism(lines, P((0.0, 0.05, 0.0)), P((0.0, 0.5, lean * 0.5)), 0.13 * scale, 0.2 * scale, rgb, rings=3, n=8, i0=i, w=w)
+    prism(lines, P((0.0, 0.5, lean * 0.5)), P((0.0, 0.64, lean)), 0.2 * scale, 0.07 * scale, rgb, rings=1, n=8, i0=i, w=w)
+    head = (0.0, 0.8, lean * 1.4)
+    for dy, r in ((-0.08, 0.075), (0.0, 0.11), (0.08, 0.075)):
+        lines.poly(circle(pos, frame, 0.0, (head[1] + dy) * scale, head[2] * scale, r * scale, (0, 2), 9), rgb,
+                   closed=True, i0=i, w=w)
+    lines.poly(circle(pos, frame, 0.0, head[1] * scale, head[2] * scale, 0.11 * scale, (0, 1), 9), rgb, closed=True, i0=i, w=w * 0.8)
+    lines.poly(circle(pos, frame, 0.0, head[1] * scale, head[2] * scale, 0.11 * scale, (2, 1), 9), rgb, closed=True, i0=i, w=w * 0.8)
+    for s in "lr":
+        sh, el, ha = j["sh" + s], j["elbow" + s], j["hand" + s]
+        prism(lines, P(sh), P(el), 0.065 * scale, 0.055 * scale, rgb, rings=1, n=5, i0=i, w=w * 0.9)
+        prism(lines, P(el), P(ha), 0.055 * scale, 0.04 * scale, rgb, rings=1, n=5, i0=i, w=w * 0.9)
+        hp = (j["hip" + s][0], 0.05, j["hip" + s][2])
+        kn = (j["knee" + s][0], j["knee" + s][1] + 0.05, j["knee" + s][2])
+        fo = (j["foot" + s][0], j["foot" + s][1] + 0.05, j["foot" + s][2])
+        prism(lines, P(hp), P(kn), 0.095 * scale, 0.072 * scale, rgb, rings=2, n=6, i0=i, w=w)
+        prism(lines, P(kn), P(fo), 0.072 * scale, 0.05 * scale, rgb, rings=2, n=6, i0=i, w=w)
+        lines.add(P(fo), P((fo[0], fo[1], fo[2] + 0.16)), rgb, i, w=w * 0.8)
+
+
+def add_car(lines, pos, frame, rgb, bright, solid_cam=None, panels=True):
     """A body box, a cabin box, four wheels and an arrow on the hood that shows the heading."""
     body = local_box(pos, frame, (-0.95, -0.55, -2.2), (0.95, 0.1, 2.2))
     cab = local_box(pos, frame, (-0.8, 0.1, -1.2), (0.8, 0.68, 0.6))
@@ -245,6 +313,18 @@ def add_car(lines, pos, frame, rgb, bright, solid_cam=None):
         for sz in (-1.4, 1.4):
             ring = circle(pos, frame, sx, -0.6, sz, 0.42, (1, 2), 9)
             lines.poly(ring, rgb, closed=True, i0=bright, w=0.09)
+            if panels:
+                lines.poly(circle(pos, frame, sx, -0.6, sz, 0.2, (1, 2), 7), rgb, closed=True, i0=bright * 0.7, w=0.06)
+    if solid_cam is None and panels:
+        # Panel lines: the hood, the roof and the doors.
+        dim = bright * 0.35
+        face_grid(lines, body[2], body[3], body[7], body[6], 3, 2, rgb, i0=dim, w=0.04)
+        face_grid(lines, cab[3], cab[7], cab[6], cab[2], 3, 1, rgb, i0=dim, w=0.04)
+        face_grid(lines, body[0], body[4], body[6], body[2], 3, 2, rgb, i0=dim, w=0.04)
+        face_grid(lines, body[1], body[5], body[7], body[3], 3, 2, rgb, i0=dim, w=0.04)
+        for sx in (0, 1):
+            lines.add(at(pos, frame, (-0.95, 0.95)[sx], -0.55, -0.3), at(pos, frame, (-0.95, 0.95)[sx], 0.1, -0.3), rgb, dim, w=0.04)
+            lines.add(at(pos, frame, (-0.95, 0.95)[sx], -0.55, 0.8), at(pos, frame, (-0.95, 0.95)[sx], 0.1, 0.8), rgb, dim, w=0.04)
     tip = at(pos, frame, 0.0, 0.1, 3.4)
     lines.add(at(pos, frame, 0.0, 0.1, 1.2), tip, rgb, bright, w=0.12)
     lines.add(tip, at(pos, frame, -0.35, 0.1, 2.7), rgb, bright, w=0.12)
@@ -261,7 +341,7 @@ def add_diamond(lines, pos, size, rgb, bright):
     lines.poly(ring, rgb, closed=True, i0=bright, w=0.05, fade=200.0)
 
 
-def add_building(lines, lo, hi, rgb, step, bright=0.62, floors=True, solid_cam=None):
+def add_building(lines, lo, hi, rgb, step, bright=0.62, floors=True, solid_cam=None, windows=True):
     """A box with its four walls and one ring for each floor. With solid_cam the hidden lines go."""
     x0, y0, z0 = lo
     x1, y1, z1 = hi
@@ -282,6 +362,15 @@ def add_building(lines, lo, hi, rgb, step, bright=0.62, floors=True, solid_cam=N
             ring = [(x0, y, z0), (x1, y, z0), (x1, y, z1), (x0, y, z1)]
             lines.poly(ring, rgb, closed=True, i0=bright * 0.28, w=0.05, fade=160.0)
             y += step
+    if windows and floors and step and y1 - y0 > step * 1.5:
+        # Window posts: vertical lines on the four walls, a post about each one and a half blocks.
+        for (ax, az), (bx, bz) in (((x0, z0), (x1, z0)), ((x1, z0), (x1, z1)), ((x1, z1), (x0, z1)), ((x0, z1), (x0, z0))):
+            length = math.hypot(bx - ax, bz - az)
+            n = int(length / (step * 1.5))
+            for k in range(1, n):
+                t = k / n
+                lines.add((ax + (bx - ax) * t, y0, az + (bz - az) * t), (ax + (bx - ax) * t, y1, az + (bz - az) * t),
+                          rgb, bright * 0.2, w=0.04, fade=150.0)
 
 
 # --------------------------------------------------------------------------- themes
@@ -469,10 +558,10 @@ def palette(rgb, fade=1.0):
 LETTER_KEYS = {"a": "rot_left", "d": "rot_right", "w": "tilt_up", "s": "tilt_down", "+": "plus", "=": "plus",
                "-": "minus", "_": "minus", "m": "map", "f": "follow", "v": "orbit", "g": "free", "h": "hollow",
                "l": "labels", "r": "grid", "b": "buildings", "t": "trails", "o": "glow", "c": "compass",
-               "p": "snap", "q": "quit", "?": "help", "e": "cycle_render", "n": "cycle_camera"}
+               "p": "snap", "q": "quit", "?": "help", "e": "cycle_render", "n": "cycle_camera", "k": "color"}
 CODE_KEYS = {"K": "left", "M": "right", "H": "up", "P": "down",
-             ";": "help", "<": "cycle_camera", "=": "hollow", ">": "cycle_render",
-             "C": "snap", chr(134): "quit"}                                               # F1 to F4, F9, F12
+             ";": "help", "<": "cycle_camera", "=": "hollow", ">": "cycle_render", "?": "color", "@": "labels",
+             "A": "grid", "B": "map", "C": "snap", "D": "quit", chr(134): "quit"}        # F1 to F10, F12
 
 
 def key_name(ch, code=None):
@@ -504,6 +593,7 @@ class Viewer:
         self.free_pos = None         # the place and the angles of the free camera
         self.free_yaw = 0.0
         self.free_pitch = -0.3
+        self.detail = False          # polygon figures and window posts: the numpy viewer sets it
         self.hollow = True           # outline only. False: hidden lines go and faces get light hatching
         self.labels = True
         self.buildings = True
@@ -641,13 +731,13 @@ class Viewer:
         self.free_pos = (p[0] + f[0] * forward_step + f[2] * side_step, p[1] + f[1] * forward_step,
                          p[2] + f[2] * forward_step - f[0] * side_step)
 
-    def cam_text(self):
+    def cam_text(self, short=False):
         """The camera line of the main view: mode, azimuth, elevation and zoom, with zero padded numbers."""
         pose = self.last_pose
         if pose is None:
-            return "CAM %s" % self.mode.upper()
+            return "%s%s" % ("" if short else "CAMERA ", self.mode.upper())
         zoom = 0.0 if self.mode == "free" else math.dist(pose.pos, pose.focus)
-        return "CAM %s  AZ %03d  EL %03d  ZOOM %03d" % (self.mode.upper(), math.degrees(pose.yaw) % 360,
+        return "%s%s  AZ %03d  EL %03d  ZOOM %03d" % ("" if short else "CAMERA ", self.mode.upper(), math.degrees(pose.yaw) % 360,
                                                          max(0, math.degrees(-pose.pitch)), min(999, zoom))
 
     def tint(self, rgb):
@@ -717,25 +807,36 @@ class Viewer:
         pos = (focus[0] - f[0] * dist, max(ground + 1.5, focus[1] - f[1] * dist), focus[2] - f[2] * dist)
         return Pose(pos, yaw, pitch, focus, ground)
 
+    @staticmethod
+    def _holds(box, p, margin=1.0):
+        """True when the point is inside the box of a building (a little outside counts)."""
+        lo, hi = box[0], box[1]
+        return all(lo[k] - margin <= p[k] <= hi[k] + margin for k in range(3))
+
     # -- static parts, kept until the focus or the data change
     def _map_lines(self, boxes, focus, ground, cam=None):
         solid = None if self.hollow else cam
         sig = (hash(tuple(boxes)), id(self.roads), len(self.roads), self.top, self.buildings, solid is not None)
-        key = (sig, int(focus[0] // 48), int(focus[2] // 48),
+        # A building that holds the camera or the followed body is not drawn: its walls would hide the view.
+        inside = frozenset(k for k, box in enumerate(boxes) if self._holds(box, focus) or (cam is not None and self._holds(box, cam)))
+        key = (sig, int(focus[0] // 48), int(focus[2] // 48), inside,
                (int(cam[0] // 2), int(cam[1] // 2), int(cam[2] // 2)) if solid is not None else None)
         hit = self._cache.get("map")
         if hit and hit[0] == key:
             return hit[1]
         ln = self._lines()
         rad = self.map_radius + 48.0
-        for box in (boxes if self.buildings else ()):
+        for index, box in enumerate(boxes if self.buildings else ()):
+            if index in inside:
+                continue
             lo, hi, label, rgb = box[:4]
             step = box[4] if len(box) > 4 else 4.0
             cx, cz = (lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2
             if math.hypot(cx - focus[0], cz - focus[2]) - math.hypot(hi[0] - lo[0], hi[2] - lo[2]) / 2 > rad:
                 continue
             col = rgb if isinstance(rgb, tuple) else COLOR_BOX
-            add_building(ln, lo, hi, col, step, floors=not self.top, solid_cam=solid)
+            near = math.hypot(cx - focus[0], cz - focus[2]) < 110.0
+            add_building(ln, lo, hi, col, step, floors=not self.top, solid_cam=solid, windows=self.detail and near and not self.top)
             if label:
                 ln.label((cx, hi[1], cz), label, col, 0)
         for start, end, half in self.roads:
@@ -876,7 +977,9 @@ class Viewer:
                     frame = ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0))
             else:
                 frame = rec["frame"] = frame_of(e)
-            add_car(move if rec["speed"] > 0.4 else still, e.pos, frame, COLOR_OBJECT, 0.75, None if self.hollow else cam)
+            add_car(move if rec["speed"] > 0.4 else still, e.pos, frame, COLOR_OBJECT, 0.75, None if self.hollow else cam, self.detail)
+        # Only the nearest few figures are drawn with polygons, the others as stick figures.
+        near_ids = {e.id for e in sorted(humans, key=lambda h: math.dist(cam, h.pos))[:10]} if self.detail else set()
         for e in humans:
             mine = me is not None and e.id == me
             hp = getattr(e, "health", 100)
@@ -891,7 +994,10 @@ class Viewer:
                 amp = 0.0
             frame = frame_of(e)
             ln = move if speed > 0.4 and not seated else still
-            add_figure(ln, e.pos, frame, rgb, rec["phase"], amp, scale, seated, 1.0 if mine else 0.9)
+            if e.id in near_ids and d < 45.0 and not seated:
+                add_figure_detail(ln, e.pos, frame, rgb, rec["phase"], amp, scale, 1.0 if mine else 0.9)
+            else:
+                add_figure(ln, e.pos, frame, rgb, rec["phase"], amp, scale, seated, 1.0 if mine else 0.9)
             if mine:
                 ring = [(e.pos[0] + math.sin(a) * 1.1, pose.ground + 0.05, e.pos[2] + math.cos(a) * 1.1)
                         for a in (2 * math.pi * k / 16 for k in range(16))]

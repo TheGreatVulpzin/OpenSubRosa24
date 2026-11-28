@@ -772,6 +772,7 @@ class VectorViewer(viz.Viewer):
         self.backend = backend
         self.backends = ["braille", "halfblock"] + (["sixel"] if backend == "sixel" else [])
         self.needs_clear = False         # the caller clears the screen once after a change of the backend
+        self.detail = True               # polygon figures and window posts
         self.ss = ss
         self.cell = cell
         self.post = post or Post()
@@ -862,7 +863,7 @@ class VectorViewer(viz.Viewer):
                 if p and 0 <= p[0] < cam.cx * 2 and 0 <= p[1] < cam.cy * 2:
                     px = int(p[0] * cols / (cam.cx * 2))
                     py = max(0, int(p[1] * view_rows / (cam.cy * 2)) - 1)
-                    col = self._label_color(rgb)
+                    col = self._label_color(self._tint(tuple(rgb)))
                     packed = (col[0] << 16) | (col[1] << 8) | col[2]
                     for k, ch in enumerate(text):
                         x = px - len(text) // 2 + k
