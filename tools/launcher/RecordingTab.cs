@@ -86,7 +86,7 @@ namespace SubVulpes
             recScenario.SelectedIndex = chosen < 0 ? 0 : chosen;
             recScenario.SelectedIndexChanged += delegate { settings.Set("scenario", recScenario.Text); settings.Save(); };
             var snapshotNow = new Button { Text = "Snapshot now", AutoSize = true };
-            snapshotNow.Click += delegate { RequestServerSnapshot(); };
+            snapshotNow.Click += delegate { RequestSnapshot(); };
             bar.Controls.AddRange(new Control[] { recSide, recMissingOnly, refresh,
                 new Label { Text = "Server scenario", AutoSize = true, Margin = new Padding(12, 7, 3, 3) }, recScenario, snapshotNow, recSummary });
             page.Controls.Add(bar, 0, 1);
@@ -402,11 +402,15 @@ namespace SubVulpes
         }
 
         // The recorder looks for snapshot_now.txt once each second, takes the snapshot and deletes the file.
-        void RequestServerSnapshot()
+        // The server and the client each have a recorder, so the file goes to both folders that run.
+        void RequestSnapshot()
         {
             try {
-                File.WriteAllText(Path.Combine(folder, "snapshot_now.txt"), "", Encoding.ASCII);
-                AddLine("[launcher] The server takes the snapshot in about 1 second (the log says when it is written).");
+                var folders = new List<string>();
+                if (!string.IsNullOrEmpty(folder) && Directory.Exists(folder)) folders.Add(folder);
+                if (client != null && clientDir != null) folders.Add(clientDir);
+                foreach (string dir in folders) File.WriteAllText(Path.Combine(dir, "snapshot_now.txt"), "", Encoding.ASCII);
+                AddLine("[launcher] The snapshot starts in about 1 second (the log says when it is written).");
             } catch (Exception ex) {
                 AddLine("[launcher] Cannot ask for the snapshot: " + ex.Message);
             }
@@ -469,6 +473,7 @@ namespace SubVulpes
                     Directory.CreateDirectory(before);
                     File.Move(path, Path.Combine(before, name));
                 }
+                File.Delete(Path.Combine(dir, "snapshot_now.txt"));
                 File.Copy(proxy, Path.Combine(dir, "wsock32.dll"), true);
                 File.WriteAllText(Path.Combine(dir, "subvulpes.ini"),
                     "[hooks]\r\nhooks=1\r\nlifted=1\r\noriginal_only=1\r\nverify=0\r\nrecord_args=1\r\nrecord_imports=1\r\n" +
