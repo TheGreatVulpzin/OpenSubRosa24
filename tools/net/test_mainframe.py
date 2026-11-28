@@ -100,7 +100,7 @@ class FrameTests(unittest.TestCase):
     def test_panels_are_there(self):
         text = "\n".join(self.check_size(120, 40, extra=EXTRA))
         for name in ("MAIN VIEW", "PLAYERS", "TEAMS", "OPERATOR LOG", "CALL COUNTERS", "TICK 000005", "TPS 061.2",
-                     "SIM CLOCK 12345", "HELLO THERE", "BETA", "LINK", "RECORDER", "STAT ACTIVE", "SRC060I", "SRC044I", "PF12 QUIT"):
+                     "SIM CLOCK 12345", "HELLO THERE", "BETA", "LINK", "RECORDER", "STAT ACTIVE", "SRC060I", "SRC044I", "F12 QUIT"):
             self.assertIn(name, text)
 
     def test_missing_extra_and_state(self):
@@ -244,7 +244,7 @@ class ViewerChoiceTests(unittest.TestCase):
 
     @unittest.skipUnless(HAVE_NUMPY, "numpy is missing")
     def test_vector_view_is_half_blocks(self):
-        mf = mainframe.Mainframe(120, 40, vector=True)
+        mf = mainframe.Mainframe(120, 40, vector=True, backend="halfblock")
         frame = mf.render(scene(), [], 0, EXTRA)
         self.assertIn("\u2580", frame)
         self.assertEqual(len(plain(frame)), 40)
@@ -275,8 +275,7 @@ class KeyBarTests(unittest.TestCase):
         for vector in (False, None):
             lines = plain(mainframe.Mainframe(120, 40, vector=vector).render(scene(), [], 0, EXTRA))
             self.assertEqual(len(lines), 40)
-            self.assertIn("PF1 ROT  PF2 TILT  PF3 ZOOM  PF4 MAP  PF5 FOLLOW  PF6 FREE", lines[-1])
-            self.assertIn("PF7 HOLLOW  PF8 HELP  PF9 SNAP  PF12 QUIT", lines[-1])
+            self.assertIn("F1 HELP  F2 CAMERA  F3 WIRE  F4 RENDER  F9 SNAP  F12 QUIT", lines[-1])
 
     def test_view_title_shows_the_camera_and_the_wire_mode(self):
         mf = mainframe.Mainframe(140, 44)
@@ -293,7 +292,7 @@ class KeyBarTests(unittest.TestCase):
         self.assertTrue(mf.key("help"))
         last = plain(mf.render(scene(), [], 0, EXTRA))[-1]
         self.assertIn("H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS", last)
-        self.assertNotIn("PF1", last)
+        self.assertNotIn("F1 HELP", last)
         self.assertFalse(mf.key("no such key"))
 
     def test_toggles_are_attributes_of_the_viewer(self):

@@ -258,7 +258,7 @@ class ViewerTests(unittest.TestCase):
         return v
 
     def test_halfblock_frame_size(self):
-        v = self.make()
+        v = self.make(backend="halfblock")
         frame = v.render(scene(4), [((-5, 24, 10), (5, 40, 20), "base", (255, 100, 100))], 0)
         lines = plain(frame)
         self.assertEqual(len(lines), 30)
@@ -346,6 +346,71 @@ class ViewerTests(unittest.TestCase):
                 v.render(state, boxes, 0)
             best = min(best, (time.perf_counter() - start) / 5)
         self.assertLess(best, 0.2, "frame took %.1f ms" % (best * 1000))
+
+
+@unittest.skipIf(np is None, "numpy is missing")
+class BrailleTests(unittest.TestCase):
+    def test_a_line_is_thin_and_continuous(self):
+        img = np.zeros((3, 16, 40), dtype=np.uint8)
+        img[:, 8, 2:38] = 255                                  # one pixel row, bright
+        rows = plain("\n".join(vector.braille(img)))
+        marks = [ch for ch in rows[2] if ch != " "]
+        self.assertEqual(len(marks), 18)                       # every cell of the line has dots
+        self.assertTrue(all(0x2800 < ord(ch) <= 0x28FF for ch in marks))
+        self.assertEqual(rows[0].strip(), "")                  # nothing off the line
+        self.assertEqual(rows[3].strip(), "")
+
+    def test_dark_pixels_draw_nothing(self):
+        img = np.full((3, 16, 40), 20, dtype=np.uint8)
+        self.assertTrue(all(line.strip() == "" for line in plain("\n".join(vector.braille(img)))))
+
+    def test_dots_are_in_the_right_places(self):
+        img = np.zeros((3, 8, 4), dtype=np.uint8)
+        img[:, 0, 0] = 255                                     # top left dot of the first cell: bit 1
+        img[:, 3, 3] = 255                                     # bottom right dot of the second cell: bit 128
+        rows = plain("\n".join(vector.braille(img)))
+        self.assertEqual(rows[0], chr(0x2801) + chr(0x2880))
+
+    def test_cell_color_follows_the_pixels(self):
+        img = np.zeros((3, 4, 2), dtype=np.uint8)
+        img[0, :, :] = 255                                     # red
+        text = vector.braille(img)[0]
+        self.assertIn("\x1b[38;2;252;0;0m", text)
+
+    def test_text_overlay(self):
+        img = np.zeros((3, 8, 6), dtype=np.uint8)
+        rows = vector.braille(img, {(1, 2): ("X", 0xFFFFFF)})
+        self.assertIn("X", plain(rows[1])[0])
+
+    def test_frame_size_and_resolution(self):
+        v = vector.VectorViewer(100, 30, backend="braille")
+        v.ground = 24.0
+        frame = v.render(scene(4), [], 0)
+        self.assertEqual(len(plain(frame)), 30)
+        self.assertEqual(v.last_image.shape, (3, 29 * 4, 100 * 2))
+        self.assertTrue(any(0x2800 < ord(ch) <= 0x28FF for ch in frame))
+
+
+class DetectionTests(unittest.TestCase):
+    def test_sixel_is_in_the_attribute_list(self):
+        self.assertTrue(vector.sixel_in_reply("\x1b[?61;4;6;7;14;21;22c"))
+        self.assertTrue(vector.sixel_in_reply("\x1b[?4c"))
+        self.assertFalse(vector.sixel_in_reply("\x1b[?61;6;7c"))
+        self.assertFalse(vector.sixel_in_reply("\x1b[?61;14;24c"))
+        self.assertFalse(vector.sixel_in_reply(""))
+
+    def test_no_terminal_no_sixel(self):
+        self.assertEqual(vector.best_backend((8, 16)), ("braille", (8, 16)))
+
+    @unittest.skipIf(np is None, "numpy is missing")
+    def test_render_key_cycles_the_backend(self):
+        v = vector.VectorViewer(100, 30)
+        self.assertEqual(v.backend, "braille")                  # the default without a sixel terminal
+        self.assertTrue(v.key("cycle_render"))
+        self.assertEqual(v.backend, "halfblock")
+        self.assertTrue(v.needs_clear)
+        v.key("cycle_render")
+        self.assertEqual(v.backend, "braille")
 
 
 if __name__ == "__main__":

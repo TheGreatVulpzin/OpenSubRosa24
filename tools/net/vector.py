@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import math
 import os
+import re
 import sys
 import time
 
@@ -430,6 +431,62 @@ def halfblock(img, texts=None):
     return rows
 
 
+# --------------------------------------------------------------------------- braille output
+
+# Bit of each dot of a braille cell: [row in the cell][column in the cell].
+_BRAILLE_BITS = np.array([[1, 8], [2, 16], [4, 32], [64, 128]], dtype=np.uint16)
+_BAYER4 = (np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]], dtype=np.float32) + 0.5) / 16.0
+
+
+def braille(img, texts=None, level=0.17, jitter=0.05):
+    """Rows of text for an image with 4 pixel rows and 2 pixel columns for each cell: a dot is on where the
+    pixel is bright enough (the level moves a little with a 4 by 4 ordered pattern, so a faint line does not
+    break up). The color of a cell is the average color of its dots. texts is {(row, col): (char, rgb)}."""
+    _, H, W = img.shape
+    rows, cols = H // 4, W // 2
+    img = img[:, :rows * 4, :cols * 2]
+    lum = img.max(axis=0).astype(np.float32) * (1.0 / 255.0)
+    thr = level + (np.tile(_BAYER4, (rows + 1, cols // 2 + 1))[:rows * 4, :cols * 2] - 0.5) * 2 * jitter
+    on = lum > thr
+    bits = (on.reshape(rows, 4, cols, 2) * _BRAILLE_BITS[None, :, None, :]).sum(axis=(1, 3))
+    weight = np.where(on, lum, 0.0).astype(np.float32)
+    wsum = weight.reshape(rows, 4, cols, 2).sum(axis=(1, 3))
+    color = (img.astype(np.float32) * weight).reshape(3, rows, 4, cols, 2).sum(axis=(2, 4)) / np.maximum(wsum, 1e-6)
+    # A braille dot covers few pixels of the cell and looks dim: raise the brightness, keep the hue.
+    top = np.maximum(color.max(axis=0), 1.0)
+    color = color * (np.sqrt(top / 255.0) * 255.0 / top)
+    packed = pack(color.clip(0, 255).astype(np.uint8)).tolist()
+    bits = bits.tolist()
+    out_rows = []
+    for ry in range(rows):
+        line = []
+        fg = -1
+        over = None
+        if texts:
+            over = {c: v for (r, c), v in texts.items() if r == ry} or None
+        brow, prow = bits[ry], packed[ry]
+        for cx in range(cols):
+            if over is not None and cx in over:
+                ch, col = over[cx]
+                if col != fg:
+                    line.append(_fg(col))
+                    fg = col
+                line.append(ch)
+                continue
+            b = brow[cx]
+            if b == 0:
+                line.append(" ")
+                continue
+            c = prow[cx]
+            if c != fg:
+                line.append(_fg(c))
+                fg = c
+            line.append(chr(0x2800 + b))
+        line.append("\x1b[0m\x1b[K")
+        out_rows.append("".join(line))
+    return out_rows
+
+
 # --------------------------------------------------------------------------- sixel output
 
 _HUE_TABLES = {}
@@ -666,14 +723,55 @@ def query_cell_size(timeout=0.3):
     return None
 
 
+def detect_sixel(timeout=0.4):
+    """True when the terminal says that it draws sixel images: the device attributes reply (CSI c) lists 4.
+    Only a Windows console that is a terminal is asked. The answer is False when there is no reply."""
+    if not (sys.stdout.isatty() and sys.stdin.isatty()):
+        return False
+    try:
+        import msvcrt
+    except ImportError:
+        return False
+    sys.stdout.write("\x1b[c")
+    sys.stdout.flush()
+    end = time.time() + timeout
+    got = ""
+    while time.time() < end:
+        if msvcrt.kbhit():
+            ch = msvcrt.getwch()
+            got += ch
+            if ch == "c":
+                break
+        else:
+            time.sleep(0.005)
+    return sixel_in_reply(got)
+
+
+def sixel_in_reply(reply):
+    """True when a device attributes reply such as ESC [ ? 61 ; 4 ; 6 c lists the attribute 4 (sixel)."""
+    found = re.search(r"\[\?([0-9;]*)c", reply)
+    return bool(found) and "4" in found.group(1).split(";")
+
+
+def best_backend(cell=None):
+    """The backend and the cell size for this terminal: sixel when it can, else braille dots."""
+    if detect_sixel():
+        return "sixel", cell or query_cell_size() or (10, 20)
+    return "braille", cell or (10, 20)
+
+
 # --------------------------------------------------------------------------- the viewer
 
 class VectorViewer(viz.Viewer):
     """The scene of viz.Viewer, drawn as a glowing vector picture."""
 
-    def __init__(self, width=None, height=None, backend="halfblock", ss=3, cell=(10, 20), post=None, theme=None):
+    def __init__(self, width=None, height=None, backend="braille", ss=3, cell=(10, 20), post=None, theme=None):
         super().__init__(width, height)
+        if backend == "auto":
+            backend, cell = best_backend(cell)
         self.backend = backend
+        self.backends = ["braille", "halfblock"] + (["sixel"] if backend == "sixel" else [])
+        self.needs_clear = False         # the caller clears the screen once after a change of the backend
         self.ss = ss
         self.cell = cell
         self.post = post or Post()
@@ -684,6 +782,12 @@ class VectorViewer(viz.Viewer):
         self.sixel_origin = (1, 1)       # row and column (from 1) where the image starts
         self.last_ms = {}
 
+    def cycle_backend(self):
+        """The next way to draw the picture: sixel (when the terminal has it), braille dots, half blocks."""
+        order = ["sixel"] * (("sixel" in self.backends)) + ["braille", "halfblock"]
+        self.backend = order[(order.index(self.backend) + 1) % len(order)]
+        self.needs_clear = True
+
     def _label_color(self, rgb):
         m = max(rgb) or 1
         k = 255.0 / m
@@ -693,6 +797,8 @@ class VectorViewer(viz.Viewer):
         """Pixel size of the final picture for a view of cols by rows cells."""
         if self.backend == "sixel":
             return cols * self.cell[0], rows * self.cell[1]
+        if self.backend == "braille":
+            return cols * 2, rows * 4
         return cols, rows * 2
 
     def picture(self, state, boxes, me, camera, cols, rows):
@@ -700,7 +806,7 @@ class VectorViewer(viz.Viewer):
         t0 = time.perf_counter()
         pose, parts = self.scene(state, boxes, me, camera)
         Wo, Ho = self.picture_size(cols, rows)
-        ss = 1 if self.backend == "sixel" else self.ss
+        ss = 1 if self.backend == "sixel" else 2 if self.backend == "braille" else self.ss
         W, H = Wo * ss, Ho * ss
         cam = viz.Camera(pose.pos, pose.yaw, pose.pitch, W, H, self.fov)
         t1 = time.perf_counter()
@@ -734,7 +840,8 @@ class VectorViewer(viz.Viewer):
                               tuple(c / 255.0 for c in col), size)
         self.post.persist = self.trail_decay if self.trails else 0.0
         self.post.glow_on = self.glow
-        img = self.post.run(lin, trail, scanlines=self.backend != "sixel", glow_shift=max(0, int(round(math.log2(Wo / 140.0)))) if self.backend == "sixel" else 0)
+        fine = self.backend in ("sixel", "braille")
+        img = self.post.run(lin, trail, scanlines=not fine, glow_shift=max(0, int(round(math.log2(Wo / 140.0)))) if fine else 0)
         t3 = time.perf_counter()
         self.last_ms = {"scene": (t1 - t0) * 1000, "raster": (t2 - t1) * 1000, "post": (t3 - t2) * 1000}
         return img, labels, cam
@@ -761,7 +868,7 @@ class VectorViewer(viz.Viewer):
                         x = px - len(text) // 2 + k
                         if 0 <= x < cols and 0 <= py < view_rows:
                             texts[(py, x)] = (ch, packed)
-            body = halfblock(img, texts)
+            body = braille(img, texts) if self.backend == "braille" else halfblock(img, texts)
         self.last_ms["encode"] = (time.perf_counter() - t0) * 1000
         body.append(self._hud(state, cols))
         return "\n".join(body)
@@ -776,7 +883,7 @@ def _main(argv):
             width = int(argv[i + 1])
         elif a == "--height":
             height = int(argv[i + 1])
-    backend = "sixel" if "--sixel" in argv else "halfblock"
+    backend = "sixel" if "--sixel" in argv else "halfblock" if "--half" in argv else "braille"
     v = VectorViewer(width or 140, height or 44, backend=backend)
     state, boxes, me = viz.demo_scene(1.0)
     if "--frame" in argv:

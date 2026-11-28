@@ -21,9 +21,10 @@ Arguments:
   --rejoin S         join again with the same account after S seconds (inventory load and save)
   --viz              draw the world in the terminal (tools/net/viz.py)
   --console          mainframe style console with panels (tools/net/mainframe.py), --no-boot skips the boot text
-  --sixel            with --viz or --console: draw the view as a sixel image (Windows Terminal 1.22 and later)
-  --cell WxH         pixel size of one terminal cell for --sixel (default 10x20)
-  --braille          draw the view with braille dots, even when numpy is there
+  --mode MODE        how the view is drawn: auto (sixel when the terminal has it, else braille), sixel (true
+                     pixels, Windows Terminal 1.22 and later), braille (2 by 4 dots in each cell), half (half
+                     blocks), dots (the old dots of viz.py, needs no numpy). --sixel and --braille are short for it
+  --cell WxH         pixel size of one terminal cell for sixel (default: asked from the terminal, else 10x20)
   --amber            with --viz: amber instead of green cyan (the console is always green)
   --solid, --no-grid, --no-glow, --no-trails   start values of the view toggles
 
@@ -341,6 +342,9 @@ class Bot:
                     self.snapshot_at = time.time()
                     continue
                 self.viewer.key(name)
+            if getattr(self.viewer, 'needs_clear', False):
+                sys.stdout.write('\x1b[2J')
+                self.viewer.needs_clear = False
         me = self.state.human if self.state.human != -1 else None
         if self.console is not None:
             frame = self.console.render(self.state, self.boxes, me=me, extra=self.extra())
@@ -478,7 +482,9 @@ SAFE_DIM_COLOR = (150, 90, 90)       # the safe zones of the other teams
 def view_options(args):
     """Keyword arguments of the viewers (viz.Viewer, vector.VectorViewer, mainframe.Mainframe)."""
     cell = tuple(int(n) for n in args.cell.lower().split('x'))
-    return {'vector': False if args.braille else None, 'sixel': args.sixel, 'cell': cell}
+    mode = 'sixel' if args.sixel else 'braille' if args.braille else args.mode
+    return {'vector': False if mode == 'dots' else None, 'backend': None if mode == 'dots' else
+            {'half': 'halfblock'}.get(mode, mode), 'cell': cell}
 
 
 def make_viewer(args):
@@ -487,7 +493,7 @@ def make_viewer(args):
     if opt['vector'] is not False:
         try:
             import vector
-            return vector.VectorViewer(backend='sixel' if args.sixel else 'halfblock', cell=opt['cell'],
+            return vector.VectorViewer(backend=opt['backend'], cell=opt['cell'],
                                        theme='amber' if args.amber else 'tube')
         except ImportError:
             say('SRC009W NUMPY MISSING  BRAILLE VIEW')
@@ -592,14 +598,16 @@ def main():
     ap.add_argument('--console', action='store_true', help='the world and the server in a mainframe style console')
     ap.add_argument('--no-boot', action='store_true', help='with --console: skip the boot text')
     ap.add_argument('--viz', action='store_true', help='draw the world in the terminal (ANSI, 3D wireframe)')
-    ap.add_argument('--sixel', action='store_true', help='with --viz or --console: draw the view as a sixel image')
-    ap.add_argument('--cell', default='10x20', help='pixel size of one terminal cell, for --sixel')
+    ap.add_argument('--mode', default='auto', choices=('auto', 'sixel', 'braille', 'half', 'dots'),
+                    help='how the view is drawn (see the header)')
+    ap.add_argument('--sixel', action='store_true', help='short for --mode sixel')
+    ap.add_argument('--cell', default='10x20', help='pixel size of one terminal cell, for sixel')
     ap.add_argument('--amber', action='store_true', help='with --viz: amber instead of green cyan')
     ap.add_argument('--solid', action='store_true', help='start with hidden lines removed and light faces (key H toggles)')
     ap.add_argument('--no-grid', action='store_true', help='start without the ground grid (key R)')
     ap.add_argument('--no-glow', action='store_true', help='start without the bloom of the vector view (key O)')
     ap.add_argument('--no-trails', action='store_true', help='start without the trails of the vector view (key T)')
-    ap.add_argument('--braille', action='store_true', help='draw the view with braille dots (no numpy needed)')
+    ap.add_argument('--braille', action='store_true', help='short for --mode braille')
     ap.add_argument('--snapshot', type=float, help='seconds after the join: ask the recorder for the snapshot')
     ap.add_argument('--team', type=int, default=1, help='round mode: menu choice of the team (1 to 3)')
     ap.add_argument('--rejoin', type=float, help='join again with the same account after this many seconds')

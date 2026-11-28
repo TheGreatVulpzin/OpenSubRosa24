@@ -302,15 +302,16 @@ class ModeAndToggleTests(unittest.TestCase):
     def test_key_names_of_the_letters_and_the_function_keys(self):
         names = {"a": "rot_left", "d": "rot_right", "w": "tilt_up", "s": "tilt_down", "+": "plus", "-": "minus",
                  "m": "map", "f": "follow", "v": "orbit", "g": "free", "h": "hollow", "l": "labels", "r": "grid",
-                 "b": "buildings", "t": "trails", "o": "glow", "c": "compass", "p": "snap", "q": "quit", "?": "help"}
+                 "b": "buildings", "t": "trails", "o": "glow", "c": "compass", "p": "snap", "q": "quit", "?": "help",
+                 "e": "cycle_render", "n": "cycle_camera"}
         for ch, name in names.items():
             self.assertEqual(viz.key_name(ch), name)
             self.assertEqual(viz.key_name(ch.upper()), name if ch not in "adws" else "fast_" + name)
         self.assertIsNone(viz.key_name("x"))
         self.assertEqual(viz.key_name("\x03"), "quit")
-        # The Windows codes behind a prefix: the arrows, then PF1 to PF9 and PF12 of the key bar.
-        codes = {"K": "left", "M": "right", "H": "up", "P": "down", ";": "rot_right", "<": "pitch_up", "=": "plus",
-                 ">": "map", "?": "follow", "@": "free", "A": "hollow", "B": "help", "C": "snap", chr(134): "quit"}
+        # The Windows codes behind a prefix: the arrows, then the function keys of the key bar.
+        codes = {"K": "left", "M": "right", "H": "up", "P": "down", ";": "help", "<": "cycle_camera",
+                 "=": "hollow", ">": "cycle_render", "C": "snap", chr(134): "quit"}
         for code, name in codes.items():
             self.assertEqual(viz.key_name(chr(0), code), name)
         for name in names.values():

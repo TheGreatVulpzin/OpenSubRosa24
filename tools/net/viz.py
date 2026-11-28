@@ -469,10 +469,10 @@ def palette(rgb, fade=1.0):
 LETTER_KEYS = {"a": "rot_left", "d": "rot_right", "w": "tilt_up", "s": "tilt_down", "+": "plus", "=": "plus",
                "-": "minus", "_": "minus", "m": "map", "f": "follow", "v": "orbit", "g": "free", "h": "hollow",
                "l": "labels", "r": "grid", "b": "buildings", "t": "trails", "o": "glow", "c": "compass",
-               "p": "snap", "q": "quit", "?": "help"}
+               "p": "snap", "q": "quit", "?": "help", "e": "cycle_render", "n": "cycle_camera"}
 CODE_KEYS = {"K": "left", "M": "right", "H": "up", "P": "down",
-             ";": "rot_right", "<": "pitch_up", "=": "plus", ">": "map", "?": "follow", "@": "free",
-             "A": "hollow", "B": "help", "C": "snap", chr(134): "quit"}                   # F1 to F9, F12
+             ";": "help", "<": "cycle_camera", "=": "hollow", ">": "cycle_render",
+             "C": "snap", chr(134): "quit"}                                               # F1 to F4, F9, F12
 
 
 def key_name(ch, code=None):
@@ -567,6 +567,14 @@ class Viewer:
             name, fast = name[5:], 5.0
         if name in TOGGLES:
             setattr(self, name, not getattr(self, name))
+            return True
+        if name == "cycle_camera":
+            order = ("follow", "orbit", "free", "map")
+            return self.key(order[(order.index(self.mode) + 1) % len(order)] if self.mode in order else "follow")
+        if name == "cycle_render":
+            cycle = getattr(self, "cycle_backend", None)
+            if cycle is not None:
+                cycle()
             return True
         if name in ("rot_left", "rot_right"):      # the A and D keys turn, but a free camera moves sideways
             name = ("strafe_" if self.mode == "free" else "") + name[4:]

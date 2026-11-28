@@ -17,7 +17,8 @@ line, so the caller prints the frame after a cursor home (`\\x1b[H`) and nothing
     python tools/net/mainframe.py --demo        animated fake data, Ctrl+C to stop (--no-boot skips the boot)
                                                 The main view uses numpy (tools/net/vector.py) when it is there, and
                                                 braille dots when it is not (python -I never finds numpy).
-                                                --braille forces the dots, --sixel draws the view as a sixel image.
+                                                --sixel draws the view as a sixel image, --braille as braille dots,
+                                                --half as half blocks, --dots as the old dots without numpy.
     python tools/net/mainframe.py --frame       one frame of the demo
     python tools/net/mainframe.py --boot        only the boot sequence
 """
@@ -89,8 +90,8 @@ TXT = {
     "timer": "TIMER",
     "phases": {1: "WAITING", 2: "ROUND", 3: "ROUND OVER"},
     "wire": ("HOLLOW", "SOLID"),
-    "keys": "PF1 ROT  PF2 TILT  PF3 ZOOM  PF4 MAP  PF5 FOLLOW  PF6 FREE  PF7 HOLLOW  PF8 HELP  PF9 SNAP  PF12 QUIT",
-    "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  V ORBIT  G FREE  F FOLLOW  M MAP  P SNAP  Q QUIT",
+    "keys": "F1 HELP  F2 CAMERA  F3 WIRE  F4 RENDER  F9 SNAP  F12 QUIT   ARROWS A D TURN  W S TILT  + - ZOOM  M MAP",
+    "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  V ORBIT  G FREE  F FOLLOW  M MAP  E RENDER  P SNAP  Q QUIT",
     "unknown": "UNKNOWN",
     "no_data": "NO DATA",
     "ready": "READY",
@@ -240,12 +241,13 @@ class FastViewer(viz.Viewer):
         return _shade(_lum(rgb) * level * 1.1)
 
 
-def make_viewer(vector, sixel, cell):
-    """The vector viewer when numpy is there (and vector is not False), else the braille viewer."""
+def make_viewer(vector, sixel, cell, backend=None):
+    """The vector viewer when numpy is there (and vector is not False), else the dots viewer. The backend is
+    sixel, braille or halfblock; None picks sixel when the terminal has it, else braille."""
     if vector is not False:
         try:
             import vector as vector_mod
-            return vector_mod.VectorViewer(backend="sixel" if sixel else "halfblock", cell=cell, theme=phosphor)
+            return vector_mod.VectorViewer(backend="sixel" if sixel else backend or "auto", cell=cell, theme=phosphor)
         except ImportError:
             pass
     return FastViewer()
@@ -407,9 +409,9 @@ def event_lines(events):
 # --------------------------------------------------------------------------- the console
 
 class Mainframe:
-    def __init__(self, width=None, height=None, vector=None, sixel=False, cell=(10, 20)):
+    def __init__(self, width=None, height=None, vector=None, sixel=False, cell=(10, 20), backend=None):
         self.width, self.height = width, height
-        self.viewer = make_viewer(vector, sixel, cell)
+        self.viewer = make_viewer(vector, sixel, cell, backend)
         self.vector = hasattr(self.viewer, "picture")      # true for the numpy viewer
         self.sleep = time.sleep
         self.now = time.monotonic
@@ -770,7 +772,8 @@ def _main(argv):
         sys.stdout.reconfigure(encoding="utf-8")
     if (width is None or height is None) and not sys.stdout.isatty():
         width, height = width or 120, height or 40
-    mf = Mainframe(width, height, vector=False if "--braille" in argv else None, sixel="--sixel" in argv)
+    backend = "braille" if "--braille" in argv else "halfblock" if "--half" in argv else None
+    mf = Mainframe(width, height, vector=False if "--dots" in argv else None, sixel="--sixel" in argv, backend=backend)
     if "--frame" in argv:
         state, boxes, me, extra = demo_data(1.0)
         sys.stdout.write(mf.render(state, boxes, me, extra) + "\n")
