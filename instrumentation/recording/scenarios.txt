@@ -3,10 +3,14 @@
 # subvulpes_force.txt. Rules: see the header of force.c. Read a scenario with names:
 #   python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt <name>
 # The server runs 62.5 ticks each second. The tick counter goes back to 0 at each resetgame.
+# A line "#bot <arguments>" starts instrumentation/recording/bot.py 5 seconds after the original server
+# (a player without a person). The forcer ignores it. See the header of bot.py for the arguments.
 
 [fast-rounds]
 # Round mode. A round lasts about 95 seconds instead of the length of config.txt. The server goes through
 # states 1, 2 and 3 and resetgame again and again.
+# The bot picks team 1 and is ready, so each round loads and saves its inventory.
+#bot --team 1 --stay 230 --snapshot 70 --leave
 ticks 0x90dc578
 # State 1 (teams and equipment): after 120 ticks (the doors close in the first tick) the timer goes to
 # 1801. One tick later it is 1800, and the game makes missions, traffic, cars and phones. The wait is 29 s.
@@ -35,3 +39,31 @@ at 1200 set 0x2561d740 4 2105700
 at 1500 set 0x2561d740 4 2159700
 at 1800 set 0x2561d740 4 2213700
 at 2100 set 0x2561d740 4 3887700
+
+[company-missions]
+# World mode, for a player who is a member of a company. The game gives missions only to a team with a
+# member and no mission (createscenario_world), and a mission lasts 306000 clock units. Each rule puts the
+# clock 300 units before a multiple of 54000, 7 periods after the one before, so the old missions are over
+# (scenario_setmissioninactive) and the game makes new ones. A guard mission (scenario_createguards) is
+# 3 in 8 of the missions of one company. The periods 8, 36 and 64 are also periods of 216000, which can
+# make a transaction or a three way mission. The last period is before the end of the world (3726000).
+# The first jump is at tick 1200 (19 s): the player must be in a company by then (bot.py --company does it).
+# The bot joins company 0, stays, leaves the base (team 7 again), leaves the game and joins again.
+#bot --company 0 --stay 105 --snapshot 70 --exit-company --leave --rejoin 3
+ticks 0x90dc578
+at 1200 set 0x2561d740 4 431700
+at 1800 set 0x2561d740 4 809700
+at 2400 set 0x2561d740 4 1187700
+at 3000 set 0x2561d740 4 1565700
+at 3600 set 0x2561d740 4 1943700
+at 4200 set 0x2561d740 4 2321700
+at 4800 set 0x2561d740 4 2699700
+at 5400 set 0x2561d740 4 3077700
+at 6000 set 0x2561d740 4 3455700
+
+[accounts]
+# Any mode. Three bots join with new accounts, two of them with the same name, and one with the first part of
+# the account id of another. This reaches createaccount, account_nameexists and deleteplayer. No forced values.
+#bot --name Same --account 11 22 --stay 8 --snapshot 5 --leave
+#bot --name Same --account 33 44 --stay 8 --leave
+#bot --name Other --account 11 99 --stay 8 --leave

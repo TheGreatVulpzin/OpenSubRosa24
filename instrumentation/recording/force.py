@@ -94,7 +94,7 @@ def show(path, name=None):
     bad = 0
     for number, line in section_lines(path, name):
         w = words(line)
-        if not w:
+        if not w or w[0].startswith('['):
             continue
         if w[0] == 'ticks':
             print('%3d  tick counter: %s' % (number, field_name(int(w[1], 0)) or w[1]))

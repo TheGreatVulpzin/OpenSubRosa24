@@ -33,6 +33,18 @@ The launcher lists the scenarios in the tab Recording ("Server scenario"). The c
 | `fast-rounds` | Round | A round lasts about 95 seconds: 29 s of state 1, 58 s of state 2, 5 s of state 3. The server goes through states 1, 2 and 3 and `resetgame` many times. |
 | `missions-now` | Round | The missions, traffic and team cars appear 2 seconds into each round. The round keeps its length. |
 | `world-clock` | World | The world clock jumps 30 ticks before each period of 54000 units (shops, bans, missions) and before the end of the world. |
+| `company-missions` | World | The world clock jumps 9 times, 7 periods each time (first jump at tick 1200). Missions end and new ones start for the company of the bot. Needs a bot in a company. |
+| `accounts` | Any | Three bots join with new accounts (same name twice, one account id half shared). No forced values. |
+
+### Bots
+
+A bot is a player without a person (`instrumentation/recording/bot.py`). It sends the join and input packets (`tools/net/srpacket.py`), answers the menus, and reads and writes the memory of the original server. A line `#bot <arguments>` in a scenario starts a bot 5 seconds after the server (Python must be on the PATH). The arguments are in the header of `bot.py`.
+
+- World mode: the bot spawns, then the script writes the position of its human into the safe box of a base. A player without a team inside a base joins that team, and becomes its manager when the team has none. This is the only way to reach the code of companies (missions, guards) without a person. The script moves the old position and the bones with the body: the bones move by Verlet steps, so a change of the position alone throws the body away.
+- Round mode: the bot picks a team in menu 2 and marks itself ready. Each round loads and saves its inventory.
+- `--snapshot S` makes the recorder write `sv_snapshot.bin` while the bot is in the game, so the harness has a state with a player.
+- The bot works only with the original server of the recorder (fixed image base). Never run it on a server with real players.
+- `python -I instrumentation/recording/bot.py --viz ...` draws the world in the terminal with ANSI colors and 3D wireframes (`tools/net/viz.py`).
 
 Read a scenario with the field names: `python -I instrumentation/recording/force.py show instrumentation/recording/scenarios.txt fast-rounds`. `force.py find game.timer` gives the RVA and the size for a new rule. A new scenario is a new `[name]` section in `instrumentation/recording/scenarios.txt`. The rules are numbers, so the recorder needs no table of names. The format is at the top of `force.c`, and `instrumentation/tests/test_force.c` tests it.
 

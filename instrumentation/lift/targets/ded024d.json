@@ -65,6 +65,21 @@
     },
     {
       "name": "vulpzin-20261017-194935-record"
+    },
+    {
+      "name": "20261127-play"
+    },
+    {
+      "name": "20261127-worldclock"
+    },
+    {
+      "name": "20261128-bot-accounts"
+    },
+    {
+      "name": "20261128-bot-company-missions"
+    },
+    {
+      "name": "20261128-bot-fast-rounds"
     }
   ],
   "synth": "instrumentation/recording/synth_calls.txt",

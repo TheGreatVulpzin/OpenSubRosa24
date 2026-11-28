@@ -928,6 +928,7 @@ namespace SubVulpes
                     server.BeginErrorReadLine();
                 } else {
                     AddLine("[launcher] The original server runs with the hook recorder. Close its window to stop it.");
+                    StartScenarioBots();
                 }
                 started = lastSpeedLine = DateTime.Now;
                 runPanel.Visible = true;

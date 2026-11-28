@@ -401,6 +401,60 @@ namespace SubVulpes
             }
         }
 
+        // A scenario can start bots: each line "#bot <arguments>" runs instrumentation/recording/bot.py against the
+        // original server, 5 seconds after it starts. The bot needs Python on the PATH. The forcer ignores these lines.
+        readonly List<Process> bots = new List<Process>();
+
+        string BotScript()
+        {
+            foreach (string path in new[] {
+                Path.Combine(launcherFolder, "bot.py"),
+                Path.GetFullPath(Path.Combine(launcherFolder, @"..\..\instrumentation\recording\bot.py")) }) {
+                if (File.Exists(path)) return path;
+            }
+            return null;
+        }
+
+        void StartScenarioBots()
+        {
+            string rules;
+            if (recScenario.Text == NoScenario || !ReadScenarios().TryGetValue(recScenario.Text, out rules)) return;
+            string script = BotScript();
+            int pid = server.Id;
+            foreach (string line in rules.Split('\n')) {
+                string text = line.Trim();
+                if (!text.StartsWith("#bot ")) continue;
+                if (script == null) { AddLine("[launcher] The scenario has a bot, but bot.py was not found."); return; }
+                string arguments = "-I \"" + script + "\" --pid " + pid + " " + text.Substring(5);
+                var info = new ProcessStartInfo("python", arguments) {
+                    UseShellExecute = false, CreateNoWindow = true,
+                    RedirectStandardOutput = true, RedirectStandardError = true };
+                try {
+                    Task.Delay(5000).ContinueWith(t => {
+                        var bot = Process.Start(info);
+                        lock (bots) bots.Add(bot);
+                        bot.OutputDataReceived += OnOutput;
+                        bot.ErrorDataReceived += OnOutput;
+                        bot.BeginOutputReadLine();
+                        bot.BeginErrorReadLine();
+                    });
+                    AddLine("[launcher] Bot: " + text.Substring(5));
+                } catch (Exception ex) {
+                    AddLine("[launcher] Cannot start the bot: " + ex.Message);
+                }
+            }
+        }
+
+        void StopScenarioBots()
+        {
+            lock (bots) {
+                foreach (Process bot in bots) {
+                    try { if (!bot.HasExited) bot.Kill(); } catch { }
+                }
+                bots.Clear();
+            }
+        }
+
         // The recorder looks for snapshot_now.txt once each second, takes the snapshot and deletes the file.
         // The server and the client each have a recorder, so the file goes to both folders that run.
         void RequestSnapshot()
@@ -419,6 +473,7 @@ namespace SubVulpes
         // When the original server closes, its files go to the folder of the test.
         void CollectOriginalServer()
         {
+            StopScenarioBots();
             try {
                 foreach (string name in RecordFiles) {
                     string path = Path.Combine(folder, name);
