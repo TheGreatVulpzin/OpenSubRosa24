@@ -573,6 +573,7 @@ def session(args, mem):
             sys.stdout.reconfigure(encoding='utf-8')
             bot.viewer = make_viewer(args)
         bot.keys = sys.stdin.isatty() and os.name == 'nt'
+        bot.viewer.yaw_off = 0.8                      # a three quarter view shows the limbs of the body
         bot.viewer.hollow = not args.solid           # the start values of the toggles (keys change them while it runs)
         bot.viewer.grid = not args.no_grid
         bot.viewer.glow = not args.no_glow

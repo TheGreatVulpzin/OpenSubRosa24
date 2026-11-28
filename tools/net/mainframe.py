@@ -96,7 +96,7 @@ TXT = {
     "render_names": {"halfblock": "HALF"},
     "fkeys": (("F1", "HELP"), ("F2", "CAMERA"), ("F3", "WIRE"), ("F4", "RENDER"), ("F5", "COLOR"),
               ("F6", "LABELS"), ("F7", "GRID"), ("F8", "MAP"), ("F9", "SNAP"), ("F10", "QUIT")),
-    "view_keys": "ARROWS A D TURN   W S TILT   + - ZOOM",
+    "view_keys": ("ARROWS A D TURN", "W S TILT", "+ - ZOOM"),
     "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  K COLOR  V ORBIT  G FREE  F FOLLOW  M MAP  E RENDER  P SNAP  Q QUIT",
     "npc": "NPC",
     "unknown": "UNKNOWN",
@@ -359,8 +359,15 @@ def _box(title, info, rows, width, height, footer=""):
     for i in range(height - 2):
         body = rows[i] if i < len(rows) else " " * inner
         out.append(S_MID + V2 + body + S_MID + V2 + RESET)
-    if footer and len(footer) + 6 <= inner:
-        out.append(S_MID + BL + H2 + S_LO + " " + footer + " " + S_MID + H2 * (inner - len(footer) - 3) + BRC + RESET)
+    foot = []
+    for i, group in enumerate([footer] if isinstance(footer, str) and footer else footer or ()):
+        if i:
+            foot.append((S_DK, " \u2502 "))                    # the same green, weaker than the text
+        foot.append((S_LO, group))
+    foot_len = sum(len(t) for _, t in foot)
+    if foot and foot_len + 6 <= inner:
+        out.append(S_MID + BL + H2 + S_LO + " " + "".join(st + t for st, t in foot) + S_LO + " " + S_MID
+                   + H2 * (inner - foot_len - 3) + BRC + RESET)
     else:
         out.append(S_MID + BL + H2 * inner + BRC + RESET)
     return out
@@ -634,7 +641,8 @@ class Mainframe:
             values = {"slot": "%03d" % slot if slot is not None else ("%03d" % h.id if not info else "---"),
                       "name": str(name)[:name_w].ljust(name_w), "acct": "%04d" % acct if acct is not None else "----",
                       "hp": "%03d" % max(0, min(999, hp)), "x": "%05d" % x, "z": "%05d" % z, "team": team_text.rjust(8)}
-            text = (">" if mine else " ") + " " + " ".join(values[k] for k, _ in cols)
+            text = (">" if mine else " ") + " " + " ".join(values[k].ljust(w) if k == "name" else values[k].rjust(w)
+                                                          for k, w in cols)
             if mine:
                 style = S_ME
             else:
@@ -784,7 +792,7 @@ class Mainframe:
         players_h = max(5, remaining - calls_h)
         left = self._view(state, boxes, me, camera, lw, view_h) + self._log(state, extra, lw, log_h)
         right = (self._players(state, me, rw, players_h, extra) + self._teams(state, extra, rw, teams_h)
-                 + self._sim(state, extra, rw, sim_h) + self._calls(extra, rw, calls_h))
+                 + self._calls(extra, rw, calls_h) + self._sim(state, extra, rw, sim_h))
         rows += [a + b for a, b in zip(left, right)]
         rows.append(self._key_bar(width))
         out = []

@@ -208,13 +208,13 @@ class SceneTests(unittest.TestCase):
                                                orient_b=(-1.0, 0.0, 0.0))])      # faces +x
         pose, _ = v.scene(state, me=0)
         self.assertAlmostEqual(pose.yaw, math.pi / 2, places=3)
-        self.assertLess(pose.pos[0], 50.0 - 10.0)               # behind: smaller x
-        self.assertGreater(pose.pos[1], 25.0 + 6.0)             # above
+        self.assertLess(pose.pos[0], 50.0 - 3.0)                # behind: smaller x
+        self.assertGreater(pose.pos[1], 25.0 + 1.5)             # above
         self.assertGreater(math.degrees(-pose.pitch), 10.0)         # a low chase view, so the horizon shows
         self.assertLess(math.degrees(-pose.pitch), 25.0)
         dist = math.dist(pose.pos, pose.focus)
-        self.assertGreater(dist, 30.0)
-        self.assertLess(dist, 50.0)
+        self.assertGreater(dist, 8.0)
+        self.assertLess(dist, 16.0)
 
     def test_yaw_follows_the_facing_smoothly(self):
         v = self.view(scene(1))
@@ -381,7 +381,7 @@ class ModeAndToggleTests(unittest.TestCase):
     def test_cam_text_is_zero_padded(self):
         v = self.view()
         v.scene(self.state(), me=0)
-        self.assertRegex(v.cam_text(), r"^CAMERA FOLLOW  AZ 000  EL 0\d\d  ZOOM 040$")
+        self.assertRegex(v.cam_text(), r"^CAMERA FOLLOW  AZ 000  EL 0\d\d  ZOOM 01[12]$")
 
 
 class SolidTests(unittest.TestCase):

@@ -299,6 +299,96 @@ def add_figure_detail(lines, pos, frame, rgb, phase, amp, scale, bright):
         lines.add(P(fo), P((fo[0], fo[1], fo[2] + 0.16)), rgb, i, w=w * 0.8)
 
 
+# The bone tree of a human of the game (src/game/human_body.c, body_table): the parent of each bone, its place
+# and its joint in the frame of the parent, and its half size along each axis. Bone 0 is the hip, 1 the chest,
+# 2 the head, 3 to 5 the left arm, 6 to 8 the right arm, 9 to 11 the left leg, 12 to 14 the right leg.
+BODY = (
+    (0, (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.25, 0.125, 0.09375)),
+    (0, (0.0, 0.375, 0.0), (0.0, 0.125, 0.0), (0.25, 0.25, 0.09375)),
+    (1, (0.0, 0.375, 0.0), (0.0, 0.1875, 0.0), (0.125, 0.125, 0.125)),
+    (1, (-0.25, 0.0, 0.0), (-0.25, 0.1875, 0.0), (0.0625, 0.1875, 0.0625)),
+    (3, (0.0, -0.375, 0.0), (0.0, -0.1875, 0.0), (0.0625, 0.1875, 0.0625)),
+    (4, (0.0, -0.1875, 0.0), (0.0, -0.1875, 0.0), (0.0625, 0.0625, 0.0625)),
+    (1, (0.25, 0.0, 0.0), (0.25, 0.1875, 0.0), (0.0625, 0.1875, 0.0625)),
+    (6, (0.0, -0.375, 0.0), (0.0, -0.1875, 0.0), (0.0625, 0.1875, 0.0625)),
+    (7, (0.0, -0.1875, 0.0), (0.0, -0.1875, 0.0), (0.0625, 0.0625, 0.0625)),
+    (0, (-0.09375, -0.25, 0.0), (-0.09375, -0.0625, 0.0), (0.09375, 0.25, 0.09375)),
+    (9, (0.0, -0.5, 0.0), (0.0, -0.25, 0.0), (0.09375, 0.25, 0.09375)),
+    (10, (0.0, -0.25, 0.0), (0.0, -0.1875, 0.0), (0.09375, 0.0625, 0.1875)),
+    (0, (0.09375, -0.25, 0.0), (0.09375, -0.0625, 0.0), (0.09375, 0.25, 0.09375)),
+    (12, (0.0, -0.5, 0.0), (0.0, -0.25, 0.0), (0.09375, 0.25, 0.09375)),
+    (13, (0.0, -0.25, 0.0), (0.0, -0.1875, 0.0), (0.09375, 0.0625, 0.1875)),
+)
+BONE_RADIUS = 0.0625
+HUMAN_BONES = 15
+
+
+def rotate_rows(rot, axis, angle):
+    """The orientation rows turned about an axis by an angle, as rotateorientation of the game does it."""
+    ax, ay, az = axis
+    c, s_ = math.cos(angle), math.sin(angle)
+    out = []
+    for rx, ry, rz in rot:
+        cx, cy, cz = ry * az - rz * ay, rz * ax - rx * az, rx * ay - ry * ax
+        dot = rx * ax + ry * ay + rz * az
+        x = dot * ax + c * (cz * ay - cy * az) + s_ * cx
+        y = dot * ay + c * (az * cx - cz * ax) + s_ * cy
+        z = dot * az + c * (cy * ax - cx * ay) + s_ * cz
+        n = math.sqrt(x * x + y * y + z * z) or 1.0
+        out.append((x / n, y / n, z / n))
+    return out
+
+
+def human_bones(hip, rows, joints, count=HUMAN_BONES):
+    """The place and the orientation of each bone of a human, as the client of the game builds them: the hip
+    has a place and an orientation, every other bone hangs from its parent and turns by its three joint
+    angles. joints holds the angles of bones 1 to count - 1. Returns [(pos, (right, up, front))]."""
+    bones = [(hip, rows)]
+    for b in range(1, count):
+        parent = BODY[b][0]
+        ppos, prot = bones[parent]
+        joint, place = BODY[b][2], BODY[b][1]
+        pos = tuple(ppos[i] + prot[0][i] * joint[0] + prot[1][i] * joint[1] + prot[2][i] * joint[2] for i in range(3))
+        rot = list(prot)
+        angles = joints[b - 1] if b - 1 < len(joints) else (0.0, 0.0, 0.0)
+        rot = rotate_rows(rot, rot[0], angles[0])
+        rot = rotate_rows(rot, rot[1], angles[1])
+        rot = rotate_rows(rot, rot[2], angles[2])
+        off = (place[0] - joint[0], place[1] - joint[1], place[2] - joint[2])
+        pos = tuple(pos[i] + rot[0][i] * off[0] + rot[1][i] * off[1] + rot[2][i] * off[2] for i in range(3))
+        bones.append((pos, tuple(rot)))
+    return bones
+
+
+def add_game_human(lines, e, rgb, bright, scale=1.0, count=HUMAN_BONES, boxes=True):
+    """A human of the game: its 15 bones posed by the joint angles of the packet, as boxes of the true size
+    (boxes=True) or, from far away, as the axis of each bone with a box for the head. count is 9 for a human
+    in a vehicle (the packet leaves out the legs)."""
+    a, b = _unit(e.orient_a, (0.0, 1.0, 0.0)), _unit(e.orient_b, (0.0, 0.0, 1.0))
+    row0 = _unit(_cross(b, a), (1.0, 0.0, 0.0))
+    origin = (0.0, 0.0, 0.0)
+    bones = human_bones(origin, (row0, a, b), e.joints, count)
+    hip = e.pos
+    for index, (pos, rot) in enumerate(bones):
+        center = tuple(hip[i] + pos[i] * scale for i in range(3))
+        half = tuple((BODY[index][3][k] + BONE_RADIUS * 0.5) * scale for k in range(3))
+        if not boxes and index != 2:
+            # The axis of the bone: the width for the hip and the chest, the length for the other bones.
+            axes = ((0, 1) if index == 1 else (0,) if index == 0 else (2,) if index in (11, 14) else (1,))
+            for axis in axes:
+                a_, b_ = ([center[i] - rot[axis][i] * half[axis] for i in range(3)],
+                          [center[i] + rot[axis][i] * half[axis] for i in range(3)])
+                lines.add(tuple(a_), tuple(b_), rgb, bright, w=0.06 * scale)
+            continue
+        corners = local_box(center, rot, (-half[0], -half[1], -half[2]), half)
+        box_edges(lines, corners, rgb, i0=bright, w=0.045 * scale if index in (0, 1, 2) else 0.035 * scale)
+        if index in (0, 1, 2):
+            # The big boxes get a cross on the front and the back, so the body reads as a solid.
+            dim = bright * 0.4
+            face_grid(lines, corners[4], corners[5], corners[7], corners[6], 2, 2, rgb, i0=dim, w=0.03 * scale)
+            face_grid(lines, corners[0], corners[1], corners[3], corners[2], 2, 2, rgb, i0=dim, w=0.03 * scale)
+
+
 def add_car(lines, pos, frame, rgb, bright, solid_cam=None, panels=True):
     """A body box, a cabin box, four wheels and an arrow on the hood that shows the heading."""
     body = local_box(pos, frame, (-0.95, -0.55, -2.2), (0.95, 0.1, 2.2))
@@ -604,7 +694,8 @@ class Viewer:
         self.last_pose = None
         self.yaw_off = 0.0           # turn the user adds to the facing of the human
         self.pitch = -0.27
-        self.dist = 40.0
+        self.dist = 12.0
+        self.box_dist = 7.0         # a human closer than this is drawn as boxes, else as the axes of its bones
         self.top_dist = 170.0
         self.top_yaw = 0.0
         self.follow = True
@@ -770,7 +861,7 @@ class Viewer:
         self._t_pose = now
         if target is not None:
             want = (target.pos[0], target.pos[1], target.pos[2])
-            ground = target.pos[1] - 0.95
+            ground = target.pos[1] - 1.1
             _r, _u, fwd = frame_of(target)
             face = math.atan2(fwd[0], fwd[2]) if math.hypot(fwd[0], fwd[2]) > 0.2 else None
         else:
@@ -978,8 +1069,8 @@ class Viewer:
             else:
                 frame = rec["frame"] = frame_of(e)
             add_car(move if rec["speed"] > 0.4 else still, e.pos, frame, COLOR_OBJECT, 0.75, None if self.hollow else cam, self.detail)
-        # Only the nearest few figures are drawn with polygons, the others as stick figures.
-        near_ids = {e.id for e in sorted(humans, key=lambda h: math.dist(cam, h.pos))[:10]} if self.detail else set()
+        # Only the nearest six figures are drawn with polygons, the others as stick figures.
+        near_ids = {e.id for e in sorted(humans, key=lambda h: math.dist(cam, h.pos))[:6]} if self.detail else set()
         for e in humans:
             mine = me is not None and e.id == me
             hp = getattr(e, "health", 100)
@@ -993,8 +1084,12 @@ class Viewer:
             if amp < 0.05:
                 amp = 0.0
             frame = frame_of(e)
+            game_figure = False
             ln = move if speed > 0.4 and not seated else still
-            if e.id in near_ids and d < 45.0 and not seated:
+            if e.id in near_ids and d < 45.0 and len(getattr(e, "joints", None) or ()) >= 8:
+                add_game_human(ln, e, rgb, 1.0 if mine else 0.9, 1.0, 9 if seated else HUMAN_BONES, d < self.box_dist)
+                game_figure = True
+            elif e.id in near_ids and d < 45.0 and not seated:
                 add_figure_detail(ln, e.pos, frame, rgb, rec["phase"], amp, scale, 1.0 if mine else 0.9)
             else:
                 add_figure(ln, e.pos, frame, rgb, rec["phase"], amp, scale, seated, 1.0 if mine else 0.9)
@@ -1003,7 +1098,8 @@ class Viewer:
                         for a in (2 * math.pi * k / 16 for k in range(16))]
                 ln.poly(ring, COLOR_ME, closed=True, i0=0.9, w=0.08)
             if d < 55.0 and not seated:
-                ln.label((e.pos[0], e.pos[1] + 1.4 * scale, e.pos[2]), "YOU" if mine else "#%d" % e.id, rgb, 5 if mine else 3)
+                height = 1.35 if game_figure else 1.4 * scale
+                ln.label((e.pos[0], e.pos[1] + height, e.pos[2]), "YOU" if mine else "#%d" % e.id, rgb, 5 if mine else 3)
         self._prune(now)
         return still, move
 

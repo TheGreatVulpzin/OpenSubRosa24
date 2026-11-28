@@ -840,7 +840,7 @@ class VectorViewer(viz.Viewer):
                     draw_text(lin, int(p[0]) - len(text) * 6 * size // 2, int(p[1]) - 10 * size, text,
                               tuple(c / 255.0 for c in col), size)
         self.post.persist = self.trail_decay if self.trails else 0.0
-        self.post.glow_on = self.glow
+        self.post.glow_on = self.glow and self.backend != "braille"      # the dots are bright already: a bloom fills the figures
         fine = self.backend in ("sixel", "braille")
         img = self.post.run(lin, trail, scanlines=not fine, glow_shift=max(0, int(round(math.log2(Wo / 140.0)))) if fine else 0)
         t3 = time.perf_counter()

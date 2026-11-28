@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for mainframe.py. Run: python -I tools/net/test_mainframe.py"""
 import io
+import math
 import os
 import re
 import sys
@@ -156,7 +157,7 @@ class FrameTests(unittest.TestCase):
 
     def test_players_marks_the_bot(self):
         lines = self.check_size(120, 40, extra=EXTRA)
-        mine = [ln for ln in lines if "> 000 " in ln]
+        mine = [ln for ln in lines if ">  000 " in ln]
         self.assertEqual(len(mine), 1)
 
     def test_many_players_keep_me_visible(self):
@@ -165,7 +166,7 @@ class FrameTests(unittest.TestCase):
         mf = mainframe.Mainframe(100, 30)
         text = "\n".join(plain(mf.render(state, [], 55)))
         self.assertIn(">", text)
-        self.assertIn(" 055 ", text)
+        self.assertIn("  055 ", text)
         self.assertIn("MORE", text)
 
     def test_event_text(self):
@@ -202,6 +203,18 @@ class FrameTests(unittest.TestCase):
             trails = mf._trails(state, t[0])
         self.assertEqual(len(trails), 3)
 
+    @staticmethod
+    def speed_scale():
+        """How much slower than a quiet machine this one is now: a fixed loop, the best of five runs."""
+        best = 9.0
+        for _ in range(5):
+            start = time.perf_counter()
+            total = 0.0
+            for i in range(300000):
+                total += math.sqrt(i) * 0.5
+            best = min(best, time.perf_counter() - start)
+        return max(1.0, best / 0.12)
+
     def timed(self, move):
         humans = [sr.HumanBlock(i, pos=(i % 10 * 3.0, 25.0, 10.0 + i // 10 * 3.0), orient_a=(0.0, 1.0, 0.0),
                                orient_b=(0.0, 0.0, -1.0)) for i in range(50)]
@@ -222,12 +235,12 @@ class FrameTests(unittest.TestCase):
 
     def test_frame_time(self):
         each = self.timed(False)
-        limit = 0.12 if HAVE_NUMPY else 0.06
+        limit = (0.12 if HAVE_NUMPY else 0.06) * self.speed_scale()
         self.assertLess(each, limit, "frame took %.1f ms" % (each * 1000))
 
     def test_frame_time_with_trails(self):
         each = self.timed(True)
-        limit = 0.13 if HAVE_NUMPY else 0.07
+        limit = (0.13 if HAVE_NUMPY else 0.07) * self.speed_scale()
         self.assertLess(each, limit, "frame took %.1f ms" % (each * 1000))
 
 
@@ -308,7 +321,7 @@ class KeyBarTests(unittest.TestCase):
 
     def test_columns_are_zero_padded(self):
         text = "\n".join(plain(mainframe.Mainframe(120, 40).render(scene(), [], 0, EXTRA)))
-        for word in ("SLOT", "NAME", "ACCT", "HP", "TEAM", "MGR", "MBR", "MSN", "> 000", "UPTIME", "STAT", "ACTIVE", "000005"):
+        for word in ("SLOT", "NAME", "ACCT", "HP", "TEAM", "MGR", "MBR", "MSN", ">  000", "UPTIME", "STAT", "ACTIVE", "000005"):
             self.assertIn(word, text)
 
 

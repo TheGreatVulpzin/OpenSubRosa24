@@ -298,7 +298,7 @@ class ViewerTests(unittest.TestCase):
         self.assertGreater(int(img[1].max()), 100)
 
     def test_trails_and_glow_toggles(self):
-        v = self.make()
+        v = self.make(backend="halfblock")                  # the braille dots take no bloom
         state = scene(3)
         v.render(state, [], 0)
         v.glow = False
