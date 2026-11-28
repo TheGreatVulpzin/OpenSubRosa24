@@ -96,7 +96,9 @@ TXT = {
     "render_names": {"halfblock": "HALF"},
     "fkeys": (("F1", "HELP"), ("F2", "CAMERA"), ("F3", "WIRE"), ("F4", "RENDER"), ("F5", "COLOR"),
               ("F6", "LABELS"), ("F7", "GRID"), ("F8", "MAP"), ("F9", "SNAP"), ("F10", "QUIT")),
-    "view_keys": ("ARROWS A D TURN", "W S TILT", "+ - ZOOM"),
+    "view_keys": ("ARROWS A D TURN", "W S TILT", "+ - ZOOM", "TAB TARGET"),
+    "target": "TARGET",
+    "display": "DISPLAY",
     "help": "H HOLLOW  L LABELS  R GRID  B BLDG  T TRAILS  O GLOW  C COMPASS  K COLOR  V ORBIT  G FREE  F FOLLOW  M MAP  E RENDER  P SNAP  Q QUIT",
     "npc": "NPC",
     "unknown": "UNKNOWN",
@@ -592,7 +594,10 @@ class Mainframe:
             rows = [S_BASE + green_row(r) + RESET for r in rows]
         backend = getattr(v, "backend", "dots")
         render = TXT["render_names"].get(backend, backend.upper())
-        groups = _label_groups(v.cam_text(short=True)) + [(TXT["wire"], str(1 if v.hollow else 2)), ("", render)]
+        groups = _label_groups(v.cam_text(short=True)) + [(TXT["wire"], str(1 if v.hollow else 2))]
+        if me is not None:
+            groups.append((TXT["target"], "%03d" % me))
+        groups.append(("", render))
         room = inner_w - len(TXT["view"]) - 8
         while len(groups) > 1 and _groups_len(groups) > room:
             groups.pop()                                     # the camera has the first claim on the room
@@ -700,6 +705,8 @@ class Mainframe:
         if mode == "ROUND":
             rows += [(TXT["state"], TXT["states"].get(getattr(state, "phase", 0), TXT["unknown"])),
                      (TXT["timer"], "%05d" % getattr(state, "phase_timer", 0))]
+        if extra.get("fps") is not None:
+            rows.append((TXT["display"], "%04.1f FPS  %03d MS" % (extra["fps"], min(999, extra.get("frame_ms", 0)))))
         return rows
 
     def _sim(self, state, extra, width, height):
@@ -770,7 +777,7 @@ class Mainframe:
             return True
         return self.viewer.key(name)
 
-    def render(self, state, boxes=(), me=None, extra=None, camera=None):
+    def render(self, state, boxes=(), me=None, extra=None, camera=None, with_sixel=True):
         extra = extra or {}
         width, height = self.size()
         if width < MIN_COLS or height < MIN_ROWS:
@@ -801,7 +808,7 @@ class Mainframe:
                 row = _dim_row(row)
             out.append("\x1b[48;5;%dm\x1b[K" % BLACK + row)
         frame = "\n".join(out)
-        if self.vector and self.sixel:
+        if with_sixel and self.vector and self.sixel:
             frame += self.sixel                              # the image goes over the empty view area
         return frame
 

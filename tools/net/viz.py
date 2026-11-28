@@ -648,7 +648,8 @@ def palette(rgb, fade=1.0):
 LETTER_KEYS = {"a": "rot_left", "d": "rot_right", "w": "tilt_up", "s": "tilt_down", "+": "plus", "=": "plus",
                "-": "minus", "_": "minus", "m": "map", "f": "follow", "v": "orbit", "g": "free", "h": "hollow",
                "l": "labels", "r": "grid", "b": "buildings", "t": "trails", "o": "glow", "c": "compass",
-               "p": "snap", "q": "quit", "?": "help", "e": "cycle_render", "n": "cycle_camera", "k": "color"}
+               "p": "snap", "q": "quit", "?": "help", "e": "cycle_render", "n": "cycle_camera", "k": "color",
+               "]": "next_target", "[": "prev_target", "\t": "next_target"}
 CODE_KEYS = {"K": "left", "M": "right", "H": "up", "P": "down",
              ";": "help", "<": "cycle_camera", "=": "hollow", ">": "cycle_render", "?": "color", "@": "labels",
              "A": "grid", "B": "map", "C": "snap", "D": "quit", chr(134): "quit"}        # F1 to F10, F12

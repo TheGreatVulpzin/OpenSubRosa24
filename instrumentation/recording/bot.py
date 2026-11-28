@@ -21,7 +21,8 @@ Arguments:
   --rejoin S         join again with the same account after S seconds (inventory load and save)
   --viz              draw the world in the terminal (tools/net/viz.py)
   --console          mainframe style console with panels (tools/net/mainframe.py), --no-boot skips the boot text
-  --mode MODE        how the view is drawn: auto (sixel when the terminal has it, else braille), sixel (true
+  (keys: TAB or ] follows the next human of the picture, [ the previous one)
+  --mode MODE        how the view is drawn: auto (braille; F4 adds sixel when the terminal has it), sixel (true
                      pixels, Windows Terminal 1.22 and later), braille (2 by 4 dots in each cell), half (half
                      blocks), dots (the old dots of viz.py, needs no numpy). --sixel and --braille are short for it
   --color            with --console: names in the colors of the companies (the console starts with green only)
@@ -282,6 +283,11 @@ class Bot:
         self.calls_path = None
         self.names = None
         self.tick_mark = (time.time(), 0)
+        self.target = None           # the human the camera follows: None is the human of the bot
+        self.screen = None           # tools/net/screen.py: writes only the lines that changed
+        self.draw_gap = 0.05         # seconds between two pictures, longer when a picture is slow
+        self.fps, self.frame_ms = 0.0, 0.0       # pictures each second and the time of one, for the console
+        self._fps_mark, self._fps_count, self._fps_cost = time.time(), 0, 0.0
         self._pinfo = ({}, {})       # names and ids of the players, read from the memory of the server
         self._pinfo_t = 0.0
         self._members = [0] * 5      # the players of each company
@@ -338,7 +344,7 @@ class Bot:
 
     def draw(self):
         now = time.time()
-        if self.viewer is None or self.state is None or now - self.last_draw < 0.05:
+        if self.viewer is None or self.state is None or now - self.last_draw < self.draw_gap:
             return
         self.last_draw = now
         if self.keys:
@@ -348,20 +354,46 @@ class Bot:
                 if name == 'snap':
                     self.snapshot_at = time.time()
                     continue
+                if name in ('next_target', 'prev_target'):
+                    self.change_target(1 if name == 'next_target' else -1)
+                    continue
                 (self.console or self.viewer).key(name)
             if getattr(self.viewer, 'needs_clear', False):
-                sys.stdout.write('\x1b[2J')
+                self.screen.reset()
                 self.viewer.needs_clear = False
-        me = self.state.human if self.state.human != -1 else None
+        own = self.state.human if self.state.human != -1 else None
+        me = self.target if self.target in [h.id for h in self.state.humans] else own
         if self.console is not None:
-            frame = self.console.render(self.state, self.boxes, me=me, extra=self.extra())
+            frame = self.console.render(self.state, self.boxes, me=me, extra=self.extra(), with_sixel=False)
         else:
             frame = self.viewer.render(self.state, self.boxes, me=me)
-        sys.stdout.write('\x1b[H' + frame)
         sixel = getattr(self.viewer, 'sixel_data', None)
-        if sixel:
-            sys.stdout.write(sixel)
-        sys.stdout.flush()
+        if self.screen is None:
+            import screen
+            self.screen = screen.Screen(sys.stdout)
+        self.screen.write(frame, sixel)
+        # A slow picture slows the next one: the program keeps a third of its time for the network.
+        cost = time.time() - now
+        self.draw_gap = min(0.5, max(0.05, cost * 1.5))
+        self._fps_count += 1
+        self._fps_cost += cost
+        if time.time() - self._fps_mark >= 1.0:
+            span = time.time() - self._fps_mark
+            self.fps, self.frame_ms = self._fps_count / span, self._fps_cost / self._fps_count * 1000.0
+            self._fps_mark, self._fps_count, self._fps_cost = time.time(), 0, 0.0
+
+    def change_target(self, step):
+        """Follow the next or the previous human of the picture. The first one is the human of the bot."""
+        ids = sorted(h.id for h in self.state.humans)
+        if not ids:
+            return
+        own = self.state.human if self.state.human in ids else ids[0]
+        current = self.target if self.target in ids else own
+        self.target = ids[(ids.index(current) + step) % len(ids)]
+        self.viewer._focus_s = None                  # the camera jumps to the new human
+        self.viewer._yaw_s = None
+        info = (self._pinfo[0] or {}).get(self.target) or {}
+        say('SRC008I TARGET %03d  %s' % (self.target, str(info.get('name') or ('YOU' if self.target == own else 'NPC')).upper()))
 
     def count_calls(self):
         """Count the calls that the recorder of the server has written since the last look."""
@@ -430,6 +462,7 @@ class Bot:
         data = {'tps': self.tps, 'clock': st.world, 'log': list(LOG or ())[-8:], 'calls': self.calls,
                 'recorder': self.calls_path is not None, 'bot': self.args.name}
         data['mode'] = 'WORLD' if self.gametype == 4 else 'ROUND'
+        data['fps'], data['frame_ms'] = self.fps, self.frame_ms
         if self.mem is not None:
             data['players'], data['teams_of'] = self.players_info()
         if self.mem is not None:

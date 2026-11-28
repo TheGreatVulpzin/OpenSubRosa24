@@ -383,8 +383,9 @@ def _fg(f):
 
 
 def pack(img):
-    """(3, H, W) uint8 to (H, W) ints 0xRRGGBB, with the low two bits of each channel dropped."""
-    q = (img & 0xFC).astype(np.int32)
+    """(3, H, W) uint8 to (H, W) ints 0xRRGGBB, with the low three bits of each channel dropped: 32 levels, so
+    the colors of two frames are often equal and the terminal has little to redraw."""
+    q = (img & 0xF8).astype(np.int32)
     return (q[0] << 16) | (q[1] << 8) | q[2]
 
 
@@ -455,7 +456,8 @@ def braille(img, texts=None, level=0.17, jitter=0.05):
     # A braille dot covers few pixels of the cell and looks dim: raise the brightness, keep the hue.
     top = np.maximum(color.max(axis=0), 1.0)
     color = color * (np.sqrt(top / 255.0) * 255.0 / top)
-    packed = pack(color.clip(0, 255).astype(np.uint8)).tolist()
+    quant = (color.clip(0, 255).astype(np.uint8) & 0xF8)          # 32 levels: longer runs of one color
+    packed = ((quant[0].astype(np.int32) << 16) | (quant[1].astype(np.int32) << 8) | quant[2]).tolist()
     bits = bits.tolist()
     out_rows = []
     for ry in range(rows):
@@ -767,10 +769,15 @@ class VectorViewer(viz.Viewer):
 
     def __init__(self, width=None, height=None, backend="braille", ss=3, cell=(10, 20), post=None, theme=None):
         super().__init__(width, height)
+        sixel_ok = backend == "sixel"
         if backend == "auto":
-            backend, cell = best_backend(cell)
+            # Braille dots are the quick default. The terminal is asked, so that the key F4 can offer sixel.
+            sixel_ok = detect_sixel()
+            backend = "braille"
+            if sixel_ok:
+                cell = cell or query_cell_size() or (10, 20)
         self.backend = backend
-        self.backends = ["braille", "halfblock"] + (["sixel"] if backend == "sixel" else [])
+        self.backends = ["braille", "halfblock"] + (["sixel"] if sixel_ok else [])
         self.needs_clear = False         # the caller clears the screen once after a change of the backend
         self.detail = True               # polygon figures and window posts
         self.ss = ss

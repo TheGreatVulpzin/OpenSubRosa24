@@ -227,8 +227,8 @@ class HalfBlockTests(unittest.TestCase):
         img[:, 1, 0] = (20, 60, 240)                           # lower pixel
         row = vector.halfblock(img)[0]
         self.assertIn("▀", row)
-        self.assertIn("38;2;200;100;40", row)
-        self.assertIn("48;2;20;60;240", row)
+        self.assertIn("38;2;200;96;40", row)
+        self.assertIn("48;2;16;56;240", row)
 
     def test_equal_pixels_need_no_half_block(self):
         img = np.zeros((3, 2, 4), dtype=np.uint8)
@@ -375,7 +375,7 @@ class BrailleTests(unittest.TestCase):
         img = np.zeros((3, 4, 2), dtype=np.uint8)
         img[0, :, :] = 255                                     # red
         text = vector.braille(img)[0]
-        self.assertIn("\x1b[38;2;252;0;0m", text)
+        self.assertIn("\x1b[38;2;248;0;0m", text)
 
     def test_text_overlay(self):
         img = np.zeros((3, 8, 6), dtype=np.uint8)
