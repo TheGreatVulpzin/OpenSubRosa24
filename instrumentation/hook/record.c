@@ -5,6 +5,8 @@
  *   snapshot_after=60      seconds after start: write the .data section to sv_snapshot.bin
  *                          (0 = no timer). A file snapshot_now.txt next to the exe asks for it at once.
  *   record_hit_max=20000   calls of one function after which its hook goes (speed)
+ *   snapshot_direct=1      write the snapshot from the game thread, with no copy in memory (it is the
+ *                          fallback when the copy has no memory)
  *   record_imports=1       record the side-effect functions with their import calls (below)
  *
  * sv_args.txt, one line per recorded call (up to RECORD_MAX different calls per function):
@@ -637,12 +639,40 @@ void sv_ev_end(void)
 typedef struct SnapBuf {
     uint8_t *data;
     size_t len;
+    /* Streaming mode (file is set): data is a small window that goes to the file when it is full.
+     * It is the way out when the address space has no room for the whole copy (a 32 bit client). */
+    HANDLE file;
+    size_t cap, written;
+    int failed;
 } SnapBuf;
+
+static void snap_flush(SnapBuf *b)
+{
+    DWORD wrote = 0;
+    if (!b->file || !b->len)
+        return;
+    if (!WriteFile(b->file, b->data, (DWORD)b->len, &wrote, NULL) || wrote != b->len)
+        b->failed = 1;
+    b->written += b->len;
+    b->len = 0;
+}
 
 static void snap_put(SnapBuf *b, const void *p, size_t n)
 {
-    memcpy(b->data + b->len, p, n);
-    b->len += n;
+    if (!b->file) {
+        memcpy(b->data + b->len, p, n);
+        b->len += n;
+        return;
+    }
+    while (n) {
+        size_t part = b->cap - b->len < n ? b->cap - b->len : n;
+        memcpy(b->data + b->len, p, part);
+        b->len += part;
+        p = (const uint8_t *)p + part;
+        n -= part;
+        if (b->len == b->cap)
+            snap_flush(b);
+    }
 }
 
 static DWORD WINAPI snapshot_writer(LPVOID arg)
@@ -762,9 +792,27 @@ void sv_snapshot_check(void)
     }
 
     /* Pass 2: copy. The buffer is allocated after the region list, so it is not in it. */
-    b = malloc(sizeof *b);
-    if (b)
+    b = calloc(1, sizeof *b);
+    if (b && !sv_config_int("snapshot_direct", 0))
         b->data = VirtualAlloc(NULL, total, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    if (b && !b->data) {
+        /* No room for the whole copy: write to the file from the game thread with a small
+         * buffer. The game stops for the time of the write. */
+        char path[MAX_PATH];
+        sv_log("snapshot: no memory for a %u MB copy, writing the file directly (the game waits)",
+               (unsigned)(total >> 20));
+        out_path(path, sizeof path, "sv_snapshot.bin");
+        b->cap = 4u << 20;
+        b->data = VirtualAlloc(NULL, b->cap, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+        b->file = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (!b->data || b->file == INVALID_HANDLE_VALUE) {
+            if (b->data)
+                VirtualFree(b->data, 0, MEM_RELEASE);
+            if (b->file != INVALID_HANDLE_VALUE)
+                CloseHandle(b->file);
+            b->data = NULL;
+        }
+    }
     if (!b || !b->data) {
         sv_log("ERROR snapshot: no memory for a %u MB copy", (unsigned)(total >> 20));
         free(b);
@@ -772,7 +820,6 @@ void sv_snapshot_check(void)
         free(regions);
         return;
     }
-    b->len = 0;
     snap_put(b, &magic, 4);
     snap_put(b, &base, 4);
     snap_put(b, &data_rva, 4);
@@ -780,14 +827,15 @@ void sv_snapshot_check(void)
     snap_put(b, &cw, 2);
     for (page = 0; page < npages; page++) {
         if (used[page]) {
-            uint32_t idx = (uint32_t)page;
+            uint32_t idx = (uint32_t)page, w[1024];
             snap_put(b, &idx, 4);
-            snap_put(b, data + page * 4096, 4096);
             if (sv_record_code) {
-                uint32_t *w = (uint32_t *)(b->data + b->len - 4096);
                 int k;
                 for (k = 0; k < 1024; k++)
-                    w[k] = sv_record_code(w[k]);
+                    w[k] = sv_record_code(((const uint32_t *)(data + page * 4096))[k]);
+                snap_put(b, w, 4096);
+            } else {
+                snap_put(b, data + page * 4096, 4096);
             }
         }
     }
@@ -801,6 +849,18 @@ void sv_snapshot_check(void)
     }
     free(used);
     free(regions);
+    if (b->file) {
+        snap_flush(b);
+        CloseHandle(b->file);
+        if (b->failed)
+            sv_log("ERROR snapshot: the write to sv_snapshot.bin failed (error %lu)", GetLastError());
+        else
+            sv_log("snapshot of .data written to sv_snapshot.bin (%u MB, direct write in %lu ms)",
+                   (unsigned)(b->written >> 20), GetTickCount() - t0);
+        VirtualFree(b->data, 0, MEM_RELEASE);
+        free(b);
+        return;
+    }
     sv_log("snapshot: copied in %lu ms (%u KB of heap regions), writing on a thread", GetTickCount() - t0,
            heap / 1024);
     th = CreateThread(NULL, 0, snapshot_writer, b, 0, NULL);

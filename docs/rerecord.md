@@ -18,6 +18,8 @@ The launcher (`build\launcher\opensubrosa24_launcher.exe`, build it with `tools\
 
 The server snapshot needs 600 seconds of play, the client snapshot 240 seconds (`snapshot_after` in `launcher.ini` sets the server value). The button "Snapshot now" in the tab Recording takes the server snapshot at once: it writes `snapshot_now.txt` into the server folder, and the recorder deletes the file and writes `sv_snapshot.bin`. With `snapshot_after=0` only the button takes it.
 
+The snapshot copy needs one block of memory as large as the snapshot. The 32 bit client can fail to find 350 MB. Then the recorder writes the file from the game thread with a 4 MB buffer, and the game waits a few seconds. `snapshot_direct=1` in `subvulpes.ini` forces this way (for a test).
+
 A hook that is called very often is removed after `record_hit_max` calls (default 20000), even when its calls have the same arguments. Without this limit the always-hooked functions of the checklist slowed the server to about 8 ticks per second in a round with traffic.
 
 ## Server scenarios (the forcer)
