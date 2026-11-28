@@ -28,14 +28,6 @@
   "recordings_dir": "build/recordings",
   "recordings": [
     {
-      "name": "play-20261012",
-      "quick": true
-    },
-    {
-      "name": "20261013-1016-smoke",
-      "quick": true
-    },
-    {
       "name": "20261013-query"
     },
     {
@@ -44,10 +36,6 @@
     },
     {
       "name": "20261015-friend"
-    },
-    {
-      "name": "murilo-20261015",
-      "synth": true
     },
     {
       "name": "round-20261015-0141",

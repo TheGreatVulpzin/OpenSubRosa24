@@ -61,7 +61,7 @@ The sections below say what the old recordings held and what the player does.
 
 ## Server (024d)
 
-Surviving: `play-20261012`, `20261013-1016-smoke`, `20261013-query`, `20261015-friend`, `murilo-20261015` (with its synthetic runs). The gate on these shows 0 differences.
+Surviving and used by the gate: `20261013-query`, `20261015-friend`, the recordings of 2026-11-27 and 2026-11-28 (`20261127-play`, `20261127-worldclock`, three bot recordings). Four old entries left the gate target on 2026-11-28 because the files are damaged: `play-20261012` (the heap list of the snapshot is garbage, the harness crashes), `20261013-1016-smoke` (its `sv_snapshot.bin` is a PNG picture), `murilo-20261015` (the harness reads 1 call from `sv_args.txt`). Every function of the old baseline has calls in the other recordings, so no proof was lost.
 
 Functions that no surviving recording reaches (13). A new recording must do the action in the right column:
 
